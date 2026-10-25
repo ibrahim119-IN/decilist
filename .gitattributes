@@ -1,1 +1,4 @@
 * text=auto eol=lf
+# These retained evidence files have documented hashes of their original bytes.
+benchmarks/results/request-text-liquid.json -text
+reports/liquid-smoke-2026-10-25.json -text
