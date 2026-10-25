@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "suite": "decilist-triage-v1",
-  "frozen_at_utc": "2026-10-25T21:02:15.213759+00:00",
+  "frozen_at_utc": "2026-10-25T21:12:09.388215+00:00",
   "frozen_before_model_run": true,
   "base_revision": "bf2a1df0a5a0b95dfc923eaa0a67c6fea2f07063",
   "files_sha256": {
@@ -10,7 +10,7 @@
     "benchmarks/run_triage.py": "86033e86a3d558689cd246ccdc7e310af49a4b70857bafdf8a321d6f3dcac268",
     "tests/test_triage_lab.py": "ac5307ac71bf09ebec8c6840ebddcd5b02e7bd293c1c6a725d3152049fc453df",
     "packages/python/src/decilist/triage.py": "c246194e22da66967c88b1911a169944fc7c66f7049146cdd70435ca4c832e6f",
-    "packages/python/src/decilist/triage_evidence.py": "f63cfd51225ecc3948f27bfc78a07c01c77fa8dddf745f1b98de635b58536f43"
+    "packages/python/src/decilist/triage_evidence.py": "50067926f906660380999595b207a5c7bd2082e4cd66f52f44cea24f8c2eef58"
   },
   "diagnosis_contract_sha256": "7c16ab0f051a306cce3790c3149196872499c34bedc3a356d8641ea9c3de37fd",
   "case_test_sha256": {
@@ -123,5 +123,10 @@
         "manual_review"
       ]
     }
+  },
+  "portability_replay": {
+    "original_freeze_sha256": "2675e9dcc1c29d98c5ab1af2b366d093d1192221240e4e676b56b676e8634fce",
+    "original_model_report": "reports/triage-machine-2026-10-26.json",
+    "reason": "Decode percent-encoded POSIX file URI references; no instructions, labels, policy, cases, baseline rules, or provider changes. This replay uses already-observed cases and is not a new held-out evaluation."
   }
 }

@@ -73,6 +73,29 @@ def test_uri_percent_encoded_spaces_are_resolved_locally(project):
     assert [row["path"] for row in result["references"]] == ["src/main script.js"]
 
 
+@pytest.mark.parametrize("uri", [
+    "file://[PROJECT]/src/main%20script.js",
+    "file:///[PROJECT]/src/main%20script.js",
+])
+def test_sanitized_project_uri_decodes_spaces_on_every_host(project, uri):
+    source(project, "src/main script.js")
+    result = prepare_evidence(f"at fn ({uri}:2:3)", project)
+    assert [(row["path"], row["line"]) for row in result["references"]] == [("src/main script.js", 2)]
+    assert "2 | assert first == 2" in result["references"][0]["excerpt"]
+
+
+@pytest.mark.parametrize("uri", [
+    "file://[PROJECT]/%2e%2e/outside.js",
+    "file:///[PROJECT]/%2e%2e/outside.js",
+])
+def test_sanitized_project_uri_validates_traversal_after_decoding(project, uri):
+    outside = project.parent / "outside.js"
+    outside.write_text("OUTSIDE_CONTENT", encoding="utf-8")
+    result = prepare_evidence(f"at fn ({uri}:1:3)", project)
+    assert result["references"] == []
+    assert "OUTSIDE_CONTENT" not in json.dumps(result)
+
+
 def test_remote_uris_are_never_treated_as_project_relative_files(project):
     result = prepare_evidence("at fn (https://example.com/src/main.js:2:3)\n"
                               "at fn (file://server/share/src/main.js:2:3)", project)

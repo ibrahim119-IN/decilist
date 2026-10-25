@@ -1,6 +1,6 @@
 # First triage result: implementation works, added model value is unproven
 
-Measured October 26, 2026 Cairo time (October 25 UTC). Source: commit `e0cc931`, with exact evaluation file hashes in [the pre-run freeze](../benchmarks/triage_freeze.json). Other documentation/study work and a pre-existing example were uncommitted at measurement, so the report correctly records `source_dirty=true`.
+Measured October 26, 2026 Cairo time (October 25 UTC). Source: commit `e0cc931`, with exact evaluation file hashes in [the original pre-run freeze](../benchmarks/triage_freeze_windows_v1.json). Other documentation/study work and a pre-existing example were uncommitted at measurement, so the report correctly records `source_dirty=true`.
 
 The optional assistant runs on saved test logs, gathers bounded referenced source excerpts, and chooses a next check through Decilist. A separate clean environment installed the built Python wheel and successfully used its CLI outside the source checkout against the existing local Liquid runtime. No repair was generated or applied by the assistant.
 
@@ -45,6 +45,12 @@ The immediate product decision is to improve specific, evidence-backed help befo
 - [Machine comparison, raw decisions, evidence, hashes and limitations](../reports/triage-machine-2026-10-26.json)
 - [Observed baseline, failure and reference-repair proof](../reports/triage-fixture-proof-2026-10-26.json)
 - [Installed-package CLI example](../reports/triage-installed-example-2026-10-26.json)
-- [Frozen corpus](../benchmarks/triage_cases.json) and [source/prompt freeze](../benchmarks/triage_freeze.json)
+- [Frozen corpus](../benchmarks/triage_cases.json) and [original source/prompt freeze](../benchmarks/triage_freeze_windows_v1.json)
 
 Raw unsanitized subprocess logs stay in local isolated lab directories. Published logs are bounded and sanitized; redaction is heuristic. See [verification](triage-verification.md) for software checks actually run.
+
+## Portability follow-up
+
+The first GitHub run exposed a real Ubuntu parsing defect: a percent-encoded space in a project-local `file://` reference was not decoded in one sanitized URI branch. The existing assertion was retained; new host-independent space/traversal checks reproduce the branch on Windows too. The fix decodes that URI path before the existing confinement checks.
+
+The original freeze and report above are preserved. A [new source freeze](../benchmarks/triage_freeze.json) explicitly identifies this portability-only change and the earlier observed result. A [follow-up replay](../reports/triage-portability-replay-2026-10-26.json) used the same retained proof, labels, instructions, policy, rules, and model. All 60 provider/case/repetition input hashes and categorical outcomes matched the original run. These are already-seen cases, not new held-out evidence; the result remains one model suggestion and seven abstentions across the eight unique regressions.

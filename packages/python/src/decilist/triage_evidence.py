@@ -184,7 +184,9 @@ def _source_path(raw: str, project: Path) -> tuple[Path, str] | None:
     if raw.startswith("file://[PROJECT]/"):
         # Replacing a POSIX project prefix in file:///project/file yields this
         # placeholder form. Parse it before urlsplit interprets [] as an IPv6 host.
-        raw = raw[len("file://"):]
+        # Decode this URI path just as in the normal parsed-file-URI branch,
+        # before applying traversal, extension, and project-confinement checks.
+        raw = unquote(raw[len("file://"):])
     elif raw.startswith("file://"):
         try:
             parsed = urlsplit(raw)
