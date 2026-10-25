@@ -2,5 +2,11 @@
   {"question":{"kind":"choose","state":"evidence","instructions":"Choose one","options":{"alpha":"First","beta":"Second"}},"probabilities":{"alpha":0.2,"beta":0.8},"value":"beta","confidence":0.8},
   {"question":{"kind":"predict","state":"evidence","instructions":"Is it ready?"},"probabilities":{"false":0.8,"true":0.2},"value":false,"confidence":0.8},
   {"question":{"kind":"score","state":"evidence","instructions":"How ready?","levels":["Low","Medium","High"]},"probabilities":{"0":0.1,"1":0.2,"2":0.7},"value":1.6,"confidence":0.7},
-  {"question":{"kind":"choose","state":"evidence","instructions":"Choose one","options":{"first":"First","second":"Second"}},"probabilities":{"second":0.5,"first":0.5},"value":"first","confidence":0.5}
+  {"question":{"kind":"choose","state":"evidence","instructions":"Choose one","options":{"first":"First","second":"Second"}},"probabilities":{"second":0.5,"first":0.5},"value":"first","confidence":0.5},
+  {"question":{"kind":"choose","state":"evidence","instructions":"Choose one","options":{"__proto__":"Prototype label","constructor":"Constructor label"}},"probabilities":{"__proto__":0.8,"constructor":0.2},"value":"__proto__","confidence":0.8},
+  {"question":{"kind":"choose","state":"evidence","instructions":"Choose one","options":{"__proto__":"Prototype label","constructor":"Constructor label","toString":"String label","hasOwnProperty":"Own property label"}},"probabilities":{"__proto__":0,"constructor":0.8,"toString":0.1,"hasOwnProperty":0.1},"value":"constructor","confidence":0.8},
+  {"question":{"kind":"choose","state":"evidence","instructions":"Choose one","options":{"2":"Two","1":"One"}},"probabilities":{"2":0.5,"1":0.5},"value":"1","confidence":0.5},
+  {"question":{"kind":"choose","state":"evidence","instructions":"Choose one","options":{"01":"Leading zero","4294967295":"Beyond index range","-1":"Negative","١":"Unicode digit","4294967294":"Largest array index"}},"probabilities":{"01":0.2,"4294967295":0.2,"-1":0.2,"١":0.2,"4294967294":0.2},"value":"4294967294","confidence":0.2},
+  {"question":{"kind":"choose","state":"evidence","instructions":"Choose one","options":{"01":"Leading zero","4294967295":"Beyond index range","-1":"Negative","١":"Unicode digit"}},"probabilities":{"01":0.25,"4294967295":0.25,"-1":0.25,"١":0.25},"value":"01","confidence":0.25},
+  {"question":{"kind":"choose","state":"evidence","instructions":"Choose one","options":{"00":"Leading zeros","0":"Zero"}},"probabilities":{"00":0.5,"0":0.5},"value":"0","confidence":0.5}
 ]

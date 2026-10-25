@@ -2,9 +2,24 @@ import { z } from "zod";
 
 const text = z.string().trim().min(1).max(65536);
 const label = z.string().min(1).max(256).refine(value => value === value.trim());
+function isRecord(input: unknown): input is Record<PropertyKey, unknown> {
+  if (typeof input !== "object" || input === null || Array.isArray(input)) return false;
+  // Match record input semantics, including null-prototype dictionaries and own constructor labels.
+  const constructor: unknown = (input as {constructor?: unknown}).constructor;
+  if (typeof constructor !== "function") return true;
+  const prototype: unknown = constructor.prototype;
+  return typeof prototype === "object" && prototype !== null && !Array.isArray(prototype) && Object.hasOwn(prototype, "isPrototypeOf");
+}
+function stringRecord<Value extends z.ZodType>(key: z.ZodType<string>, value: Value) {
+  // Zod's record output skips __proto__. Validate own entries before constructing safe data properties.
+  return z.custom<Record<PropertyKey, unknown>>(isRecord, "Expected a record")
+    .transform(input => Reflect.ownKeys(input).filter(key => Object.prototype.propertyIsEnumerable.call(input, key)).map(key => [key, input[key]]))
+    .pipe(z.array(z.tuple([key, value])))
+    .transform((entries): Record<string, z.output<Value>> => Object.fromEntries(entries));
+}
 const base = { state: text, instructions: text };
 export const questionSchema = z.discriminatedUnion("kind", [
-  z.strictObject({ ...base, kind: z.literal("choose"), options: z.record(label, text).refine(x => Object.keys(x).length >= 2 && Object.keys(x).length <= 64) }),
+  z.strictObject({ ...base, kind: z.literal("choose"), options: stringRecord(label, text).refine(x => Object.keys(x).length >= 2 && Object.keys(x).length <= 64) }),
   z.strictObject({ ...base, kind: z.literal("predict") }),
   z.strictObject({ ...base, kind: z.literal("score"), levels: z.array(label).min(2).max(10).refine(x => new Set(x).size === x.length) }),
 ]);
@@ -19,7 +34,7 @@ export const decisionSchema = z.strictObject({
   schema_version: z.literal("1"), request_id: z.string().min(1),
   kind: z.enum(["choose", "predict", "score"]), status: z.enum(["accepted", "abstained"]),
   value: z.union([z.string(), z.boolean(), z.number(), z.null()]),
-  probabilities: z.record(z.string(), z.number().min(0).max(1)),
+  probabilities: stringRecord(z.string(), z.number().min(0).max(1)),
   confidence: z.number().min(0).max(1).nullable(), provider: z.string().nullable(), model: z.string().nullable(),
   latency_ms: z.number().min(0), cost_usd: z.number().min(0).nullable(),
   attempts: z.array(z.strictObject({provider: z.string(), outcome: z.enum(["accepted", "low_confidence", "invalid_output", "timeout", "error", "blocked"]), latency_ms: z.number().min(0)})),
@@ -50,23 +65,85 @@ export interface Transport {
   decide(question: Question, policy: z.infer<typeof policySchema>): Promise<unknown>;
 }
 
+export class RuntimeConnectionError extends Error {
+  constructor(message: string, options?: ErrorOptions) { super(message, options); this.name = "RuntimeConnectionError"; }
+}
+export class RuntimeCompatibilityError extends RuntimeConnectionError {
+  constructor(message: string, options?: ErrorOptions) { super(message, options); this.name = "RuntimeCompatibilityError"; }
+}
+export const runtimeHealthSchema = z.object({
+  service: z.literal("decilist"), schema_version: z.literal("1"),
+  runtime_version: z.string().min(1), ready: z.boolean(), status: z.string(),
+  provider: z.string().optional(),
+});
+export type RuntimeHealth = z.infer<typeof runtimeHealthSchema>;
+function defaultUrl(): string {
+  // Browser use needs no Node globals; the explicit launcher passes this only to local applications.
+  const environment = (globalThis as {process?: {env?: Record<string, string | undefined>}}).process?.env;
+  return environment?.DECILIST_URL || "http://127.0.0.1:8765";
+}
+
 export class HttpTransport implements Transport {
-  constructor(readonly baseUrl = "http://127.0.0.1:8765", readonly timeoutMs = 130000) {
+  private isReady = false;
+  constructor(readonly baseUrl = defaultUrl(), readonly timeoutMs = 130000) {
     const url = new URL(baseUrl);
-    if (!["http:", "https:"].includes(url.protocol) || url.username || url.password) throw new Error("Invalid API URL");
+    if (!["http:", "https:"].includes(url.protocol) || url.username || url.password || url.search || url.hash || url.pathname !== "/") throw new Error("API URL must be an HTTP(S) origin without credentials, path, query, or fragment");
+    if (!Number.isFinite(timeoutMs) || timeoutMs <= 0) throw new Error("timeoutMs must be positive");
+  }
+  /** Wait for identity, readiness, and contract compatibility. Never starts a process. */
+  async ready(waitMs = 0): Promise<RuntimeHealth> {
+    if (!Number.isFinite(waitMs) || waitMs < 0) throw new Error("waitMs must be nonnegative");
+    const deadline = Date.now() + waitMs;
+    while (true) {
+      try {
+        const response = await fetch(new URL("/health", this.baseUrl), {
+          signal: AbortSignal.timeout(waitMs ? Math.max(1, Math.min(1000, deadline - Date.now())) : 1000), redirect: "error",
+        });
+        if (response.status === 503) throw new RuntimeConnectionError("The Decilist runtime is loading. Wait for readiness.");
+        if (!response.ok) throw new RuntimeCompatibilityError(`The health endpoint returned HTTP ${response.status}. Check the runtime URL.`);
+        let input: unknown;
+        try { input = await response.json(); }
+        catch { throw new RuntimeCompatibilityError("The endpoint did not return Decilist health JSON. Check the runtime URL."); }
+        const health = runtimeHealthSchema.safeParse(input);
+        if (!health.success) throw new RuntimeCompatibilityError("The endpoint is not a compatible Decilist runtime. Check its URL and install matching SDK/runtime packages.");
+        if (!health.data.ready || health.data.status !== "ok") throw new RuntimeConnectionError("The Decilist runtime is not ready yet.");
+        this.isReady = true;
+        return health.data;
+      } catch (error) {
+        if (error instanceof RuntimeCompatibilityError) throw error;
+        if (Date.now() >= deadline) throw new RuntimeConnectionError(`Decilist is not ready at ${this.baseUrl}. Start it with: decilist runtime start --provider demo`, {cause: error});
+        await new Promise(resolve => setTimeout(resolve, Math.min(100, Math.max(0, deadline - Date.now()))));
+      }
+    }
   }
   async decide(question: Question, policy: z.infer<typeof policySchema>): Promise<unknown> {
-    const response = await fetch(new URL("/v1/decisions", this.baseUrl), {
-      method: "POST", headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({question, policy}), signal: AbortSignal.timeout(this.timeoutMs), redirect: "error",
-    });
-    if (!response.ok) throw new Error(`Decilist HTTP ${response.status}`);
+    if (!this.isReady) await this.ready();
+    let response: Response;
+    try {
+      response = await fetch(new URL("/v1/decisions", this.baseUrl), {
+        method: "POST", headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({question, policy}), signal: AbortSignal.timeout(this.timeoutMs), redirect: "error",
+      });
+    } catch (error) {
+      this.isReady = false;
+      throw new RuntimeConnectionError(`The Decilist request failed at ${this.baseUrl}. Check that the runtime is still running.`, {cause: error});
+    }
+    if (!response.ok) throw new RuntimeConnectionError(`Decilist HTTP ${response.status}. Check the runtime and request.`);
     return response.json();
   }
 }
 
+export type ConnectOptions = {baseUrl?: string; timeoutMs?: number; waitMs?: number; policy?: Policy};
+
 export class Decilist {
   constructor(readonly transport: Transport = new HttpTransport(), readonly policy: Policy = {}) {}
+  /** Configure one endpoint for all direct choose/predict/score calls. */
+  static async connect(options: ConnectOptions = {}): Promise<Decilist> {
+    const policy = policySchema.parse(options.policy ?? {});
+    const transport = new HttpTransport(options.baseUrl, options.timeoutMs);
+    await transport.ready(options.waitMs ?? 10000);
+    return new Decilist(transport, policy);
+  }
   private async execute<T>(question: Question, policy: Policy = this.policy): Promise<Decision<T>> {
     const parsed = questionSchema.parse(question);
     return validateDecision<T>(parsed, await this.transport.decide(parsed, policySchema.parse(policy)));

@@ -12,6 +12,9 @@ license = "Apache-2.0"
 license-files = ["LICENSE"]
 dependencies = ["pydantic>=2.14.1,<3", "httpx>=0.28.1,<1"]
 
+[project.scripts]
+decilist = "decilist.runtime:main"
+
 [project.optional-dependencies]
 server = ["fastapi>=0.162,<1", "starlette>=1.10,<2", "uvicorn>=0.54,<1"]
 dev = ["pytest>=8.4,<10", "pytest-asyncio>=1.2,<2", "build>=1.3,<2"]
@@ -21,7 +24,7 @@ liquid = ["transformers==5.14.1", "torch>=2.9,<3", "torchvision>=0.24,<1", "pill
 where = ["src"]
 
 [tool.setuptools.package-data]
-decilist = ["py.typed"]
+decilist = ["py.typed", "static/*"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

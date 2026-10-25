@@ -4,6 +4,14 @@
 
 The Python package is the decision runtime. TypeScript and Python HTTP clients share a public contract with all other languages. This avoids maintaining two model runtimes before the November 1 demo. Custom Python providers implement `name`, `model`, `locality`, and `async infer(question) -> probabilities`. A TypeScript `Transport` changes where requests execute; it is not itself a model provider.
 
+## Integration experience
+
+The primary integration is a direct choose/predict/score call with input, a question, and any required choices or rubric. Provider configuration happens once. Named decisions and reusable definitions are optional helpers, not a mandatory registration layer. The SDK does not require a Playground session, project, dashboard, account, workflow framework, or changes to the application's interface.
+
+The application owns actions and end-user presentation. It can use a decision to proceed, ask for missing information, or request review in its existing flow. Decilist does not generate clarification prose or build that interface automatically.
+
+The explicit `decilist runtime run --provider ... -- node app.mjs` launcher loads or reuses a compatible Python runtime, waits for readiness, runs the application, and shuts down only the server it owns. A shared foreground runtime is also available. Python and TypeScript clients can connect once and share their policy across calls. No model downloads or process creation happen merely on SDK import. Local inference may run on the developer's machine or the application's private server; end users do not inherently need to install a model. See [runtime details](runtime.md).
+
 ```text
 Python in-process / Python HTTP / TypeScript / other HTTP caller
                               |
@@ -21,7 +29,7 @@ Python in-process / Python HTTP / TypeScript / other HTTP caller
 ## Semantics
 
 - Version 1 accepts a nonempty text state; JSON can be encoded into that text. Native JSON, images, audio, batching, and streaming are deferred.
-- `choose`: 2–64 distinct named options. The highest probability wins. Ties use declared option order, not provider response order.
+- `choose`: 2–64 distinct named options. The highest probability wins. Ties use the canonical question-key order, not provider response order. To agree with JavaScript JSON objects, canonical ASCII array-index keys (`0` through `4294967294`, without leading zeros) come first numerically; other keys retain declaration order. Python normalizes to that order before inference. Labels such as `__proto__` and `constructor` remain ordinary own data keys, not object configuration.
 - `predict`: P(true) and P(false). The boolean threshold is 0.5. Policy confidence is the probability of the selected boolean, not always P(true).
 - `score`: 2–10 distinct level descriptions, ordered low to high. Output is `sum(index * probability)`, not a rounded category or a free-form number. Confidence is the largest level probability; this is deliberately different from proximity of the expected score to a level.
 - Providers must return exactly the requested labels and finite probabilities in [0,1] summing to one within 1e-5. Invalid distributions are rejected, not silently repaired.

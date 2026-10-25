@@ -2,11 +2,23 @@
 from __future__ import annotations
 
 import math
+from collections.abc import Iterable
 from typing import Annotated, Literal, TypeAlias
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, TypeAdapter, field_validator
 
 Text = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=65536)]
 Label = Annotated[str, StringConstraints(min_length=1, max_length=256)]
+
+
+def _json_key_order(keys: Iterable[str]) -> list[str]:
+    """Match JS JSON object order: array indices first, then other keys in insertion order."""
+    def order(key: str) -> tuple[int, int]:
+        if key.isascii() and key.isdecimal() and (key == "0" or not key.startswith("0")):
+            index = int(key)
+            if index < 4294967295:
+                return (0, index)
+        return (1, 0)
+    return sorted(keys, key=order)
 
 
 class Contract(BaseModel):
@@ -27,7 +39,7 @@ class Choose(BaseQuestion):
     def exact_keys(cls, options: dict[str, str]) -> dict[str, str]:
         if any(not key.strip() or key != key.strip() for key in options):
             raise ValueError("option keys must not have surrounding whitespace")
-        return options
+        return {key: options[key] for key in _json_key_order(options)}
 
 
 class Predict(BaseQuestion):
@@ -86,7 +98,8 @@ class Decision(Contract):
 
 def labels_for(question: Question) -> list[str]:
     if isinstance(question, Choose):
-        return list(question.options)
+        # Also cover model_copy/model_construct, which intentionally bypass Pydantic validators.
+        return _json_key_order(question.options)
     if isinstance(question, Predict):
         return ["false", "true"]
     return [str(i) for i in range(len(question.levels))]

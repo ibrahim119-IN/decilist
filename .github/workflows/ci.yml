@@ -6,7 +6,10 @@ permissions:
   contents: read
 jobs:
   contracts:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -21,14 +24,10 @@ jobs:
       - run: python -m pytest -q
       - run: npm ci
       - run: npm test
+      - run: python scripts/verify_contract_parity.py
       - run: python -m build packages/python
       - run: python -m benchmarks.run --output reports/local/ci.json
-      - name: TypeScript to Python HTTP integration
-        shell: bash
-        run: |
-          python -m uvicorn apps.api.main:from_environment --factory --host 127.0.0.1 --port 8765 --no-access-log &
-          api_pid=$!
-          trap 'kill "$api_pid"' EXIT
-          python scripts/wait_for_api.py
-          python -m examples.http_client
-          npm run demo
+      - name: Python HTTP integration through the explicit launcher
+        run: python -m decilist runtime run --provider demo -- python -m examples.http_client
+      - name: TypeScript HTTP integration through the explicit launcher
+        run: python -m decilist runtime run --provider demo -- node examples/workflow.mjs

@@ -4,7 +4,8 @@
   "workspaces": ["packages/typescript"],
   "scripts": {
     "build": "npm run build --workspace @decilist/sdk",
-    "test": "npm run test --workspace @decilist/sdk",
+    "test": "npm run test --workspace @decilist/sdk && npm run test:ui",
+    "test:ui": "node --test tests/test_sdk_snippets.mjs",
     "demo": "npm run demo --workspace @decilist/sdk"
   },
   "engines": {"node": ">=22"}

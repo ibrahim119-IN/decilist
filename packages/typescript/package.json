@@ -7,6 +7,7 @@
   "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "bin": {"decilist": "./dist/cli.js"},
   "exports": {".": {"types": "./dist/index.d.ts", "import": "./dist/index.js"}},
   "files": ["dist"],
   "scripts": {"build": "tsc -p tsconfig.json", "test": "npm run build && tsc -p tsconfig.test.json && node --test test/*.test.mjs", "demo": "npm run build && node ../../examples/workflow.mjs"},

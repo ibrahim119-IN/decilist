@@ -1,0 +1,5 @@
+{
+  "local_only": true,
+  "min_confidence": 0.7,
+  "timeout_ms": 30000
+}

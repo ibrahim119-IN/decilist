@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Decilist",
-    "description": "Local development decision runtime",
-    "version": "0.1.0-alpha.1"
+    "description": "Local decision runtime",
+    "version": "0.1.0a1"
   },
   "paths": {
     "/health": {
@@ -59,10 +59,68 @@
           }
         }
       }
+    },
+    "/v1/demo/request": {
+      "post": {
+        "summary": "Prepare Request",
+        "operationId": "prepare_request_v1_demo_request_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AppRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "AppRequest": {
+        "properties": {
+          "request": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 1,
+            "title": "Request"
+          },
+          "clarification": {
+            "type": "string",
+            "maxLength": 1000,
+            "title": "Clarification",
+            "default": ""
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "request"
+        ],
+        "title": "AppRequest"
+      },
       "Attempt": {
         "properties": {
           "provider": {

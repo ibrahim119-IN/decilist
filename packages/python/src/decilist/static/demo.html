@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Request desk / Decilist app example</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script type="module" src="/demo.js"></script>
+  </head>
+  <body class="demo-body">
+    <header>
+      <a class="brand demo-brand" href="/demo"
+        ><span class="desk-mark" aria-hidden="true">↗</span>Request desk</a
+      >
+      <nav aria-label="Main">
+        <a href="/">Developer Playground</a
+        ><span class="local"><i></i> Private workspace</span>
+      </nav>
+    </header>
+    <main class="demo-main">
+      <section class="intro">
+        <p class="eyebrow">YOUR WORKSPACE</p>
+        <h1>What would you<br /><em>like to prepare?</em></h1>
+        <p class="demo-lead">
+          Start with your request. We'll use the document you already have open.
+        </p>
+      </section>
+      <section class="demo-workspace">
+        <aside class="source-card">
+          <span class="document-icon" aria-hidden="true">▤</span>
+          <p class="eyebrow">CURRENT DOCUMENT</p>
+          <h2>Project update</h2>
+          <p>
+            The latest progress, open questions, and next steps for the team.
+          </p>
+          <div class="source-meta">
+            <span>Already in context</span><span>Private drafts</span>
+          </div>
+        </aside>
+        <section class="panel composer">
+          <form id="request-form">
+            <label for="request">Your request</label
+            ><textarea
+              id="request"
+              dir="auto"
+              rows="4"
+              maxlength="4000"
+              placeholder="Prepare a short summary of the project update."
+              required
+            ></textarea>
+            <div class="presets demo-presets" aria-label="Example requests">
+              <button
+                type="button"
+                data-request="Prepare a short summary of the project update."
+              >
+                A clear request</button
+              ><button
+                type="button"
+                data-request="Prepare something from this document."
+              >
+                Needs a detail</button
+              ><button
+                type="button"
+                data-request="Maybe a summary or a checklist, I'm not sure."
+              >
+                Needs review
+              </button>
+            </div>
+            <button id="prepare" class="primary" type="submit">
+              Prepare request <span>↗</span>
+            </button>
+          </form>
+          <div id="demo-pending" role="status" hidden>
+            <span class="loading-dot" aria-hidden="true"></span>
+            <p>Checking what your request needs…</p>
+          </div>
+          <section
+            id="demo-response"
+            aria-live="polite"
+            aria-atomic="false"
+            hidden
+          >
+            <span id="demo-state" class="tag"></span>
+            <h2 id="demo-message" tabindex="-1"></h2>
+            <form id="clarification-form" hidden>
+              <label for="clarification">One detail</label
+              ><input
+                id="clarification"
+                dir="auto"
+                type="text"
+                maxlength="1000"
+                placeholder="e.g. a short summary"
+                required
+              /><button id="continue" class="secondary" type="submit">
+                Continue
+              </button>
+            </form>
+            <div id="draft" hidden>
+              <p id="draft-request" dir="auto"></p>
+              <p id="draft-clarification" dir="auto" hidden></p>
+              <div class="draft-meta">
+                <span>Source: Project update</span
+                ><span>Local preview only</span>
+              </div>
+            </div>
+            <p id="review-help" class="note" hidden>
+              You can edit your original request above and try again.
+            </p>
+          </section>
+          <p id="demo-error" class="error" role="alert" hidden></p>
+        </section>
+      </section>
+      <footer class="demo-footer">
+        <span
+          >This example prepares a local preview. It never sends, publishes, or
+          changes your document.</span
+        ><span id="demo-mode" role="status">Connecting…</span>
+      </footer>
+      <details class="demo-explanation">
+        <summary>About this example</summary>
+        <p>
+          The app supplies the current document and your request to one bounded
+          decision. The decision selects a next step; this app writes the
+          clarification and prepares the preview.
+        </p>
+        <p id="demo-mode-explanation"></p>
+        <a href="/">Open the developer Playground ↗</a>
+      </details>
+    </main>
+  </body>
+</html>

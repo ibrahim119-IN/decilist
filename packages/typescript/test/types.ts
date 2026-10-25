@@ -16,3 +16,9 @@ const score = await sdk.score("state", "Rate", ["Low", "High"]);
 if (score.status === "accepted") {
   const numeric: number = score.value;
 }
+const special = await sdk.choose("state", "Choose", {["__proto__"]:"Prototype label",constructor:"Constructor label"});
+if (special.status === "accepted") {
+  const selected: "__proto__" | "constructor" = special.value;
+  // @ts-expect-error special labels must retain the same bounded choice type
+  const invalid: "other" = special.value;
+}
