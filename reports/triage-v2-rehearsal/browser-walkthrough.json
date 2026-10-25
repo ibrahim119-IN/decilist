@@ -1,0 +1,94 @@
+{
+  "kind": "agent-assisted live browser walkthrough",
+  "human_first_use": false,
+  "start_utc": "2026-10-25T21:24:14.426Z",
+  "end_utc": "2026-10-25T21:27:00.325Z",
+  "elapsed_seconds": 165.899,
+  "timing_scope": "From first normal-app submit through final prepared preview. Includes agent/tool interaction and inspection; not inference latency or first-use usability timing.",
+  "endpoint": "http://127.0.0.1:8765",
+  "provider_observed_in_advanced": {
+    "ready": true,
+    "provider": "liquid",
+    "name": "liquid-local",
+    "model": "LiquidAI/d1-3B",
+    "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+    "locality": "local"
+  },
+  "checks": [
+    {"area":"normal app", "input":"Prepare a short summary of the project update.", "observed":"DRAFT READY; original request; Source: Project update; Local preview only", "status":"passed"},
+    {"area":"normal app", "input":"Prepare something from this document.", "observed":"ONE DETAIL; focused clarification asks summary, outline, or checklist", "status":"passed"},
+    {"area":"normal app", "input":"عايز ملخص قصير", "observed":"Continuation DRAFT READY; original request, Arabic clarification, and known source all retained", "status":"passed"},
+    {"area":"normal app", "input":"Maybe a summary or a checklist, I'm not sure.", "observed":"NEEDS REVIEW; original request retained for revision", "status":"passed", "limit":"App-owned guards can affect this route; it is not independent model accuracy evidence."},
+    {"area":"pending", "observed":"Submit disabled and Checking what your request needs…; Playground Running… and Waiting for the local runtime", "status":"passed"},
+    {"area":"Playground", "input":"Default transient-failure workflow question", "observed":"ANSWER ACCEPTED; retry 96.6%; proceed 1.8%; review 1.7%", "ui_latency_ms":240.3, "status":"passed"},
+    {"area":"local test", "name":"Agent rehearsal 2026-10-26 transient retry", "observed":"Saved in browser; rerun Passed", "status":"passed"},
+    {"area":"correction mechanism", "name":"Agent rehearsal disposable correction expected review", "observed":"Saved explicit expected review; rerun Failed (got retry); 1 of 2 local tests passed", "status":"passed", "limit":"Deliberate mismatch to exercise test behavior; not a discovered model error or quality result."},
+    {"area":"cleanup", "observed":"Removed only the two owned rehearsal cases; Local tests 0 and No tests yet restored", "status":"passed"},
+    {"area":"SDK", "observed":"Expanded Python and TypeScript examples match current state, question, options, local endpoint, 0.7 threshold and 30000 ms timeout; both have abstention handling", "status":"display verified", "execution":"Performed separately by primary agent, outside this walkthrough."},
+    {"area":"Copy code", "observed":"Button changed to Copied", "status":"partially verified", "limit":"Documented tab clipboard read returned empty, so copied clipboard bytes were not verified here. Visible SDK source was inspected."},
+    {"area":"abstention", "input":"Same real-model question, threshold 1.0", "observed":"NEEDS REVIEW; No answer; No provider met the policy. Let your application ask for detail, retry, or request review.", "ui_latency_ms":287.7, "status":"passed", "cleanup":"Threshold restored to 0.7 through keyboard input."},
+    {"area":"input validation", "input":"Only one allowed answer", "observed":"Add 2–64 distinct answers, each with a label and meaning.; Copy code disabled while invalid", "status":"passed", "cleanup":"Original three valid answers restored."},
+    {"area":"responsive layout", "viewport":{"width":390,"height":844}, "observed":"Both normal app and Playground screenshots inspected. Cards stack; controls and abstention result fit without observed horizontal clipping. Arabic continuation visible.", "status":"passed", "limit":"Browser viewport QA, not physical-device testing. Temporary viewport override reset."},
+    {"area":"keyboard", "observed":"Confidence slider adjusted with End/ArrowLeft; focus moves to clarification/result; labels exposed to accessibility API", "status":"bounded verification", "limit":"Not a complete keyboard-only or screen-reader audit."},
+    {"area":"baseline fallback", "observed":"Advanced UI says providers are configured when starting the runtime; only liquid provider present", "status":"not freshly executed", "limit":"Would require a separate explicitly selected demo runtime. Existing Liquid runtime was not restarted or changed."}
+  ],
+  "screenshots": {
+    "observed_live": true,
+    "saved_files": [],
+    "reason": "Documented CUA screenshot API displayed observed images but exposed no documented screenshot-file export operation. No fabricated or reconstructed captures were created."
+  },
+  "network": {
+    "changed": false,
+    "os_airgap_test": false,
+    "scope": "Local loopback browser flow only. Existing cached smoke evidence is separate; this walkthrough did not observe process traffic or disable network access."
+  },
+  "final_state": "Normal app /demo; clear request DRAFT READY; useful final tab retained. Liquid server left running.",
+  "triage_v2_status_at_walkthrough": "Under implementation; no v2 quality or live CLI completion claim in this browser report.",
+  "followups": [
+    {
+      "start_utc": "2026-10-25T21:29:37.436Z",
+      "delete_verified_utc": "2026-10-25T21:29:51.906Z",
+      "browser": "Edge extension; earlier IAB session unavailable on resumed turn",
+      "change": "Successful saved-test removal deletes its cached result and replaces the previous notice with an explicit removal notice. Storage-write failure still preserves the original cases and failure notice.",
+      "file": "packages/python/src/decilist/static/app.js",
+      "checks": [
+        "node --check packages/python/src/decilist/static/app.js passed",
+        "Created only Agent rehearsal disposable removal follow-up; real Liquid decision retry 96.6%, UI latency 223.9 ms",
+        "Saved case reran Passed; 1 of 1 local tests passed visible before removal",
+        "Removed owned case; Local tests 0, No tests yet, Run tests disabled, and fresh Removed notice visible",
+        "Prior 1 of 1 local tests passed summary absent after removal; desktop screenshot visually inspected"
+      ],
+      "cleanup": "Owned case removed; no unrelated saved tests changed"
+    },
+    {
+      "checked_at_utc": "2026-10-25T21:30:53Z",
+      "kind": "Explicit separate rules fallback and cleanup",
+      "endpoint": "http://127.0.0.1:8788",
+      "owned_server_pid": 24436,
+      "exec_session": 98440,
+      "observed": [
+        "Playground RULES WALKTHROUGH · LOCAL and explanatory non-model label",
+        "Transient failure returned retry; Rules baseline result label",
+        "Trace disclosed uniform low_confidence followed by workflow-rules accepted",
+        "Malformed JSON returned abstained / No answer; uniform low_confidence and workflow-rules error retained",
+        "Normal app Rules walkthrough · local; clear request DRAFT READY; Local preview only"
+      ],
+      "cleanup": "Ctrl+C sent only to owned exec session; shutdown completed and PID24436 exited. Port 8788 no longer listening.",
+      "original_runtime": "Port8765 PID36324 unchanged, ready=true, provider=liquid, local_only=true",
+      "final_browser": "Liquid http://127.0.0.1:8765/demo; DRAFT READY; useful tab retained",
+      "network_settings_changed": false
+    },
+    {
+      "kind": "Primary-agent cached model rehearsal report inspected",
+      "report": "reports/triage-v2-offline-rehearsal-2026-10-26.json",
+      "report_started_at_utc": "2026-10-25T21:24:32.054487+00:00",
+      "report_finished_at_utc": "2026-10-25T21:24:57.558759+00:00",
+      "device": "cuda:0",
+      "cached_load_ms": 23656.984200002626,
+      "accepted_operations": ["choose", "predict", "score"],
+      "blocked_connection_attempts": 0,
+      "boundary": "Python socket connect/connect_ex/create_connection/getaddrinfo denied during cached model loading and inference; no OS firewall, native-code network audit or browser air-gap claim.",
+      "provenance": "Report produced by primary agent and inspected here; not a duplicate run by this browser agent."
+    }
+  ]
+}

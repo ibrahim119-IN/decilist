@@ -4,7 +4,7 @@
 
 Decilist is an early, open-source Decision Intelligence SDK. Ask a bounded question directly in your code, validate its answer, apply a policy, and evaluate the result through the same contract across providers. It is local-first and model-agnostic by design. No decision registration or Playground session is required; reusable decision definitions are an optional future convenience.
 
-**Status: measured local alpha, not a completed platform.** Direct SDK calls, an explicit runtime launcher, packaged UI, and evaluation are implemented. Liquid d1-3B runs locally on the tested Windows RTX 3090. Its frozen held-out evaluation exposed substantial decision errors: 66.7% accepted classification accuracy and 60% overall coverage. See the [actual model results and failures](docs/model-validation.md). The default `demo` provider remains explicitly labelled deterministic rules. OpenAI Decisions is planned. Packages are not published to npm or PyPI.
+**Status: measured local alpha.** Direct SDK calls, an explicit runtime launcher, packaged UI, and reproducible evaluation are implemented. Liquid d1-3B runs locally on the tested Windows RTX 3090. Its general held-out evaluation exposed substantial decision errors: 66.7% accepted classification accuracy and 60% overall coverage. See the [actual model results and failures](docs/model-validation.md). The optional test-triage assistant now adds concrete failure facts, bounded implementation references, and explicitly labelled rules/model modes. See [the fresh triage evaluation and agent-run repair experiments](docs/triage-v2-results.md). The default `demo` provider remains labelled deterministic rules. OpenAI Decisions is planned. Packages are not published to npm or PyPI.
 
 ![Normal-app example using the local model](reports/ui/demo-liquid.png)
 
@@ -110,27 +110,29 @@ The demo's rules only implement the documented workflow gate; they do not interp
 
 ## Inspect a failing test in an existing project
 
-The optional Python triage helper consumes your existing failure log and bounded source references. It proposes one next check, preserves the model's decision trace, and abstains when evidence or confidence is insufficient. It does not execute commands or repair files. This helper needs a learned local runtime; the `demo` rules runtime is deliberately rejected.
+The optional Python triage helper consumes your existing failure log, extracts observed facts, and follows bounded static Python references to implementation code. It proposes an inspection when a narrow error-pattern rule or the learned local model supports it. Rules and model results remain distinguishable. It does not execute commands or repair files.
 
 ```bash
-python -m decilist.triage --log failure.log --project .
+decilist triage --log failure.log --project .
 ```
 
 Or call it directly from your existing Python tooling:
 
 ```python
 from pathlib import Path
-from decilist.triage import diagnose
+from decilist.triage_assistant import diagnose
 from decilist.triage_evidence import prepare_evidence
 
 evidence = prepare_evidence(Path("failure.log").read_text(), project=Path("."))
-report = await diagnose(evidence)  # use inside your existing async function
+report = await diagnose(evidence, project=Path("."))  # inside your existing async function
 print(report["next_check"]["title"])
 ```
 
-The transport is restricted to a local loopback endpoint. Credential filtering is heuristic, so inspect evidence before sharing reports. The [walkthrough](docs/triage.md) covers saving logs, status handling, and setup. The [deferred human experiment](docs/triage-study.md) measures time to a verified repair; model latency alone is not debugging-time savings. The [product roadmap in Arabic](docs/product-roadmap-ar.md) sets measurable adoption and quality gates for November 1 and beyond.
+Use `--mode rules` for facts and narrow rules without a model; `--mode model` explicitly bypasses rules. The default `auto` applies a supported rule first, otherwise requests the already-running learned local model. The `demo` runtime is rejected as a learned provider. `python -m decilist triage` is the equivalent module command; the original `decilist.triage` module remains available for reproducing v1.
 
-**First triage result: the learned assistant has not demonstrated added value.** On eight authored regressions replayed in this repository, the frozen error-pattern comparator suggested an acceptable next check for all eight. Liquid suggested one and abstained on seven; it abstained on all four evaluation regressions. This small suite does not establish general superiority for either approach. Human debugging-time savings remain unmeasured. See the [full triage findings](docs/triage-results.md).
+Transport is restricted to a local loopback endpoint. Credential filtering is heuristic, so inspect evidence before sharing reports. The [Arabic install and integration guide](docs/install-and-use-ar.md) covers the few-line API, status handling, and setup. The [walkthrough](docs/triage.md) explains evidence limits. The [deferred human experiment](docs/triage-study.md) remains unstarted; separate agent-run trials measure actual agent time to a protected repair, without claiming human time savings.
+
+**Triage quality remains limited.** The [original result](docs/triage-results.md) is preserved: Liquid suggested one next check and abstained on seven known cases. On eight fresh evaluation regressions, v2's learned path accepted two correct next checks versus one for v1, at the unchanged 0.7 threshold. The default hybrid also accepted two (one explicit rule, one model result). All three ambiguity/mixed/insufficient controls went to review in v2. These small authored suites do not establish general diagnosis quality or human productivity savings. [Full results and retained failures](docs/triage-v2-results.md).
 
 ## Verify and compare
 

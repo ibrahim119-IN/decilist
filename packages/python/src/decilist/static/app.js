@@ -394,6 +394,10 @@ function renderCases() {
       const before = cases;
       cases = cases.filter((x) => x.id !== item.id);
       if (!persist()) cases = before;
+      else {
+        testResults.delete(item.id);
+        notice(`Removed “${item.name}” from this device.`);
+      }
       renderCases();
     });
     li.append(info, remove);

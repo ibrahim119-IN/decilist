@@ -1,5 +1,17 @@
 # Triage verification record — October 26, 2026
 
+## V2 local candidate
+
+The primary agent ran the complete Python suite: **429 passed in 83.29 seconds**. `npm test` passed **21 SDK tests plus one generated-snippet check**, the TypeScript build passed, and **10 actual Python envelopes** passed TypeScript parity validation. These are implementation checks, not model-quality or human-productivity evidence.
+
+The new frozen corpus proved 19 baseline → failure → reference-repair sequences. Fresh machine evaluation used 8 regressions plus 3 separately reported controls, with 3 timing repetitions. Four reserved cases were repaired twice by fresh-context agents; the primary agent then reran all eight protected repairs and checked their source hashes. The human study was inspected and remains `ready`, with both timers unset and zero hints.
+
+The installed Python wheel passed 20 clean-consumer checks outside the checkout, including the actual local-model abstention path. Its SHA-256 is `4cac6713558857b8060162c96e1b81946d20828898db3836d3cff62f6592818b`; packaged source bytes match this candidate. Initial verification-harness assumptions about abstention provider fields and subprocess banner ordering failed and were corrected; the report retains those failures. No package assertion or product behavior was weakened.
+
+Actual browser checks covered the normal app, clarification/context reuse, ambiguity, saved-test pass/failure/removal, model abstention, narrow layout, and the explicit rules fallback. A stale saved-test summary found during the walkthrough was fixed and rechecked in the browser. A separate actual terminal recording captures failing commands, installed triage, and a direct SDK call; it is not a synthetic video or human usability test.
+
+See [v2 results](triage-v2-results.md), [clean installation evidence](../reports/triage-v2-clean-install-2026-10-26.json), [agent trial records](../reports/triage-v2-agent-trials-2026-10-26.json), and [browser/recording evidence](../reports/triage-v2-rehearsal/README.md). GitHub Actions validates the pushed candidate separately; local GPU measurements are not inferred from CI. Historical counts below remain attached to their earlier increments.
+
 Checks below were executed on the Windows development machine. Machine measurements use the actual resident Liquid runtime; ordinary software tests do not download or require model weights.
 
 | Check | Observed outcome |

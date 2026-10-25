@@ -1,0 +1,600 @@
+{
+  "schema_version": 1,
+  "kind": "agent-run-cached-liquid-http-app-rehearsal",
+  "started_at_utc": "2026-10-25T21:41:02.913672+00:00",
+  "success": true,
+  "human_usability_time": null,
+  "source_revision": "83c9fbcf2a090b2862ec0be740e2d2d5c8e72a30",
+  "source_dirty": true,
+  "gpu_preflight_csv": "0, NVIDIA GeForce RTX 3090, 610.88, 24576 MiB, 22775 MiB, 18 %\n1, NVIDIA GeForce RTX 3090, 610.88, 24576 MiB, 15268 MiB, 0 %",
+  "cache": {
+    "pinned_snapshot_present": true,
+    "weights_bytes": 6247065504,
+    "download_attempted_by_script": false
+  },
+  "environment": {
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1",
+    "HF_HUB_DISABLE_TELEMETRY": "1",
+    "HF_HUB_DISABLE_UPDATE_CHECK": "1"
+  },
+  "concurrency_note": "Coordinated agent trials were reported complete before this rehearsal; other background machine activity was not controlled.",
+  "reproduction": {
+    "working_directory": "repository root",
+    "command": [
+      "../../work/.venv-liquid/Scripts/python.exe",
+      "scripts/rehearse_cached_runtime.py",
+      "--hf-home",
+      "../../work/model-cache",
+      "--device",
+      "cuda:0",
+      "--port",
+      "8791",
+      "--output",
+      "reports/triage-v2-cached-runtime-rehearsal-2026-10-26.json"
+    ]
+  },
+  "limits": [
+    "Cached load excludes initial model/library downloads and installation.",
+    "Python connect/connect_ex/create_connection/getaddrinfo wrappers only; native extensions, separate processes, OS interfaces and packet capture are not audited.",
+    "AF_UNIX local IPC is allowed; IP connections and name resolution require loopback. localhost is rewritten to a loopback literal.",
+    "Guard self-tests are deliberately blocked attempts, reported separately from actual model/HTTP workload.",
+    "HTTP and static literal-asset checks only; no browser offline run, visual layout verification, OS air gap, or human walkthrough.",
+    "Shared machine: background CPU/network/GPU activity was not controlled; timings are observations, not controlled benchmarks or human productivity measures.",
+    "Windows asyncio Proactor native ConnectEx can bypass these Python wrappers. Recorded HTTP destinations are explicit loopback literals; no native-code network audit is claimed."
+  ],
+  "server": {
+    "host": "127.0.0.1",
+    "requested_port": 8791,
+    "port": 8791,
+    "pid": 21500,
+    "ownership": "new socket and runtime in this rehearsal process"
+  },
+  "guard_self_test": [
+    {
+      "operation": "connect",
+      "blocked": true
+    },
+    {
+      "operation": "connect_ex",
+      "blocked": true
+    },
+    {
+      "operation": "create_connection",
+      "blocked": true
+    },
+    {
+      "operation": "getaddrinfo",
+      "blocked": true
+    }
+  ],
+  "cached_provider_load_ms": 26324.712899993756,
+  "provider": {
+    "name": "liquid-local",
+    "model": "LiquidAI/d1-3B",
+    "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+    "device": "cuda:0",
+    "attention_backend": "vendor-explicit"
+  },
+  "runtime": {
+    "python": "3.12.0rc2",
+    "platform": "Windows",
+    "packages": {
+      "decilist": "0.1.0a1",
+      "torch": "2.13.0+cu126",
+      "torchvision": "0.28.0+cu126",
+      "transformers": "5.14.1",
+      "huggingface-hub": "1.33.0",
+      "httpx": "0.28.1",
+      "uvicorn": "0.54.0"
+    },
+    "cuda_runtime": "12.6",
+    "gpu": "NVIDIA GeForce RTX 3090"
+  },
+  "server_startup_ms": 16.11090000369586,
+  "http_requests": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "status_code": 200,
+      "http_elapsed_ms": 29.586300006485544,
+      "content_type": "application/json",
+      "content_security_policy": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "status_code": 200,
+      "http_elapsed_ms": 78.37579998886213,
+      "content_type": "text/html; charset=utf-8",
+      "content_security_policy": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'"
+    },
+    {
+      "method": "GET",
+      "path": "/demo",
+      "status_code": 200,
+      "http_elapsed_ms": 4.37959999544546,
+      "content_type": "text/html; charset=utf-8",
+      "content_security_policy": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'"
+    },
+    {
+      "method": "GET",
+      "path": "/app.js",
+      "status_code": 200,
+      "http_elapsed_ms": 4.435299997567199,
+      "content_type": "text/javascript; charset=utf-8",
+      "content_security_policy": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'"
+    },
+    {
+      "method": "GET",
+      "path": "/demo.js",
+      "status_code": 200,
+      "http_elapsed_ms": 4.492400010349229,
+      "content_type": "text/javascript; charset=utf-8",
+      "content_security_policy": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'"
+    },
+    {
+      "method": "GET",
+      "path": "/style.css",
+      "status_code": 200,
+      "http_elapsed_ms": 3.879999989294447,
+      "content_type": "text/css; charset=utf-8",
+      "content_security_policy": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/decisions",
+      "status_code": 200,
+      "http_elapsed_ms": 1908.8399000029312,
+      "content_type": "application/json",
+      "content_security_policy": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/decisions",
+      "status_code": 200,
+      "http_elapsed_ms": 146.83280000463128,
+      "content_type": "application/json",
+      "content_security_policy": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/decisions",
+      "status_code": 200,
+      "http_elapsed_ms": 92.72019998752512,
+      "content_type": "application/json",
+      "content_security_policy": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/demo/request",
+      "status_code": 200,
+      "http_elapsed_ms": 49.262499989708886,
+      "content_type": "application/json",
+      "content_security_policy": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/demo/request",
+      "status_code": 200,
+      "http_elapsed_ms": 48.93759998958558,
+      "content_type": "application/json",
+      "content_security_policy": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/demo/request",
+      "status_code": 200,
+      "http_elapsed_ms": 48.34510000364389,
+      "content_type": "application/json",
+      "content_security_policy": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/demo/request",
+      "status_code": 200,
+      "http_elapsed_ms": 45.84350000368431,
+      "content_type": "application/json",
+      "content_security_policy": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'"
+    }
+  ],
+  "health": {
+    "service": "decilist",
+    "schema_version": "1",
+    "runtime_version": "0.1.0a1",
+    "ready": true,
+    "status": "ok",
+    "provider": "liquid",
+    "local_only": true,
+    "providers": [
+      {
+        "name": "liquid-local",
+        "model": "LiquidAI/d1-3B",
+        "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+        "locality": "local"
+      }
+    ]
+  },
+  "ui_asset_check": {
+    "served_assets": {
+      "/": {
+        "bytes": 10008,
+        "sha256": "549ce77205981fa199b7ce4c956fa0e251a56f733607f241f082d07f6e6840af"
+      },
+      "/demo": {
+        "bytes": 4843,
+        "sha256": "6ef3136106a61a8ef234c387b89a6683f5806794613c992723ff17a0abab401a"
+      },
+      "/app.js": {
+        "bytes": 18977,
+        "sha256": "75e0af6212eb99e5035a490822017c834e7440df36fb4b260f182826473706d7"
+      },
+      "/demo.js": {
+        "bytes": 4775,
+        "sha256": "c325c44b8e33e2b6592f9746a7506ef7a83ca2007cae47f8a38430cf0815b6be"
+      },
+      "/style.css": {
+        "bytes": 14740,
+        "sha256": "b672a75dd772123d943304f43b3e7ad96c91aa7043592be9b7bf83d0d6be72cd"
+      }
+    },
+    "literal_dependency_urls": [
+      "/app.js",
+      "/demo.js",
+      "/health",
+      "/style.css",
+      "/v1/decisions",
+      "/v1/demo/request"
+    ],
+    "all_literal_dependencies_same_origin": true,
+    "inline_script_count": 0,
+    "self_only_csp_on_health_and_assets": true,
+    "scope": "Actual HTTP bodies/headers and literal HTML/CSS/fetch references; no browser JavaScript execution or layout verification"
+  },
+  "operations": [
+    {
+      "kind": "choose",
+      "http_elapsed_ms": 1908.8399000029312,
+      "question": {
+        "kind": "choose",
+        "state": "Please summarize the attached document in three bullet points.",
+        "instructions": "Which action is explicitly requested?",
+        "options": {
+          "summarize": "Summarize a document",
+          "translate": "Translate text",
+          "compare": "Compare documents"
+        }
+      },
+      "decision": {
+        "schema_version": "1",
+        "request_id": "2203558a-3738-4d80-8a79-099523c7110b",
+        "kind": "choose",
+        "status": "accepted",
+        "value": "summarize",
+        "probabilities": {
+          "summarize": 0.9849305403410742,
+          "translate": 0.008005038222499027,
+          "compare": 0.007064421436426688
+        },
+        "confidence": 0.9849305403410742,
+        "provider": "liquid-local",
+        "model": "LiquidAI/d1-3B",
+        "latency_ms": 1904.824599987478,
+        "cost_usd": null,
+        "attempts": [
+          {
+            "provider": "liquid-local",
+            "outcome": "accepted",
+            "latency_ms": 1904.7786000010092
+          }
+        ]
+      }
+    },
+    {
+      "kind": "predict",
+      "http_elapsed_ms": 146.83280000463128,
+      "question": {
+        "kind": "predict",
+        "state": "Please translate this paragraph from English into Arabic.",
+        "instructions": "Does the request explicitly specify a target language?"
+      },
+      "decision": {
+        "schema_version": "1",
+        "request_id": "3e14d1ea-a1a4-44d6-874b-0c01f61adab5",
+        "kind": "predict",
+        "status": "accepted",
+        "value": true,
+        "probabilities": {
+          "false": 0.033085978388704196,
+          "true": 0.9669140216112958
+        },
+        "confidence": 0.9669140216112958,
+        "provider": "liquid-local",
+        "model": "LiquidAI/d1-3B",
+        "latency_ms": 142.95739999215584,
+        "cost_usd": null,
+        "attempts": [
+          {
+            "provider": "liquid-local",
+            "outcome": "accepted",
+            "latency_ms": 142.91769999545068
+          }
+        ]
+      }
+    },
+    {
+      "kind": "score",
+      "http_elapsed_ms": 92.72019998752512,
+      "question": {
+        "kind": "score",
+        "state": "The request includes an action, an input document, and a requested output format.",
+        "instructions": "Rate completeness of the request using only the stated fields.",
+        "levels": [
+          "No fields are present",
+          "One or two fields are present",
+          "All three fields are present"
+        ]
+      },
+      "decision": {
+        "schema_version": "1",
+        "request_id": "8c75b546-38aa-44e1-8b0c-78301cf7a693",
+        "kind": "score",
+        "status": "accepted",
+        "value": 1.9384756068981595,
+        "probabilities": {
+          "0": 0.007220478716071712,
+          "1": 0.04708343566969704,
+          "2": 0.9456960856142312
+        },
+        "confidence": 0.9456960856142312,
+        "provider": "liquid-local",
+        "model": "LiquidAI/d1-3B",
+        "latency_ms": 88.65479999803938,
+        "cost_usd": null,
+        "attempts": [
+          {
+            "provider": "liquid-local",
+            "outcome": "accepted",
+            "latency_ms": 88.60979999008123
+          }
+        ]
+      }
+    }
+  ],
+  "app_flow": [
+    {
+      "id": "complete_request",
+      "parent_step": null,
+      "input": {
+        "request": "Prepare a short summary of the project update.",
+        "clarification": ""
+      },
+      "http_elapsed_ms": 49.262499989708886,
+      "observed": {
+        "outcome": "proceed",
+        "message": "Your request draft is ready.",
+        "draft": {
+          "request": "Prepare a short summary of the project update.",
+          "clarification": "",
+          "source": "Project update",
+          "destination": "Private drafts"
+        },
+        "decision": {
+          "schema_version": "1",
+          "request_id": "3cc1ba94-d5b0-431f-b827-314c4ae7fc04",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "proceed",
+          "probabilities": {
+            "proceed": 0.9524869012454587,
+            "clarify": 0.03693192506588429,
+            "review": 0.010581173688656942
+          },
+          "confidence": 0.9524869012454587,
+          "provider": "liquid-local",
+          "model": "LiquidAI/d1-3B",
+          "latency_ms": 45.21220001333859,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "liquid-local",
+              "outcome": "accepted",
+              "latency_ms": 45.172500002081506
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "missing_format",
+      "parent_step": null,
+      "input": {
+        "request": "Prepare something from this document.",
+        "clarification": ""
+      },
+      "http_elapsed_ms": 48.93759998958558,
+      "observed": {
+        "outcome": "clarify",
+        "message": "What would you like from the project update: a summary, outline, or checklist?",
+        "draft": null,
+        "decision": {
+          "schema_version": "1",
+          "request_id": "c7e1b35e-ee98-442a-8400-c28e9c184022",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "clarify",
+          "probabilities": {
+            "proceed": 0.13778974290425788,
+            "clarify": 0.792925223242984,
+            "review": 0.06928503385275825
+          },
+          "confidence": 0.792925223242984,
+          "provider": "liquid-local",
+          "model": "LiquidAI/d1-3B",
+          "latency_ms": 45.07310000190046,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "liquid-local",
+              "outcome": "accepted",
+              "latency_ms": 45.031900008325465
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "clarification_continuation",
+      "parent_step": "missing_format",
+      "input": {
+        "request": "Prepare something from this document.",
+        "clarification": "A short checklist."
+      },
+      "http_elapsed_ms": 48.34510000364389,
+      "observed": {
+        "outcome": "proceed",
+        "message": "Your request draft is ready.",
+        "draft": {
+          "request": "Prepare something from this document.",
+          "clarification": "A short checklist.",
+          "source": "Project update",
+          "destination": "Private drafts"
+        },
+        "decision": {
+          "schema_version": "1",
+          "request_id": "28b17ab5-7d23-4507-8a0e-b7d218ee9240",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "proceed",
+          "probabilities": {
+            "proceed": 0.8739933752071322,
+            "clarify": 0.09211822401903827,
+            "review": 0.033888400773829534
+          },
+          "confidence": 0.8739933752071322,
+          "provider": "liquid-local",
+          "model": "LiquidAI/d1-3B",
+          "latency_ms": 44.539399998029694,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "liquid-local",
+              "outcome": "accepted",
+              "latency_ms": 44.49909999675583
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "review_request",
+      "parent_step": null,
+      "input": {
+        "request": "Email a summary to the team.",
+        "clarification": ""
+      },
+      "http_elapsed_ms": 45.84350000368431,
+      "observed": {
+        "outcome": "review",
+        "message": "There isn't enough certainty to prepare this draft. Please make your request more specific.",
+        "draft": null,
+        "decision": {
+          "schema_version": "1",
+          "request_id": "42aeb54d-ad15-4716-b62b-21ccb72be390",
+          "kind": "choose",
+          "status": "abstained",
+          "value": null,
+          "probabilities": {},
+          "confidence": null,
+          "provider": null,
+          "model": null,
+          "latency_ms": 42.339699997683056,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "liquid-local",
+              "outcome": "low_confidence",
+              "latency_ms": 42.30239999014884
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "gpu_memory": {
+    "allocated_bytes": 6267150848,
+    "peak_allocated_bytes": 6294792704,
+    "scope": "This process's PyTorch allocator; excludes other processes/native allocations"
+  },
+  "observed_app_outcomes": [
+    "clarify",
+    "proceed",
+    "review"
+  ],
+  "cleanup": {
+    "own_server_task_finished": true,
+    "own_listener_closed": true,
+    "post_shutdown_connect_ex": 10035,
+    "original_runtime_touched": false,
+    "post_process_os_listener_verification": {
+      "checked_at_utc": "2026-10-25T21:43:07.207783+00:00",
+      "source": "Windows Get-NetTCPConnection Listen table",
+      "own_port_8791_has_listener": false,
+      "original_8765_owner_still_36324": true,
+      "observed_listeners": [
+        {
+          "LocalAddress": "127.0.0.1",
+          "LocalPort": 8765,
+          "OwningProcess": 36324
+        }
+      ]
+    },
+    "connect_ex_result_is_definitive_closure_evidence": false
+  },
+  "network_guard": {
+    "blocked_operations": [
+      {
+        "phase": "guard_self_test",
+        "operation": "socket.connect",
+        "host": "203.0.113.1",
+        "port": 443,
+        "blocked": true
+      },
+      {
+        "phase": "guard_self_test",
+        "operation": "socket.connect_ex",
+        "host": "203.0.113.1",
+        "port": 443,
+        "blocked": true
+      },
+      {
+        "phase": "guard_self_test",
+        "operation": "socket.create_connection",
+        "host": "203.0.113.1",
+        "port": 443,
+        "blocked": true
+      },
+      {
+        "phase": "guard_self_test",
+        "operation": "socket.getaddrinfo",
+        "host": "rehearsal-blocked.invalid",
+        "port": 443,
+        "blocked": true
+      }
+    ],
+    "blocked_self_test_operations": 4,
+    "blocked_workload_operations": 0,
+    "allowed_loopback_operations_by_wrapper": {
+      "socket.connect": 1,
+      "socket.connect_ex": 1
+    },
+    "all_blocked_before_original_socket_or_dns_function": true
+  },
+  "elapsed_ms": 31051.59669999557,
+  "finished_at_utc": "2026-10-25T21:41:34.250317+00:00",
+  "executed_script_sha256": "a1c2fcfd864e502b36c874b9c0e5e4b0c3457ff1c0e478191d205c2814579839",
+  "script_followup": {
+    "change": "After the single actual workload run, hardened future cleanup checks to use owned asyncio listener flags/socket descriptor; raw timings/outcomes were retained and no model rerun occurred.",
+    "current_script_sha256": "9546716d82f117103df6a761249c3e13aabbd87845d89ad02b0e0f876c71d236"
+  }
+}

@@ -1,0 +1,1164 @@
+{
+  "schema_version": 1,
+  "experiment": "triage-v2 clean-wheel consumer installation and integration",
+  "execution": "agent-run scripted verification; not a human usability or debugging-time study",
+  "started_at_utc": "2026-10-25T21:35:20.344524+00:00",
+  "model_server_started_or_restarted": false,
+  "model_download_requested": false,
+  "model_calls_planned": 1,
+  "fixture_scope": "New authored packaging smoke app; not a frozen quality case or reserved repair trial",
+  "timings_seconds": {
+    "wheel_build": 5.2491,
+    "fresh_venv_creation": 6.1207,
+    "core_sdk_install_including_dependencies": 6.2614,
+    "first_consumer_triage_call": 0.3498,
+    "scripted_snippet_write_and_run": 0.4412,
+    "followup_validation_active_process": 2.7728,
+    "active_verification_process_total": 26.5784,
+    "total_agent_run_including_harness_investigation": 85.47
+  },
+  "checks": [
+    {
+      "name": "source_matches_frozen_assistant",
+      "passed": true,
+      "files": {
+        "packages/python/src/decilist/triage_assistant.py": true,
+        "packages/python/src/decilist/triage_inspect.py": true,
+        "packages/python/src/decilist/triage_context.py": true,
+        "packages/python/src/decilist/triage_evidence.py": true,
+        "packages/python/src/decilist/triage.py": true
+      },
+      "freeze_sha256": "1e824375929468b94601af9399bafa59eebea56c08dae676b0e4097f0eb31294"
+    },
+    {
+      "name": "wheel_build",
+      "passed": true,
+      "exit_code": 0
+    },
+    {
+      "name": "wheel_contains_frozen_assistant",
+      "passed": true,
+      "files": {
+        "packages/python/src/decilist/triage_assistant.py": true,
+        "packages/python/src/decilist/triage_inspect.py": true,
+        "packages/python/src/decilist/triage_context.py": true,
+        "packages/python/src/decilist/triage_evidence.py": true,
+        "packages/python/src/decilist/triage.py": true
+      }
+    },
+    {
+      "name": "clean_core_wheel_install",
+      "passed": true,
+      "exit_code": 0,
+      "extras": []
+    },
+    {
+      "name": "installed_import_isolated_and_lightweight",
+      "passed": true,
+      "elapsed_seconds": 0.4152
+    },
+    {
+      "name": "installed_console_triage_help",
+      "passed": true,
+      "exit_code": 0,
+      "elapsed_seconds": 0.3652
+    },
+    {
+      "name": "installed_module_runtime_help",
+      "passed": true,
+      "exit_code": 0,
+      "elapsed_seconds": 0.3543
+    },
+    {
+      "name": "legacy_runtime_module_help",
+      "passed": true,
+      "exit_code": 0,
+      "elapsed_seconds": 0.3286
+    },
+    {
+      "name": "installed_console_version",
+      "passed": true,
+      "exit_code": 0,
+      "elapsed_seconds": 0.3232
+    },
+    {
+      "name": "saved_real_failure_direct_rule",
+      "passed": true
+    },
+    {
+      "name": "rules_review_keeps_expected_actual_and_source",
+      "passed": true
+    },
+    {
+      "name": "unavailable_is_explicit_and_preserves_facts",
+      "passed": true,
+      "endpoint_condition": "A reserved loopback socket deliberately did not listen; no server was started"
+    },
+    {
+      "name": "existing_learned_runtime_compatibility",
+      "passed": true,
+      "elapsed_seconds": 0.5359,
+      "exit_code": 0
+    },
+    {
+      "name": "actual_learned_call_reports_result_without_fallback",
+      "passed": true,
+      "observed_status": "needs_review",
+      "observed_route": "manual_review",
+      "decision_status": "abstained",
+      "note": "Actual Liquid inference abstained due low confidence. This passes transport/status provenance checks, not answer quality; no accepted suggestion is claimed.",
+      "initial_harness_result": false,
+      "actual_provider_attempts": [
+        {
+          "provider": "liquid-local",
+          "outcome": "low_confidence",
+          "latency_ms": 266.4562999998452
+        }
+      ],
+      "confidence": null
+    },
+    {
+      "name": "runtime_module_reuses_without_restart_and_preserves_separator",
+      "passed": true,
+      "elapsed_seconds": 0.8011,
+      "observed_application": {
+        "arguments": [
+          "--application-option",
+          "two words",
+          "triage"
+        ],
+        "endpoint": "http://127.0.0.1:8765"
+      },
+      "observed_stdout": "{\"arguments\": [\"--application-option\", \"two words\", \"triage\"], \"endpoint\": \"http://127.0.0.1:8765\"}\nReusing ready Decilist 0.1.0a1 (liquid) at http://127.0.0.1:8765. No process was started.\n"
+    },
+    {
+      "name": "few_line_api_from_consumer_app",
+      "passed": true,
+      "elapsed_seconds": 0.4406,
+      "result": {
+        "status": "suggested",
+        "source": "rules",
+        "next_check": "Inspect the missing import and its declared dependency"
+      },
+      "scope": "Agent wrote and executed the documented snippet; excludes human reading/integration time"
+    },
+    {
+      "name": "shipped_example_runs_with_installed_sdk",
+      "passed": true,
+      "elapsed_seconds": 0.4823
+    },
+    {
+      "name": "report_save_is_exclusive",
+      "passed": true,
+      "first_elapsed_seconds": 0.5567,
+      "refusal_elapsed_seconds": 0.4712,
+      "refusal_exit_code": 2
+    },
+    {
+      "name": "delivered_wheel_matches_verified_bytes",
+      "passed": true
+    },
+    {
+      "name": "delivered_package_matches_current_source_byte_for_byte",
+      "passed": true,
+      "package_files_checked": 23,
+      "mismatches": []
+    }
+  ],
+  "wheel": {
+    "filename": "decilist-0.1.0a1-py3-none-any.whl",
+    "sha256": "4cac6713558857b8060162c96e1b81946d20828898db3836d3cff62f6592818b",
+    "size_bytes": 70515
+  },
+  "consumer_environment": {
+    "version": "0.1.0a1",
+    "inside_consumer_venv": true,
+    "package_path": "Lib/site-packages/decilist/__init__.py",
+    "packages": [
+      {
+        "name": "annotated-types",
+        "version": "0.8.0"
+      },
+      {
+        "name": "anyio",
+        "version": "4.15.1"
+      },
+      {
+        "name": "certifi",
+        "version": "2026.10.23"
+      },
+      {
+        "name": "decilist",
+        "version": "0.1.0a1"
+      },
+      {
+        "name": "h11",
+        "version": "0.16.0"
+      },
+      {
+        "name": "httpcore",
+        "version": "1.0.9"
+      },
+      {
+        "name": "httpx",
+        "version": "0.28.1"
+      },
+      {
+        "name": "idna",
+        "version": "3.20"
+      },
+      {
+        "name": "pip",
+        "version": "23.2.1"
+      },
+      {
+        "name": "pydantic",
+        "version": "2.14.1"
+      },
+      {
+        "name": "pydantic_core",
+        "version": "2.50.1"
+      },
+      {
+        "name": "typing-inspection",
+        "version": "0.4.4"
+      },
+      {
+        "name": "typing_extensions",
+        "version": "4.16.0"
+      }
+    ],
+    "heavy_packages_available": {
+      "torch": false,
+      "transformers": false,
+      "torchvision": false,
+      "fastapi": false,
+      "uvicorn": false
+    },
+    "heavy_modules_imported": [],
+    "python_version": "3.12.0rc2",
+    "platform": "win32",
+    "system_release": "11",
+    "machine": "AMD64"
+  },
+  "fixtures": [
+    {
+      "program": "missing_dependency.py",
+      "source": "import decilist_clean_install_missing_dependency\n",
+      "source_sha256": "3db12e39cfe23a697fba5164694afd042827c5b2cf22f57603ecb9d919d1806b",
+      "log": "missing_dependency.log",
+      "process_exit_code": 1,
+      "elapsed_seconds": 0.0374,
+      "observed_log": "Traceback (most recent call last):\n  File \"<consumer-app>\\missing_dependency.py\", line 1, in <module>\n    import decilist_clean_install_missing_dependency\nModuleNotFoundError: No module named 'decilist_clean_install_missing_dependency'\n"
+    },
+    {
+      "program": "check_total.py",
+      "source": "def total(values):\n    return sum(values) - 1\n\ndef check_total():\n    observed = total([2, 3])\n    assert observed == 5, f'expected 5 but got {observed}'\n\ncheck_total()\n",
+      "source_sha256": "aab3b98724dfc57353accd5f54eeb72bc638428ba928601df402433082d5311c",
+      "log": "check_total.log",
+      "process_exit_code": 1,
+      "elapsed_seconds": 0.0368,
+      "observed_log": "Traceback (most recent call last):\n  File \"<consumer-app>\\check_total.py\", line 8, in <module>\n    check_total()\n  File \"<consumer-app>\\check_total.py\", line 6, in check_total\n    assert observed == 5, f'expected 5 but got {observed}'\nAssertionError: expected 5 but got 4\n"
+    }
+  ],
+  "triage_runs": {
+    "default_auto_direct_rule": {
+      "command": [
+        "decilist",
+        "triage",
+        "--log",
+        "missing_dependency.log",
+        "--project",
+        ".",
+        "--mode",
+        "auto",
+        "--format",
+        "json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.3497,
+      "report": {
+        "schema_version": 1,
+        "assistant_version": "triage-v2.0",
+        "specification_sha256": "98551133d1b7a8c61635150bf9af223ff9edfc174e4d0e491f8cc0af98bb026b",
+        "status": "suggested",
+        "source": "rules",
+        "route": "dependency_environment",
+        "next_check": {
+          "title": "Inspect the missing import and its declared dependency",
+          "steps": [
+            "Inspect the exact missing module and the referenced import location.",
+            "Compare that import with the project's declared dependencies and active environment; a module name need not equal a package installation name."
+          ]
+        },
+        "confidence": null,
+        "confidence_note": "Confidence is the model's probability for this route; it is not the probability that a diagnosis or repair is correct.",
+        "facts": {
+          "failure_observed": true,
+          "exceptions": [
+            {
+              "type": "ModuleNotFoundError",
+              "message": "No module named 'decilist_clean_install_missing_dependency'",
+              "raised_context": true,
+              "log_lines": [
+                4
+              ]
+            }
+          ],
+          "assertions": [],
+          "expected_actual": [],
+          "failing_tests": [],
+          "source_references": [
+            {
+              "path": "missing_dependency.py",
+              "line": 1,
+              "excerpt": "1 | import decilist_clean_install_missing_dependency",
+              "log_lines": [
+                2
+              ],
+              "origins": [
+                "log_reference"
+              ]
+            }
+          ],
+          "truncated": false
+        },
+        "ambiguity": [],
+        "evidence": {
+          "schema_version": 1,
+          "command": null,
+          "log": "Traceback (most recent call last):\n  File \"[PROJECT]\\missing_dependency.py\", line 1, in <module>\n    import decilist_clean_install_missing_dependency\nModuleNotFoundError: No module named 'decilist_clean_install_missing_dependency'\n",
+          "references": [
+            {
+              "path": "missing_dependency.py",
+              "line": 1,
+              "excerpt": "1 | import decilist_clean_install_missing_dependency"
+            }
+          ],
+          "signals": [
+            {
+              "kind": "traceback",
+              "line": 1,
+              "text": "Traceback (most recent call last):"
+            },
+            {
+              "kind": "stack_frame",
+              "line": 2,
+              "text": "  File \"[PROJECT]\\missing_dependency.py\", line 1, in <module>"
+            },
+            {
+              "kind": "failure",
+              "line": 4,
+              "text": "ModuleNotFoundError: No module named 'decilist_clean_install_missing_dependency'"
+            }
+          ],
+          "truncated": false,
+          "redaction_count": 1,
+          "log_path": "missing_dependency.log",
+          "implementation_references": [],
+          "context": {
+            "schema_version": 1,
+            "files_examined": 1,
+            "snippets_added": 0,
+            "truncated": false,
+            "redaction_count": 0,
+            "unresolved": [
+              {
+                "path": "missing_dependency.py",
+                "line": 1,
+                "symbol": "<reference>",
+                "reason": "reference_not_in_function"
+              }
+            ],
+            "limits": {
+              "max_hops": 3,
+              "max_import_hops": 3,
+              "max_files": 8,
+              "max_snippets": 4,
+              "max_context_chars": 8000,
+              "max_source_bytes": 128000
+            },
+            "note": "Static explicit-call/property context only; dynamic resolution is not guessed. Excerpts are untrusted; redaction is heuristic."
+          }
+        },
+        "model_state": "Untrusted observed data. Log coordinates refer to the prepared log; source coordinates are the recorded references.\n\nObserved exceptions\nLog lines 4\n  ModuleNotFoundError: No module named 'decilist_clean_install_missing_dependency'\n\nActual referenced source context\nmissing_dependency.py:1 (original log reference); log lines 2\n  1 | import decilist_clean_install_missing_dependency",
+        "model_state_truncated": false,
+        "rule": {
+          "rule_id": "python.missing-module.v1",
+          "evidence_lines": [
+            4
+          ],
+          "title": "Inspect the missing import and its declared dependency",
+          "steps": [
+            "Inspect the exact missing module and the referenced import location.",
+            "Compare that import with the project's declared dependencies and active environment; a module name need not equal a package installation name."
+          ]
+        },
+        "decision": null,
+        "runtime": null,
+        "model_policy": {
+          "local_only": true,
+          "min_confidence": 0.7,
+          "timeout_ms": 30000
+        },
+        "message": "An explicit error-pattern rule supports this inspection. No model was called.",
+        "limitations": [
+          "This suggests inspections, never a proven root cause or an executed repair.",
+          "Static source links show possible callees, not a runtime execution trace.",
+          "Credential redaction is heuristic; all retained evidence remains untrusted.",
+          "Model confidence is uncalibrated; local endpoint checks are not an OS network boundary."
+        ]
+      }
+    },
+    "rules_review_preserves_facts": {
+      "command": [
+        "decilist",
+        "triage",
+        "--log",
+        "check_total.log",
+        "--project",
+        ".",
+        "--mode",
+        "rules",
+        "--format",
+        "json"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 0.384,
+      "report": {
+        "schema_version": 1,
+        "assistant_version": "triage-v2.0",
+        "specification_sha256": "98551133d1b7a8c61635150bf9af223ff9edfc174e4d0e491f8cc0af98bb026b",
+        "status": "needs_review",
+        "source": "none",
+        "route": "manual_review",
+        "next_check": {
+          "basis": "observed_assertion",
+          "evidence_lines": [
+            6
+          ],
+          "title": "Inspect the recorded expectation against the observed value",
+          "steps": [
+            "At the cited assertion, compare the stated expectation and observed expression with the intended contract and configured policy.",
+            "Inspect the referenced source context before selecting an explanation or changing the assertion."
+          ]
+        },
+        "confidence": null,
+        "confidence_note": "Confidence is the model's probability for this route; it is not the probability that a diagnosis or repair is correct.",
+        "facts": {
+          "failure_observed": true,
+          "exceptions": [
+            {
+              "type": "AssertionError",
+              "message": "expected 5 but got 4",
+              "raised_context": true,
+              "log_lines": [
+                6
+              ]
+            }
+          ],
+          "assertions": [],
+          "expected_actual": [
+            {
+              "expected": "5",
+              "actual": "4",
+              "basis": "explicit_assertion_message",
+              "log_lines": [
+                6
+              ]
+            }
+          ],
+          "failing_tests": [],
+          "source_references": [
+            {
+              "path": "check_total.py",
+              "line": 8,
+              "excerpt": "6 |     assert observed == 5, f'expected 5 but got {observed}'\n7 | \n8 | check_total()",
+              "log_lines": [
+                2
+              ],
+              "origins": [
+                "log_reference"
+              ]
+            },
+            {
+              "path": "check_total.py",
+              "line": 6,
+              "excerpt": "4 | def check_total():\n5 |     observed = total([2, 3])\n6 |     assert observed == 5, f'expected 5 but got {observed}'\n7 | \n8 | check_total()",
+              "log_lines": [
+                4
+              ],
+              "origins": [
+                "log_reference"
+              ]
+            },
+            {
+              "path": "check_total.py",
+              "line": 1,
+              "excerpt": "1 | def total(values):\n2 |     return sum(values) - 1",
+              "log_lines": [],
+              "origins": [
+                "implementation"
+              ],
+              "end_line": 2,
+              "implementation_context": [
+                {
+                  "symbol": "total",
+                  "resolution": "static_python_call",
+                  "reference": {
+                    "path": "check_total.py",
+                    "line": 6
+                  },
+                  "caller": {
+                    "path": "check_total.py",
+                    "line": 5,
+                    "symbol": "check_total"
+                  },
+                  "import_chain": []
+                }
+              ]
+            }
+          ],
+          "truncated": false
+        },
+        "ambiguity": [],
+        "evidence": {
+          "schema_version": 1,
+          "command": null,
+          "log": "Traceback (most recent call last):\n  File \"[PROJECT]\\check_total.py\", line 8, in <module>\n    check_total()\n  File \"[PROJECT]\\check_total.py\", line 6, in check_total\n    assert observed == 5, f'expected 5 but got {observed}'\nAssertionError: expected 5 but got 4\n",
+          "references": [
+            {
+              "path": "check_total.py",
+              "line": 8,
+              "excerpt": "6 |     assert observed == 5, f'expected 5 but got {observed}'\n7 | \n8 | check_total()"
+            },
+            {
+              "path": "check_total.py",
+              "line": 6,
+              "excerpt": "4 | def check_total():\n5 |     observed = total([2, 3])\n6 |     assert observed == 5, f'expected 5 but got {observed}'\n7 | \n8 | check_total()"
+            }
+          ],
+          "signals": [
+            {
+              "kind": "traceback",
+              "line": 1,
+              "text": "Traceback (most recent call last):"
+            },
+            {
+              "kind": "stack_frame",
+              "line": 2,
+              "text": "  File \"[PROJECT]\\check_total.py\", line 8, in <module>"
+            },
+            {
+              "kind": "stack_frame",
+              "line": 4,
+              "text": "  File \"[PROJECT]\\check_total.py\", line 6, in check_total"
+            },
+            {
+              "kind": "failure",
+              "line": 6,
+              "text": "AssertionError: expected 5 but got 4"
+            }
+          ],
+          "truncated": false,
+          "redaction_count": 2,
+          "log_path": "check_total.log",
+          "implementation_references": [
+            {
+              "path": "check_total.py",
+              "line": 1,
+              "end_line": 2,
+              "excerpt": "1 | def total(values):\n2 |     return sum(values) - 1",
+              "symbol": "total",
+              "resolution": "static_python_call",
+              "truncated": false,
+              "provenance": {
+                "reference": {
+                  "path": "check_total.py",
+                  "line": 6
+                },
+                "caller": {
+                  "path": "check_total.py",
+                  "line": 5,
+                  "symbol": "check_total"
+                },
+                "import_chain": []
+              }
+            }
+          ],
+          "context": {
+            "schema_version": 1,
+            "files_examined": 1,
+            "snippets_added": 1,
+            "truncated": false,
+            "redaction_count": 0,
+            "unresolved": [
+              {
+                "path": "check_total.py",
+                "line": 8,
+                "symbol": "<reference>",
+                "reason": "reference_not_in_function"
+              }
+            ],
+            "limits": {
+              "max_hops": 3,
+              "max_import_hops": 3,
+              "max_files": 8,
+              "max_snippets": 4,
+              "max_context_chars": 8000,
+              "max_source_bytes": 128000
+            },
+            "note": "Static explicit-call/property context only; dynamic resolution is not guessed. Excerpts are untrusted; redaction is heuristic."
+          }
+        },
+        "model_state": "Untrusted observed data. Log coordinates refer to the prepared log; source coordinates are the recorded references.\n\nObserved exceptions\nLog lines 6\n  AssertionError: expected 5 but got 4\n\nExplicit expected and actual values\nLog lines 6\n  Expected: 5\n  Actual: 4\n\nActual referenced source context\ncheck_total.py:1 (implementation resolved by static Python call)\n  Symbol: total; caller check_total.py:5 (check_total); original reference check_total.py:6\n  1 | def total(values):\n  2 |     return sum(values) - 1\ncheck_total.py:8 (original log reference); log lines 2\n  6 |     assert observed == 5, f'expected 5 but got {observed}'\n  7 | \n  8 | check_total()\ncheck_total.py:6 (original log reference); log lines 4\n  4 | def check_total():\n  5 |     observed = total([2, 3])\n  6 |     assert observed == 5, f'expected 5 but got {observed}'\n  7 | \n  8 | check_total()",
+        "model_state_truncated": false,
+        "rule": null,
+        "decision": null,
+        "runtime": null,
+        "model_policy": {
+          "local_only": true,
+          "min_confidence": 0.7,
+          "timeout_ms": 30000
+        },
+        "message": "No narrow error-pattern rule applies. The observed facts remain available for inspection.",
+        "limitations": [
+          "This suggests inspections, never a proven root cause or an executed repair.",
+          "Static source links show possible callees, not a runtime execution trace.",
+          "Credential redaction is heuristic; all retained evidence remains untrusted.",
+          "Model confidence is uncalibrated; local endpoint checks are not an OS network boundary."
+        ]
+      }
+    },
+    "deliberately_unavailable_local_endpoint": {
+      "command": [
+        "decilist",
+        "triage",
+        "--log",
+        "check_total.log",
+        "--project",
+        ".",
+        "--mode",
+        "model",
+        "--format",
+        "json"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 1.5655,
+      "report": {
+        "schema_version": 1,
+        "assistant_version": "triage-v2.0",
+        "specification_sha256": "98551133d1b7a8c61635150bf9af223ff9edfc174e4d0e491f8cc0af98bb026b",
+        "status": "unavailable",
+        "source": "none",
+        "route": "manual_review",
+        "next_check": {
+          "basis": "observed_assertion",
+          "evidence_lines": [
+            6
+          ],
+          "title": "Inspect the recorded expectation against the observed value",
+          "steps": [
+            "At the cited assertion, compare the stated expectation and observed expression with the intended contract and configured policy.",
+            "Inspect the referenced source context before selecting an explanation or changing the assertion."
+          ]
+        },
+        "confidence": null,
+        "confidence_note": "Confidence is the model's probability for this route; it is not the probability that a diagnosis or repair is correct.",
+        "facts": {
+          "failure_observed": true,
+          "exceptions": [
+            {
+              "type": "AssertionError",
+              "message": "expected 5 but got 4",
+              "raised_context": true,
+              "log_lines": [
+                6
+              ]
+            }
+          ],
+          "assertions": [],
+          "expected_actual": [
+            {
+              "expected": "5",
+              "actual": "4",
+              "basis": "explicit_assertion_message",
+              "log_lines": [
+                6
+              ]
+            }
+          ],
+          "failing_tests": [],
+          "source_references": [
+            {
+              "path": "check_total.py",
+              "line": 8,
+              "excerpt": "6 |     assert observed == 5, f'expected 5 but got {observed}'\n7 | \n8 | check_total()",
+              "log_lines": [
+                2
+              ],
+              "origins": [
+                "log_reference"
+              ]
+            },
+            {
+              "path": "check_total.py",
+              "line": 6,
+              "excerpt": "4 | def check_total():\n5 |     observed = total([2, 3])\n6 |     assert observed == 5, f'expected 5 but got {observed}'\n7 | \n8 | check_total()",
+              "log_lines": [
+                4
+              ],
+              "origins": [
+                "log_reference"
+              ]
+            },
+            {
+              "path": "check_total.py",
+              "line": 1,
+              "excerpt": "1 | def total(values):\n2 |     return sum(values) - 1",
+              "log_lines": [],
+              "origins": [
+                "implementation"
+              ],
+              "end_line": 2,
+              "implementation_context": [
+                {
+                  "symbol": "total",
+                  "resolution": "static_python_call",
+                  "reference": {
+                    "path": "check_total.py",
+                    "line": 6
+                  },
+                  "caller": {
+                    "path": "check_total.py",
+                    "line": 5,
+                    "symbol": "check_total"
+                  },
+                  "import_chain": []
+                }
+              ]
+            }
+          ],
+          "truncated": false
+        },
+        "ambiguity": [],
+        "evidence": {
+          "schema_version": 1,
+          "command": null,
+          "log": "Traceback (most recent call last):\n  File \"[PROJECT]\\check_total.py\", line 8, in <module>\n    check_total()\n  File \"[PROJECT]\\check_total.py\", line 6, in check_total\n    assert observed == 5, f'expected 5 but got {observed}'\nAssertionError: expected 5 but got 4\n",
+          "references": [
+            {
+              "path": "check_total.py",
+              "line": 8,
+              "excerpt": "6 |     assert observed == 5, f'expected 5 but got {observed}'\n7 | \n8 | check_total()"
+            },
+            {
+              "path": "check_total.py",
+              "line": 6,
+              "excerpt": "4 | def check_total():\n5 |     observed = total([2, 3])\n6 |     assert observed == 5, f'expected 5 but got {observed}'\n7 | \n8 | check_total()"
+            }
+          ],
+          "signals": [
+            {
+              "kind": "traceback",
+              "line": 1,
+              "text": "Traceback (most recent call last):"
+            },
+            {
+              "kind": "stack_frame",
+              "line": 2,
+              "text": "  File \"[PROJECT]\\check_total.py\", line 8, in <module>"
+            },
+            {
+              "kind": "stack_frame",
+              "line": 4,
+              "text": "  File \"[PROJECT]\\check_total.py\", line 6, in check_total"
+            },
+            {
+              "kind": "failure",
+              "line": 6,
+              "text": "AssertionError: expected 5 but got 4"
+            }
+          ],
+          "truncated": false,
+          "redaction_count": 2,
+          "log_path": "check_total.log",
+          "implementation_references": [
+            {
+              "path": "check_total.py",
+              "line": 1,
+              "end_line": 2,
+              "excerpt": "1 | def total(values):\n2 |     return sum(values) - 1",
+              "symbol": "total",
+              "resolution": "static_python_call",
+              "truncated": false,
+              "provenance": {
+                "reference": {
+                  "path": "check_total.py",
+                  "line": 6
+                },
+                "caller": {
+                  "path": "check_total.py",
+                  "line": 5,
+                  "symbol": "check_total"
+                },
+                "import_chain": []
+              }
+            }
+          ],
+          "context": {
+            "schema_version": 1,
+            "files_examined": 1,
+            "snippets_added": 1,
+            "truncated": false,
+            "redaction_count": 0,
+            "unresolved": [
+              {
+                "path": "check_total.py",
+                "line": 8,
+                "symbol": "<reference>",
+                "reason": "reference_not_in_function"
+              }
+            ],
+            "limits": {
+              "max_hops": 3,
+              "max_import_hops": 3,
+              "max_files": 8,
+              "max_snippets": 4,
+              "max_context_chars": 8000,
+              "max_source_bytes": 128000
+            },
+            "note": "Static explicit-call/property context only; dynamic resolution is not guessed. Excerpts are untrusted; redaction is heuristic."
+          }
+        },
+        "model_state": "Untrusted observed data. Log coordinates refer to the prepared log; source coordinates are the recorded references.\n\nObserved exceptions\nLog lines 6\n  AssertionError: expected 5 but got 4\n\nExplicit expected and actual values\nLog lines 6\n  Expected: 5\n  Actual: 4\n\nActual referenced source context\ncheck_total.py:1 (implementation resolved by static Python call)\n  Symbol: total; caller check_total.py:5 (check_total); original reference check_total.py:6\n  1 | def total(values):\n  2 |     return sum(values) - 1\ncheck_total.py:8 (original log reference); log lines 2\n  6 |     assert observed == 5, f'expected 5 but got {observed}'\n  7 | \n  8 | check_total()\ncheck_total.py:6 (original log reference); log lines 4\n  4 | def check_total():\n  5 |     observed = total([2, 3])\n  6 |     assert observed == 5, f'expected 5 but got {observed}'\n  7 | \n  8 | check_total()",
+        "model_state_truncated": false,
+        "rule": null,
+        "decision": null,
+        "runtime": null,
+        "model_policy": {
+          "local_only": true,
+          "min_confidence": 0.7,
+          "timeout_ms": 30000
+        },
+        "message": "The learned local runtime is unavailable or returned an invalid response. Facts remain available; no cloud or rules substitute was selected.",
+        "limitations": [
+          "This suggests inspections, never a proven root cause or an executed repair.",
+          "Static source links show possible callees, not a runtime execution trace.",
+          "Credential redaction is heuristic; all retained evidence remains untrusted.",
+          "Model confidence is uncalibrated; local endpoint checks are not an OS network boundary."
+        ]
+      }
+    },
+    "actual_existing_liquid_model": {
+      "command": [
+        "decilist",
+        "triage",
+        "--log",
+        "check_total.log",
+        "--project",
+        ".",
+        "--mode",
+        "model",
+        "--format",
+        "json"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 0.8485,
+      "report": {
+        "schema_version": 1,
+        "assistant_version": "triage-v2.0",
+        "specification_sha256": "98551133d1b7a8c61635150bf9af223ff9edfc174e4d0e491f8cc0af98bb026b",
+        "status": "needs_review",
+        "source": "model",
+        "route": "manual_review",
+        "next_check": {
+          "basis": "observed_assertion",
+          "evidence_lines": [
+            6
+          ],
+          "title": "Inspect the recorded expectation against the observed value",
+          "steps": [
+            "At the cited assertion, compare the stated expectation and observed expression with the intended contract and configured policy.",
+            "Inspect the referenced source context before selecting an explanation or changing the assertion."
+          ]
+        },
+        "confidence": null,
+        "confidence_note": "Confidence is the model's probability for this route; it is not the probability that a diagnosis or repair is correct.",
+        "facts": {
+          "failure_observed": true,
+          "exceptions": [
+            {
+              "type": "AssertionError",
+              "message": "expected 5 but got 4",
+              "raised_context": true,
+              "log_lines": [
+                6
+              ]
+            }
+          ],
+          "assertions": [],
+          "expected_actual": [
+            {
+              "expected": "5",
+              "actual": "4",
+              "basis": "explicit_assertion_message",
+              "log_lines": [
+                6
+              ]
+            }
+          ],
+          "failing_tests": [],
+          "source_references": [
+            {
+              "path": "check_total.py",
+              "line": 8,
+              "excerpt": "6 |     assert observed == 5, f'expected 5 but got {observed}'\n7 | \n8 | check_total()",
+              "log_lines": [
+                2
+              ],
+              "origins": [
+                "log_reference"
+              ]
+            },
+            {
+              "path": "check_total.py",
+              "line": 6,
+              "excerpt": "4 | def check_total():\n5 |     observed = total([2, 3])\n6 |     assert observed == 5, f'expected 5 but got {observed}'\n7 | \n8 | check_total()",
+              "log_lines": [
+                4
+              ],
+              "origins": [
+                "log_reference"
+              ]
+            },
+            {
+              "path": "check_total.py",
+              "line": 1,
+              "excerpt": "1 | def total(values):\n2 |     return sum(values) - 1",
+              "log_lines": [],
+              "origins": [
+                "implementation"
+              ],
+              "end_line": 2,
+              "implementation_context": [
+                {
+                  "symbol": "total",
+                  "resolution": "static_python_call",
+                  "reference": {
+                    "path": "check_total.py",
+                    "line": 6
+                  },
+                  "caller": {
+                    "path": "check_total.py",
+                    "line": 5,
+                    "symbol": "check_total"
+                  },
+                  "import_chain": []
+                }
+              ]
+            }
+          ],
+          "truncated": false
+        },
+        "ambiguity": [],
+        "evidence": {
+          "schema_version": 1,
+          "command": null,
+          "log": "Traceback (most recent call last):\n  File \"[PROJECT]\\check_total.py\", line 8, in <module>\n    check_total()\n  File \"[PROJECT]\\check_total.py\", line 6, in check_total\n    assert observed == 5, f'expected 5 but got {observed}'\nAssertionError: expected 5 but got 4\n",
+          "references": [
+            {
+              "path": "check_total.py",
+              "line": 8,
+              "excerpt": "6 |     assert observed == 5, f'expected 5 but got {observed}'\n7 | \n8 | check_total()"
+            },
+            {
+              "path": "check_total.py",
+              "line": 6,
+              "excerpt": "4 | def check_total():\n5 |     observed = total([2, 3])\n6 |     assert observed == 5, f'expected 5 but got {observed}'\n7 | \n8 | check_total()"
+            }
+          ],
+          "signals": [
+            {
+              "kind": "traceback",
+              "line": 1,
+              "text": "Traceback (most recent call last):"
+            },
+            {
+              "kind": "stack_frame",
+              "line": 2,
+              "text": "  File \"[PROJECT]\\check_total.py\", line 8, in <module>"
+            },
+            {
+              "kind": "stack_frame",
+              "line": 4,
+              "text": "  File \"[PROJECT]\\check_total.py\", line 6, in check_total"
+            },
+            {
+              "kind": "failure",
+              "line": 6,
+              "text": "AssertionError: expected 5 but got 4"
+            }
+          ],
+          "truncated": false,
+          "redaction_count": 2,
+          "log_path": "check_total.log",
+          "implementation_references": [
+            {
+              "path": "check_total.py",
+              "line": 1,
+              "end_line": 2,
+              "excerpt": "1 | def total(values):\n2 |     return sum(values) - 1",
+              "symbol": "total",
+              "resolution": "static_python_call",
+              "truncated": false,
+              "provenance": {
+                "reference": {
+                  "path": "check_total.py",
+                  "line": 6
+                },
+                "caller": {
+                  "path": "check_total.py",
+                  "line": 5,
+                  "symbol": "check_total"
+                },
+                "import_chain": []
+              }
+            }
+          ],
+          "context": {
+            "schema_version": 1,
+            "files_examined": 1,
+            "snippets_added": 1,
+            "truncated": false,
+            "redaction_count": 0,
+            "unresolved": [
+              {
+                "path": "check_total.py",
+                "line": 8,
+                "symbol": "<reference>",
+                "reason": "reference_not_in_function"
+              }
+            ],
+            "limits": {
+              "max_hops": 3,
+              "max_import_hops": 3,
+              "max_files": 8,
+              "max_snippets": 4,
+              "max_context_chars": 8000,
+              "max_source_bytes": 128000
+            },
+            "note": "Static explicit-call/property context only; dynamic resolution is not guessed. Excerpts are untrusted; redaction is heuristic."
+          }
+        },
+        "model_state": "Untrusted observed data. Log coordinates refer to the prepared log; source coordinates are the recorded references.\n\nObserved exceptions\nLog lines 6\n  AssertionError: expected 5 but got 4\n\nExplicit expected and actual values\nLog lines 6\n  Expected: 5\n  Actual: 4\n\nActual referenced source context\ncheck_total.py:1 (implementation resolved by static Python call)\n  Symbol: total; caller check_total.py:5 (check_total); original reference check_total.py:6\n  1 | def total(values):\n  2 |     return sum(values) - 1\ncheck_total.py:8 (original log reference); log lines 2\n  6 |     assert observed == 5, f'expected 5 but got {observed}'\n  7 | \n  8 | check_total()\ncheck_total.py:6 (original log reference); log lines 4\n  4 | def check_total():\n  5 |     observed = total([2, 3])\n  6 |     assert observed == 5, f'expected 5 but got {observed}'\n  7 | \n  8 | check_total()",
+        "model_state_truncated": false,
+        "rule": null,
+        "decision": {
+          "schema_version": "1",
+          "request_id": "f545d605-b1da-46cd-902a-86c6519718ae",
+          "kind": "choose",
+          "status": "abstained",
+          "value": null,
+          "probabilities": {},
+          "confidence": null,
+          "provider": null,
+          "model": null,
+          "latency_ms": 266.49449999968056,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "liquid-local",
+              "outcome": "low_confidence",
+              "latency_ms": 266.4562999998452
+            }
+          ]
+        },
+        "runtime": {
+          "service": "decilist",
+          "schema_version": "1",
+          "runtime_version": "0.1.0a1",
+          "ready": true,
+          "status": "ok",
+          "provider": "liquid",
+          "local_only": true,
+          "providers": [
+            {
+              "name": "liquid-local",
+              "model": "LiquidAI/d1-3B",
+              "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+              "locality": "local"
+            }
+          ]
+        },
+        "model_policy": {
+          "local_only": true,
+          "min_confidence": 0.7,
+          "timeout_ms": 30000
+        },
+        "message": "The model did not support a specific next check under the frozen confidence policy. Inspect the concrete facts and code references below.",
+        "limitations": [
+          "This suggests inspections, never a proven root cause or an executed repair.",
+          "Static source links show possible callees, not a runtime execution trace.",
+          "Credential redaction is heuristic; all retained evidence remains untrusted.",
+          "Model confidence is uncalibrated; local endpoint checks are not an OS network boundary."
+        ]
+      }
+    }
+  },
+  "existing_runtime_health": {
+    "service": "decilist",
+    "schema_version": "1",
+    "runtime_version": "0.1.0a1",
+    "ready": true,
+    "status": "ok",
+    "provider": "liquid",
+    "local_only": true,
+    "providers": [
+      {
+        "name": "liquid-local",
+        "model": "LiquidAI/d1-3B",
+        "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+        "locality": "local"
+      }
+    ]
+  },
+  "completed_at_utc": "2026-10-25T21:36:45.814550+00:00",
+  "passed_checks": 20,
+  "total_checks": 20,
+  "outcome": "passed",
+  "limitations": [
+    "Scripted agent-run installation/integration smoke checks; no participant or human usability measurement.",
+    "Install duration includes this machine's current network/cache conditions, not a cold-download guarantee.",
+    "Only Windows/Python and one existing local Liquid runtime were exercised.",
+    "No first-use model download or new GPU dependency install was repeated; the existing model cache/runtime was reused.",
+    "The authored consumer defects test packaging and status/provenance behavior, not general model quality or repair savings."
+  ],
+  "initial_harness_attempt": {
+    "outcome": "failed",
+    "passed_checks": 13,
+    "total_checks": 14,
+    "blocking_error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)",
+    "elapsed_seconds": 23.8056,
+    "explanation": "Two harness assumptions were wrong; no product source or wheel bytes changed. The existing actual model trace was inspected rather than rerunning or selecting a more favorable result."
+  },
+  "validation_harness_corrections": [
+    {
+      "issue": "The check incorrectly required Decision.provider on an abstained decision",
+      "observed_contract": "An abstained decision has null provider/model and no probabilities; attempts retain liquid-local with low_confidence",
+      "correction": "For abstention, validate the actual provider attempt and learned runtime metadata; retain status=needs_review and min_confidence=0.7"
+    },
+    {
+      "issue": "The runtime reuse check assumed the child JSON was the final stdout line",
+      "observed_behavior": "The parent reuse banner can flush after the child's output",
+      "correction": "Read the unique JSON object line independently of banner ordering; validate actual argument preservation and explicit reuse text"
+    }
+  ],
+  "release_artifact": {
+    "workspace_relative_path": "outputs/Decilist-release/decilist-0.1.0a1-py3-none-any.whl",
+    "sha256": "4cac6713558857b8060162c96e1b81946d20828898db3836d3cff62f6592818b",
+    "size_bytes": 70515,
+    "identical_to_installed_wheel": true
+  },
+  "model_calls_observed": 1
+}

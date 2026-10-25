@@ -1,0 +1,283 @@
+{
+  "schema_version": 1,
+  "experiment": "TypeScript SDK tarball installation and direct local inference smoke check",
+  "execution": "agent-run scripted verification, not human usability or debugging-time evidence",
+  "started_at_utc": "2026-10-25T21:40:54.475906+00:00",
+  "model_server_started_or_restarted": false,
+  "model_download_requested": false,
+  "source_changes_requested": false,
+  "timings_seconds": {
+    "npm_pack": 9.9195,
+    "fresh_consumer_npm_install": 8.1906,
+    "three_operation_integration_process": 0.5713,
+    "total_agent_run": 20.1927
+  },
+  "checks": [
+    {
+      "name": "npm_pack_current_build",
+      "passed": true,
+      "exit_code": 0
+    },
+    {
+      "name": "tarball_contains_current_runtime_types_and_license",
+      "passed": true,
+      "files": [
+        "package/LICENSE",
+        "package/dist/cli-args.d.ts",
+        "package/dist/cli-args.js",
+        "package/dist/cli.d.ts",
+        "package/dist/cli.js",
+        "package/dist/index.d.ts",
+        "package/dist/index.js",
+        "package/package.json"
+      ],
+      "byte_matches_current_package": true
+    },
+    {
+      "name": "delivered_tarball_matches_packed_bytes",
+      "passed": true
+    },
+    {
+      "name": "fresh_consumer_installs_delivered_tarball",
+      "passed": true,
+      "exit_code": 0,
+      "source": "Copied release tarball, not a checkout/workspace link",
+      "ignored_lifecycle_scripts": true
+    },
+    {
+      "name": "installed_sdk_bytes_match_tarball",
+      "passed": true,
+      "version": "0.1.0-alpha.1",
+      "file_count": 8
+    },
+    {
+      "name": "three_actual_local_sdk_operations",
+      "passed": true,
+      "exit_code": 0
+    },
+    {
+      "name": "consumer_import_resolves_inside_own_node_modules",
+      "passed": true,
+      "relative_import_path": "node_modules\\@decilist\\sdk\\dist\\index.js"
+    },
+    {
+      "name": "observed_status_branches_preserve_contract_and_attempts",
+      "passed": true,
+      "observed_statuses": {
+        "choose": "accepted",
+        "predict": "accepted",
+        "score": "accepted"
+      },
+      "abstention_branch_observed": false,
+      "note": "All three actual requests were accepted. The consumer handles abstention explicitly, but that branch was not exercised by these requests. No answer-quality claim or forced acceptance."
+    },
+    {
+      "name": "package_source_and_build_unchanged",
+      "passed": true
+    }
+  ],
+  "environment": {
+    "node": "v22.23.1",
+    "npm": "10.9.8",
+    "platform": "win32",
+    "install_cache_condition": "Existing machine npm cache and network configuration retained; not a guaranteed cold cache"
+  },
+  "artifact": {
+    "workspace_relative_path": "outputs/Decilist-release/decilist-sdk-0.1.0-alpha.1.tgz",
+    "filename": "decilist-sdk-0.1.0-alpha.1.tgz",
+    "sha256": "a3ad0ae1432984beaf8fffa0296393403edf6b336e89ff720f0a14e870629fbf",
+    "size_bytes": 9420,
+    "npm_integrity": "sha512-dHrvxM7mPvwj6yNbHapItgksNwKQ/LSbmc8j8Qvrh5xOtC47ToKGQMvNjwtc1wS4+tNUcV55aKXLEt4rwamKzQ==",
+    "existing_identical_artifact_reused": false
+  },
+  "installed_dependencies": {
+    "name": "decilist-installed-sdk-smoke",
+    "dependencies": {
+      "@decilist/sdk": {
+        "version": "0.1.0-alpha.1",
+        "resolved": "file:<workspace>/outputs/Decilist-release/decilist-sdk-0.1.0-alpha.1.tgz",
+        "overridden": false,
+        "dependencies": {
+          "zod": {
+            "version": "4.6.7",
+            "resolved": "https://registry.npmjs.org/zod/-/zod-4.6.7.tgz",
+            "overridden": false
+          }
+        }
+      }
+    }
+  },
+  "integration": {
+    "module_import_relative_path": "node_modules\\@decilist\\sdk\\dist\\index.js",
+    "consumer_import_isolated": true,
+    "connect_ms": 28.204399999999993,
+    "policy": {
+      "local_only": true,
+      "min_confidence": 0.7,
+      "timeout_ms": 30000
+    },
+    "health": {
+      "service": "decilist",
+      "schema_version": "1",
+      "runtime_version": "0.1.0a1",
+      "ready": true,
+      "status": "ok",
+      "provider": "liquid",
+      "local_only": true,
+      "providers": [
+        {
+          "name": "liquid-local",
+          "model": "LiquidAI/d1-3B",
+          "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+          "locality": "local"
+        }
+      ]
+    },
+    "results": [
+      {
+        "question": {
+          "kind": "choose",
+          "state": "A support ticket says: I forgot my password and need to reset it.",
+          "instructions": "Choose the support topic.",
+          "options": {
+            "account": "Account access or password reset",
+            "billing": "Payments or invoices",
+            "technical": "A software defect"
+          }
+        },
+        "decision": {
+          "schema_version": "1",
+          "request_id": "f924cb51-c2ac-4ff9-99b8-ee7baad3338e",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "account",
+          "probabilities": {
+            "account": 0.9895335687774126,
+            "billing": 0.005883981681476024,
+            "technical": 0.004582449541111329
+          },
+          "confidence": 0.9895335687774126,
+          "provider": "liquid-local",
+          "model": "LiquidAI/d1-3B",
+          "latency_ms": 257.3643999930937,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "liquid-local",
+              "outcome": "accepted",
+              "latency_ms": 257.3146000067936
+            }
+          ]
+        },
+        "elapsed_ms": 265.4994,
+        "application_branch": {
+          "action": "consume_typed_value",
+          "value": "account"
+        }
+      },
+      {
+        "question": {
+          "kind": "predict",
+          "state": "The request says: Please cancel my subscription.",
+          "instructions": "Does the request explicitly ask to cancel the subscription?"
+        },
+        "decision": {
+          "schema_version": "1",
+          "request_id": "31a375a0-ffa3-4500-b2c7-f3b108d5c5e3",
+          "kind": "predict",
+          "status": "accepted",
+          "value": true,
+          "probabilities": {
+            "false": 0.020332353342658815,
+            "true": 0.9796676466573412
+          },
+          "confidence": 0.9796676466573412,
+          "provider": "liquid-local",
+          "model": "LiquidAI/d1-3B",
+          "latency_ms": 61.606000002939254,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "liquid-local",
+              "outcome": "accepted",
+              "latency_ms": 61.56309999641962
+            }
+          ]
+        },
+        "elapsed_ms": 67.23720000000003,
+        "application_branch": {
+          "action": "consume_typed_value",
+          "value": true
+        }
+      },
+      {
+        "question": {
+          "kind": "score",
+          "state": "All required form fields are present and validation passed.",
+          "instructions": "How ready is this form for review?",
+          "levels": [
+            "Missing required information",
+            "Ready for review",
+            "Already approved"
+          ]
+        },
+        "decision": {
+          "schema_version": "1",
+          "request_id": "cde36b02-e153-42ad-b73a-19d3d97a116b",
+          "kind": "score",
+          "status": "accepted",
+          "value": 1.032722945506875,
+          "probabilities": {
+            "0": 0.004438274851857003,
+            "1": 0.9584005047894111,
+            "2": 0.03716122035873191
+          },
+          "confidence": 0.9584005047894111,
+          "provider": "liquid-local",
+          "model": "LiquidAI/d1-3B",
+          "latency_ms": 35.63810000196099,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "liquid-local",
+              "outcome": "accepted",
+              "latency_ms": 35.589100007200614
+            }
+          ]
+        },
+        "elapsed_ms": 40.203400000000045,
+        "application_branch": {
+          "action": "consume_typed_value",
+          "value": 1.032722945506875
+        }
+      }
+    ]
+  },
+  "actual_model_calls": 3,
+  "package_source_and_build_hashes": {
+    "dist/cli-args.d.ts": "9d21f15753982dedbb9e23397c1ac7470ed213489b1340037b0e5e330ce6e0fb",
+    "dist/cli-args.js": "cf8626732e10b1fb5c7ead30fb053e9378080e2685c3f00466b389ed529faa7d",
+    "dist/cli.d.ts": "43e818adf60173644896298637f47b01d5819b17eda46eaa32d0c7d64724d012",
+    "dist/cli.js": "2d4309157c975d08868b9ff245be73b822a5a71f31e4917b30fc76698b3e023e",
+    "dist/index.d.ts": "2cff61e22dae94535e324b8c675747f7555992329032b127a260eef3d1486349",
+    "dist/index.js": "875165940773b9c3a503f643bfa159720df58e4109f0e7465f05766cd98cbf59",
+    "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "package.json": "6f29b85b56dfe7af231f9884ae945234b5f9489c287fbdfb111740c43c69a525",
+    "src/cli-args.ts": "2860be607271979530170d43304285fc72419130b670831263f34fb7f8d4886d",
+    "src/cli.ts": "7b41117f16fbbaf6ee93a389acf8bd0d62fa9a1e0a9145a675c12e2c67381e00",
+    "src/index.ts": "49a6b6e1d6c5045412d37e409d6f6c03972fd8f29d0f82551bfecca025ee0ad6"
+  },
+  "completed_at_utc": "2026-10-25T21:41:14.668946+00:00",
+  "passed_checks": 9,
+  "total_checks": 9,
+  "outcome": "passed",
+  "limitations": [
+    "Agent-run packaging and transport/contract smoke verification, not a human usability or task-accuracy study.",
+    "All three actual SDK requests were accepted; the consumer's explicit abstention branch was not exercised by those requests.",
+    "The installed dependency metadata's generated absolute artifact path is normalized to <workspace>; package SHA and byte checks retain artifact identity.",
+    "npm dependency installation used the machine's existing network/cache conditions; no cold-download timing is claimed.",
+    "Only Windows, Node 22, and one existing local Liquid runtime were exercised.",
+    "The SDK's model stays in the Python runtime; this consumer installed only the JavaScript SDK and its dependency.",
+    "No model download, runtime restart, package publication, or source change was performed."
+  ]
+}

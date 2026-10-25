@@ -2,21 +2,23 @@
 
 Keep your normal editor, test runner, source search, and CI workflow. After a test fails, Decilist can read the saved failure and suggest one bounded next check. It does not establish the root cause, generate a repair, run commands from the log, edit source, or change tests.
 
-The possible checks are dependency/environment, contract validation, decision policy, runtime lifecycle, application logic, and manual review. A model selects one of these fixed routes; the explanatory steps are authored by the application. Route confidence is not the probability that a diagnosis or repair is correct.
+The possible checks are dependency/environment, contract validation, decision policy, runtime lifecycle, application logic, and manual review. The default v2 helper first applies a narrow explicit rule when supported, otherwise asks the already-running learned local model. Explanatory steps are authored by the application. Route confidence is not the probability that a diagnosis or repair is correct.
 
-The [current frozen Python/pytest comparison](triage-results.md) has not shown a model benefit: the automated rules comparator selected an acceptable route under the frozen labels for all eight regression cases, while the local model selected one and abstained on seven. Both cases reserved for the human pilot currently lead to manual review. The pilot is measurement-readiness work, not proven assistance; a meaningful future efficacy run needs a prespecified improved assistant and fresh cases. The current threshold and cases remain unchanged.
+The [v1 result](triage-results.md) is retained. The [v2 evaluation and actual agent-run repair trials](triage-v2-results.md) use fresh prespecified cases: learned coverage increased from 1/8 to 2/8 at the same threshold, but agent repair time did not improve in the small four-case comparison. Human productivity savings remain unmeasured. The original human session is still unstarted.
 
 ## Use your existing failure log
 
-Use the Python SDK environment from [runtime setup](runtime.md) and an already configured learned local runtime. Provider/model setup happens once; importing triage does not download or start a model. The default rules demo is deliberately refused as learned triage.
+Install the core Python SDK following the [integration guide](install-and-use-ar.md). Facts and narrow rules work without a model. For model suggestions, configure a learned local runtime separately using [runtime setup](runtime.md). Importing triage never downloads or starts a model. The default rules demo is deliberately refused as learned triage.
 
 After your usual failed pytest or CI run has produced `failed.log`, run one command from your project:
 
 ```bash
-python -m decilist.triage --log failed.log --project .
+decilist triage --log failed.log --project .
 ```
 
-The command shows the next check, status, route confidence, observed failure lines, and referenced source locations together. It reads the saved log; it does not rerun that original command. Its exit status is the status of this suggestion, not the exit status of your earlier tests. Use `--format json --output triage-result.json` when you need the raw decision and prepared evidence in a new local file; existing output files are not overwritten.
+The equivalent module command is `python -m decilist triage`. Use `--mode rules` to avoid inference, `--mode model` to bypass rules, or the default `auto` to select a supported rule before the model. The original `python -m decilist.triage` entry remains v1 for reproducibility.
+
+The command shows facts, next inspection, source (`rules`, `model`, or `none`), status, and code references together. It reads the saved log; it does not rerun the original command. Exit 0 means a suggestion, 1 means review/unavailable, and 2 means invalid input. These are not the exit codes of your earlier tests. Use `--format json --output triage-result.json` for a structured report in a new file; existing output files are not overwritten.
 
 The SDK's default endpoint is `http://127.0.0.1:8765`; an existing `DECILIST_URL` setting can choose another loopback runtime. Remote endpoints are rejected before evidence is transmitted. An unavailable model is reported, with no silent rules or cloud fallback.
 
@@ -28,7 +30,7 @@ This uses the same read-only preparation and bounded decision as the CLI:
 import asyncio
 from pathlib import Path
 from decilist import Client
-from decilist.triage import diagnose, format_text
+from decilist.triage_assistant import diagnose, format_text
 from decilist.triage_evidence import prepare_evidence
 
 async def main():
@@ -37,7 +39,7 @@ async def main():
         project=Path("."),
     )
     async with Client("http://127.0.0.1:8765") as client:
-        report = await diagnose(evidence, client=client)
+        report = await diagnose(evidence, client=client, project=Path("."))
     print(format_text(report), end="")
 
 asyncio.run(main())
@@ -49,7 +51,7 @@ The optional `command` argument to `prepare_evidence` is metadata. Supply it onl
 
 ## What the evidence supports
 
-Preparation clips the log, removes common credential patterns, and reads at most three source excerpts from recognized references inside the resolved project. It does not scan the repository, infer unseen execution, or treat instructions inside a traceback as authority. Unsafe/outside paths and unsupported file types do not become source excerpts. Redaction is heuristic; inspect sensitive logs before using them, including with a local model.
+Preparation clips the log, removes common credential patterns, and reads at most three source excerpts from recognized references inside the resolved project. V2 additionally follows statically resolvable Python calls, properties, imports and reexports, capped at three call and import hops, eight files, four snippets, and 8,000 added serialized characters. It does not import or execute source, scan the repository, infer dynamic execution, or treat traceback instructions as authority. Unsafe/outside paths and unsupported file types do not become excerpts. Redaction is heuristic; inspect sensitive logs before using them, including with a local model.
 
 A traceback can identify a failing boundary while leaving the cause uncertain. Missing environment details, incomplete logs, or source changed after a run can weaken the evidence. The suggested route should guide the next inspection; the developer still checks the actual input, expected behavior, and code before making a change.
 

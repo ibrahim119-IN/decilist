@@ -1,0 +1,677 @@
+{
+  "suite": "testtriage-fresh-v2",
+  "version": 2,
+  "base_revision": "83c9fbcf2a090b2862ec0be740e2d2d5c8e72a30",
+  "purpose": "Fresh observed fixtures in two real projects. Seeded bugs are explicitly labeled; controls and blind agent trials are separate from unique machine regression quality. No human time-saved or representative-production claim.",
+  "authorship": "Codex-authored cases, protected tests and acceptable next-check labels; no independent human label review. Frozen before model outputs.",
+  "case_split_policy": "12 fresh machine regressions: four development/eight evaluation. Four separately reserved blind agent trials are excluded from development, ablation, and machine evaluation. Three controls are separate. No old t01-t10 reused.",
+  "projects": {
+    "decilist": {
+      "revision": "83c9fbcf2a090b2862ec0be740e2d2d5c8e72a30",
+      "source": "pinned Git tree in this repository"
+    },
+    "httpx": {
+      "version": "0.28.1",
+      "repository": "https://github.com/encode/httpx",
+      "revision": "26d48e0634e6ee9cdc0533996db289ce4b430177",
+      "tag": "0.28.1",
+      "verified_via": "GitHub connector on 2026-10-26: tag reference, httpx/_urls.py and LICENSE.md; installed mutable module and license Git-blob hashes matched upstream exactly. Other installed package source files are pinned by SHA-256, not separately claimed upstream-reviewed.",
+      "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_urls.py",
+      "urls_git_blob_sha": "147a8fa333acaf31618d37ba2896e3a5bf5e4d02",
+      "urls_sha256": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd",
+      "license": "BSD-3-Clause",
+      "license_source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/LICENSE.md",
+      "license_sha256": "4ec59d544f12b5f539a3a716fd321ac58ccd8030b465221f2c880200cdf28d8d",
+      "license_text": "Copyright © 2019, [Encode OSS Ltd](https://www.encode.io/).\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n\n* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\n\n* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\n* Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n",
+      "installed_source_sha256": {
+        "vendor/httpx/__init__.py": "0ac6997bac998f4ac783adf6d8058a587193315afdb718047c3e4fdff46bcfad",
+        "vendor/httpx/__version__.py": "2e853261e3974e2786cee3ffeb850bd30c5db718eebbf41b3af13b34e83e22a5",
+        "vendor/httpx/_api.py": "aff660b388c8a5c3c92ea2b975b6d26b2aa8fe254c2856b164277ea0e1f12c4b",
+        "vendor/httpx/_auth.py": "62bdd0c1a5122b5eeb198c7eee3f85762705233cf863d14557ed45e3eed15d7e",
+        "vendor/httpx/_client.py": "c43f941baefe58c91e96d00039e1868fe719d91453026d7db1647194563bff8d",
+        "vendor/httpx/_config.py": "a4fa7653ec2271f70ab05f8a6111352d876dddee84446788a1767c1a3a372d67",
+        "vendor/httpx/_content.py": "2c61b3ac94d1dcebcde0c6f519554d2d7917247fbaa0a97002db4ef69e70ff28",
+        "vendor/httpx/_decoders.py": "a74757f08d0d1077b1b37506a784ac66eb62321b17aeb5a5ebe1a7a956f488a3",
+        "vendor/httpx/_exceptions.py": "6f15bb7f1ce054c01d3536f04f4567ab4e202435b5fe023f1858903ee3328cbd",
+        "vendor/httpx/_main.py": "0a0f4631a6e24d3fecc1a0df5202118ad4b0c4b44c4b05033a6ecb7521aa940e",
+        "vendor/httpx/_models.py": "e3ffc6bb2bf580bc6e6428708a6f247d036220e709f5a72b785392babbd97e6b",
+        "vendor/httpx/_multipart.py": "28e1c465997aa28860f663da2b2caedf8e6aab5ac92e0df94d41b7600cd70776",
+        "vendor/httpx/_status_codes.py": "0d89fedae7c180c797cb9b3cc77fd307bc2302e00031ec136a43eb9b9ad712c7",
+        "vendor/httpx/_transports/__init__.py": "19b52805200ea7bcfe97ef63e5884c851dc3308727e8554b863d3bd8edcd9e7a",
+        "vendor/httpx/_transports/asgi.py": "1d17e20d830fb78c101f6805807660e1cfa2dec6e5a3a6cbe464ea7044fec73f",
+        "vendor/httpx/_transports/base.py": "9194bf54c6d58987c5e7bd29a205022756ee973fb26df2f9d4faacf7292d79b5",
+        "vendor/httpx/_transports/default.py": "03379a454c95c0271c4f2c8d25ec437f49f57457f3cf2769748420bf0ecf2e79",
+        "vendor/httpx/_transports/mock.py": "3d3a34779ebb4484d7c46ae48ba90deffebbc300317f088c0dcb972626428c4a",
+        "vendor/httpx/_transports/wsgi.py": "35c3d7dd76a9fc4c0215958efce692c9036e227098c7540c35b3bc1807a2ea36",
+        "vendor/httpx/_types.py": "272878d4642aec039ebfc20e58a0c083bcc26ef1c07ee7e65b983f3e24ed12b6",
+        "vendor/httpx/_urlparse.py": "640987e3b38d7e4c6bae3f8f3d88467a21e36fa0232824be00d58837838bfca6",
+        "vendor/httpx/_urls.py": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd",
+        "vendor/httpx/_utils.py": "fd355ea802afc4990a1ddcfb74579be2cd0b66a41781e1645d281f88704aff5a",
+        "vendor/httpx/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "blind_trial_pairs": {
+    "A": {
+      "case_ids": [
+        "a01",
+        "a02"
+      ],
+      "project": "decilist",
+      "editable_paths": [
+        "packages/python/src/decilist/contracts.py"
+      ],
+      "design": "Separate fresh cases in the same module with three protected input variants each; equal difficulty is not established."
+    },
+    "B": {
+      "case_ids": [
+        "b01",
+        "b02"
+      ],
+      "project": "httpx",
+      "editable_paths": [
+        "vendor/httpx/_urls.py"
+      ],
+      "design": "Separate fresh cases in the same module with three protected input variants each; equal difficulty is not established."
+    }
+  },
+  "cases": [
+    {
+      "id": "v01",
+      "split": "dev",
+      "role": "regression",
+      "project": "decilist",
+      "family": "strict_schema",
+      "provenance": "seeded_regression",
+      "test_key": "strict_schema",
+      "editable_paths": [
+        "packages/python/src/decilist/contracts.py"
+      ],
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "packages/python/src/decilist/contracts.py",
+          "old": "extra=\"forbid\", strict=True",
+          "new": "extra=\"forbid\", strict=False"
+        }
+      ],
+      "acceptable_routes": [
+        "contract_validation"
+      ],
+      "targeted_inspection_assertion": "Inspect Contract.model_config and verify string inputs are rejected rather than coerced into Policy fields.",
+      "evidence_mode": "full",
+      "inspection_targets": [
+        {
+          "path": "packages/python/src/decilist/contracts.py",
+          "symbols": [
+            "Contract",
+            "Policy"
+          ],
+          "required_observation": "Inspect Contract.model_config and verify string inputs are rejected rather than coerced into Policy fields."
+        }
+      ]
+    },
+    {
+      "id": "v02",
+      "split": "evaluation",
+      "role": "regression",
+      "project": "decilist",
+      "family": "probability_type",
+      "provenance": "seeded_regression",
+      "test_key": "boolean_probability",
+      "editable_paths": [
+        "packages/python/src/decilist/contracts.py"
+      ],
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "packages/python/src/decilist/contracts.py",
+          "old": "type(p) not in (int, float)",
+          "new": "not isinstance(p, (int, float))"
+        }
+      ],
+      "acceptable_routes": [
+        "contract_validation"
+      ],
+      "targeted_inspection_assertion": "Inspect validate_probabilities numeric type admission; boolean values must not count as numeric probabilities.",
+      "evidence_mode": "full",
+      "inspection_targets": [
+        {
+          "path": "packages/python/src/decilist/contracts.py",
+          "symbols": [
+            "validate_probabilities"
+          ],
+          "required_observation": "Inspect validate_probabilities numeric type admission; boolean values must not count as numeric probabilities."
+        }
+      ]
+    },
+    {
+      "id": "v03",
+      "split": "evaluation",
+      "role": "regression",
+      "project": "decilist",
+      "family": "text_bounds",
+      "provenance": "seeded_regression",
+      "test_key": "text_bound",
+      "editable_paths": [
+        "packages/python/src/decilist/contracts.py"
+      ],
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "packages/python/src/decilist/contracts.py",
+          "old": "min_length=1, max_length=65536",
+          "new": "min_length=1, max_length=65535"
+        }
+      ],
+      "acceptable_routes": [
+        "contract_validation"
+      ],
+      "targeted_inspection_assertion": "Compare Text maximum character length with the declared inclusive 65536-character contract for ASCII and multibyte Unicode.",
+      "evidence_mode": "full",
+      "inspection_targets": [
+        {
+          "path": "packages/python/src/decilist/contracts.py",
+          "symbols": [
+            "Text",
+            "BaseQuestion"
+          ],
+          "required_observation": "Compare Text maximum character length with the declared inclusive 65536-character contract for ASCII and multibyte Unicode."
+        }
+      ]
+    },
+    {
+      "id": "v04",
+      "split": "dev",
+      "role": "regression",
+      "project": "decilist",
+      "family": "portable_uri",
+      "provenance": "historical_revert",
+      "test_key": "portable_uri",
+      "editable_paths": [
+        "packages/python/src/decilist/triage_evidence.py"
+      ],
+      "mutations": [
+        {
+          "kind": "historical_blob",
+          "path": "packages/python/src/decilist/triage_evidence.py",
+          "revision": "421885d"
+        }
+      ],
+      "acceptable_routes": [
+        "contract_validation",
+        "application_logic"
+      ],
+      "targeted_inspection_assertion": "Inspect portable file-URI decoding before source confinement checks; valid percent-encoded local paths must resolve to the referenced source.",
+      "evidence_mode": "full",
+      "inspection_targets": [
+        {
+          "path": "packages/python/src/decilist/triage_evidence.py",
+          "symbols": [
+            "_source_path",
+            "prepare_evidence"
+          ],
+          "required_observation": "Inspect portable file-URI decoding before source confinement checks; valid percent-encoded local paths must resolve to the referenced source."
+        }
+      ]
+    },
+    {
+      "id": "v05",
+      "split": "evaluation",
+      "role": "regression",
+      "project": "decilist",
+      "family": "path_segments",
+      "provenance": "seeded_regression",
+      "test_key": "parent_segments",
+      "editable_paths": [
+        "packages/python/src/decilist/triage_evidence.py"
+      ],
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "packages/python/src/decilist/triage_evidence.py",
+          "old": "if \"..\" in re.split(r\"[\\\\/]\", raw):",
+          "new": "if False:"
+        }
+      ],
+      "acceptable_routes": [
+        "contract_validation"
+      ],
+      "targeted_inspection_assertion": "Inspect _source_path parent-segment admission; reject lexical traversal segments before any source excerpt is read.",
+      "evidence_mode": "full",
+      "inspection_targets": [
+        {
+          "path": "packages/python/src/decilist/triage_evidence.py",
+          "symbols": [
+            "_source_path"
+          ],
+          "required_observation": "Inspect _source_path parent-segment admission; reject lexical traversal segments before any source excerpt is read."
+        }
+      ]
+    },
+    {
+      "id": "v06",
+      "split": "dev",
+      "role": "regression",
+      "project": "decilist",
+      "family": "async_cancellation",
+      "provenance": "seeded_regression",
+      "test_key": "cancellation",
+      "editable_paths": [
+        "packages/python/src/decilist/engine.py"
+      ],
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "packages/python/src/decilist/engine.py",
+          "old": "except Exception:",
+          "new": "except BaseException:"
+        }
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Inspect the async exception boundary and cancellation propagation; caller cancellation must escape without invoking fallback.",
+      "evidence_mode": "full",
+      "inspection_targets": [
+        {
+          "path": "packages/python/src/decilist/engine.py",
+          "symbols": [
+            "Decilist.decide"
+          ],
+          "required_observation": "Inspect the async exception boundary and cancellation propagation; caller cancellation must escape without invoking fallback."
+        }
+      ]
+    },
+    {
+      "id": "v07",
+      "split": "evaluation",
+      "role": "regression",
+      "project": "decilist",
+      "family": "async_timeout_units",
+      "provenance": "seeded_regression",
+      "test_key": "timeout_units",
+      "editable_paths": [
+        "packages/python/src/decilist/engine.py"
+      ],
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "packages/python/src/decilist/engine.py",
+          "old": "policy.timeout_ms / 1000",
+          "new": "policy.timeout_ms"
+        }
+      ],
+      "acceptable_routes": [
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Inspect timeout unit conversion passed to asyncio.wait_for; the public policy is milliseconds, not seconds.",
+      "evidence_mode": "full",
+      "inspection_targets": [
+        {
+          "path": "packages/python/src/decilist/engine.py",
+          "symbols": [
+            "Decilist.decide"
+          ],
+          "required_observation": "Inspect timeout unit conversion passed to asyncio.wait_for; the public policy is milliseconds, not seconds."
+        }
+      ]
+    },
+    {
+      "id": "v08",
+      "split": "evaluation",
+      "role": "regression",
+      "project": "decilist",
+      "family": "provider_locality",
+      "provenance": "seeded_regression",
+      "test_key": "remote_block",
+      "editable_paths": [
+        "packages/python/src/decilist/engine.py"
+      ],
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "packages/python/src/decilist/engine.py",
+          "old": "if policy.local_only and provider.locality != \"local\":",
+          "new": "if policy.local_only and False:"
+        }
+      ],
+      "acceptable_routes": [
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Inspect local-only provider admission before infer is called; nonlocal providers must be blocked without execution.",
+      "evidence_mode": "full",
+      "inspection_targets": [
+        {
+          "path": "packages/python/src/decilist/engine.py",
+          "symbols": [
+            "Decilist.decide"
+          ],
+          "required_observation": "Inspect local-only provider admission before infer is called; nonlocal providers must be blocked without execution."
+        }
+      ]
+    },
+    {
+      "id": "v09",
+      "split": "dev",
+      "role": "regression",
+      "project": "httpx",
+      "family": "url_percent_decoding",
+      "provenance": "seeded_regression",
+      "test_key": "httpx_username",
+      "editable_paths": [
+        "vendor/httpx/_urls.py"
+      ],
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_urls.py",
+          "old": "return unquote(userinfo.partition(\":\")[0])",
+          "new": "return userinfo.partition(\":\")[0]"
+        }
+      ],
+      "acceptable_routes": [
+        "application_logic"
+      ],
+      "targeted_inspection_assertion": "Inspect URL.username decoding of percent-escaped user information, preserving the distinct raw-userinfo interface.",
+      "evidence_mode": "full",
+      "inspection_targets": [
+        {
+          "path": "vendor/httpx/_urls.py",
+          "symbols": [
+            "URL.username"
+          ],
+          "required_observation": "Inspect URL.username decoding of percent-escaped user information, preserving the distinct raw-userinfo interface."
+        }
+      ]
+    },
+    {
+      "id": "v10",
+      "split": "evaluation",
+      "role": "regression",
+      "project": "httpx",
+      "family": "url_international_host",
+      "provenance": "seeded_regression",
+      "test_key": "httpx_host",
+      "editable_paths": [
+        "vendor/httpx/_urls.py"
+      ],
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_urls.py",
+          "old": "host = idna.decode(host)",
+          "new": "host = host"
+        }
+      ],
+      "acceptable_routes": [
+        "application_logic"
+      ],
+      "targeted_inspection_assertion": "Inspect URL.host IDNA decoding while preserving ASCII raw_host behavior.",
+      "evidence_mode": "full",
+      "inspection_targets": [
+        {
+          "path": "vendor/httpx/_urls.py",
+          "symbols": [
+            "URL.host"
+          ],
+          "required_observation": "Inspect URL.host IDNA decoding while preserving ASCII raw_host behavior."
+        }
+      ]
+    },
+    {
+      "id": "v11",
+      "split": "evaluation",
+      "role": "regression",
+      "project": "httpx",
+      "family": "url_query_delimiter",
+      "provenance": "seeded_regression",
+      "test_key": "httpx_raw_path",
+      "editable_paths": [
+        "vendor/httpx/_urls.py"
+      ],
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_urls.py",
+          "old": "path += \"?\" + self._uri_reference.query",
+          "new": "path += self._uri_reference.query"
+        }
+      ],
+      "acceptable_routes": [
+        "application_logic"
+      ],
+      "targeted_inspection_assertion": "Inspect URL.raw_path assembly: preserve exactly one query separator and the raw encoded query bytes.",
+      "evidence_mode": "full",
+      "inspection_targets": [
+        {
+          "path": "vendor/httpx/_urls.py",
+          "symbols": [
+            "URL.raw_path"
+          ],
+          "required_observation": "Inspect URL.raw_path assembly: preserve exactly one query separator and the raw encoded query bytes."
+        }
+      ]
+    },
+    {
+      "id": "v12",
+      "split": "evaluation",
+      "role": "regression",
+      "project": "httpx",
+      "family": "url_fragment_decoding",
+      "provenance": "seeded_regression",
+      "test_key": "httpx_fragment",
+      "editable_paths": [
+        "vendor/httpx/_urls.py"
+      ],
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_urls.py",
+          "old": "return unquote(self._uri_reference.fragment or \"\")",
+          "new": "return self._uri_reference.fragment or \"\""
+        }
+      ],
+      "acceptable_routes": [
+        "application_logic"
+      ],
+      "targeted_inspection_assertion": "Inspect URL.fragment percent decoding without changing path or query behavior.",
+      "evidence_mode": "full",
+      "inspection_targets": [
+        {
+          "path": "vendor/httpx/_urls.py",
+          "symbols": [
+            "URL.fragment"
+          ],
+          "required_observation": "Inspect URL.fragment percent decoding without changing path or query behavior."
+        }
+      ]
+    },
+    {
+      "id": "a01",
+      "split": "agent_trial",
+      "role": "trial_regression",
+      "project": "decilist",
+      "family": "reserved_trial",
+      "provenance": "seeded_regression",
+      "test_key": "trial_a_one",
+      "editable_paths": [
+        "packages/python/src/decilist/contracts.py"
+      ],
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "packages/python/src/decilist/contracts.py",
+          "old": "Field(min_length=2, max_length=64)",
+          "new": "Field(min_length=2, max_length=63)"
+        }
+      ],
+      "acceptable_routes": [
+        "contract_validation"
+      ],
+      "targeted_inspection_assertion": "Inspect the declared inclusive options-count upper boundary against the failing valid-input examples.",
+      "evidence_mode": "full"
+    },
+    {
+      "id": "a02",
+      "split": "agent_trial",
+      "role": "trial_regression",
+      "project": "decilist",
+      "family": "reserved_trial",
+      "provenance": "seeded_regression",
+      "test_key": "trial_a_two",
+      "editable_paths": [
+        "packages/python/src/decilist/contracts.py"
+      ],
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "packages/python/src/decilist/contracts.py",
+          "old": "Field(min_length=2, max_length=10)",
+          "new": "Field(min_length=2, max_length=9)"
+        }
+      ],
+      "acceptable_routes": [
+        "contract_validation"
+      ],
+      "targeted_inspection_assertion": "Inspect the declared inclusive score-level-count upper boundary against the failing valid-input examples.",
+      "evidence_mode": "full"
+    },
+    {
+      "id": "b01",
+      "split": "agent_trial",
+      "role": "trial_regression",
+      "project": "httpx",
+      "family": "reserved_trial",
+      "provenance": "seeded_regression",
+      "test_key": "trial_b_one",
+      "editable_paths": [
+        "vendor/httpx/_urls.py"
+      ],
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_urls.py",
+          "old": "return self._dict[str(key)][0]",
+          "new": "return self._dict[str(key)][-1]"
+        }
+      ],
+      "acceptable_routes": [
+        "application_logic"
+      ],
+      "targeted_inspection_assertion": "Inspect the documented first-value behavior for repeated query keys in the accessed public method.",
+      "evidence_mode": "full"
+    },
+    {
+      "id": "b02",
+      "split": "agent_trial",
+      "role": "trial_regression",
+      "project": "httpx",
+      "family": "reserved_trial",
+      "provenance": "seeded_regression",
+      "test_key": "trial_b_two",
+      "editable_paths": [
+        "vendor/httpx/_urls.py"
+      ],
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_urls.py",
+          "old": "return self._dict[key][0]",
+          "new": "return self._dict[key][-1]"
+        }
+      ],
+      "acceptable_routes": [
+        "application_logic"
+      ],
+      "targeted_inspection_assertion": "Inspect the documented first-value behavior for repeated query keys in the accessed public method.",
+      "evidence_mode": "full"
+    },
+    {
+      "id": "c01",
+      "split": "controls",
+      "role": "mixed_control",
+      "project": "decilist",
+      "family": "mixed_fault",
+      "provenance": "seeded_regression",
+      "test_key": "mixed",
+      "editable_paths": [
+        "packages/python/src/decilist/contracts.py",
+        "packages/python/src/decilist/engine.py"
+      ],
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "packages/python/src/decilist/contracts.py",
+          "old": "type(p) not in (int, float)",
+          "new": "not isinstance(p, (int, float))"
+        },
+        {
+          "kind": "replace",
+          "path": "packages/python/src/decilist/engine.py",
+          "old": "policy.timeout_ms / 1000",
+          "new": "policy.timeout_ms"
+        }
+      ],
+      "acceptable_routes": [
+        "manual_review"
+      ],
+      "targeted_inspection_assertion": "Recognize independent probability-type and timeout failures; separate the evidence groups before asserting one next check.",
+      "evidence_mode": "full",
+      "inspection_targets": []
+    },
+    {
+      "id": "c02",
+      "split": "controls",
+      "role": "ambiguity_control",
+      "project": "decilist",
+      "family": "ambiguous_assertion",
+      "provenance": "seeded_regression",
+      "test_key": "ambiguous",
+      "editable_paths": [
+        "packages/python/src/decilist/engine.py"
+      ],
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "packages/python/src/decilist/engine.py",
+          "old": "if policy.local_only and provider.locality != \"local\":",
+          "new": "if policy.local_only and False:"
+        }
+      ],
+      "acceptable_routes": [
+        "manual_review"
+      ],
+      "targeted_inspection_assertion": "The retained exception type lacks assertion operands and traceback; request the original failed assertion and input before choosing a specific boundary.",
+      "evidence_mode": "exception_only",
+      "inspection_targets": []
+    },
+    {
+      "id": "c03",
+      "split": "controls",
+      "role": "insufficient_control",
+      "project": "httpx",
+      "family": "insufficient_log",
+      "provenance": "seeded_regression",
+      "test_key": "httpx_raw_path",
+      "editable_paths": [
+        "vendor/httpx/_urls.py"
+      ],
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_urls.py",
+          "old": "path += \"?\" + self._uri_reference.query",
+          "new": "path += self._uri_reference.query"
+        }
+      ],
+      "acceptable_routes": [
+        "manual_review"
+      ],
+      "targeted_inspection_assertion": "The nonzero exit without retained failure details does not identify an inspection target; collect the actual failing log.",
+      "evidence_mode": "truncated",
+      "inspection_targets": []
+    }
+  ]
+}

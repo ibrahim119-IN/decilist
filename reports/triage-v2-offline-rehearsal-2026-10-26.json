@@ -1,0 +1,91 @@
+{
+  "started_at": "2026-10-25T21:24:32.054487+00:00",
+  "kind": "agent-run-cached-offline-rehearsal",
+  "device": "cuda:0",
+  "network_boundary": "Python socket connect/connect_ex/create_connection/getaddrinfo denied during model load and inference; not an OS firewall or native-code network audit.",
+  "human_usability_time": null,
+  "cached_load_ms": 23656.984200002626,
+  "operations_ms": 1846.8292000034126,
+  "results": [
+    {
+      "schema_version": "1",
+      "request_id": "d06f5187-644f-4d41-8a2d-8960ba090e48",
+      "kind": "choose",
+      "status": "accepted",
+      "value": "proceed",
+      "probabilities": {
+        "proceed": 0.9046505351008906,
+        "review": 0.0953494648991095
+      },
+      "confidence": 0.9046505351008906,
+      "provider": "liquid-local",
+      "model": "LiquidAI/d1-3B",
+      "latency_ms": 1697.3368000035407,
+      "cost_usd": null,
+      "attempts": [
+        {
+          "provider": "liquid-local",
+          "outcome": "accepted",
+          "latency_ms": 1697.2895999933826
+        }
+      ]
+    },
+    {
+      "schema_version": "1",
+      "request_id": "aa456ce5-236f-4b80-b82f-820609e5ad1e",
+      "kind": "predict",
+      "status": "accepted",
+      "value": true,
+      "probabilities": {
+        "false": 0.020332353342658815,
+        "true": 0.9796676466573412
+      },
+      "confidence": 0.9796676466573412,
+      "provider": "liquid-local",
+      "model": "LiquidAI/d1-3B",
+      "latency_ms": 116.43609999737237,
+      "cost_usd": null,
+      "attempts": [
+        {
+          "provider": "liquid-local",
+          "outcome": "accepted",
+          "latency_ms": 116.3941000122577
+        }
+      ]
+    },
+    {
+      "schema_version": "1",
+      "request_id": "01f52dde-a28d-4c05-bafe-166de4387b70",
+      "kind": "score",
+      "status": "accepted",
+      "value": 2.806286637749682,
+      "probabilities": {
+        "0": 0.003583923027505398,
+        "1": 0.010370425136613397,
+        "2": 0.16222074289457522,
+        "3": 0.8238249089413061
+      },
+      "confidence": 0.8238249089413061,
+      "provider": "liquid-local",
+      "model": "LiquidAI/d1-3B",
+      "latency_ms": 32.601400002022274,
+      "cost_usd": null,
+      "attempts": [
+        {
+          "provider": "liquid-local",
+          "outcome": "accepted",
+          "latency_ms": 32.55879999778699
+        }
+      ]
+    }
+  ],
+  "provider": {
+    "name": "liquid-local",
+    "model": "LiquidAI/d1-3B",
+    "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+    "attention_backend": "vendor-explicit"
+  },
+  "success": true,
+  "blocked_connection_attempts": [],
+  "finished_at": "2026-10-25T21:24:57.558759+00:00"
+}

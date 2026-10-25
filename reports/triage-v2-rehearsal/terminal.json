@@ -1,0 +1,481 @@
+{
+  "schema_version": 1,
+  "kind": "actual timed agent-run terminal recording",
+  "browser_video": false,
+  "human_first_use": false,
+  "started_at_utc": "2026-10-25T21:37:58.144627+00:00",
+  "finished_at_utc": "2026-10-25T21:38:00.388520+00:00",
+  "duration_seconds": 2.2436799999995856,
+  "package_version": "0.1.0a1",
+  "wheel_sha256": "4cac6713558857b8060162c96e1b81946d20828898db3836d3cff62f6592818b",
+  "fixture_provenance": "Separate tiny authored clean-consumer project, never reserved agent trials; check_total.py and missing_dependency.py run without edits",
+  "fixture_sha256": {
+    "check_total.py": "aab3b98724dfc57353accd5f54eeb72bc638428ba928601df402433082d5311c",
+    "missing_dependency.py": "3db12e39cfe23a697fba5164694afd042827c5b2cf22f57603ecb9d919d1806b"
+  },
+  "runtime_url": "http://127.0.0.1:8765",
+  "network_claim": "Loopback client calls only; no OS air gap, browser offline or native-network audit established by this recording",
+  "capture": "Actual merged stdout/stderr lines timestamped when observed; command prompts and exit annotations are recorder metadata, not subprocess output",
+  "redactions": [
+    {
+      "alias": "<CONSUMER_PYTHON>",
+      "replacements": 12,
+      "scope": "Display path replacement only; original personal path not retained in deliverable"
+    },
+    {
+      "alias": "<AUTHORED_PROJECT>",
+      "replacements": 11,
+      "scope": "Display path replacement only; original personal path not retained in deliverable"
+    },
+    {
+      "alias": "<RECORDING_WORK>",
+      "replacements": 6,
+      "scope": "Display path replacement only; original personal path not retained in deliverable"
+    },
+    {
+      "alias": "<USER_HOME>",
+      "replacements": 0,
+      "scope": "Display path replacement only; original personal path not retained in deliverable"
+    }
+  ],
+  "commands": [
+    {
+      "label": "Installed distribution version",
+      "argv": [
+        "<CONSUMER_PYTHON>",
+        "-u",
+        "-c",
+        "from importlib.metadata import version; print(version('decilist'))"
+      ],
+      "cwd": "<AUTHORED_PROJECT>",
+      "started_at_seconds": 5.059999239165336e-05,
+      "finished_at_seconds": 0.18031969999719877,
+      "exit_code": 0,
+      "output_sha256_before_path_redaction": "f6117cad3102e68db1f8ef1a113bcaa1535b76177160c11388c2abd7a01fe074"
+    },
+    {
+      "label": "Actual authored check_total failure",
+      "argv": [
+        "<CONSUMER_PYTHON>",
+        "-u",
+        "<AUTHORED_PROJECT>\\check_total.py"
+      ],
+      "cwd": "<AUTHORED_PROJECT>",
+      "started_at_seconds": 0.18073959999310318,
+      "finished_at_seconds": 0.223958099988522,
+      "exit_code": 1,
+      "output_sha256_before_path_redaction": "69ee4ad3948c1bba9ce6c0e8eb07fe5fcfa4407d64f3ee8fd66d551bf665654d"
+    },
+    {
+      "label": "Installed triage auto: check_total",
+      "argv": [
+        "<CONSUMER_PYTHON>",
+        "-u",
+        "-m",
+        "decilist",
+        "triage",
+        "--log",
+        "<RECORDING_WORK>\\check_total.log",
+        "--project",
+        "<AUTHORED_PROJECT>",
+        "--mode",
+        "auto"
+      ],
+      "cwd": "<AUTHORED_PROJECT>",
+      "started_at_seconds": 0.22458299998834264,
+      "finished_at_seconds": 1.1748997999966377,
+      "exit_code": 1,
+      "output_sha256_before_path_redaction": "fe9e2bc9c421b57cbe0ca923d667a60fe4d2a2be0256bd07abc05219b66602b5"
+    },
+    {
+      "label": "Actual authored missing_dependency failure",
+      "argv": [
+        "<CONSUMER_PYTHON>",
+        "-u",
+        "<AUTHORED_PROJECT>\\missing_dependency.py"
+      ],
+      "cwd": "<AUTHORED_PROJECT>",
+      "started_at_seconds": 1.1755514999968,
+      "finished_at_seconds": 1.2225088999985019,
+      "exit_code": 1,
+      "output_sha256_before_path_redaction": "e83c14acac9d191fe59f213f725a214919579d8b3248c1d9e9d3938b1f461f44"
+    },
+    {
+      "label": "Installed triage auto: missing_dependency",
+      "argv": [
+        "<CONSUMER_PYTHON>",
+        "-u",
+        "-m",
+        "decilist",
+        "triage",
+        "--log",
+        "<RECORDING_WORK>\\missing_dependency.log",
+        "--project",
+        "<AUTHORED_PROJECT>",
+        "--mode",
+        "auto"
+      ],
+      "cwd": "<AUTHORED_PROJECT>",
+      "started_at_seconds": 1.2232850000000326,
+      "finished_at_seconds": 1.6131696999946143,
+      "exit_code": 0,
+      "output_sha256_before_path_redaction": "6acbd73e53fba75c25f9b1748ac8092118780a93b2e65e1105c6ee9c536d0a3a"
+    },
+    {
+      "label": "Direct installed Python Client.choose",
+      "argv": [
+        "<CONSUMER_PYTHON>",
+        "-u",
+        "<RECORDING_WORK>\\sdk_choose.py"
+      ],
+      "cwd": "<AUTHORED_PROJECT>",
+      "started_at_seconds": 1.614335199992638,
+      "finished_at_seconds": 2.2433670999889728,
+      "exit_code": 0,
+      "output_sha256_before_path_redaction": "ef39ddee215f5360b49c229c61fc8b5dbf59d20003c174282f1500f1757adb30"
+    }
+  ],
+  "events": [
+    {
+      "at": 5.059999239165336e-05,
+      "kind": "command",
+      "text": "\n$ <CONSUMER_PYTHON> -u -c \"from importlib.metadata import version; print(version('decilist'))\"\n"
+    },
+    {
+      "at": 0.16696189998765476,
+      "kind": "output",
+      "text": "0.1.0a1\r\n"
+    },
+    {
+      "at": 0.18031969999719877,
+      "kind": "exit",
+      "text": "[exit 0; 0.180 seconds]\n"
+    },
+    {
+      "at": 0.18073959999310318,
+      "kind": "command",
+      "text": "\n$ <CONSUMER_PYTHON> -u <AUTHORED_PROJECT>\\check_total.py\n"
+    },
+    {
+      "at": 0.22010849999787752,
+      "kind": "output",
+      "text": "Traceback (most recent call last):\r\n"
+    },
+    {
+      "at": 0.2202229999966221,
+      "kind": "output",
+      "text": "  File \"<AUTHORED_PROJECT>\\check_total.py\", line 8, in <module>\r\n"
+    },
+    {
+      "at": 0.22031999999308027,
+      "kind": "output",
+      "text": "    check_total()\r\n"
+    },
+    {
+      "at": 0.22033799999917392,
+      "kind": "output",
+      "text": "  File \"<AUTHORED_PROJECT>\\check_total.py\", line 6, in check_total\r\n"
+    },
+    {
+      "at": 0.22046849998878315,
+      "kind": "output",
+      "text": "    assert observed == 5, f'expected 5 but got {observed}'\r\n"
+    },
+    {
+      "at": 0.22047159999783617,
+      "kind": "output",
+      "text": "AssertionError: expected 5 but got 4\r\n"
+    },
+    {
+      "at": 0.223958099988522,
+      "kind": "exit",
+      "text": "[exit 1; 0.043 seconds]\n"
+    },
+    {
+      "at": 0.22458299998834264,
+      "kind": "command",
+      "text": "\n$ <CONSUMER_PYTHON> -u -m decilist triage --log <RECORDING_WORK>\\check_total.log --project <AUTHORED_PROJECT> --mode auto\n"
+    },
+    {
+      "at": 1.1498972999979742,
+      "kind": "output",
+      "text": "Decilist triage-v2.0 | needs_review | source: model\r\n"
+    },
+    {
+      "at": 1.1499122999957763,
+      "kind": "output",
+      "text": "The model did not support a specific next check under the frozen confidence policy. Inspect the concrete facts and code references below.\r\n"
+    },
+    {
+      "at": 1.149913799992646,
+      "kind": "output",
+      "text": "Observed: AssertionError: expected 5 but got 4\r\n"
+    },
+    {
+      "at": 1.149915099987993,
+      "kind": "output",
+      "text": "Expected: 5\r\n"
+    },
+    {
+      "at": 1.1499158999940846,
+      "kind": "output",
+      "text": "Observed: 4\r\n"
+    },
+    {
+      "at": 1.1499168000009377,
+      "kind": "output",
+      "text": "Next inspection: Inspect the recorded expectation against the observed value\r\n"
+    },
+    {
+      "at": 1.1499173999909544,
+      "kind": "output",
+      "text": "1. At the cited assertion, compare the stated expectation and observed expression with the intended contract and configured policy.\r\n"
+    },
+    {
+      "at": 1.1499182999978075,
+      "kind": "output",
+      "text": "2. Inspect the referenced source context before selecting an explanation or changing the assertion.\r\n"
+    },
+    {
+      "at": 1.1499189999885857,
+      "kind": "output",
+      "text": "Code (failure reference): check_total.py:8\r\n"
+    },
+    {
+      "at": 1.1499196999939159,
+      "kind": "output",
+      "text": "Code (failure reference): check_total.py:6\r\n"
+    },
+    {
+      "at": 1.1499202999984846,
+      "kind": "output",
+      "text": "Code (implementation): check_total.py:1\r\n"
+    },
+    {
+      "at": 1.1499212999915471,
+      "kind": "output",
+      "text": "No code was changed or executed. Use --format json for retained evidence, source provenance, and decision trace.\r\n"
+    },
+    {
+      "at": 1.1748997999966377,
+      "kind": "exit",
+      "text": "[exit 1; 0.950 seconds]\n"
+    },
+    {
+      "at": 1.1755514999968,
+      "kind": "command",
+      "text": "\n$ <CONSUMER_PYTHON> -u <AUTHORED_PROJECT>\\missing_dependency.py\n"
+    },
+    {
+      "at": 1.209495799994329,
+      "kind": "output",
+      "text": "Traceback (most recent call last):\r\n"
+    },
+    {
+      "at": 1.209609099998488,
+      "kind": "output",
+      "text": "  File \"<AUTHORED_PROJECT>\\missing_dependency.py\", line 1, in <module>\r\n"
+    },
+    {
+      "at": 1.2096214999910444,
+      "kind": "output",
+      "text": "    import decilist_clean_install_missing_dependency\r\n"
+    },
+    {
+      "at": 1.2097475999908056,
+      "kind": "output",
+      "text": "ModuleNotFoundError: No module named 'decilist_clean_install_missing_dependency'\r\n"
+    },
+    {
+      "at": 1.2225088999985019,
+      "kind": "exit",
+      "text": "[exit 1; 0.047 seconds]\n"
+    },
+    {
+      "at": 1.2232850000000326,
+      "kind": "command",
+      "text": "\n$ <CONSUMER_PYTHON> -u -m decilist triage --log <RECORDING_WORK>\\missing_dependency.log --project <AUTHORED_PROJECT> --mode auto\n"
+    },
+    {
+      "at": 1.5904627999989316,
+      "kind": "output",
+      "text": "Decilist triage-v2.0 | suggested | source: rules\r\n"
+    },
+    {
+      "at": 1.5904761999991024,
+      "kind": "output",
+      "text": "An explicit error-pattern rule supports this inspection. No model was called.\r\n"
+    },
+    {
+      "at": 1.5904774999944493,
+      "kind": "output",
+      "text": "Observed: ModuleNotFoundError: No module named 'decilist_clean_install_missing_dependency'\r\n"
+    },
+    {
+      "at": 1.590478499987512,
+      "kind": "output",
+      "text": "Next inspection: Inspect the missing import and its declared dependency\r\n"
+    },
+    {
+      "at": 1.590479399994365,
+      "kind": "output",
+      "text": "1. Inspect the exact missing module and the referenced import location.\r\n"
+    },
+    {
+      "at": 1.5904805999889504,
+      "kind": "output",
+      "text": "2. Compare that import with the project's declared dependencies and active environment; a module name need not equal a package installation name.\r\n"
+    },
+    {
+      "at": 1.590481399995042,
+      "kind": "output",
+      "text": "Code (failure reference): missing_dependency.py:1\r\n"
+    },
+    {
+      "at": 1.5904821000003722,
+      "kind": "output",
+      "text": "Rule: python.missing-module.v1; no model confidence is assigned.\r\n"
+    },
+    {
+      "at": 1.5904830999934347,
+      "kind": "output",
+      "text": "No code was changed or executed. Use --format json for retained evidence, source provenance, and decision trace.\r\n"
+    },
+    {
+      "at": 1.6131696999946143,
+      "kind": "exit",
+      "text": "[exit 0; 0.390 seconds]\n"
+    },
+    {
+      "at": 1.614335199992638,
+      "kind": "command",
+      "text": "\n$ <CONSUMER_PYTHON> -u <RECORDING_WORK>\\sdk_choose.py\n"
+    },
+    {
+      "at": 2.216027899994515,
+      "kind": "output",
+      "text": "{\r\n"
+    },
+    {
+      "at": 2.216044000000693,
+      "kind": "output",
+      "text": "  \"schema_version\": \"1\",\r\n"
+    },
+    {
+      "at": 2.216045599998324,
+      "kind": "output",
+      "text": "  \"request_id\": \"e7da4d82-7499-4ca4-8e41-283ba5653430\",\r\n"
+    },
+    {
+      "at": 2.2160465999913868,
+      "kind": "output",
+      "text": "  \"kind\": \"choose\",\r\n"
+    },
+    {
+      "at": 2.2160476999997627,
+      "kind": "output",
+      "text": "  \"status\": \"accepted\",\r\n"
+    },
+    {
+      "at": 2.2160487999935867,
+      "kind": "output",
+      "text": "  \"value\": \"summarize\",\r\n"
+    },
+    {
+      "at": 2.2160493999981554,
+      "kind": "output",
+      "text": "  \"probabilities\": {\r\n"
+    },
+    {
+      "at": 2.2160500999889337,
+      "kind": "output",
+      "text": "    \"summarize\": 0.9849305403410742,\r\n"
+    },
+    {
+      "at": 2.216050799994264,
+      "kind": "output",
+      "text": "    \"translate\": 0.008005038222499027,\r\n"
+    },
+    {
+      "at": 2.216051299998071,
+      "kind": "output",
+      "text": "    \"compare\": 0.007064421436426688\r\n"
+    },
+    {
+      "at": 2.216051899988088,
+      "kind": "output",
+      "text": "  },\r\n"
+    },
+    {
+      "at": 2.2160524999926565,
+      "kind": "output",
+      "text": "  \"confidence\": 0.9849305403410742,\r\n"
+    },
+    {
+      "at": 2.216053299998748,
+      "kind": "output",
+      "text": "  \"provider\": \"liquid-local\",\r\n"
+    },
+    {
+      "at": 2.216053899988765,
+      "kind": "output",
+      "text": "  \"model\": \"LiquidAI/d1-3B\",\r\n"
+    },
+    {
+      "at": 2.216054399992572,
+      "kind": "output",
+      "text": "  \"latency_ms\": 32.24970000155736,\r\n"
+    },
+    {
+      "at": 2.216055299999425,
+      "kind": "output",
+      "text": "  \"cost_usd\": null,\r\n"
+    },
+    {
+      "at": 2.216055899989442,
+      "kind": "output",
+      "text": "  \"attempts\": [\r\n"
+    },
+    {
+      "at": 2.2160566999955336,
+      "kind": "output",
+      "text": "    {\r\n"
+    },
+    {
+      "at": 2.2160573000001023,
+      "kind": "output",
+      "text": "      \"provider\": \"liquid-local\",\r\n"
+    },
+    {
+      "at": 2.2160577999893576,
+      "kind": "output",
+      "text": "      \"outcome\": \"accepted\",\r\n"
+    },
+    {
+      "at": 2.2160583999939263,
+      "kind": "output",
+      "text": "      \"latency_ms\": 32.21049999410752\r\n"
+    },
+    {
+      "at": 2.2160593000007793,
+      "kind": "output",
+      "text": "    }\r\n"
+    },
+    {
+      "at": 2.216059899990796,
+      "kind": "output",
+      "text": "  ]\r\n"
+    },
+    {
+      "at": 2.216997799987439,
+      "kind": "output",
+      "text": "}\r\n"
+    },
+    {
+      "at": 2.2433670999889728,
+      "kind": "exit",
+      "text": "[exit 0; 0.629 seconds]\n"
+    }
+  ],
+  "sdk_code": "import asyncio, json\nfrom decilist import Client, Policy\nasync def main():\n    async with await Client.connect(\"http://127.0.0.1:8765\", policy=Policy(local_only=True, min_confidence=0.7, timeout_ms=30000)) as sdk:\n        result = await sdk.choose(\"Please summarize the attached document in three bullet points.\", \"Which action is explicitly requested?\", {\"summarize\": \"Summarize a document\", \"translate\": \"Translate text\", \"compare\": \"Compare documents\"})\n        print(json.dumps(result.model_dump(mode=\"json\"), ensure_ascii=False, indent=2))\nasyncio.run(main())\n"
+}

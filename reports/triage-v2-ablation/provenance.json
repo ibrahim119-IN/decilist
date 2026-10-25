@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "archived_at_utc": "2026-10-25T21:40:23.938314+00:00",
+  "measurement_origin": "Existing completed work/triage-v2/ablation.py experiment; no inference rerun during archival.",
+  "original_work_script_sha256": "db49ca318d905954ccbf54a15004a62bd6faa89a882576d035157c98e0b06f62",
+  "adapted_runner_sha256": "6150c9229389f14d51f72082b55d987d7df24f302b56160b03e4fdab8198a8ba",
+  "previous_report": {
+    "path": "reports/triage-machine-2026-10-26.json",
+    "sha256": "008133da471cc3799b94a59528f249e1b349c883d1c72802f123049957cda2b2"
+  },
+  "copied_byte_exact": [
+    "ablation-spec.json",
+    "ablation-results.json",
+    "original-ablation.py",
+    "tokenizer-audit.py"
+  ],
+  "tokenizer_audit": {
+    "phase": "Later offline tokenizer/pure-renderer re-execution, separate from original inference measurements",
+    "original_audit_note": "Original audit existed as console output; no original audit Markdown was found or fabricated.",
+    "scope": "Offline tokenizer/pure-renderer audit only; no model inference, network, GPU, server calls, or vendor edits",
+    "model_inference_calls": 0,
+    "model_weights_loaded": false,
+    "vendor_revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+    "verified_prompt_git_blob_sha1": "6c44c47b600f1b41015a273cb9e03c3e18ef918a",
+    "cached_config_sha256": "0cbac0f580bd8036ef94ac83aa632a57a170e66d20f381ef47c3f6486c9a3e8c",
+    "cached_tokenizer_sha256": "8096ecb9f54599d756c8de728a598a340bc1e43c0deb77ddd62456c38349fcee",
+    "configured_max_position_embeddings": 32768,
+    "regression_cases": 8,
+    "regression_prompt_tokens_min": 986,
+    "regression_prompt_tokens_max": 1495,
+    "aliases": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F"
+    ],
+    "duplicated_signal_log_lines_min": 5,
+    "duplicated_signal_log_lines_max": 13,
+    "byte_preservation": "Published audit has LF-normalized line endings only; parsed JSON unchanged. Raw CRLF capture remains in the local work directory.",
+    "raw_capture_sha256": "0fbfe37a3d918a56b186a9d8f73ed3175142de0f44d2357e4e4ea52c9d9da60d"
+  },
+  "offline_runner_verification": {
+    "syntax": "passed",
+    "original_state_sha256_matches": 64,
+    "original_state_char_count_matches": 64,
+    "original_readable_transform_equivalent": true,
+    "variants_and_short_constants_match": true,
+    "existing_output_directory_rejected_without_changes": true,
+    "model_inference_calls": 0
+  },
+  "archive_file_sha256": {
+    "ablation-results.json": "8836aa96a2907f2391bdd84351624f3fdcb96ff318dd18363394b74e4f7fd0ec",
+    "ablation-spec.json": "d478cae632f3cb9740e123a6090069ea49a0f84a1d4ee2617d01ffc128947179",
+    "original-ablation.py": "db49ca318d905954ccbf54a15004a62bd6faa89a882576d035157c98e0b06f62",
+    "README.md": "00cfe6c36612ee02e322003db225202e794d6541cbde4c7585a5bc1b637da629",
+    "tokenizer-audit.json": "33fb5a0fe5d011af9911eb878c9358311027c3afd11116ab727d1384ad754302",
+    "tokenizer-audit.py": "0025a013e292a4f84f1effecd9c83fac8a6041ae7204ea16c173c06666947b26"
+  }
+}

@@ -13,7 +13,7 @@ license-files = ["LICENSE"]
 dependencies = ["pydantic>=2.14.1,<3", "httpx>=0.28.1,<1"]
 
 [project.scripts]
-decilist = "decilist.runtime:main"
+decilist = "decilist.cli:main"
 
 [project.optional-dependencies]
 server = ["fastapi>=0.162,<1", "starlette>=1.10,<2", "uvicorn>=0.54,<1"]

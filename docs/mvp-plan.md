@@ -128,6 +128,8 @@ Defer mobile applications, multimodal API, fine-tuning, hosted dashboards, multi
 - [x] A held-out report distinguishes model quality, coverage, latency, and unmeasured costs.
 - [x] The end-user example stays in its own interface and reuses existing context.
 - [x] The optional Playground has one primary workspace and reproduces its result in copied SDK code.
-- [ ] The final candidate, packaging, tests, browser flows, and rehearsal are verified.
+- [x] The local alpha candidate, packaging, tests, browser flows, and bounded rehearsal are verified; exact pushed-commit CI is checked separately.
 
-Completed gates refer to the measured alpha scope. Current model errors remain visible; no production-readiness claim follows. First-time human usability, a final candidate freeze, recording, and full offline presentation rehearsal still need to happen before November 1. Any future prompt/model improvements need development-only tuning followed by fresh held-out evaluation; the existing report and labels must remain intact.
+Completed gates refer to the measured alpha scope. On October 26 the triage candidate was frozen before fresh evaluation; Python and TypeScript distributables were installed into clean consumers, 429 Python and 22 JavaScript tests passed, and actual UI and terminal rehearsals were recorded. [Delivery ledger](triage-v2-plan-ar.md), [results](triage-v2-results.md), and [verification](triage-verification.md) retain the evidence, including the absence of measured agent-debugging speedup.
+
+Current model errors remain visible; no production-readiness claim follows. First-time human usability and an OS-isolated full browser presentation are unverified. Cached loading/inference with Python network operations blocked is narrower evidence, not an air gap. The recording is actual terminal output, not a browser video. The November 1 presentation has not happened. Any future prompt/model improvements need development-only tuning followed by fresh held-out evaluation; existing reports and labels remain intact. Public registries, a second learned provider, and production hosting retain the separate scope above.

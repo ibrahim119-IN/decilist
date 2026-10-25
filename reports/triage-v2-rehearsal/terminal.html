@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Decilist · تسجيل طرفية حقيقي</title>
+<style>
+:root{color-scheme:dark;--bg:#10191a;--panel:#172326;--line:#334448;--ink:#e8f0e9;--muted:#a9bdb8;--green:#c1f58d;--amber:#ffcf85}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,sans-serif}main{max-width:1180px;margin:auto;padding:28px}h1{font-size:clamp(26px,4vw,44px);line-height:1.2;margin:12px 0}p{margin:8px 0;color:var(--muted)}.eyebrow{color:var(--green);font-size:13px;letter-spacing:.08em}.intro{max-width:850px}.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:24px 0 14px}button,select{border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);padding:10px 16px;font:inherit;cursor:pointer}button.primary{background:var(--green);color:#142014;border-color:var(--green);font-weight:650}button:hover,select:hover{border-color:var(--green)}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--green);outline-offset:3px}#clock{direction:ltr;font-variant-numeric:tabular-nums;color:var(--green);margin-inline-start:auto}.timeline{width:100%;accent-color:var(--green);margin:0 0 14px;direction:ltr}.terminal{direction:ltr;text-align:left;border:1px solid var(--line);border-radius:12px;background:#0a1011;overflow:hidden}.bar{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--panel);padding:12px 18px;color:var(--muted);font-size:13px}.terminal pre{white-space:pre-wrap;overflow-wrap:anywhere;margin:0;padding:20px;height:56vh;min-height:310px;overflow:auto;font:14px/1.6 ui-monospace,Consolas,monospace}.command{color:var(--green)}.exit{color:var(--amber)}.out{color:#e0e9e4}.meta{color:var(--muted)}.notes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}.note{border:1px solid var(--line);border-radius:10px;padding:16px;background:var(--panel)}h2{font-size:16px;margin:0 0 6px}details{margin:18px 0;border:1px solid var(--line);border-radius:10px;padding:14px}summary{cursor:pointer;color:var(--green)}details pre{direction:ltr;text-align:left;white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.6 ui-monospace,Consolas,monospace}a{color:var(--green)}.foot{font-size:13px;margin-top:16px}#status{color:var(--green)}@media(max-width:650px){main{padding:18px}.notes{grid-template-columns:1fr}.terminal pre{font-size:12px;padding:13px;height:58vh}.controls{gap:8px}button,select{padding:9px 11px}#clock{width:100%;margin:0}.bar{padding:10px 12px}}
+</style>
+<main><header class="intro"><div class="eyebrow">DECILIST / RECORDED DEVELOPER REHEARSAL</div><h1>تسجيل طرفية حقيقي</h1><p>إعادة عرض لأوامر شغّلها الوكيل فعلًا: اختبار فاشل، ترياج من الحزمة المثبتة، واستدعاء مباشر للموديل المحلي.</p><p>ده مش فيديو للمتصفح أو تجربة مستخدم لأول مرة. النتائج وأكواد الخروج محفوظة زي ما ظهرت، مع إخفاء المسارات الشخصية.</p></header>
+<div class="controls"><button class="primary" id="play">تشغيل</button><button id="pause">إيقاف مؤقت</button><button id="restart">من البداية</button><label>السرعة <select id="speed" aria-label="سرعة التشغيل"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select></label><span id="clock"></span></div>
+<input class="timeline" id="seek" type="range" min="0" step="any" aria-label="موضع التسجيل"><div class="terminal"><div class="bar"><span>Actual subprocess output · stdout + stderr</span><span id="status" role="status">جاهز للتشغيل</span></div><pre id="screen" aria-label="مخرجات الطرفية المسجلة"></pre></div>
+<div class="notes"><section class="note"><h2>إيه اللي اتسجّل؟</h2><p id="method"></p><p id="provenance"></p></section><section class="note"><h2>حدود الدليل</h2><p>الحالات صغيرة ومؤلفة للتحضير. اقتراح الفحص مش إثبات لسبب الخطأ أو إصلاحه. الموديل قد يمتنع، والقواعد ظاهرة بمصدرها. التسجيل استخدم loopback ولا يثبت عزل الجهاز عن الشبكة.</p></section></div>
+<details><summary>كود استدعاء Python SDK المستخدم فعلًا</summary><pre id="sdk"></pre></details><details><summary>إخفاء المسارات والتوقيت</summary><p>اتستبدلت مسارات الجهاز الشخصية ومجلدات العمل بأسماء وصفية؛ نص الخطأ والقرار وكود الخروج ما اتغيروش. التوقيت هو وقت رصد كل سطر من العملية، مش قياس كتابة شخص أو زمن كل حرف.</p><pre id="redactions"></pre></details>
+<p class="foot"><a href="terminal.json">سجل JSON الكامل</a> · الصفحة ذاتية الاكتفاء ولا تحتاج ملفات أو خطوط أو مكتبات خارجية.</p></main>
+<script type="application/json" id="record">{
+  "schema_version": 1,
+  "kind": "actual timed agent-run terminal recording",
+  "browser_video": false,
+  "human_first_use": false,
+  "started_at_utc": "2026-10-25T21:37:58.144627+00:00",
+  "finished_at_utc": "2026-10-25T21:38:00.388520+00:00",
+  "duration_seconds": 2.2436799999995856,
+  "package_version": "0.1.0a1",
+  "wheel_sha256": "4cac6713558857b8060162c96e1b81946d20828898db3836d3cff62f6592818b",
+  "fixture_provenance": "Separate tiny authored clean-consumer project, never reserved agent trials; check_total.py and missing_dependency.py run without edits",
+  "fixture_sha256": {
+    "check_total.py": "aab3b98724dfc57353accd5f54eeb72bc638428ba928601df402433082d5311c",
+    "missing_dependency.py": "3db12e39cfe23a697fba5164694afd042827c5b2cf22f57603ecb9d919d1806b"
+  },
+  "runtime_url": "http://127.0.0.1:8765",
+  "network_claim": "Loopback client calls only; no OS air gap, browser offline or native-network audit established by this recording",
+  "capture": "Actual merged stdout/stderr lines timestamped when observed; command prompts and exit annotations are recorder metadata, not subprocess output",
+  "redactions": [
+    {
+      "alias": "\u003cCONSUMER_PYTHON\u003e",
+      "replacements": 12,
+      "scope": "Display path replacement only; original personal path not retained in deliverable"
+    },
+    {
+      "alias": "\u003cAUTHORED_PROJECT\u003e",
+      "replacements": 11,
+      "scope": "Display path replacement only; original personal path not retained in deliverable"
+    },
+    {
+      "alias": "\u003cRECORDING_WORK\u003e",
+      "replacements": 6,
+      "scope": "Display path replacement only; original personal path not retained in deliverable"
+    },
+    {
+      "alias": "\u003cUSER_HOME\u003e",
+      "replacements": 0,
+      "scope": "Display path replacement only; original personal path not retained in deliverable"
+    }
+  ],
+  "commands": [
+    {
+      "label": "Installed distribution version",
+      "argv": [
+        "\u003cCONSUMER_PYTHON\u003e",
+        "-u",
+        "-c",
+        "from importlib.metadata import version; print(version('decilist'))"
+      ],
+      "cwd": "\u003cAUTHORED_PROJECT\u003e",
+      "started_at_seconds": 5.059999239165336e-05,
+      "finished_at_seconds": 0.18031969999719877,
+      "exit_code": 0,
+      "output_sha256_before_path_redaction": "f6117cad3102e68db1f8ef1a113bcaa1535b76177160c11388c2abd7a01fe074"
+    },
+    {
+      "label": "Actual authored check_total failure",
+      "argv": [
+        "\u003cCONSUMER_PYTHON\u003e",
+        "-u",
+        "\u003cAUTHORED_PROJECT\u003e\\check_total.py"
+      ],
+      "cwd": "\u003cAUTHORED_PROJECT\u003e",
+      "started_at_seconds": 0.18073959999310318,
+      "finished_at_seconds": 0.223958099988522,
+      "exit_code": 1,
+      "output_sha256_before_path_redaction": "69ee4ad3948c1bba9ce6c0e8eb07fe5fcfa4407d64f3ee8fd66d551bf665654d"
+    },
+    {
+      "label": "Installed triage auto: check_total",
+      "argv": [
+        "\u003cCONSUMER_PYTHON\u003e",
+        "-u",
+        "-m",
+        "decilist",
+        "triage",
+        "--log",
+        "\u003cRECORDING_WORK\u003e\\check_total.log",
+        "--project",
+        "\u003cAUTHORED_PROJECT\u003e",
+        "--mode",
+        "auto"
+      ],
+      "cwd": "\u003cAUTHORED_PROJECT\u003e",
+      "started_at_seconds": 0.22458299998834264,
+      "finished_at_seconds": 1.1748997999966377,
+      "exit_code": 1,
+      "output_sha256_before_path_redaction": "fe9e2bc9c421b57cbe0ca923d667a60fe4d2a2be0256bd07abc05219b66602b5"
+    },
+    {
+      "label": "Actual authored missing_dependency failure",
+      "argv": [
+        "\u003cCONSUMER_PYTHON\u003e",
+        "-u",
+        "\u003cAUTHORED_PROJECT\u003e\\missing_dependency.py"
+      ],
+      "cwd": "\u003cAUTHORED_PROJECT\u003e",
+      "started_at_seconds": 1.1755514999968,
+      "finished_at_seconds": 1.2225088999985019,
+      "exit_code": 1,
+      "output_sha256_before_path_redaction": "e83c14acac9d191fe59f213f725a214919579d8b3248c1d9e9d3938b1f461f44"
+    },
+    {
+      "label": "Installed triage auto: missing_dependency",
+      "argv": [
+        "\u003cCONSUMER_PYTHON\u003e",
+        "-u",
+        "-m",
+        "decilist",
+        "triage",
+        "--log",
+        "\u003cRECORDING_WORK\u003e\\missing_dependency.log",
+        "--project",
+        "\u003cAUTHORED_PROJECT\u003e",
+        "--mode",
+        "auto"
+      ],
+      "cwd": "\u003cAUTHORED_PROJECT\u003e",
+      "started_at_seconds": 1.2232850000000326,
+      "finished_at_seconds": 1.6131696999946143,
+      "exit_code": 0,
+      "output_sha256_before_path_redaction": "6acbd73e53fba75c25f9b1748ac8092118780a93b2e65e1105c6ee9c536d0a3a"
+    },
+    {
+      "label": "Direct installed Python Client.choose",
+      "argv": [
+        "\u003cCONSUMER_PYTHON\u003e",
+        "-u",
+        "\u003cRECORDING_WORK\u003e\\sdk_choose.py"
+      ],
+      "cwd": "\u003cAUTHORED_PROJECT\u003e",
+      "started_at_seconds": 1.614335199992638,
+      "finished_at_seconds": 2.2433670999889728,
+      "exit_code": 0,
+      "output_sha256_before_path_redaction": "ef39ddee215f5360b49c229c61fc8b5dbf59d20003c174282f1500f1757adb30"
+    }
+  ],
+  "events": [
+    {
+      "at": 5.059999239165336e-05,
+      "kind": "command",
+      "text": "\n$ \u003cCONSUMER_PYTHON\u003e -u -c \"from importlib.metadata import version; print(version('decilist'))\"\n"
+    },
+    {
+      "at": 0.16696189998765476,
+      "kind": "output",
+      "text": "0.1.0a1\r\n"
+    },
+    {
+      "at": 0.18031969999719877,
+      "kind": "exit",
+      "text": "[exit 0; 0.180 seconds]\n"
+    },
+    {
+      "at": 0.18073959999310318,
+      "kind": "command",
+      "text": "\n$ \u003cCONSUMER_PYTHON\u003e -u \u003cAUTHORED_PROJECT\u003e\\check_total.py\n"
+    },
+    {
+      "at": 0.22010849999787752,
+      "kind": "output",
+      "text": "Traceback (most recent call last):\r\n"
+    },
+    {
+      "at": 0.2202229999966221,
+      "kind": "output",
+      "text": "  File \"\u003cAUTHORED_PROJECT\u003e\\check_total.py\", line 8, in \u003cmodule\u003e\r\n"
+    },
+    {
+      "at": 0.22031999999308027,
+      "kind": "output",
+      "text": "    check_total()\r\n"
+    },
+    {
+      "at": 0.22033799999917392,
+      "kind": "output",
+      "text": "  File \"\u003cAUTHORED_PROJECT\u003e\\check_total.py\", line 6, in check_total\r\n"
+    },
+    {
+      "at": 0.22046849998878315,
+      "kind": "output",
+      "text": "    assert observed == 5, f'expected 5 but got {observed}'\r\n"
+    },
+    {
+      "at": 0.22047159999783617,
+      "kind": "output",
+      "text": "AssertionError: expected 5 but got 4\r\n"
+    },
+    {
+      "at": 0.223958099988522,
+      "kind": "exit",
+      "text": "[exit 1; 0.043 seconds]\n"
+    },
+    {
+      "at": 0.22458299998834264,
+      "kind": "command",
+      "text": "\n$ \u003cCONSUMER_PYTHON\u003e -u -m decilist triage --log \u003cRECORDING_WORK\u003e\\check_total.log --project \u003cAUTHORED_PROJECT\u003e --mode auto\n"
+    },
+    {
+      "at": 1.1498972999979742,
+      "kind": "output",
+      "text": "Decilist triage-v2.0 | needs_review | source: model\r\n"
+    },
+    {
+      "at": 1.1499122999957763,
+      "kind": "output",
+      "text": "The model did not support a specific next check under the frozen confidence policy. Inspect the concrete facts and code references below.\r\n"
+    },
+    {
+      "at": 1.149913799992646,
+      "kind": "output",
+      "text": "Observed: AssertionError: expected 5 but got 4\r\n"
+    },
+    {
+      "at": 1.149915099987993,
+      "kind": "output",
+      "text": "Expected: 5\r\n"
+    },
+    {
+      "at": 1.1499158999940846,
+      "kind": "output",
+      "text": "Observed: 4\r\n"
+    },
+    {
+      "at": 1.1499168000009377,
+      "kind": "output",
+      "text": "Next inspection: Inspect the recorded expectation against the observed value\r\n"
+    },
+    {
+      "at": 1.1499173999909544,
+      "kind": "output",
+      "text": "1. At the cited assertion, compare the stated expectation and observed expression with the intended contract and configured policy.\r\n"
+    },
+    {
+      "at": 1.1499182999978075,
+      "kind": "output",
+      "text": "2. Inspect the referenced source context before selecting an explanation or changing the assertion.\r\n"
+    },
+    {
+      "at": 1.1499189999885857,
+      "kind": "output",
+      "text": "Code (failure reference): check_total.py:8\r\n"
+    },
+    {
+      "at": 1.1499196999939159,
+      "kind": "output",
+      "text": "Code (failure reference): check_total.py:6\r\n"
+    },
+    {
+      "at": 1.1499202999984846,
+      "kind": "output",
+      "text": "Code (implementation): check_total.py:1\r\n"
+    },
+    {
+      "at": 1.1499212999915471,
+      "kind": "output",
+      "text": "No code was changed or executed. Use --format json for retained evidence, source provenance, and decision trace.\r\n"
+    },
+    {
+      "at": 1.1748997999966377,
+      "kind": "exit",
+      "text": "[exit 1; 0.950 seconds]\n"
+    },
+    {
+      "at": 1.1755514999968,
+      "kind": "command",
+      "text": "\n$ \u003cCONSUMER_PYTHON\u003e -u \u003cAUTHORED_PROJECT\u003e\\missing_dependency.py\n"
+    },
+    {
+      "at": 1.209495799994329,
+      "kind": "output",
+      "text": "Traceback (most recent call last):\r\n"
+    },
+    {
+      "at": 1.209609099998488,
+      "kind": "output",
+      "text": "  File \"\u003cAUTHORED_PROJECT\u003e\\missing_dependency.py\", line 1, in \u003cmodule\u003e\r\n"
+    },
+    {
+      "at": 1.2096214999910444,
+      "kind": "output",
+      "text": "    import decilist_clean_install_missing_dependency\r\n"
+    },
+    {
+      "at": 1.2097475999908056,
+      "kind": "output",
+      "text": "ModuleNotFoundError: No module named 'decilist_clean_install_missing_dependency'\r\n"
+    },
+    {
+      "at": 1.2225088999985019,
+      "kind": "exit",
+      "text": "[exit 1; 0.047 seconds]\n"
+    },
+    {
+      "at": 1.2232850000000326,
+      "kind": "command",
+      "text": "\n$ \u003cCONSUMER_PYTHON\u003e -u -m decilist triage --log \u003cRECORDING_WORK\u003e\\missing_dependency.log --project \u003cAUTHORED_PROJECT\u003e --mode auto\n"
+    },
+    {
+      "at": 1.5904627999989316,
+      "kind": "output",
+      "text": "Decilist triage-v2.0 | suggested | source: rules\r\n"
+    },
+    {
+      "at": 1.5904761999991024,
+      "kind": "output",
+      "text": "An explicit error-pattern rule supports this inspection. No model was called.\r\n"
+    },
+    {
+      "at": 1.5904774999944493,
+      "kind": "output",
+      "text": "Observed: ModuleNotFoundError: No module named 'decilist_clean_install_missing_dependency'\r\n"
+    },
+    {
+      "at": 1.590478499987512,
+      "kind": "output",
+      "text": "Next inspection: Inspect the missing import and its declared dependency\r\n"
+    },
+    {
+      "at": 1.590479399994365,
+      "kind": "output",
+      "text": "1. Inspect the exact missing module and the referenced import location.\r\n"
+    },
+    {
+      "at": 1.5904805999889504,
+      "kind": "output",
+      "text": "2. Compare that import with the project's declared dependencies and active environment; a module name need not equal a package installation name.\r\n"
+    },
+    {
+      "at": 1.590481399995042,
+      "kind": "output",
+      "text": "Code (failure reference): missing_dependency.py:1\r\n"
+    },
+    {
+      "at": 1.5904821000003722,
+      "kind": "output",
+      "text": "Rule: python.missing-module.v1; no model confidence is assigned.\r\n"
+    },
+    {
+      "at": 1.5904830999934347,
+      "kind": "output",
+      "text": "No code was changed or executed. Use --format json for retained evidence, source provenance, and decision trace.\r\n"
+    },
+    {
+      "at": 1.6131696999946143,
+      "kind": "exit",
+      "text": "[exit 0; 0.390 seconds]\n"
+    },
+    {
+      "at": 1.614335199992638,
+      "kind": "command",
+      "text": "\n$ \u003cCONSUMER_PYTHON\u003e -u \u003cRECORDING_WORK\u003e\\sdk_choose.py\n"
+    },
+    {
+      "at": 2.216027899994515,
+      "kind": "output",
+      "text": "{\r\n"
+    },
+    {
+      "at": 2.216044000000693,
+      "kind": "output",
+      "text": "  \"schema_version\": \"1\",\r\n"
+    },
+    {
+      "at": 2.216045599998324,
+      "kind": "output",
+      "text": "  \"request_id\": \"e7da4d82-7499-4ca4-8e41-283ba5653430\",\r\n"
+    },
+    {
+      "at": 2.2160465999913868,
+      "kind": "output",
+      "text": "  \"kind\": \"choose\",\r\n"
+    },
+    {
+      "at": 2.2160476999997627,
+      "kind": "output",
+      "text": "  \"status\": \"accepted\",\r\n"
+    },
+    {
+      "at": 2.2160487999935867,
+      "kind": "output",
+      "text": "  \"value\": \"summarize\",\r\n"
+    },
+    {
+      "at": 2.2160493999981554,
+      "kind": "output",
+      "text": "  \"probabilities\": {\r\n"
+    },
+    {
+      "at": 2.2160500999889337,
+      "kind": "output",
+      "text": "    \"summarize\": 0.9849305403410742,\r\n"
+    },
+    {
+      "at": 2.216050799994264,
+      "kind": "output",
+      "text": "    \"translate\": 0.008005038222499027,\r\n"
+    },
+    {
+      "at": 2.216051299998071,
+      "kind": "output",
+      "text": "    \"compare\": 0.007064421436426688\r\n"
+    },
+    {
+      "at": 2.216051899988088,
+      "kind": "output",
+      "text": "  },\r\n"
+    },
+    {
+      "at": 2.2160524999926565,
+      "kind": "output",
+      "text": "  \"confidence\": 0.9849305403410742,\r\n"
+    },
+    {
+      "at": 2.216053299998748,
+      "kind": "output",
+      "text": "  \"provider\": \"liquid-local\",\r\n"
+    },
+    {
+      "at": 2.216053899988765,
+      "kind": "output",
+      "text": "  \"model\": \"LiquidAI/d1-3B\",\r\n"
+    },
+    {
+      "at": 2.216054399992572,
+      "kind": "output",
+      "text": "  \"latency_ms\": 32.24970000155736,\r\n"
+    },
+    {
+      "at": 2.216055299999425,
+      "kind": "output",
+      "text": "  \"cost_usd\": null,\r\n"
+    },
+    {
+      "at": 2.216055899989442,
+      "kind": "output",
+      "text": "  \"attempts\": [\r\n"
+    },
+    {
+      "at": 2.2160566999955336,
+      "kind": "output",
+      "text": "    {\r\n"
+    },
+    {
+      "at": 2.2160573000001023,
+      "kind": "output",
+      "text": "      \"provider\": \"liquid-local\",\r\n"
+    },
+    {
+      "at": 2.2160577999893576,
+      "kind": "output",
+      "text": "      \"outcome\": \"accepted\",\r\n"
+    },
+    {
+      "at": 2.2160583999939263,
+      "kind": "output",
+      "text": "      \"latency_ms\": 32.21049999410752\r\n"
+    },
+    {
+      "at": 2.2160593000007793,
+      "kind": "output",
+      "text": "    }\r\n"
+    },
+    {
+      "at": 2.216059899990796,
+      "kind": "output",
+      "text": "  ]\r\n"
+    },
+    {
+      "at": 2.216997799987439,
+      "kind": "output",
+      "text": "}\r\n"
+    },
+    {
+      "at": 2.2433670999889728,
+      "kind": "exit",
+      "text": "[exit 0; 0.629 seconds]\n"
+    }
+  ],
+  "sdk_code": "import asyncio, json\nfrom decilist import Client, Policy\nasync def main():\n    async with await Client.connect(\"http://127.0.0.1:8765\", policy=Policy(local_only=True, min_confidence=0.7, timeout_ms=30000)) as sdk:\n        result = await sdk.choose(\"Please summarize the attached document in three bullet points.\", \"Which action is explicitly requested?\", {\"summarize\": \"Summarize a document\", \"translate\": \"Translate text\", \"compare\": \"Compare documents\"})\n        print(json.dumps(result.model_dump(mode=\"json\"), ensure_ascii=False, indent=2))\nasyncio.run(main())\n"
+}</script><script>
+"use strict";
+const record=JSON.parse(document.getElementById("record").textContent),screen=document.getElementById("screen"),seek=document.getElementById("seek"),clock=document.getElementById("clock"),status=document.getElementById("status"),speed=document.getElementById("speed");
+let position=0,playing=false,last=0,shown=-1;
+seek.max=record.duration_seconds;
+document.getElementById("sdk").textContent=record.sdk_code;
+document.getElementById("redactions").textContent=JSON.stringify(record.redactions,null,2);
+document.getElementById("method").textContent=`${record.commands.length} أوامر فعلية. مدة التسجيل ${record.duration_seconds.toFixed(2)} ثانية. أكواد الخروج متعمدة الظهور، ومنها فشل الاختبار والامتناع.`;
+document.getElementById("provenance").dir="ltr";
+document.getElementById("provenance").textContent=`Package ${record.package_version} · recorded ${record.started_at_utc}`;
+function stamp(t){return `${Math.floor(t/60).toString().padStart(2,"0")}:${(t%60).toFixed(1).padStart(4,"0")}`;}
+function render(){const events=record.events.filter(e=>e.at<=position);if(events.length!==shown){const fragment=document.createDocumentFragment();for(const e of events){const line=document.createElement("span");line.className=e.kind==="command"?"command":e.kind==="exit"?"exit":e.kind==="output"?"out":"meta";line.textContent=e.text;fragment.append(line);}screen.replaceChildren(fragment);screen.scrollTop=screen.scrollHeight;shown=events.length;}seek.value=position;clock.textContent=`${stamp(position)} / ${stamp(record.duration_seconds)}`;}
+function tick(now){if(playing){if(last)position=Math.min(record.duration_seconds,position+(now-last)/1000*Number(speed.value));if(position>=record.duration_seconds){playing=false;status.textContent="اكتمل التسجيل";}render();}last=now;requestAnimationFrame(tick);}
+document.getElementById("play").onclick=()=>{if(position>=record.duration_seconds)position=0;playing=true;last=0;status.textContent="جاري العرض";render();};
+document.getElementById("pause").onclick=()=>{playing=false;status.textContent="متوقف مؤقتًا";render();};
+document.getElementById("restart").onclick=()=>{position=0;playing=false;last=0;status.textContent="جاهز من البداية";render();};
+seek.oninput=()=>{position=Number(seek.value);status.textContent=playing?"جاري العرض":position>=record.duration_seconds?"نهاية التسجيل":"متوقف مؤقتًا";render();};render();requestAnimationFrame(tick);
+</script></html>

@@ -1,5 +1,7 @@
 # First triage result: implementation works, added model value is unproven
 
+This page preserves the **v1** experiment. The implemented v2 assistant, fresh-case comparison, and actual agent-run repair trials are documented in [v2 results](triage-v2-results.md). Historical proposals below describe the original measurement; they do not mean v2 remains unimplemented.
+
 Measured October 26, 2026 Cairo time (October 25 UTC). Source: commit `e0cc931`, with exact evaluation file hashes in [the original pre-run freeze](../benchmarks/triage_freeze_windows_v1.json). Other documentation/study work and a pre-existing example were uncommitted at measurement, so the report correctly records `source_dirty=true`.
 
 The optional assistant runs on saved test logs, gathers bounded referenced source excerpts, and chooses a next check through Decilist. A separate clean environment installed the built Python wheel and successfully used its CLI outside the source checkout against the existing local Liquid runtime. No repair was generated or applied by the assistant.
