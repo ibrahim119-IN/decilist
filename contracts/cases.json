@@ -1,0 +1,6 @@
+[
+  {"question":{"kind":"choose","state":"evidence","instructions":"Choose one","options":{"alpha":"First","beta":"Second"}},"probabilities":{"alpha":0.2,"beta":0.8},"value":"beta","confidence":0.8},
+  {"question":{"kind":"predict","state":"evidence","instructions":"Is it ready?"},"probabilities":{"false":0.8,"true":0.2},"value":false,"confidence":0.8},
+  {"question":{"kind":"score","state":"evidence","instructions":"How ready?","levels":["Low","Medium","High"]},"probabilities":{"0":0.1,"1":0.2,"2":0.7},"value":1.6,"confidence":0.7},
+  {"question":{"kind":"choose","state":"evidence","instructions":"Choose one","options":{"first":"First","second":"Second"}},"probabilities":{"second":0.5,"first":0.5},"value":"first","confidence":0.5}
+]

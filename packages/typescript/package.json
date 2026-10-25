@@ -1,0 +1,16 @@
+{
+  "name": "@decilist/sdk",
+  "version": "0.1.0-alpha.1",
+  "description": "Typed local-first decision contracts and HTTP client",
+  "type": "module",
+  "license": "Apache-2.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {".": {"types": "./dist/index.d.ts", "import": "./dist/index.js"}},
+  "files": ["dist"],
+  "scripts": {"build": "tsc -p tsconfig.json", "test": "npm run build && tsc -p tsconfig.test.json && node --test test/*.test.mjs", "demo": "npm run build && node ../../examples/workflow.mjs"},
+  "dependencies": {"zod": "4.6.7"},
+  "devDependencies": {"typescript": "7.0.2", "@types/node": "^22.0.0"},
+  "engines": {"node": ">=22"}
+}

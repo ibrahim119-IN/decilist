@@ -1,0 +1,1090 @@
+{
+  "suite": "workflow-smoke-v1",
+  "dataset_sha256": "da150fafab76e8b6eb381a03c5f1663c6cf038b0d23398f23e05dce1d95e78e0",
+  "measured_at": "2026-10-25T18:41:37.920135+00:00",
+  "python": "3.12.0rc2",
+  "platform": "Windows",
+  "limitations": "12 synthetic smoke cases. Rules encode the labeling policy; this is not evidence of learned model quality or production performance. Sequential warm calls; model load and one warmup excluded. Cost unmeasured.",
+  "runs": {
+    "uniform": {
+      "providers": [
+        {
+          "name": "uniform",
+          "model": "uniform-v1",
+          "revision": null
+        }
+      ],
+      "policy": {
+        "local_only": true,
+        "min_confidence": 0.0,
+        "timeout_ms": 5000
+      },
+      "metrics": {
+        "cases": 12,
+        "accepted": 12,
+        "coverage": 1.0,
+        "accuracy_all": 0.16666666666666666,
+        "accuracy_accepted": 0.16666666666666666,
+        "abstention_rate": 0.0,
+        "p50_ms": 0.00790000194683671,
+        "p95_ms": 0.02649999805726111,
+        "invalid_output_attempts": 0,
+        "timeout_attempts": 0,
+        "cost_usd": null,
+        "errors": [
+          {
+            "id": "first-retry",
+            "expected": "retry",
+            "value": "proceed",
+            "status": "accepted"
+          },
+          {
+            "id": "last-retry",
+            "expected": "retry",
+            "value": "proceed",
+            "status": "accepted"
+          },
+          {
+            "id": "exhausted",
+            "expected": "review",
+            "value": "proceed",
+            "status": "accepted"
+          },
+          {
+            "id": "missing-data",
+            "expected": "review",
+            "value": "proceed",
+            "status": "accepted"
+          },
+          {
+            "id": "invalid-data",
+            "expected": "review",
+            "value": "proceed",
+            "status": "accepted"
+          },
+          {
+            "id": "unknown",
+            "expected": "review",
+            "value": "proceed",
+            "status": "accepted"
+          },
+          {
+            "id": "negative-retries",
+            "expected": "review",
+            "value": "proceed",
+            "status": "accepted"
+          },
+          {
+            "id": "string-boolean",
+            "expected": "review",
+            "value": "proceed",
+            "status": "accepted"
+          },
+          {
+            "id": "missing-retries",
+            "expected": "review",
+            "value": "proceed",
+            "status": "accepted"
+          },
+          {
+            "id": "injected-note",
+            "expected": "review",
+            "value": "proceed",
+            "status": "accepted"
+          }
+        ]
+      },
+      "results": [
+        {
+          "schema_version": "1",
+          "request_id": "2384a187-53a9-4b92-8f8d-75ba1f07eb2c",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "proceed",
+          "probabilities": {
+            "proceed": 0.3333333333333333,
+            "retry": 0.3333333333333333,
+            "review": 0.3333333333333333
+          },
+          "confidence": 0.3333333333333333,
+          "provider": "uniform",
+          "model": "uniform-v1",
+          "latency_ms": 0.02649999805726111,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "accepted",
+              "latency_ms": 0.01680001150816679
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "3f7e1bc7-2709-4f11-bb12-b716bd71ef81",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "proceed",
+          "probabilities": {
+            "proceed": 0.3333333333333333,
+            "retry": 0.3333333333333333,
+            "review": 0.3333333333333333
+          },
+          "confidence": 0.3333333333333333,
+          "provider": "uniform",
+          "model": "uniform-v1",
+          "latency_ms": 0.01409999094903469,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "accepted",
+              "latency_ms": 0.009199997293762863
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "ba8c4042-8c9f-40a5-8922-35ad8cabe64f",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "proceed",
+          "probabilities": {
+            "proceed": 0.3333333333333333,
+            "retry": 0.3333333333333333,
+            "review": 0.3333333333333333
+          },
+          "confidence": 0.3333333333333333,
+          "provider": "uniform",
+          "model": "uniform-v1",
+          "latency_ms": 0.008899995009414852,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "accepted",
+              "latency_ms": 0.005400012014433742
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "f61f8e9d-72f5-42b4-9df6-429b58487748",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "proceed",
+          "probabilities": {
+            "proceed": 0.3333333333333333,
+            "retry": 0.3333333333333333,
+            "review": 0.3333333333333333
+          },
+          "confidence": 0.3333333333333333,
+          "provider": "uniform",
+          "model": "uniform-v1",
+          "latency_ms": 0.008300004992634058,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "accepted",
+              "latency_ms": 0.0048000074457377195
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "8659ac3f-a99a-42ac-ba50-6ad44d259a32",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "proceed",
+          "probabilities": {
+            "proceed": 0.3333333333333333,
+            "retry": 0.3333333333333333,
+            "review": 0.3333333333333333
+          },
+          "confidence": 0.3333333333333333,
+          "provider": "uniform",
+          "model": "uniform-v1",
+          "latency_ms": 0.008100003469735384,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "accepted",
+              "latency_ms": 0.0040000013541430235
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "cca722ee-8f9c-4131-a1a9-ee8519b24f1e",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "proceed",
+          "probabilities": {
+            "proceed": 0.3333333333333333,
+            "retry": 0.3333333333333333,
+            "review": 0.3333333333333333
+          },
+          "confidence": 0.3333333333333333,
+          "provider": "uniform",
+          "model": "uniform-v1",
+          "latency_ms": 0.006800008122809231,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "accepted",
+              "latency_ms": 0.0035999983083456755
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "525453d5-c37e-4ace-be11-430a5dcb99f7",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "proceed",
+          "probabilities": {
+            "proceed": 0.3333333333333333,
+            "retry": 0.3333333333333333,
+            "review": 0.3333333333333333
+          },
+          "confidence": 0.3333333333333333,
+          "provider": "uniform",
+          "model": "uniform-v1",
+          "latency_ms": 0.006700007361359894,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "accepted",
+              "latency_ms": 0.003300010575912893
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "354f90f8-f8cc-4889-81d9-89a42ac1b024",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "proceed",
+          "probabilities": {
+            "proceed": 0.3333333333333333,
+            "retry": 0.3333333333333333,
+            "review": 0.3333333333333333
+          },
+          "confidence": 0.3333333333333333,
+          "provider": "uniform",
+          "model": "uniform-v1",
+          "latency_ms": 0.006199989002197981,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "accepted",
+              "latency_ms": 0.0033999967854470015
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "61e065f6-1199-4976-8f51-2a7af305f786",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "proceed",
+          "probabilities": {
+            "proceed": 0.3333333333333333,
+            "retry": 0.3333333333333333,
+            "review": 0.3333333333333333
+          },
+          "confidence": 0.3333333333333333,
+          "provider": "uniform",
+          "model": "uniform-v1",
+          "latency_ms": 0.006400005077011883,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "accepted",
+              "latency_ms": 0.0036999990697950125
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "af941a84-a1e1-43c4-a7b7-0279ba48f680",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "proceed",
+          "probabilities": {
+            "proceed": 0.3333333333333333,
+            "retry": 0.3333333333333333,
+            "review": 0.3333333333333333
+          },
+          "confidence": 0.3333333333333333,
+          "provider": "uniform",
+          "model": "uniform-v1",
+          "latency_ms": 0.007299997378140688,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "accepted",
+              "latency_ms": 0.0034999975468963385
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "8032c54a-839e-4b1e-b936-acbd2c66e820",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "proceed",
+          "probabilities": {
+            "proceed": 0.3333333333333333,
+            "retry": 0.3333333333333333,
+            "review": 0.3333333333333333
+          },
+          "confidence": 0.3333333333333333,
+          "provider": "uniform",
+          "model": "uniform-v1",
+          "latency_ms": 0.008399991202168167,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "accepted",
+              "latency_ms": 0.004999994416721165
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "8eb49c6e-055d-410e-93df-7e4345fe2d9c",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "proceed",
+          "probabilities": {
+            "proceed": 0.3333333333333333,
+            "retry": 0.3333333333333333,
+            "review": 0.3333333333333333
+          },
+          "confidence": 0.3333333333333333,
+          "provider": "uniform",
+          "model": "uniform-v1",
+          "latency_ms": 0.00790000194683671,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "accepted",
+              "latency_ms": 0.0049000082071870565
+            }
+          ]
+        }
+      ]
+    },
+    "rules": {
+      "providers": [
+        {
+          "name": "workflow-rules",
+          "model": "rules-v1",
+          "revision": null
+        }
+      ],
+      "policy": {
+        "local_only": true,
+        "min_confidence": 0.7,
+        "timeout_ms": 5000
+      },
+      "metrics": {
+        "cases": 12,
+        "accepted": 12,
+        "coverage": 1.0,
+        "accuracy_all": 1.0,
+        "accuracy_accepted": 1.0,
+        "abstention_rate": 0.0,
+        "p50_ms": 0.008799994247965515,
+        "p95_ms": 0.013199998647905886,
+        "invalid_output_attempts": 0,
+        "timeout_attempts": 0,
+        "cost_usd": null,
+        "errors": []
+      },
+      "results": [
+        {
+          "schema_version": "1",
+          "request_id": "be3ace7e-e94a-4773-b866-33fe9bf93b80",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "proceed",
+          "probabilities": {
+            "proceed": 1.0,
+            "retry": 0.0,
+            "review": 0.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.013199998647905886,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.0092999980552122
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "f4c6ccfb-a934-40db-b795-60d875046a95",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "proceed",
+          "probabilities": {
+            "proceed": 1.0,
+            "retry": 0.0,
+            "review": 0.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.010000003385357559,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.006800008122809231
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "9d3b89cb-5f87-445a-a600-32bea018ac04",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "retry",
+          "probabilities": {
+            "proceed": 0.0,
+            "retry": 1.0,
+            "review": 0.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.0092999980552122,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.006400005077011883
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "5c712c53-05ee-4ecd-aec2-dad2a17416d4",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "retry",
+          "probabilities": {
+            "proceed": 0.0,
+            "retry": 1.0,
+            "review": 0.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.008200004231184721,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.005399997462518513
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "000809c8-42d7-49cf-81e6-3955c2d6b572",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "review",
+          "probabilities": {
+            "proceed": 0.0,
+            "retry": 0.0,
+            "review": 1.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.009800001862458885,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.005099995178170502
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "a3d2bf0c-0f7f-45f8-a7f6-a8b4a5dc0ec9",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "review",
+          "probabilities": {
+            "proceed": 0.0,
+            "retry": 0.0,
+            "review": 1.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.008799994247965515,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.005900001269765198
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "11412de0-4393-4c69-a0b8-1a68bd585032",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "review",
+          "probabilities": {
+            "proceed": 0.0,
+            "retry": 0.0,
+            "review": 1.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.008000002708286047,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.0050000089686363935
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "7fbb7d3b-76f4-4bc2-a749-3e3b24009f72",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "review",
+          "probabilities": {
+            "proceed": 0.0,
+            "retry": 0.0,
+            "review": 1.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.007800001185387373,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.0048000074457377195
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "87207966-ecbe-40e5-b972-8ded0f6241e2",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "review",
+          "probabilities": {
+            "proceed": 0.0,
+            "retry": 0.0,
+            "review": 1.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.009199997293762863,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.006100002792663872
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "c1aec94a-24c4-492e-8a5b-3c3a8d4fec1b",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "review",
+          "probabilities": {
+            "proceed": 0.0,
+            "retry": 0.0,
+            "review": 1.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.008000002708286047,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.005199995939619839
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "e713e9c8-ea8e-421d-b7c2-fb42d95a91f7",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "review",
+          "probabilities": {
+            "proceed": 0.0,
+            "retry": 0.0,
+            "review": 1.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.00790000194683671,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.005099995178170502
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "a8a842ba-3b13-4822-8c56-ff0347f0e040",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "review",
+          "probabilities": {
+            "proceed": 0.0,
+            "retry": 0.0,
+            "review": 1.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.0092999980552122,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.006599992047995329
+            }
+          ]
+        }
+      ]
+    },
+    "policy-fallback": {
+      "providers": [
+        {
+          "name": "uniform",
+          "model": "uniform-v1",
+          "revision": null
+        },
+        {
+          "name": "workflow-rules",
+          "model": "rules-v1",
+          "revision": null
+        }
+      ],
+      "policy": {
+        "local_only": true,
+        "min_confidence": 0.7,
+        "timeout_ms": 5000
+      },
+      "metrics": {
+        "cases": 12,
+        "accepted": 12,
+        "coverage": 1.0,
+        "accuracy_all": 1.0,
+        "accuracy_accepted": 1.0,
+        "abstention_rate": 0.0,
+        "p50_ms": 0.012999997125007212,
+        "p95_ms": 0.09160001354757696,
+        "invalid_output_attempts": 0,
+        "timeout_attempts": 0,
+        "cost_usd": null,
+        "errors": []
+      },
+      "results": [
+        {
+          "schema_version": "1",
+          "request_id": "695c47db-d750-4d99-8f43-1de5c9e239bb",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "proceed",
+          "probabilities": {
+            "proceed": 1.0,
+            "retry": 0.0,
+            "review": 0.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.01479999627918005,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "low_confidence",
+              "latency_ms": 0.00449999060947448
+            },
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.005699999746866524
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "a1e21bdd-1f1c-4a50-be2a-8ead94c3e18f",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "proceed",
+          "probabilities": {
+            "proceed": 1.0,
+            "retry": 0.0,
+            "review": 0.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.012999997125007212,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "low_confidence",
+              "latency_ms": 0.0037999998312443495
+            },
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.005199995939619839
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "abec5c48-7c73-4da4-907f-9409bc6fe42f",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "retry",
+          "probabilities": {
+            "proceed": 0.0,
+            "retry": 1.0,
+            "review": 0.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.012600008631125093,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "low_confidence",
+              "latency_ms": 0.0040000013541430235
+            },
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.004899993655271828
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "613b4308-f357-4b6f-a1f3-16bb0898452f",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "retry",
+          "probabilities": {
+            "proceed": 0.0,
+            "retry": 1.0,
+            "review": 0.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.01239999255631119,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "low_confidence",
+              "latency_ms": 0.0035999983083456755
+            },
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.0048000074457377195
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "b25a1f42-b7bd-48fe-90e7-69cab3c989c0",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "review",
+          "probabilities": {
+            "proceed": 0.0,
+            "retry": 0.0,
+            "review": 1.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.012799995602108538,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "low_confidence",
+              "latency_ms": 0.003500012098811567
+            },
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.005599998985417187
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "4d71052f-8115-4b12-99ef-0cc3ee7be4bd",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "review",
+          "probabilities": {
+            "proceed": 0.0,
+            "retry": 0.0,
+            "review": 1.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.012199991033412516,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "low_confidence",
+              "latency_ms": 0.0034999975468963385
+            },
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.005199995939619839
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "4a33bd41-7849-4a3f-b825-94f1db68888d",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "review",
+          "probabilities": {
+            "proceed": 0.0,
+            "retry": 0.0,
+            "review": 1.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.09160001354757696,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "low_confidence",
+              "latency_ms": 0.07949999417178333
+            },
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.007199996616691351
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "8f492189-84c6-4333-a09e-663ee908a1db",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "review",
+          "probabilities": {
+            "proceed": 0.0,
+            "retry": 0.0,
+            "review": 1.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.015400000847876072,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "low_confidence",
+              "latency_ms": 0.0045000051613897085
+            },
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.005199995939619839
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "329cbfae-f120-4abd-bcc0-479a0ce25017",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "review",
+          "probabilities": {
+            "proceed": 0.0,
+            "retry": 0.0,
+            "review": 1.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.014500008546747267,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "low_confidence",
+              "latency_ms": 0.0040000013541430235
+            },
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.005299996701069176
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "89aa3003-0023-4222-b02b-49f8893cf51e",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "review",
+          "probabilities": {
+            "proceed": 0.0,
+            "retry": 0.0,
+            "review": 1.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.012999997125007212,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "low_confidence",
+              "latency_ms": 0.0039000005926936865
+            },
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.004999994416721165
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "02e24d32-567b-4b6d-9a43-b724b01456e2",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "review",
+          "probabilities": {
+            "proceed": 0.0,
+            "retry": 0.0,
+            "review": 1.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.012599994079209864,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "low_confidence",
+              "latency_ms": 0.0036999990697950125
+            },
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.0050000089686363935
+            }
+          ]
+        },
+        {
+          "schema_version": "1",
+          "request_id": "c5e75298-acdc-4f17-ab02-92cf1a67c01c",
+          "kind": "choose",
+          "status": "accepted",
+          "value": "review",
+          "probabilities": {
+            "proceed": 0.0,
+            "retry": 0.0,
+            "review": 1.0
+          },
+          "confidence": 1.0,
+          "provider": "workflow-rules",
+          "model": "rules-v1",
+          "latency_ms": 0.013600001693703234,
+          "cost_usd": null,
+          "attempts": [
+            {
+              "provider": "uniform",
+              "outcome": "low_confidence",
+              "latency_ms": 0.0043000036384910345
+            },
+            {
+              "provider": "workflow-rules",
+              "outcome": "accepted",
+              "latency_ms": 0.005599998985417187
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

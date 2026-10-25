@@ -1,0 +1,11 @@
+{
+  "name": "decilist-monorepo",
+  "private": true,
+  "workspaces": ["packages/typescript"],
+  "scripts": {
+    "build": "npm run build --workspace @decilist/sdk",
+    "test": "npm run test --workspace @decilist/sdk",
+    "demo": "npm run demo --workspace @decilist/sdk"
+  },
+  "engines": {"node": ">=22"}
+}

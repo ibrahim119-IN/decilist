@@ -1,0 +1,454 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Decilist",
+    "description": "Local development decision runtime",
+    "version": "0.1.0-alpha.1"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/decisions": {
+      "post": {
+        "summary": "Decide",
+        "operationId": "decide_v1_decisions_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Attempt": {
+        "properties": {
+          "provider": {
+            "type": "string",
+            "title": "Provider"
+          },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "accepted",
+              "low_confidence",
+              "invalid_output",
+              "timeout",
+              "error",
+              "blocked"
+            ],
+            "title": "Outcome"
+          },
+          "latency_ms": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Latency Ms"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "provider",
+          "outcome",
+          "latency_ms"
+        ],
+        "title": "Attempt"
+      },
+      "Choose": {
+        "properties": {
+          "state": {
+            "type": "string",
+            "maxLength": 65536,
+            "minLength": 1,
+            "title": "State"
+          },
+          "instructions": {
+            "type": "string",
+            "maxLength": 65536,
+            "minLength": 1,
+            "title": "Instructions"
+          },
+          "kind": {
+            "type": "string",
+            "const": "choose",
+            "title": "Kind",
+            "default": "choose"
+          },
+          "options": {
+            "additionalProperties": {
+              "type": "string",
+              "maxLength": 65536,
+              "minLength": 1
+            },
+            "propertyNames": {
+              "maxLength": 256,
+              "minLength": 1
+            },
+            "type": "object",
+            "maxProperties": 64,
+            "minProperties": 2,
+            "title": "Options"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "state",
+          "instructions",
+          "options"
+        ],
+        "title": "Choose"
+      },
+      "Decision": {
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "const": "1",
+            "title": "Schema Version",
+            "default": "1"
+          },
+          "request_id": {
+            "type": "string",
+            "title": "Request Id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "choose",
+              "predict",
+              "score"
+            ],
+            "title": "Kind"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "accepted",
+              "abstained"
+            ],
+            "title": "Status"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "probabilities": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Probabilities"
+          },
+          "confidence": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confidence"
+          },
+          "provider": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model"
+          },
+          "latency_ms": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Latency Ms"
+          },
+          "cost_usd": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cost Usd"
+          },
+          "attempts": {
+            "items": {
+              "$ref": "#/components/schemas/Attempt"
+            },
+            "type": "array",
+            "title": "Attempts"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "request_id",
+          "kind",
+          "status",
+          "latency_ms",
+          "attempts"
+        ],
+        "title": "Decision"
+      },
+      "DecisionRequest": {
+        "properties": {
+          "question": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Choose"
+              },
+              {
+                "$ref": "#/components/schemas/Predict"
+              },
+              {
+                "$ref": "#/components/schemas/Score"
+              }
+            ],
+            "title": "Question",
+            "discriminator": {
+              "propertyName": "kind",
+              "mapping": {
+                "choose": "#/components/schemas/Choose",
+                "predict": "#/components/schemas/Predict",
+                "score": "#/components/schemas/Score"
+              }
+            }
+          },
+          "policy": {
+            "$ref": "#/components/schemas/Policy"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "question"
+        ],
+        "title": "DecisionRequest"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Policy": {
+        "properties": {
+          "local_only": {
+            "type": "boolean",
+            "title": "Local Only",
+            "default": true
+          },
+          "min_confidence": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Min Confidence",
+            "default": 0.7
+          },
+          "timeout_ms": {
+            "type": "integer",
+            "maximum": 120000.0,
+            "minimum": 1.0,
+            "title": "Timeout Ms",
+            "default": 5000
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "Policy"
+      },
+      "Predict": {
+        "properties": {
+          "state": {
+            "type": "string",
+            "maxLength": 65536,
+            "minLength": 1,
+            "title": "State"
+          },
+          "instructions": {
+            "type": "string",
+            "maxLength": 65536,
+            "minLength": 1,
+            "title": "Instructions"
+          },
+          "kind": {
+            "type": "string",
+            "const": "predict",
+            "title": "Kind",
+            "default": "predict"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "state",
+          "instructions"
+        ],
+        "title": "Predict"
+      },
+      "Score": {
+        "properties": {
+          "state": {
+            "type": "string",
+            "maxLength": 65536,
+            "minLength": 1,
+            "title": "State"
+          },
+          "instructions": {
+            "type": "string",
+            "maxLength": 65536,
+            "minLength": 1,
+            "title": "Instructions"
+          },
+          "kind": {
+            "type": "string",
+            "const": "score",
+            "title": "Kind",
+            "default": "score"
+          },
+          "levels": {
+            "items": {
+              "type": "string",
+              "maxLength": 256,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 10,
+            "minItems": 2,
+            "title": "Levels"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "state",
+          "instructions",
+          "levels"
+        ],
+        "title": "Score"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
