@@ -24,32 +24,28 @@ This does not introduce a new trained model or claim a speed advantage over vend
 
 ## Start locally
 
-Prerequisites: Python 3.12 recommended (package minimum 3.11), Node.js 22+, Git. Run commands from the repository root.
+For Python and the packaged UI, install Python 3.12 (minimum 3.11) and Git. Clone the repository and create a local environment:
 
 ```bash
+git clone https://github.com/ibrahim119-IN/decilist.git
+cd decilist
 python -m venv .venv
 ```
 
-Activate `.venv` (`.venv\Scripts\Activate.ps1` on Windows PowerShell, `source .venv/bin/activate` on macOS/Linux), then:
+Activate `.venv` (`.\.venv\Scripts\Activate.ps1` on Windows PowerShell, `source .venv/bin/activate` on Ubuntu), then install and start:
 
 ```bash
-python -m pip install --upgrade pip
-python -m pip install -c requirements-dev.lock -e "packages/python[server,dev]"
-npm ci
+python -m pip install "./packages/python[server]"
 python -m decilist runtime start --provider demo
 ```
 
-Open **http://127.0.0.1:8765/demo** for a normal request-composer example, or **http://127.0.0.1:8765/** for the optional Playground. The app asks one focused clarification in place, preserves its known context, and prepares a local request preview. It does not generate the requested summary or execute external actions. This loopback development server has no production authentication, API key, external fonts, analytics, or cloud inference. Dependency installation requires internet access; the default demo does not.
+If activation is unavailable, replace `python` with `.\.venv\Scripts\python.exe` on Windows or `.venv/bin/python` on Ubuntu.
 
-To run a program with its runtime in one command, after `npm run build`:
-
-```bash
-python -m decilist runtime run --provider demo -- node examples/workflow.mjs
-```
+Open **http://127.0.0.1:8765/demo** for a normal request-composer example, or **http://127.0.0.1:8765/** for the optional Playground. Keep this terminal open; Ctrl+C stops the runtime. The app asks one focused clarification in place, preserves its known context, and prepares a local request preview. It does not generate the requested summary or execute external actions. This loopback development server has no production authentication, API key, external fonts, analytics, or cloud inference. Dependency installation requires internet access; the default demo does not.
 
 ## Python SDK
 
-Connect once and use direct calls. This example uses the explicitly selected rules runtime:
+Connect once and use direct calls. Run this example in another terminal using the same environment and the running rules runtime:
 
 ```python
 import asyncio
@@ -67,7 +63,15 @@ Python can also run in process with `Decilist([provider])`. Both paths expose `c
 
 ## TypeScript SDK
 
-Build the workspace with `npm run build`. The package is currently consumed from the workspace, not a public registry.
+TypeScript also requires Node.js 22+. From the repository root, install and build the workspace:
+
+```bash
+npm ci
+npm run build
+python -m decilist runtime run --provider demo -- node examples/workflow.mjs
+```
+
+The last command starts or reuses a compatible Python runtime and runs the TypeScript example. The package is currently consumed from the workspace, not a public registry. For your own app, use the shared runtime from Start locally or launch the app with `runtime run`. A direct call looks like:
 
 ```ts
 import { Decilist } from "@decilist/sdk";
@@ -106,11 +110,18 @@ The demo's rules only implement the documented workflow gate; they do not interp
 
 ## Verify and compare
 
+Contributors also install the test/build dependencies. From the repository root with `.venv` active:
+
 ```bash
+python -m pip install -c requirements-dev.lock -e "./packages/python[server,dev]"
+npm ci
 python -m pytest -q
 npm test
+node --test tests/test_sdk_snippets.mjs
 python -m benchmarks.run --output reports/local/workflow.json
 ```
+
+[CI for commit `0b8ba2c`](https://github.com/ibrahim119-IN/decilist/actions/runs/40226959697) passed scripted launcher integration on Windows and Ubuntu. Native GPU inference on the Windows presentation machine and first-use human usability remain separate, pending checks.
 
 The original 12-case smoke suite checks wiring. Its perfect rule score follows from rules implementing its labels; it is **not** model-quality evidence. [Initial measured report](reports/baseline-2026-10-25.json).
 

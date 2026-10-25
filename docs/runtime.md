@@ -4,45 +4,72 @@ Connect once, then call `choose`, `predict`, or `score` directly. Saved decision
 
 ## Install and run
 
-Use Python 3.11 or later; TypeScript also needs Node.js 22 or later. The local launcher is verified on Windows on the presentation machine. Other operating systems have not been verified. These alpha packages are local artifacts, not published registry packages.
+Python and the packaged UI require Python 3.11 or later (3.12 recommended) and Git. These alpha packages are installed from source or local artifacts; they are not published on PyPI or npm.
 
-From this repository, install into a local environment:
+[CI for commit `0b8ba2c`](https://github.com/ibrahim119-IN/decilist/actions/runs/40226959697) passed scripted launcher integration on Windows and Ubuntu. Native GPU inference on the Windows presentation machine remains pending. macOS and first-use human usability have not been verified.
 
-```powershell
+From the repository root, create a local environment:
+
+```bash
 python -m venv .venv
-.venv\Scripts\python -m pip install "./packages/python[server]"
-npm install
-npm run build
 ```
 
-To install a built wheel in a fresh project instead, use `python -m pip install "./decilist-0.1.0a1-py3-none-any.whl[server]"`. Install the TypeScript tarball with `npm install ./decilist-sdk-0.1.0-alpha.1.tgz`.
+Activate it with `.\.venv\Scripts\Activate.ps1` on Windows PowerShell or `source .venv/bin/activate` on Ubuntu, then install and start:
 
-One command runs an application with a ready local runtime and closes the runtime afterward:
-
-```powershell
-.venv\Scripts\python -m decilist runtime run --provider demo -- node app.mjs
+```bash
+python -m pip install "./packages/python[server]"
+python -m decilist runtime start --provider demo
 ```
+
+If activation is unavailable, replace `python` with `.\.venv\Scripts\python.exe` on Windows or `.venv/bin/python` on Ubuntu.
+
+Open `http://127.0.0.1:8765/demo` for the ordinary-app example or `http://127.0.0.1:8765/` for the optional Playground. `start` stays in the foreground; Ctrl+C stops the runtime started by that command. This setup includes the Python SDK and both UI pages.
 
 `demo` is a deterministic rules baseline for wiring checks. It is not a learned model or an estimate of model quality. Choose a provider explicitly; failures never switch providers silently.
 
-The npm package also provides a thin launcher for that same installed Python runtime:
+For a fresh project with a copied wheel, install it using `python -m pip install "./decilist-0.1.0a1-py3-none-any.whl[server]"` instead of the source path above.
 
-```powershell
-npx decilist --python .venv\Scripts\python.exe runtime run --provider demo -- node app.mjs
+To inspect a running service, use another terminal with the same environment:
+
+```bash
+python -m decilist runtime status
 ```
 
-The launcher keeps the HTTP server in its Python process, waits for compatible health, runs the application without a shell, and returns the application's exit code. It passes the endpoint in `DECILIST_URL`, which both HTTP SDKs use by default. If a matching runtime already owns the port, it reuses it and leaves it running. An unrelated service, incompatible contract, or different provider produces an error. No runtime is started by importing an SDK.
+`status` exits unsuccessfully for unavailable or incompatible services. `--port 8766` selects another loopback port for `start` or `run`; `status --url http://127.0.0.1:8766` inspects it. Remote hosting and authentication are outside this launcher.
 
-For a long running shared runtime or the optional Playground, use:
+## Python
 
-```powershell
-.venv\Scripts\python -m decilist runtime start --provider demo
-.venv\Scripts\python -m decilist runtime status
+With the runtime running, a direct SDK call in another terminal uses the same environment:
+
+```python
+import asyncio
+from decilist import Client
+
+async def main():
+    async with await Client.connect() as decisions:
+        answer = await decisions.predict('{"complete":true,"valid":true}', "Is the workflow ready to proceed?")
+        print(answer.value if answer.status == "accepted" else "Needs review")
+asyncio.run(main())
 ```
 
-`start` stays in the foreground. Open the printed loopback URL for the optional Playground; Ctrl+C stops the runtime started by that command. `status` can run separately and exits unsuccessfully for unavailable or incompatible services. `--port 8766` selects another loopback port; `status --url http://127.0.0.1:8766` inspects it. Remote hosting and authentication are outside this launcher.
+`Client.connect(base_url, wait_seconds=10)` verifies readiness. Existing `Client(base_url)` checks health on its first decision. A shared policy can be configured once using `Client.connect(policy=Policy(timeout_ms=30000))`; import `Policy` from `decilist`. Closing a client closes its connections; it does not stop the runtime. In process Python uses the same direct methods on an engine configured with one or more providers.
+
+To run this repository's Python example together with a ready runtime in one command:
+
+```bash
+python -m decilist runtime run --provider demo -- python -m examples.http_client
+```
+
+The launcher keeps the HTTP server in its Python process, waits for compatible health, runs the application without a shell, and returns the application's exit code. It passes the endpoint in `DECILIST_URL`, which both HTTP SDKs use by default. It closes the runtime it started after the application exits. If a matching runtime already owns the port, it reuses it and leaves it running. An unrelated service, incompatible contract, or different provider produces an error. No runtime is started by importing an SDK.
 
 ## TypeScript
+
+TypeScript also requires Node.js 22+. After the Python setup above, install and build the workspace from the repository root:
+
+```bash
+npm ci
+npm run build
+```
 
 Create `app.mjs` in the project containing the installed SDK:
 
@@ -57,20 +84,19 @@ console.log(answer.status === "accepted" ? answer.value : "Needs review");
 
 Use `Decilist.connect({baseUrl: "http://127.0.0.1:8765"})` for a configured endpoint. Connection checks service identity, readiness, runtime version metadata, and decision schema version before sending decision evidence. `waitMs` defaults to 10 seconds and is configurable. Existing `new Decilist(transport, policy)` calls remain supported; the HTTP transport checks health before its first decision. Custom transports remain available.
 
-## Python
+Run the app with a managed Python runtime:
 
-```python
-import asyncio
-from decilist import Client
-
-async def main():
-    async with await Client.connect() as decisions:
-        answer = await decisions.predict('{"complete":true,"valid":true}', "Is the workflow ready to proceed?")
-        print(answer.value if answer.status == "accepted" else "Needs review")
-asyncio.run(main())
+```bash
+python -m decilist runtime run --provider demo -- node app.mjs
 ```
 
-`Client.connect(base_url, wait_seconds=10)` verifies readiness. Existing `Client(base_url)` checks health on its first decision. A shared policy can be configured once using `Client.connect(policy=Policy(timeout_ms=30000))`; import `Policy` from `decilist`. Closing a client closes its connections; it does not stop the runtime. In process Python uses the same direct methods on an engine configured with one or more providers.
+The built npm workspace also provides a thin launcher for that installed Python runtime. With `.venv` active:
+
+```bash
+npx decilist --python python runtime run --provider demo -- node app.mjs
+```
+
+For a fresh project with a copied TypeScript tarball, use `npm install ./decilist-sdk-0.1.0-alpha.1.tgz` instead of the workspace install/build. It still connects to the Python runtime installed above. The tarball is a local build artifact, not a published registry package.
 
 ## Explicit Liquid setup
 

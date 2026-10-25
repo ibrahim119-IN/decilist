@@ -89,6 +89,7 @@ async def verify(device: str, repetitions: int) -> dict:
     return {"checked_at_utc": datetime.now(timezone.utc).isoformat(), "purpose": "Compatibility and typed-contract smoke check; not a quality benchmark",
             "policy": {"local_only": True, "min_confidence": 0, "timeout_ms": 120000},
             "model": provider.model, "revision": provider.revision, "device": device,
+            "attention_backend": getattr(provider, "attention_backend", "vendor-default"),
             "platform": platform.system(), "python": platform.python_version(),
             "versions": {key: importlib.metadata.version(key) for key in ("torch", "torchvision", "transformers", "huggingface-hub", "decilist")},
             "cuda_runtime": torch.version.cuda, "gpu": torch.cuda.get_device_name(device) if device.startswith("cuda") else None,

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+import importlib
 from collections.abc import Callable
 from typing import Any
 from .contracts import Choose, Predict, Question, labels_for
@@ -35,6 +36,7 @@ class LiquidLocalProvider:
 
     def __init__(self, model: Any):
         self._model = model
+        self.attention_backend = "vendor-default"
         self._lock = asyncio.Lock()
         self._running: set[asyncio.Task] = set()
 
@@ -51,7 +53,54 @@ class LiquidLocalProvider:
         snapshot = snapshot_download(cls.model, revision=cls.revision, local_files_only=offline)
         model = AutoModel.from_pretrained(snapshot, trust_remote_code=True, local_files_only=True, dtype=dtype)
         model = model.to(device).eval()
-        return cls(model)
+        attention_backend = cls._configure_attention(model, torch, device=device)
+        provider = cls(model)
+        provider.attention_backend = attention_backend
+        return provider
+
+    @staticmethod
+    def _configure_attention(model: Any, torch: Any, *, device: str) -> str:
+        """Use the pinned vendor's explicit path if this CUDA build has no flash kernels."""
+        module_name = type(model).__module__
+        package, separator, leaf = module_name.rpartition(".")
+        if not separator or leaf not in {"modeling_d1", "lfm2_vl"}:
+            raise RuntimeError("Cannot locate the pinned Liquid hybrid attention module from the loaded model class")
+        try:
+            hybrid = importlib.import_module(package + ".hybrid")
+        except ImportError as exc:
+            raise RuntimeError("The pinned Liquid hybrid attention module is missing; verify the cached model revision") from exc
+        fused = getattr(hybrid, "_fused", None)
+        explicit = getattr(hybrid, "_explicit", None)
+        if not callable(fused) or not callable(explicit):
+            raise RuntimeError("The pinned Liquid attention compatibility hooks _fused/_explicit are missing; verify the cached model revision")
+        # The vendor already rejects CPU and other non-CUDA queries in _fused.
+        if device.split(":", 1)[0] != "cuda":
+            return "vendor-default"
+        available = getattr(getattr(getattr(torch, "backends", None), "cuda", None), "is_flash_attention_available", None)
+        if not callable(available):
+            raise RuntimeError("PyTorch cannot report compiled Flash Attention availability; use a supported torch build")
+        try:
+            compiled = available()
+        except Exception as exc:
+            raise RuntimeError("Could not determine this PyTorch build's Flash Attention availability") from exc
+        if type(compiled) is not bool:
+            raise RuntimeError("PyTorch reported an invalid Flash Attention availability result")
+        original = getattr(fused, "_decilist_vendor_fused", fused)
+        if not callable(original):
+            raise RuntimeError("The Liquid attention compatibility hook has an invalid original predicate")
+        if compiled:
+            # Normally no assignment occurs: preserve the vendor's architecture/dtype checks.
+            if fused is not original:
+                hybrid._fused = original
+            return "vendor-default"
+        if fused is original:
+            def without_flash(_query: Any) -> bool:
+                return False
+            setattr(without_flash, "_decilist_vendor_fused", original)
+            # _own and _over_trunk consult this module global and retain their existing
+            # explicit attention calculations. No vendor/cache file or tensor is changed.
+            hybrid._fused = without_flash
+        return "vendor-explicit"
 
     @staticmethod
     def question_payload(question: Question) -> dict:
