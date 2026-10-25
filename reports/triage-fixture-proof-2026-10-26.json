@@ -1,0 +1,1432 @@
+{
+  "suite": "decilist-triage-v1",
+  "cases": [
+    {
+      "case_id": "t01",
+      "role": "regression",
+      "provenance": "historical_revert",
+      "verified": true,
+      "baseline": {
+        "exit_code": 0,
+        "elapsed_ms": 601.1923999903956,
+        "stdout": "...                                                                      [100%]\n3 passed in 0.19s\n",
+        "log_path": ".triage/runs/bb5ae5cc1e8e4205bca4e2440e7a453c.log",
+        "command": [
+          "python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--tb=short",
+          "-c",
+          ".triage/pytest.ini",
+          "--confcutdir=.triage",
+          "-o",
+          "asyncio_mode=auto",
+          "-p",
+          "no:cacheprovider",
+          "-p",
+          "pytest_asyncio.plugin",
+          ".triage/test_case.py"
+        ],
+        "protected_files_ok": true,
+        "integrity_issues": [],
+        "run_sha256": "3dda496087ef21e2a2cf70552e7962179ac5dbb2ea30ff9b654d99231ed1382d",
+        "timed_out": false,
+        "source_stable": true,
+        "editable_sha256_before": {
+          "packages/python/src/decilist/contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8"
+        },
+        "editable_sha256_after": {
+          "packages/python/src/decilist/contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8"
+        },
+        "raw_log_sha256": "3dda496087ef21e2a2cf70552e7962179ac5dbb2ea30ff9b654d99231ed1382d",
+        "log_truncated": false,
+        "log_redaction_count": 0
+      },
+      "mutation": {
+        "exit_code": 1,
+        "elapsed_ms": 708.9331000024686,
+        "stdout": "FFF                                                                      [100%]\n================================== FAILURES ===================================\n_________ test_numeric_labels_keep_cross_language_tie_order[keys0-2] __________\n.triage\\test_case.py:17: in test_numeric_labels_keep_cross_language_tie_order\n    assert result.value == expected, \"equal probabilities must follow JSON integer-key order across Python and JavaScript\"\nE   AssertionError: equal probabilities must follow JSON integer-key order across Python and JavaScript\nE   assert '10' == '2'\nE     \nE     - 2\nE     + 10\n_________ test_numeric_labels_keep_cross_language_tie_order[keys1-1] __________\n.triage\\test_case.py:17: in test_numeric_labels_keep_cross_language_tie_order\n    assert result.value == expected, \"equal probabilities must follow JSON integer-key order across Python and JavaScript\"\nE   AssertionError: equal probabilities must follow JSON integer-key order across Python and JavaScript\nE   assert '8' == '1'\nE     \nE     - 1\nE     + 8\n_________ test_numeric_labels_keep_cross_language_tie_order[keys2-4] __________\n.triage\\test_case.py:17: in test_numeric_labels_keep_cross_language_tie_order\n    assert result.value == expected, \"equal probabilities must follow JSON integer-key order across Python and JavaScript\"\nE   AssertionError: equal probabilities must follow JSON integer-key order across Python and JavaScript\nE   assert 'z' == '4'\nE     \nE     - 4\nE     + z\n=========================== short test summary info ===========================\nFAILED .triage\\test_case.py::test_numeric_labels_keep_cross_language_tie_order[keys0-2]\nFAILED .triage\\test_case.py::test_numeric_labels_keep_cross_language_tie_order[keys1-1]\nFAILED .triage\\test_case.py::test_numeric_labels_keep_cross_language_tie_order[keys2-4]\n3 failed in 0.28s\n",
+        "log_path": ".triage/runs/e554bd590cba47ac964a79d1ab5b8220.log",
+        "command": [
+          "python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--tb=short",
+          "-c",
+          ".triage/pytest.ini",
+          "--confcutdir=.triage",
+          "-o",
+          "asyncio_mode=auto",
+          "-p",
+          "no:cacheprovider",
+          "-p",
+          "pytest_asyncio.plugin",
+          ".triage/test_case.py"
+        ],
+        "protected_files_ok": true,
+        "integrity_issues": [],
+        "run_sha256": "49331bffa22774145b5122017dcbb5b0b8bec73199b860090aaa5bd7dcd23331",
+        "timed_out": false,
+        "source_stable": true,
+        "editable_sha256_before": {
+          "packages/python/src/decilist/contracts.py": "a67930ed6e088756d7a537ff9e9d8b8acbda3ad0b3862e58a9076d167dab8818"
+        },
+        "editable_sha256_after": {
+          "packages/python/src/decilist/contracts.py": "a67930ed6e088756d7a537ff9e9d8b8acbda3ad0b3862e58a9076d167dab8818"
+        },
+        "raw_log_sha256": "49331bffa22774145b5122017dcbb5b0b8bec73199b860090aaa5bd7dcd23331",
+        "log_truncated": false,
+        "log_redaction_count": 0
+      },
+      "reference_repair": {
+        "passed": true,
+        "integrity_ok": true,
+        "run": {
+          "exit_code": 0,
+          "elapsed_ms": 571.4871999953175,
+          "stdout": "...                                                                      [100%]\n3 passed in 0.18s\n",
+          "log_path": ".triage/runs/6de3a2bb00f044978ced351b291ada38.log",
+          "command": [
+            "python.exe",
+            "-m",
+            "pytest",
+            "-q",
+            "--tb=short",
+            "-c",
+            ".triage/pytest.ini",
+            "--confcutdir=.triage",
+            "-o",
+            "asyncio_mode=auto",
+            "-p",
+            "no:cacheprovider",
+            "-p",
+            "pytest_asyncio.plugin",
+            ".triage/test_case.py"
+          ],
+          "protected_files_ok": true,
+          "integrity_issues": [],
+          "run_sha256": "e6cbc4c1da572f1c913992dec2cde873e23df72b0e423a19d110af3ee902563c",
+          "timed_out": false,
+          "source_stable": true,
+          "editable_sha256_before": {
+            "packages/python/src/decilist/contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8"
+          },
+          "editable_sha256_after": {
+            "packages/python/src/decilist/contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8"
+          },
+          "raw_log_sha256": "e6cbc4c1da572f1c913992dec2cde873e23df72b0e423a19d110af3ee902563c",
+          "log_truncated": false,
+          "log_redaction_count": 0
+        }
+      },
+      "protected_sha256": {
+        "packages/python/src/decilist/__init__.py": "5c8169b352357ffb6ba41d403325b98487da1412bd5ab9f6ba2a8498d38dff24",
+        "packages/python/src/decilist/__main__.py": "9e373e1af43452f53b43782b070d6653060e9b50f8311c2f1a345467fb8b819e",
+        "packages/python/src/decilist/client.py": "51fd84355f4093eeaa3b1a2eca8e9931af4c59872d5c7a119a6bd4f1d55742e0",
+        "packages/python/src/decilist/demo.py": "84e002f263fa1feb9bcbe77ba89c40f770b282ec752f2eaf83be4948723412b4",
+        "packages/python/src/decilist/engine.py": "9d9281477b8327874c733fe26e0f89bd14c5ff754a6c6cbddaf1542a93381db4",
+        "packages/python/src/decilist/evaluation.py": "a1be17b931fbf504e830c379a7144b2e71239d276224371446918af6aaa6335b",
+        "packages/python/src/decilist/providers.py": "1d6e208f70930e190f752bbe0ef3096c646066e8ff469629927d081b7f756ea3",
+        "packages/python/src/decilist/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "packages/python/src/decilist/runtime.py": "7f8b1ec6d0bda03584167b6e0f6b4259c322477ea2a0957f55ed99d9f39ed59e",
+        "packages/python/src/decilist/server.py": "6b6ac14c2661fd4fa67f020061daa9ce0a5fb38ed52f34913e93a5e327474e4d",
+        "packages/python/src/decilist/static/app.js": "ae2988c19435ee808be61f4f50dd35bdef1185a151b14edaea64370681d8ca6e",
+        "packages/python/src/decilist/static/demo.html": "6ef3136106a61a8ef234c387b89a6683f5806794613c992723ff17a0abab401a",
+        "packages/python/src/decilist/static/demo.js": "c325c44b8e33e2b6592f9746a7506ef7a83ca2007cae47f8a38430cf0815b6be",
+        "packages/python/src/decilist/static/index.html": "549ce77205981fa199b7ce4c956fa0e251a56f733607f241f082d07f6e6840af",
+        "packages/python/src/decilist/static/style.css": "b672a75dd772123d943304f43b3e7ad96c91aa7043592be9b7bf83d0d6be72cd",
+        "packages/python/src/decilist/web.py": "a24caf6d9f7da73abec438b821df9ad7a2429c3775af3dcf420fb21b1d49f3ae",
+        ".triage/test_case.py": "a7e41d7ad10adedd345912eac175e07e0409a9f20a68802520c7fcb38735ba76",
+        ".triage/pytest.ini": "8250d20f42b419af40706490ead78aabab9feba93eab09a3f626e3de5256e1f4"
+      },
+      "editable_mutation_sha256": {
+        "packages/python/src/decilist/contracts.py": "a67930ed6e088756d7a537ff9e9d8b8acbda3ad0b3862e58a9076d167dab8818"
+      }
+    },
+    {
+      "case_id": "t02",
+      "role": "regression",
+      "provenance": "historical_revert",
+      "verified": true,
+      "baseline": {
+        "exit_code": 0,
+        "elapsed_ms": 576.1366000078851,
+        "stdout": "...                                                                      [100%]\n3 passed in 0.18s\n",
+        "log_path": ".triage/runs/891e25dedb1f4c379ec287c20905f97c.log",
+        "command": [
+          "python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--tb=short",
+          "-c",
+          ".triage/pytest.ini",
+          "--confcutdir=.triage",
+          "-o",
+          "asyncio_mode=auto",
+          "-p",
+          "no:cacheprovider",
+          "-p",
+          "pytest_asyncio.plugin",
+          ".triage/test_case.py"
+        ],
+        "protected_files_ok": true,
+        "integrity_issues": [],
+        "run_sha256": "e6cbc4c1da572f1c913992dec2cde873e23df72b0e423a19d110af3ee902563c",
+        "timed_out": false,
+        "source_stable": true,
+        "editable_sha256_before": {
+          "packages/python/src/decilist/demo.py": "84e002f263fa1feb9bcbe77ba89c40f770b282ec752f2eaf83be4948723412b4"
+        },
+        "editable_sha256_after": {
+          "packages/python/src/decilist/demo.py": "84e002f263fa1feb9bcbe77ba89c40f770b282ec752f2eaf83be4948723412b4"
+        },
+        "raw_log_sha256": "e6cbc4c1da572f1c913992dec2cde873e23df72b0e423a19d110af3ee902563c",
+        "log_truncated": false,
+        "log_redaction_count": 0
+      },
+      "mutation": {
+        "exit_code": 1,
+        "elapsed_ms": 633.7082999962149,
+        "stdout": "FFF                                                                      [100%]\n================================== FAILURES ===================================\n_ test_explicit_unsupported_translation_is_reviewed[Translate this summary into Arabic.] _\n.triage\\test_case.py:18: in test_explicit_unsupported_translation_is_reviewed\n    assert probabilities[\"review\"] == 1, \"a supported format word must not authorize an unsupported translation action\"\nE   AssertionError: a supported format word must not authorize an unsupported translation action\nE   assert 0.0 == 1\n_ test_explicit_unsupported_translation_is_reviewed[Give a translation of the outline.] _\n.triage\\test_case.py:18: in test_explicit_unsupported_translation_is_reviewed\n    assert probabilities[\"review\"] == 1, \"a supported format word must not authorize an unsupported translation action\"\nE   AssertionError: a supported format word must not authorize an unsupported translation action\nE   assert 0.0 == 1\n_ test_explicit_unsupported_translation_is_reviewed[Prepare a Spanish translation of this checklist.] _\n.triage\\test_case.py:18: in test_explicit_unsupported_translation_is_reviewed\n    assert probabilities[\"review\"] == 1, \"a supported format word must not authorize an unsupported translation action\"\nE   AssertionError: a supported format word must not authorize an unsupported translation action\nE   assert 0.0 == 1\n=========================== short test summary info ===========================\nFAILED .triage\\test_case.py::test_explicit_unsupported_translation_is_reviewed[Translate this summary into Arabic.]\nFAILED .triage\\test_case.py::test_explicit_unsupported_translation_is_reviewed[Give a translation of the outline.]\nFAILED .triage\\test_case.py::test_explicit_unsupported_translation_is_reviewed[Prepare a Spanish translation of this checklist.]\n3 failed in 0.25s\n",
+        "log_path": ".triage/runs/5eb9a72f131f415b9f839a5aa5ac106f.log",
+        "command": [
+          "python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--tb=short",
+          "-c",
+          ".triage/pytest.ini",
+          "--confcutdir=.triage",
+          "-o",
+          "asyncio_mode=auto",
+          "-p",
+          "no:cacheprovider",
+          "-p",
+          "pytest_asyncio.plugin",
+          ".triage/test_case.py"
+        ],
+        "protected_files_ok": true,
+        "integrity_issues": [],
+        "run_sha256": "5e181333d00861665e0e68752fbede8a552202c8f43efca3a6b36fe386477db6",
+        "timed_out": false,
+        "source_stable": true,
+        "editable_sha256_before": {
+          "packages/python/src/decilist/demo.py": "f23357d3a6a9ada22fd693a4bb06643b8bf6a84b1443d970b31d54f295d5dea6"
+        },
+        "editable_sha256_after": {
+          "packages/python/src/decilist/demo.py": "f23357d3a6a9ada22fd693a4bb06643b8bf6a84b1443d970b31d54f295d5dea6"
+        },
+        "raw_log_sha256": "5e181333d00861665e0e68752fbede8a552202c8f43efca3a6b36fe386477db6",
+        "log_truncated": false,
+        "log_redaction_count": 0
+      },
+      "reference_repair": {
+        "passed": true,
+        "integrity_ok": true,
+        "run": {
+          "exit_code": 0,
+          "elapsed_ms": 567.3830000014277,
+          "stdout": "...                                                                      [100%]\n3 passed in 0.18s\n",
+          "log_path": ".triage/runs/da1cde94bf3d486c91e8bd88db3b51ad.log",
+          "command": [
+            "python.exe",
+            "-m",
+            "pytest",
+            "-q",
+            "--tb=short",
+            "-c",
+            ".triage/pytest.ini",
+            "--confcutdir=.triage",
+            "-o",
+            "asyncio_mode=auto",
+            "-p",
+            "no:cacheprovider",
+            "-p",
+            "pytest_asyncio.plugin",
+            ".triage/test_case.py"
+          ],
+          "protected_files_ok": true,
+          "integrity_issues": [],
+          "run_sha256": "e6cbc4c1da572f1c913992dec2cde873e23df72b0e423a19d110af3ee902563c",
+          "timed_out": false,
+          "source_stable": true,
+          "editable_sha256_before": {
+            "packages/python/src/decilist/demo.py": "84e002f263fa1feb9bcbe77ba89c40f770b282ec752f2eaf83be4948723412b4"
+          },
+          "editable_sha256_after": {
+            "packages/python/src/decilist/demo.py": "84e002f263fa1feb9bcbe77ba89c40f770b282ec752f2eaf83be4948723412b4"
+          },
+          "raw_log_sha256": "e6cbc4c1da572f1c913992dec2cde873e23df72b0e423a19d110af3ee902563c",
+          "log_truncated": false,
+          "log_redaction_count": 0
+        }
+      },
+      "protected_sha256": {
+        "packages/python/src/decilist/__init__.py": "5c8169b352357ffb6ba41d403325b98487da1412bd5ab9f6ba2a8498d38dff24",
+        "packages/python/src/decilist/__main__.py": "9e373e1af43452f53b43782b070d6653060e9b50f8311c2f1a345467fb8b819e",
+        "packages/python/src/decilist/client.py": "51fd84355f4093eeaa3b1a2eca8e9931af4c59872d5c7a119a6bd4f1d55742e0",
+        "packages/python/src/decilist/contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8",
+        "packages/python/src/decilist/engine.py": "9d9281477b8327874c733fe26e0f89bd14c5ff754a6c6cbddaf1542a93381db4",
+        "packages/python/src/decilist/evaluation.py": "a1be17b931fbf504e830c379a7144b2e71239d276224371446918af6aaa6335b",
+        "packages/python/src/decilist/providers.py": "1d6e208f70930e190f752bbe0ef3096c646066e8ff469629927d081b7f756ea3",
+        "packages/python/src/decilist/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "packages/python/src/decilist/runtime.py": "7f8b1ec6d0bda03584167b6e0f6b4259c322477ea2a0957f55ed99d9f39ed59e",
+        "packages/python/src/decilist/server.py": "6b6ac14c2661fd4fa67f020061daa9ce0a5fb38ed52f34913e93a5e327474e4d",
+        "packages/python/src/decilist/static/app.js": "ae2988c19435ee808be61f4f50dd35bdef1185a151b14edaea64370681d8ca6e",
+        "packages/python/src/decilist/static/demo.html": "6ef3136106a61a8ef234c387b89a6683f5806794613c992723ff17a0abab401a",
+        "packages/python/src/decilist/static/demo.js": "c325c44b8e33e2b6592f9746a7506ef7a83ca2007cae47f8a38430cf0815b6be",
+        "packages/python/src/decilist/static/index.html": "549ce77205981fa199b7ce4c956fa0e251a56f733607f241f082d07f6e6840af",
+        "packages/python/src/decilist/static/style.css": "b672a75dd772123d943304f43b3e7ad96c91aa7043592be9b7bf83d0d6be72cd",
+        "packages/python/src/decilist/web.py": "a24caf6d9f7da73abec438b821df9ad7a2429c3775af3dcf420fb21b1d49f3ae",
+        ".triage/test_case.py": "fa38d56e79f79b4917e5d85a1fbf033a102d5be22ef8402ef9ce872e9f0dc86a",
+        ".triage/pytest.ini": "8250d20f42b419af40706490ead78aabab9feba93eab09a3f626e3de5256e1f4"
+      },
+      "editable_mutation_sha256": {
+        "packages/python/src/decilist/demo.py": "f23357d3a6a9ada22fd693a4bb06643b8bf6a84b1443d970b31d54f295d5dea6"
+      }
+    },
+    {
+      "case_id": "t03",
+      "role": "regression",
+      "provenance": "historical_revert_simulated_capability",
+      "verified": true,
+      "baseline": {
+        "exit_code": 0,
+        "elapsed_ms": 578.7540999881458,
+        "stdout": "...                                                                      [100%]\n3 passed in 0.18s\n",
+        "log_path": ".triage/runs/3d921e426a1742acaec385ffcc7e6bc2.log",
+        "command": [
+          "python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--tb=short",
+          "-c",
+          ".triage/pytest.ini",
+          "--confcutdir=.triage",
+          "-o",
+          "asyncio_mode=auto",
+          "-p",
+          "no:cacheprovider",
+          "-p",
+          "pytest_asyncio.plugin",
+          ".triage/test_case.py"
+        ],
+        "protected_files_ok": true,
+        "integrity_issues": [],
+        "run_sha256": "e6cbc4c1da572f1c913992dec2cde873e23df72b0e423a19d110af3ee902563c",
+        "timed_out": false,
+        "source_stable": true,
+        "editable_sha256_before": {
+          "packages/python/src/decilist/providers.py": "1d6e208f70930e190f752bbe0ef3096c646066e8ff469629927d081b7f756ea3"
+        },
+        "editable_sha256_after": {
+          "packages/python/src/decilist/providers.py": "1d6e208f70930e190f752bbe0ef3096c646066e8ff469629927d081b7f756ea3"
+        },
+        "raw_log_sha256": "e6cbc4c1da572f1c913992dec2cde873e23df72b0e423a19d110af3ee902563c",
+        "log_truncated": false,
+        "log_redaction_count": 0
+      },
+      "mutation": {
+        "exit_code": 1,
+        "elapsed_ms": 630.1952000067104,
+        "stdout": "F..                                                                      [100%]\n================================== FAILURES ===================================\n__ test_provider_respects_compiled_attention_capability[cuda:1-False-False] ___\n.triage\\test_case.py:34: in test_provider_respects_compiled_attention_capability\n    assert hybrid._fused(object()) is expected_fused, f\"Torch compiled Flash Attention availability={compiled}; the provider must select a compatible attention path for {device}\"\nE   AssertionError: Torch compiled Flash Attention availability=False; the provider must select a compatible attention path for cuda:1\nE   assert True is False\nE    +  where True = <function test_provider_respects_compiled_attention_capability.<locals>.<lambda> at 0x000001ECF5EE7B00>(<object object at 0x000001ECF2179BE0>)\nE    +    where <function test_provider_respects_compiled_attention_capability.<locals>.<lambda> at 0x000001ECF5EE7B00> = <module 'fixture_vendor.hybrid'>._fused\nE    +    and   <object object at 0x000001ECF2179BE0> = object()\n=========================== short test summary info ===========================\nFAILED .triage\\test_case.py::test_provider_respects_compiled_attention_capability[cuda:1-False-False]\n1 failed, 2 passed in 0.24s\n",
+        "log_path": ".triage/runs/0603c346640b488f9a45284a29ac125c.log",
+        "command": [
+          "python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--tb=short",
+          "-c",
+          ".triage/pytest.ini",
+          "--confcutdir=.triage",
+          "-o",
+          "asyncio_mode=auto",
+          "-p",
+          "no:cacheprovider",
+          "-p",
+          "pytest_asyncio.plugin",
+          ".triage/test_case.py"
+        ],
+        "protected_files_ok": true,
+        "integrity_issues": [],
+        "run_sha256": "3e9068468aabbc49dec571dcae5022326a7118145695a49239d00fd617625f68",
+        "timed_out": false,
+        "source_stable": true,
+        "editable_sha256_before": {
+          "packages/python/src/decilist/providers.py": "fa05b878a89cba6a5b44836c474671afe15b8c4ebbb0869870f67355fea84a0c"
+        },
+        "editable_sha256_after": {
+          "packages/python/src/decilist/providers.py": "fa05b878a89cba6a5b44836c474671afe15b8c4ebbb0869870f67355fea84a0c"
+        },
+        "raw_log_sha256": "3e9068468aabbc49dec571dcae5022326a7118145695a49239d00fd617625f68",
+        "log_truncated": false,
+        "log_redaction_count": 0
+      },
+      "reference_repair": {
+        "passed": true,
+        "integrity_ok": true,
+        "run": {
+          "exit_code": 0,
+          "elapsed_ms": 605.806500010658,
+          "stdout": "...                                                                      [100%]\n3 passed in 0.20s\n",
+          "log_path": ".triage/runs/6350d4bcd3f94d07bdb2993ebf6f13fe.log",
+          "command": [
+            "python.exe",
+            "-m",
+            "pytest",
+            "-q",
+            "--tb=short",
+            "-c",
+            ".triage/pytest.ini",
+            "--confcutdir=.triage",
+            "-o",
+            "asyncio_mode=auto",
+            "-p",
+            "no:cacheprovider",
+            "-p",
+            "pytest_asyncio.plugin",
+            ".triage/test_case.py"
+          ],
+          "protected_files_ok": true,
+          "integrity_issues": [],
+          "run_sha256": "05f7f7d7e74af6e23fe4984046332ed347e22cf50f99a33856b9d2f589167249",
+          "timed_out": false,
+          "source_stable": true,
+          "editable_sha256_before": {
+            "packages/python/src/decilist/providers.py": "1d6e208f70930e190f752bbe0ef3096c646066e8ff469629927d081b7f756ea3"
+          },
+          "editable_sha256_after": {
+            "packages/python/src/decilist/providers.py": "1d6e208f70930e190f752bbe0ef3096c646066e8ff469629927d081b7f756ea3"
+          },
+          "raw_log_sha256": "05f7f7d7e74af6e23fe4984046332ed347e22cf50f99a33856b9d2f589167249",
+          "log_truncated": false,
+          "log_redaction_count": 0
+        }
+      },
+      "protected_sha256": {
+        "packages/python/src/decilist/__init__.py": "5c8169b352357ffb6ba41d403325b98487da1412bd5ab9f6ba2a8498d38dff24",
+        "packages/python/src/decilist/__main__.py": "9e373e1af43452f53b43782b070d6653060e9b50f8311c2f1a345467fb8b819e",
+        "packages/python/src/decilist/client.py": "51fd84355f4093eeaa3b1a2eca8e9931af4c59872d5c7a119a6bd4f1d55742e0",
+        "packages/python/src/decilist/contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8",
+        "packages/python/src/decilist/demo.py": "84e002f263fa1feb9bcbe77ba89c40f770b282ec752f2eaf83be4948723412b4",
+        "packages/python/src/decilist/engine.py": "9d9281477b8327874c733fe26e0f89bd14c5ff754a6c6cbddaf1542a93381db4",
+        "packages/python/src/decilist/evaluation.py": "a1be17b931fbf504e830c379a7144b2e71239d276224371446918af6aaa6335b",
+        "packages/python/src/decilist/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "packages/python/src/decilist/runtime.py": "7f8b1ec6d0bda03584167b6e0f6b4259c322477ea2a0957f55ed99d9f39ed59e",
+        "packages/python/src/decilist/server.py": "6b6ac14c2661fd4fa67f020061daa9ce0a5fb38ed52f34913e93a5e327474e4d",
+        "packages/python/src/decilist/static/app.js": "ae2988c19435ee808be61f4f50dd35bdef1185a151b14edaea64370681d8ca6e",
+        "packages/python/src/decilist/static/demo.html": "6ef3136106a61a8ef234c387b89a6683f5806794613c992723ff17a0abab401a",
+        "packages/python/src/decilist/static/demo.js": "c325c44b8e33e2b6592f9746a7506ef7a83ca2007cae47f8a38430cf0815b6be",
+        "packages/python/src/decilist/static/index.html": "549ce77205981fa199b7ce4c956fa0e251a56f733607f241f082d07f6e6840af",
+        "packages/python/src/decilist/static/style.css": "b672a75dd772123d943304f43b3e7ad96c91aa7043592be9b7bf83d0d6be72cd",
+        "packages/python/src/decilist/web.py": "a24caf6d9f7da73abec438b821df9ad7a2429c3775af3dcf420fb21b1d49f3ae",
+        ".triage/test_case.py": "806adb1fd4decd1cc4cceec561d7b42bcc21842c0c8ae1a81d9a52fb7c45e2db",
+        ".triage/pytest.ini": "8250d20f42b419af40706490ead78aabab9feba93eab09a3f626e3de5256e1f4"
+      },
+      "editable_mutation_sha256": {
+        "packages/python/src/decilist/providers.py": "fa05b878a89cba6a5b44836c474671afe15b8c4ebbb0869870f67355fea84a0c"
+      }
+    },
+    {
+      "case_id": "t04",
+      "role": "regression",
+      "provenance": "seeded_regression",
+      "verified": true,
+      "baseline": {
+        "exit_code": 0,
+        "elapsed_ms": 625.7628000021214,
+        "stdout": "...                                                                      [100%]\n3 passed in 0.19s\n",
+        "log_path": ".triage/runs/80165cb86975490c858b6713c2f15875.log",
+        "command": [
+          "python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--tb=short",
+          "-c",
+          ".triage/pytest.ini",
+          "--confcutdir=.triage",
+          "-o",
+          "asyncio_mode=auto",
+          "-p",
+          "no:cacheprovider",
+          "-p",
+          "pytest_asyncio.plugin",
+          ".triage/test_case.py"
+        ],
+        "protected_files_ok": true,
+        "integrity_issues": [],
+        "run_sha256": "3dda496087ef21e2a2cf70552e7962179ac5dbb2ea30ff9b654d99231ed1382d",
+        "timed_out": false,
+        "source_stable": true,
+        "editable_sha256_before": {
+          "packages/python/src/decilist/contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8"
+        },
+        "editable_sha256_after": {
+          "packages/python/src/decilist/contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8"
+        },
+        "raw_log_sha256": "3dda496087ef21e2a2cf70552e7962179ac5dbb2ea30ff9b654d99231ed1382d",
+        "log_truncated": false,
+        "log_redaction_count": 0
+      },
+      "mutation": {
+        "exit_code": 1,
+        "elapsed_ms": 655.9851000056369,
+        "stdout": "FFF                                                                      [100%]\n================================== FAILURES ===================================\n_______ test_invalid_probability_sum_cannot_be_accepted[probabilities0] _______\n.triage\\test_case.py:17: in test_invalid_probability_sum_cannot_be_accepted\n    assert result.status == \"abstained\", \"provider probabilities must sum to one before an accepted output is formed\"\nE   AssertionError: provider probabilities must sum to one before an accepted output is formed\nE   assert 'accepted' == 'abstained'\nE     \nE     - abstained\nE     + accepted\n_______ test_invalid_probability_sum_cannot_be_accepted[probabilities1] _______\n.triage\\test_case.py:17: in test_invalid_probability_sum_cannot_be_accepted\n    assert result.status == \"abstained\", \"provider probabilities must sum to one before an accepted output is formed\"\nE   AssertionError: provider probabilities must sum to one before an accepted output is formed\nE   assert 'accepted' == 'abstained'\nE     \nE     - abstained\nE     + accepted\n_______ test_invalid_probability_sum_cannot_be_accepted[probabilities2] _______\n.triage\\test_case.py:17: in test_invalid_probability_sum_cannot_be_accepted\n    assert result.status == \"abstained\", \"provider probabilities must sum to one before an accepted output is formed\"\nE   AssertionError: provider probabilities must sum to one before an accepted output is formed\nE   assert 'accepted' == 'abstained'\nE     \nE     - abstained\nE     + accepted\n=========================== short test summary info ===========================\nFAILED .triage\\test_case.py::test_invalid_probability_sum_cannot_be_accepted[probabilities0]\nFAILED .triage\\test_case.py::test_invalid_probability_sum_cannot_be_accepted[probabilities1]\nFAILED .triage\\test_case.py::test_invalid_probability_sum_cannot_be_accepted[probabilities2]\n3 failed in 0.26s\n",
+        "log_path": ".triage/runs/31bc1c33fffc4a1a8f61fb193289d7b5.log",
+        "command": [
+          "python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--tb=short",
+          "-c",
+          ".triage/pytest.ini",
+          "--confcutdir=.triage",
+          "-o",
+          "asyncio_mode=auto",
+          "-p",
+          "no:cacheprovider",
+          "-p",
+          "pytest_asyncio.plugin",
+          ".triage/test_case.py"
+        ],
+        "protected_files_ok": true,
+        "integrity_issues": [],
+        "run_sha256": "d4575933559f1f27c3fd3104b769aa26c5e66224167c40c9428d3ebdae64ade8",
+        "timed_out": false,
+        "source_stable": true,
+        "editable_sha256_before": {
+          "packages/python/src/decilist/contracts.py": "6aaa2921827bd93359b9228f62337d8f5435273956fb1a19648087c67e776433"
+        },
+        "editable_sha256_after": {
+          "packages/python/src/decilist/contracts.py": "6aaa2921827bd93359b9228f62337d8f5435273956fb1a19648087c67e776433"
+        },
+        "raw_log_sha256": "d4575933559f1f27c3fd3104b769aa26c5e66224167c40c9428d3ebdae64ade8",
+        "log_truncated": false,
+        "log_redaction_count": 0
+      },
+      "reference_repair": {
+        "passed": true,
+        "integrity_ok": true,
+        "run": {
+          "exit_code": 0,
+          "elapsed_ms": 585.0238000130048,
+          "stdout": "...                                                                      [100%]\n3 passed in 0.18s\n",
+          "log_path": ".triage/runs/a503cc9cb9454c8fbc741e3899834572.log",
+          "command": [
+            "python.exe",
+            "-m",
+            "pytest",
+            "-q",
+            "--tb=short",
+            "-c",
+            ".triage/pytest.ini",
+            "--confcutdir=.triage",
+            "-o",
+            "asyncio_mode=auto",
+            "-p",
+            "no:cacheprovider",
+            "-p",
+            "pytest_asyncio.plugin",
+            ".triage/test_case.py"
+          ],
+          "protected_files_ok": true,
+          "integrity_issues": [],
+          "run_sha256": "e6cbc4c1da572f1c913992dec2cde873e23df72b0e423a19d110af3ee902563c",
+          "timed_out": false,
+          "source_stable": true,
+          "editable_sha256_before": {
+            "packages/python/src/decilist/contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8"
+          },
+          "editable_sha256_after": {
+            "packages/python/src/decilist/contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8"
+          },
+          "raw_log_sha256": "e6cbc4c1da572f1c913992dec2cde873e23df72b0e423a19d110af3ee902563c",
+          "log_truncated": false,
+          "log_redaction_count": 0
+        }
+      },
+      "protected_sha256": {
+        "packages/python/src/decilist/__init__.py": "5c8169b352357ffb6ba41d403325b98487da1412bd5ab9f6ba2a8498d38dff24",
+        "packages/python/src/decilist/__main__.py": "9e373e1af43452f53b43782b070d6653060e9b50f8311c2f1a345467fb8b819e",
+        "packages/python/src/decilist/client.py": "51fd84355f4093eeaa3b1a2eca8e9931af4c59872d5c7a119a6bd4f1d55742e0",
+        "packages/python/src/decilist/demo.py": "84e002f263fa1feb9bcbe77ba89c40f770b282ec752f2eaf83be4948723412b4",
+        "packages/python/src/decilist/engine.py": "9d9281477b8327874c733fe26e0f89bd14c5ff754a6c6cbddaf1542a93381db4",
+        "packages/python/src/decilist/evaluation.py": "a1be17b931fbf504e830c379a7144b2e71239d276224371446918af6aaa6335b",
+        "packages/python/src/decilist/providers.py": "1d6e208f70930e190f752bbe0ef3096c646066e8ff469629927d081b7f756ea3",
+        "packages/python/src/decilist/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "packages/python/src/decilist/runtime.py": "7f8b1ec6d0bda03584167b6e0f6b4259c322477ea2a0957f55ed99d9f39ed59e",
+        "packages/python/src/decilist/server.py": "6b6ac14c2661fd4fa67f020061daa9ce0a5fb38ed52f34913e93a5e327474e4d",
+        "packages/python/src/decilist/static/app.js": "ae2988c19435ee808be61f4f50dd35bdef1185a151b14edaea64370681d8ca6e",
+        "packages/python/src/decilist/static/demo.html": "6ef3136106a61a8ef234c387b89a6683f5806794613c992723ff17a0abab401a",
+        "packages/python/src/decilist/static/demo.js": "c325c44b8e33e2b6592f9746a7506ef7a83ca2007cae47f8a38430cf0815b6be",
+        "packages/python/src/decilist/static/index.html": "549ce77205981fa199b7ce4c956fa0e251a56f733607f241f082d07f6e6840af",
+        "packages/python/src/decilist/static/style.css": "b672a75dd772123d943304f43b3e7ad96c91aa7043592be9b7bf83d0d6be72cd",
+        "packages/python/src/decilist/web.py": "a24caf6d9f7da73abec438b821df9ad7a2429c3775af3dcf420fb21b1d49f3ae",
+        ".triage/test_case.py": "14f4103c0e1c3740032d0e32008b0569658a7de268bea0cb7ddade8865cd4ce9",
+        ".triage/pytest.ini": "8250d20f42b419af40706490ead78aabab9feba93eab09a3f626e3de5256e1f4"
+      },
+      "editable_mutation_sha256": {
+        "packages/python/src/decilist/contracts.py": "6aaa2921827bd93359b9228f62337d8f5435273956fb1a19648087c67e776433"
+      }
+    },
+    {
+      "case_id": "t05",
+      "role": "regression",
+      "provenance": "seeded_regression",
+      "verified": true,
+      "baseline": {
+        "exit_code": 0,
+        "elapsed_ms": 575.2800000045681,
+        "stdout": "...                                                                      [100%]\n3 passed in 0.18s\n",
+        "log_path": ".triage/runs/f77ce5021dea425b83dcaca6464472bf.log",
+        "command": [
+          "python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--tb=short",
+          "-c",
+          ".triage/pytest.ini",
+          "--confcutdir=.triage",
+          "-o",
+          "asyncio_mode=auto",
+          "-p",
+          "no:cacheprovider",
+          "-p",
+          "pytest_asyncio.plugin",
+          ".triage/test_case.py"
+        ],
+        "protected_files_ok": true,
+        "integrity_issues": [],
+        "run_sha256": "e6cbc4c1da572f1c913992dec2cde873e23df72b0e423a19d110af3ee902563c",
+        "timed_out": false,
+        "source_stable": true,
+        "editable_sha256_before": {
+          "packages/python/src/decilist/engine.py": "9d9281477b8327874c733fe26e0f89bd14c5ff754a6c6cbddaf1542a93381db4"
+        },
+        "editable_sha256_after": {
+          "packages/python/src/decilist/engine.py": "9d9281477b8327874c733fe26e0f89bd14c5ff754a6c6cbddaf1542a93381db4"
+        },
+        "raw_log_sha256": "e6cbc4c1da572f1c913992dec2cde873e23df72b0e423a19d110af3ee902563c",
+        "log_truncated": false,
+        "log_redaction_count": 0
+      },
+      "mutation": {
+        "exit_code": 1,
+        "elapsed_ms": 640.3836999961641,
+        "stdout": "FFF                                                                      [100%]\n================================== FAILURES ===================================\n__________ test_probability_below_policy_threshold_abstains[0.5-0.7] __________\n.triage\\test_case.py:17: in test_probability_below_policy_threshold_abstains\n    assert result.status == \"abstained\", \"a valid distribution below the configured policy threshold must abstain\"\nE   AssertionError: a valid distribution below the configured policy threshold must abstain\nE   assert 'accepted' == 'abstained'\nE     \nE     - abstained\nE     + accepted\n__________ test_probability_below_policy_threshold_abstains[0.6-0.9] __________\n.triage\\test_case.py:17: in test_probability_below_policy_threshold_abstains\n    assert result.status == \"abstained\", \"a valid distribution below the configured policy threshold must abstain\"\nE   AssertionError: a valid distribution below the configured policy threshold must abstain\nE   assert 'accepted' == 'abstained'\nE     \nE     - abstained\nE     + accepted\n_________ test_probability_below_policy_threshold_abstains[0.8-0.95] __________\n.triage\\test_case.py:17: in test_probability_below_policy_threshold_abstains\n    assert result.status == \"abstained\", \"a valid distribution below the configured policy threshold must abstain\"\nE   AssertionError: a valid distribution below the configured policy threshold must abstain\nE   assert 'accepted' == 'abstained'\nE     \nE     - abstained\nE     + accepted\n=========================== short test summary info ===========================\nFAILED .triage\\test_case.py::test_probability_below_policy_threshold_abstains[0.5-0.7]\nFAILED .triage\\test_case.py::test_probability_below_policy_threshold_abstains[0.6-0.9]\nFAILED .triage\\test_case.py::test_probability_below_policy_threshold_abstains[0.8-0.95]\n3 failed in 0.25s\n",
+        "log_path": ".triage/runs/25747969c2c146eba2dd60162192c4dd.log",
+        "command": [
+          "python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--tb=short",
+          "-c",
+          ".triage/pytest.ini",
+          "--confcutdir=.triage",
+          "-o",
+          "asyncio_mode=auto",
+          "-p",
+          "no:cacheprovider",
+          "-p",
+          "pytest_asyncio.plugin",
+          ".triage/test_case.py"
+        ],
+        "protected_files_ok": true,
+        "integrity_issues": [],
+        "run_sha256": "621a9d272b4e0878a3c25daa3802779a0025fdfc81f41a399a81c81af8d08e90",
+        "timed_out": false,
+        "source_stable": true,
+        "editable_sha256_before": {
+          "packages/python/src/decilist/engine.py": "edf64b613db131abaaea051b535b24c4354422b3c2a89ecf48348cbc20f3d791"
+        },
+        "editable_sha256_after": {
+          "packages/python/src/decilist/engine.py": "edf64b613db131abaaea051b535b24c4354422b3c2a89ecf48348cbc20f3d791"
+        },
+        "raw_log_sha256": "621a9d272b4e0878a3c25daa3802779a0025fdfc81f41a399a81c81af8d08e90",
+        "log_truncated": false,
+        "log_redaction_count": 0
+      },
+      "reference_repair": {
+        "passed": true,
+        "integrity_ok": true,
+        "run": {
+          "exit_code": 0,
+          "elapsed_ms": 582.267599995248,
+          "stdout": "...                                                                      [100%]\n3 passed in 0.19s\n",
+          "log_path": ".triage/runs/d7b79deecf5c46c492cfce8c9de768a6.log",
+          "command": [
+            "python.exe",
+            "-m",
+            "pytest",
+            "-q",
+            "--tb=short",
+            "-c",
+            ".triage/pytest.ini",
+            "--confcutdir=.triage",
+            "-o",
+            "asyncio_mode=auto",
+            "-p",
+            "no:cacheprovider",
+            "-p",
+            "pytest_asyncio.plugin",
+            ".triage/test_case.py"
+          ],
+          "protected_files_ok": true,
+          "integrity_issues": [],
+          "run_sha256": "3dda496087ef21e2a2cf70552e7962179ac5dbb2ea30ff9b654d99231ed1382d",
+          "timed_out": false,
+          "source_stable": true,
+          "editable_sha256_before": {
+            "packages/python/src/decilist/engine.py": "9d9281477b8327874c733fe26e0f89bd14c5ff754a6c6cbddaf1542a93381db4"
+          },
+          "editable_sha256_after": {
+            "packages/python/src/decilist/engine.py": "9d9281477b8327874c733fe26e0f89bd14c5ff754a6c6cbddaf1542a93381db4"
+          },
+          "raw_log_sha256": "3dda496087ef21e2a2cf70552e7962179ac5dbb2ea30ff9b654d99231ed1382d",
+          "log_truncated": false,
+          "log_redaction_count": 0
+        }
+      },
+      "protected_sha256": {
+        "packages/python/src/decilist/__init__.py": "5c8169b352357ffb6ba41d403325b98487da1412bd5ab9f6ba2a8498d38dff24",
+        "packages/python/src/decilist/__main__.py": "9e373e1af43452f53b43782b070d6653060e9b50f8311c2f1a345467fb8b819e",
+        "packages/python/src/decilist/client.py": "51fd84355f4093eeaa3b1a2eca8e9931af4c59872d5c7a119a6bd4f1d55742e0",
+        "packages/python/src/decilist/contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8",
+        "packages/python/src/decilist/demo.py": "84e002f263fa1feb9bcbe77ba89c40f770b282ec752f2eaf83be4948723412b4",
+        "packages/python/src/decilist/evaluation.py": "a1be17b931fbf504e830c379a7144b2e71239d276224371446918af6aaa6335b",
+        "packages/python/src/decilist/providers.py": "1d6e208f70930e190f752bbe0ef3096c646066e8ff469629927d081b7f756ea3",
+        "packages/python/src/decilist/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "packages/python/src/decilist/runtime.py": "7f8b1ec6d0bda03584167b6e0f6b4259c322477ea2a0957f55ed99d9f39ed59e",
+        "packages/python/src/decilist/server.py": "6b6ac14c2661fd4fa67f020061daa9ce0a5fb38ed52f34913e93a5e327474e4d",
+        "packages/python/src/decilist/static/app.js": "ae2988c19435ee808be61f4f50dd35bdef1185a151b14edaea64370681d8ca6e",
+        "packages/python/src/decilist/static/demo.html": "6ef3136106a61a8ef234c387b89a6683f5806794613c992723ff17a0abab401a",
+        "packages/python/src/decilist/static/demo.js": "c325c44b8e33e2b6592f9746a7506ef7a83ca2007cae47f8a38430cf0815b6be",
+        "packages/python/src/decilist/static/index.html": "549ce77205981fa199b7ce4c956fa0e251a56f733607f241f082d07f6e6840af",
+        "packages/python/src/decilist/static/style.css": "b672a75dd772123d943304f43b3e7ad96c91aa7043592be9b7bf83d0d6be72cd",
+        "packages/python/src/decilist/web.py": "a24caf6d9f7da73abec438b821df9ad7a2429c3775af3dcf420fb21b1d49f3ae",
+        ".triage/test_case.py": "8995ba1a60acbaa35038bb867e01f5f8e879018a93549f61b698525d5e767145",
+        ".triage/pytest.ini": "8250d20f42b419af40706490ead78aabab9feba93eab09a3f626e3de5256e1f4"
+      },
+      "editable_mutation_sha256": {
+        "packages/python/src/decilist/engine.py": "edf64b613db131abaaea051b535b24c4354422b3c2a89ecf48348cbc20f3d791"
+      }
+    },
+    {
+      "case_id": "t06",
+      "role": "regression",
+      "provenance": "seeded_regression",
+      "verified": true,
+      "baseline": {
+        "exit_code": 0,
+        "elapsed_ms": 581.0863999940921,
+        "stdout": "...                                                                      [100%]\n3 passed in 0.19s\n",
+        "log_path": ".triage/runs/a11c5b05573246c8b3de0c77c9d2a33a.log",
+        "command": [
+          "python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--tb=short",
+          "-c",
+          ".triage/pytest.ini",
+          "--confcutdir=.triage",
+          "-o",
+          "asyncio_mode=auto",
+          "-p",
+          "no:cacheprovider",
+          "-p",
+          "pytest_asyncio.plugin",
+          ".triage/test_case.py"
+        ],
+        "protected_files_ok": true,
+        "integrity_issues": [],
+        "run_sha256": "3dda496087ef21e2a2cf70552e7962179ac5dbb2ea30ff9b654d99231ed1382d",
+        "timed_out": false,
+        "source_stable": true,
+        "editable_sha256_before": {
+          "packages/python/src/decilist/engine.py": "9d9281477b8327874c733fe26e0f89bd14c5ff754a6c6cbddaf1542a93381db4"
+        },
+        "editable_sha256_after": {
+          "packages/python/src/decilist/engine.py": "9d9281477b8327874c733fe26e0f89bd14c5ff754a6c6cbddaf1542a93381db4"
+        },
+        "raw_log_sha256": "3dda496087ef21e2a2cf70552e7962179ac5dbb2ea30ff9b654d99231ed1382d",
+        "log_truncated": false,
+        "log_redaction_count": 0
+      },
+      "mutation": {
+        "exit_code": 1,
+        "elapsed_ms": 655.8816000033403,
+        "stdout": "FFF                                                                      [100%]\n================================== FAILURES ===================================\n_______ test_probability_at_inclusive_policy_threshold_is_accepted[0.7] _______\n.triage\\test_case.py:17: in test_probability_at_inclusive_policy_threshold_is_accepted\n    assert result.status == \"accepted\", \"the policy threshold is inclusive; equality must not create an abstention\"\nE   AssertionError: the policy threshold is inclusive; equality must not create an abstention\nE   assert 'abstained' == 'accepted'\nE     \nE     - accepted\nE     + abstained\n_______ test_probability_at_inclusive_policy_threshold_is_accepted[0.8] _______\n.triage\\test_case.py:17: in test_probability_at_inclusive_policy_threshold_is_accepted\n    assert result.status == \"accepted\", \"the policy threshold is inclusive; equality must not create an abstention\"\nE   AssertionError: the policy threshold is inclusive; equality must not create an abstention\nE   assert 'abstained' == 'accepted'\nE     \nE     - accepted\nE     + abstained\n_______ test_probability_at_inclusive_policy_threshold_is_accepted[1.0] _______\n.triage\\test_case.py:17: in test_probability_at_inclusive_policy_threshold_is_accepted\n    assert result.status == \"accepted\", \"the policy threshold is inclusive; equality must not create an abstention\"\nE   AssertionError: the policy threshold is inclusive; equality must not create an abstention\nE   assert 'abstained' == 'accepted'\nE     \nE     - accepted\nE     + abstained\n=========================== short test summary info ===========================\nFAILED .triage\\test_case.py::test_probability_at_inclusive_policy_threshold_is_accepted[0.7]\nFAILED .triage\\test_case.py::test_probability_at_inclusive_policy_threshold_is_accepted[0.8]\nFAILED .triage\\test_case.py::test_probability_at_inclusive_policy_threshold_is_accepted[1.0]\n3 failed in 0.26s\n",
+        "log_path": ".triage/runs/823b46ecf1534e0c84633288b62089fc.log",
+        "command": [
+          "python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--tb=short",
+          "-c",
+          ".triage/pytest.ini",
+          "--confcutdir=.triage",
+          "-o",
+          "asyncio_mode=auto",
+          "-p",
+          "no:cacheprovider",
+          "-p",
+          "pytest_asyncio.plugin",
+          ".triage/test_case.py"
+        ],
+        "protected_files_ok": true,
+        "integrity_issues": [],
+        "run_sha256": "ffb689be9a06a25b4bf7ed6bdeca32ed0476939213a7d13a931c51df967cbc18",
+        "timed_out": false,
+        "source_stable": true,
+        "editable_sha256_before": {
+          "packages/python/src/decilist/engine.py": "bc2f95039b0b36fd51a68df667bb80ddd948f85019015d972d302afab422e111"
+        },
+        "editable_sha256_after": {
+          "packages/python/src/decilist/engine.py": "bc2f95039b0b36fd51a68df667bb80ddd948f85019015d972d302afab422e111"
+        },
+        "raw_log_sha256": "ffb689be9a06a25b4bf7ed6bdeca32ed0476939213a7d13a931c51df967cbc18",
+        "log_truncated": false,
+        "log_redaction_count": 0
+      },
+      "reference_repair": {
+        "passed": true,
+        "integrity_ok": true,
+        "run": {
+          "exit_code": 0,
+          "elapsed_ms": 601.0287999961292,
+          "stdout": "...                                                                      [100%]\n3 passed in 0.19s\n",
+          "log_path": ".triage/runs/e2e0463366c44b8da392042a896a62fe.log",
+          "command": [
+            "python.exe",
+            "-m",
+            "pytest",
+            "-q",
+            "--tb=short",
+            "-c",
+            ".triage/pytest.ini",
+            "--confcutdir=.triage",
+            "-o",
+            "asyncio_mode=auto",
+            "-p",
+            "no:cacheprovider",
+            "-p",
+            "pytest_asyncio.plugin",
+            ".triage/test_case.py"
+          ],
+          "protected_files_ok": true,
+          "integrity_issues": [],
+          "run_sha256": "3dda496087ef21e2a2cf70552e7962179ac5dbb2ea30ff9b654d99231ed1382d",
+          "timed_out": false,
+          "source_stable": true,
+          "editable_sha256_before": {
+            "packages/python/src/decilist/engine.py": "9d9281477b8327874c733fe26e0f89bd14c5ff754a6c6cbddaf1542a93381db4"
+          },
+          "editable_sha256_after": {
+            "packages/python/src/decilist/engine.py": "9d9281477b8327874c733fe26e0f89bd14c5ff754a6c6cbddaf1542a93381db4"
+          },
+          "raw_log_sha256": "3dda496087ef21e2a2cf70552e7962179ac5dbb2ea30ff9b654d99231ed1382d",
+          "log_truncated": false,
+          "log_redaction_count": 0
+        }
+      },
+      "protected_sha256": {
+        "packages/python/src/decilist/__init__.py": "5c8169b352357ffb6ba41d403325b98487da1412bd5ab9f6ba2a8498d38dff24",
+        "packages/python/src/decilist/__main__.py": "9e373e1af43452f53b43782b070d6653060e9b50f8311c2f1a345467fb8b819e",
+        "packages/python/src/decilist/client.py": "51fd84355f4093eeaa3b1a2eca8e9931af4c59872d5c7a119a6bd4f1d55742e0",
+        "packages/python/src/decilist/contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8",
+        "packages/python/src/decilist/demo.py": "84e002f263fa1feb9bcbe77ba89c40f770b282ec752f2eaf83be4948723412b4",
+        "packages/python/src/decilist/evaluation.py": "a1be17b931fbf504e830c379a7144b2e71239d276224371446918af6aaa6335b",
+        "packages/python/src/decilist/providers.py": "1d6e208f70930e190f752bbe0ef3096c646066e8ff469629927d081b7f756ea3",
+        "packages/python/src/decilist/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "packages/python/src/decilist/runtime.py": "7f8b1ec6d0bda03584167b6e0f6b4259c322477ea2a0957f55ed99d9f39ed59e",
+        "packages/python/src/decilist/server.py": "6b6ac14c2661fd4fa67f020061daa9ce0a5fb38ed52f34913e93a5e327474e4d",
+        "packages/python/src/decilist/static/app.js": "ae2988c19435ee808be61f4f50dd35bdef1185a151b14edaea64370681d8ca6e",
+        "packages/python/src/decilist/static/demo.html": "6ef3136106a61a8ef234c387b89a6683f5806794613c992723ff17a0abab401a",
+        "packages/python/src/decilist/static/demo.js": "c325c44b8e33e2b6592f9746a7506ef7a83ca2007cae47f8a38430cf0815b6be",
+        "packages/python/src/decilist/static/index.html": "549ce77205981fa199b7ce4c956fa0e251a56f733607f241f082d07f6e6840af",
+        "packages/python/src/decilist/static/style.css": "b672a75dd772123d943304f43b3e7ad96c91aa7043592be9b7bf83d0d6be72cd",
+        "packages/python/src/decilist/web.py": "a24caf6d9f7da73abec438b821df9ad7a2429c3775af3dcf420fb21b1d49f3ae",
+        ".triage/test_case.py": "aa6039f1ee32ca92cad2235b49316b5248bc76de65aa4a830ce1f297749f31fd",
+        ".triage/pytest.ini": "8250d20f42b419af40706490ead78aabab9feba93eab09a3f626e3de5256e1f4"
+      },
+      "editable_mutation_sha256": {
+        "packages/python/src/decilist/engine.py": "bc2f95039b0b36fd51a68df667bb80ddd948f85019015d972d302afab422e111"
+      }
+    },
+    {
+      "case_id": "t07",
+      "role": "regression",
+      "provenance": "seeded_regression",
+      "verified": true,
+      "baseline": {
+        "exit_code": 0,
+        "elapsed_ms": 603.7972000049194,
+        "stdout": "...                                                                      [100%]\n3 passed in 0.19s\n",
+        "log_path": ".triage/runs/c9ba48edf85f4694b0701d0f9b7f53b9.log",
+        "command": [
+          "python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--tb=short",
+          "-c",
+          ".triage/pytest.ini",
+          "--confcutdir=.triage",
+          "-o",
+          "asyncio_mode=auto",
+          "-p",
+          "no:cacheprovider",
+          "-p",
+          "pytest_asyncio.plugin",
+          ".triage/test_case.py"
+        ],
+        "protected_files_ok": true,
+        "integrity_issues": [],
+        "run_sha256": "3dda496087ef21e2a2cf70552e7962179ac5dbb2ea30ff9b654d99231ed1382d",
+        "timed_out": false,
+        "source_stable": true,
+        "editable_sha256_before": {
+          "packages/python/src/decilist/runtime.py": "7f8b1ec6d0bda03584167b6e0f6b4259c322477ea2a0957f55ed99d9f39ed59e"
+        },
+        "editable_sha256_after": {
+          "packages/python/src/decilist/runtime.py": "7f8b1ec6d0bda03584167b6e0f6b4259c322477ea2a0957f55ed99d9f39ed59e"
+        },
+        "raw_log_sha256": "3dda496087ef21e2a2cf70552e7962179ac5dbb2ea30ff9b654d99231ed1382d",
+        "log_truncated": false,
+        "log_redaction_count": 0
+      },
+      "mutation": {
+        "exit_code": 1,
+        "elapsed_ms": 703.1315000058385,
+        "stdout": "FFF                                                                      [100%]\n================================== FAILURES ===================================\n____ test_endpoint_identity_is_checked_before_runtime_reuse[other-service] ____\n.triage\\test_case.py:16: in test_endpoint_identity_is_checked_before_runtime_reuse\n    with pytest.raises(RuntimeCompatibilityError, match=\"not a Decilist runtime\"):\nE   Failed: DID NOT RAISE RuntimeCompatibilityError\n__________ test_endpoint_identity_is_checked_before_runtime_reuse[] ___________\n.triage\\test_case.py:16: in test_endpoint_identity_is_checked_before_runtime_reuse\n    with pytest.raises(RuntimeCompatibilityError, match=\"not a Decilist runtime\"):\nE   Failed: DID NOT RAISE RuntimeCompatibilityError\n____ test_endpoint_identity_is_checked_before_runtime_reuse[decilist-copy] ____\n.triage\\test_case.py:16: in test_endpoint_identity_is_checked_before_runtime_reuse\n    with pytest.raises(RuntimeCompatibilityError, match=\"not a Decilist runtime\"):\nE   Failed: DID NOT RAISE RuntimeCompatibilityError\n=========================== short test summary info ===========================\nFAILED .triage\\test_case.py::test_endpoint_identity_is_checked_before_runtime_reuse[other-service]\nFAILED .triage\\test_case.py::test_endpoint_identity_is_checked_before_runtime_reuse[]\nFAILED .triage\\test_case.py::test_endpoint_identity_is_checked_before_runtime_reuse[decilist-copy]\n3 failed in 0.27s\n",
+        "log_path": ".triage/runs/0190cddf87a34b058372b2c662b1c143.log",
+        "command": [
+          "python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--tb=short",
+          "-c",
+          ".triage/pytest.ini",
+          "--confcutdir=.triage",
+          "-o",
+          "asyncio_mode=auto",
+          "-p",
+          "no:cacheprovider",
+          "-p",
+          "pytest_asyncio.plugin",
+          ".triage/test_case.py"
+        ],
+        "protected_files_ok": true,
+        "integrity_issues": [],
+        "run_sha256": "868e973c82147cb1ddec46b368635074c6a2e19403e4072dcef227ba59180994",
+        "timed_out": false,
+        "source_stable": true,
+        "editable_sha256_before": {
+          "packages/python/src/decilist/runtime.py": "014733a0bd438955f5772c9d9f4df85c10e1be8b5f14724e31419253beeb9e02"
+        },
+        "editable_sha256_after": {
+          "packages/python/src/decilist/runtime.py": "014733a0bd438955f5772c9d9f4df85c10e1be8b5f14724e31419253beeb9e02"
+        },
+        "raw_log_sha256": "868e973c82147cb1ddec46b368635074c6a2e19403e4072dcef227ba59180994",
+        "log_truncated": false,
+        "log_redaction_count": 0
+      },
+      "reference_repair": {
+        "passed": true,
+        "integrity_ok": true,
+        "run": {
+          "exit_code": 0,
+          "elapsed_ms": 593.0945000000065,
+          "stdout": "...                                                                      [100%]\n3 passed in 0.19s\n",
+          "log_path": ".triage/runs/36049296a13549cb9300b23b7db2754e.log",
+          "command": [
+            "python.exe",
+            "-m",
+            "pytest",
+            "-q",
+            "--tb=short",
+            "-c",
+            ".triage/pytest.ini",
+            "--confcutdir=.triage",
+            "-o",
+            "asyncio_mode=auto",
+            "-p",
+            "no:cacheprovider",
+            "-p",
+            "pytest_asyncio.plugin",
+            ".triage/test_case.py"
+          ],
+          "protected_files_ok": true,
+          "integrity_issues": [],
+          "run_sha256": "3dda496087ef21e2a2cf70552e7962179ac5dbb2ea30ff9b654d99231ed1382d",
+          "timed_out": false,
+          "source_stable": true,
+          "editable_sha256_before": {
+            "packages/python/src/decilist/runtime.py": "7f8b1ec6d0bda03584167b6e0f6b4259c322477ea2a0957f55ed99d9f39ed59e"
+          },
+          "editable_sha256_after": {
+            "packages/python/src/decilist/runtime.py": "7f8b1ec6d0bda03584167b6e0f6b4259c322477ea2a0957f55ed99d9f39ed59e"
+          },
+          "raw_log_sha256": "3dda496087ef21e2a2cf70552e7962179ac5dbb2ea30ff9b654d99231ed1382d",
+          "log_truncated": false,
+          "log_redaction_count": 0
+        }
+      },
+      "protected_sha256": {
+        "packages/python/src/decilist/__init__.py": "5c8169b352357ffb6ba41d403325b98487da1412bd5ab9f6ba2a8498d38dff24",
+        "packages/python/src/decilist/__main__.py": "9e373e1af43452f53b43782b070d6653060e9b50f8311c2f1a345467fb8b819e",
+        "packages/python/src/decilist/client.py": "51fd84355f4093eeaa3b1a2eca8e9931af4c59872d5c7a119a6bd4f1d55742e0",
+        "packages/python/src/decilist/contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8",
+        "packages/python/src/decilist/demo.py": "84e002f263fa1feb9bcbe77ba89c40f770b282ec752f2eaf83be4948723412b4",
+        "packages/python/src/decilist/engine.py": "9d9281477b8327874c733fe26e0f89bd14c5ff754a6c6cbddaf1542a93381db4",
+        "packages/python/src/decilist/evaluation.py": "a1be17b931fbf504e830c379a7144b2e71239d276224371446918af6aaa6335b",
+        "packages/python/src/decilist/providers.py": "1d6e208f70930e190f752bbe0ef3096c646066e8ff469629927d081b7f756ea3",
+        "packages/python/src/decilist/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "packages/python/src/decilist/server.py": "6b6ac14c2661fd4fa67f020061daa9ce0a5fb38ed52f34913e93a5e327474e4d",
+        "packages/python/src/decilist/static/app.js": "ae2988c19435ee808be61f4f50dd35bdef1185a151b14edaea64370681d8ca6e",
+        "packages/python/src/decilist/static/demo.html": "6ef3136106a61a8ef234c387b89a6683f5806794613c992723ff17a0abab401a",
+        "packages/python/src/decilist/static/demo.js": "c325c44b8e33e2b6592f9746a7506ef7a83ca2007cae47f8a38430cf0815b6be",
+        "packages/python/src/decilist/static/index.html": "549ce77205981fa199b7ce4c956fa0e251a56f733607f241f082d07f6e6840af",
+        "packages/python/src/decilist/static/style.css": "b672a75dd772123d943304f43b3e7ad96c91aa7043592be9b7bf83d0d6be72cd",
+        "packages/python/src/decilist/web.py": "a24caf6d9f7da73abec438b821df9ad7a2429c3775af3dcf420fb21b1d49f3ae",
+        ".triage/test_case.py": "243403b2e1d1711d74b16291144be2e15f558c7ff5ed0bbbe8d579382bae5ef7",
+        ".triage/pytest.ini": "8250d20f42b419af40706490ead78aabab9feba93eab09a3f626e3de5256e1f4"
+      },
+      "editable_mutation_sha256": {
+        "packages/python/src/decilist/runtime.py": "014733a0bd438955f5772c9d9f4df85c10e1be8b5f14724e31419253beeb9e02"
+      }
+    },
+    {
+      "case_id": "t08",
+      "role": "regression",
+      "provenance": "seeded_regression",
+      "verified": true,
+      "baseline": {
+        "exit_code": 0,
+        "elapsed_ms": 597.3567000037292,
+        "stdout": "...                                                                      [100%]\n3 passed in 0.19s\n",
+        "log_path": ".triage/runs/98b03924622e4807a598de178bea1fd6.log",
+        "command": [
+          "python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--tb=short",
+          "-c",
+          ".triage/pytest.ini",
+          "--confcutdir=.triage",
+          "-o",
+          "asyncio_mode=auto",
+          "-p",
+          "no:cacheprovider",
+          "-p",
+          "pytest_asyncio.plugin",
+          ".triage/test_case.py"
+        ],
+        "protected_files_ok": true,
+        "integrity_issues": [],
+        "run_sha256": "3dda496087ef21e2a2cf70552e7962179ac5dbb2ea30ff9b654d99231ed1382d",
+        "timed_out": false,
+        "source_stable": true,
+        "editable_sha256_before": {
+          "packages/python/src/decilist/providers.py": "1d6e208f70930e190f752bbe0ef3096c646066e8ff469629927d081b7f756ea3"
+        },
+        "editable_sha256_after": {
+          "packages/python/src/decilist/providers.py": "1d6e208f70930e190f752bbe0ef3096c646066e8ff469629927d081b7f756ea3"
+        },
+        "raw_log_sha256": "3dda496087ef21e2a2cf70552e7962179ac5dbb2ea30ff9b654d99231ed1382d",
+        "log_truncated": false,
+        "log_redaction_count": 0
+      },
+      "mutation": {
+        "exit_code": 2,
+        "elapsed_ms": 778.6861000058707,
+        "stdout": "\n=================================== ERRORS ====================================\n________________________ ERROR collecting test_case.py ________________________\nImportError while importing test module '[PROJECT]\\.triage\\test_case.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n[EXTERNAL]/__init__.py:90: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n.triage\\test_case.py:7: in <module>\n    import decilist\npackages\\python\\src\\decilist\\__init__.py:4: in <module>\n    from .providers import FunctionProvider, LiquidLocalProvider, UniformProvider\npackages\\python\\src\\decilist\\providers.py:5: in <module>\n    import decilist_fixture_missing_dependency\nE   ModuleNotFoundError: No module named 'decilist_fixture_missing_dependency'\n=========================== short test summary info ===========================\nERROR .triage\\test_case.py\n!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n1 error in 0.34s\n",
+        "log_path": ".triage/runs/edffc90eae3d4040bb9423634ae0c657.log",
+        "command": [
+          "python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--tb=short",
+          "-c",
+          ".triage/pytest.ini",
+          "--confcutdir=.triage",
+          "-o",
+          "asyncio_mode=auto",
+          "-p",
+          "no:cacheprovider",
+          "-p",
+          "pytest_asyncio.plugin",
+          ".triage/test_case.py"
+        ],
+        "protected_files_ok": true,
+        "integrity_issues": [],
+        "run_sha256": "b91f477980c27c8116074e2ff038bda638da66745c826e91f0c3689269f6868e",
+        "timed_out": false,
+        "source_stable": true,
+        "editable_sha256_before": {
+          "packages/python/src/decilist/providers.py": "8bd37cc8af5735deda8066c4a3b75493601100b1e6185b95f247bd1a152a52d0"
+        },
+        "editable_sha256_after": {
+          "packages/python/src/decilist/providers.py": "8bd37cc8af5735deda8066c4a3b75493601100b1e6185b95f247bd1a152a52d0"
+        },
+        "raw_log_sha256": "eb375e731df073cc80446077cc00919e450d5a239eb0baa46f15db3dfaf13d4a",
+        "log_truncated": false,
+        "log_redaction_count": 2
+      },
+      "reference_repair": {
+        "passed": true,
+        "integrity_ok": true,
+        "run": {
+          "exit_code": 0,
+          "elapsed_ms": 636.2607999908505,
+          "stdout": "...                                                                      [100%]\n3 passed in 0.20s\n",
+          "log_path": ".triage/runs/e2a06220835f4ba391ed108e26a8f454.log",
+          "command": [
+            "python.exe",
+            "-m",
+            "pytest",
+            "-q",
+            "--tb=short",
+            "-c",
+            ".triage/pytest.ini",
+            "--confcutdir=.triage",
+            "-o",
+            "asyncio_mode=auto",
+            "-p",
+            "no:cacheprovider",
+            "-p",
+            "pytest_asyncio.plugin",
+            ".triage/test_case.py"
+          ],
+          "protected_files_ok": true,
+          "integrity_issues": [],
+          "run_sha256": "05f7f7d7e74af6e23fe4984046332ed347e22cf50f99a33856b9d2f589167249",
+          "timed_out": false,
+          "source_stable": true,
+          "editable_sha256_before": {
+            "packages/python/src/decilist/providers.py": "1d6e208f70930e190f752bbe0ef3096c646066e8ff469629927d081b7f756ea3"
+          },
+          "editable_sha256_after": {
+            "packages/python/src/decilist/providers.py": "1d6e208f70930e190f752bbe0ef3096c646066e8ff469629927d081b7f756ea3"
+          },
+          "raw_log_sha256": "05f7f7d7e74af6e23fe4984046332ed347e22cf50f99a33856b9d2f589167249",
+          "log_truncated": false,
+          "log_redaction_count": 0
+        }
+      },
+      "protected_sha256": {
+        "packages/python/src/decilist/__init__.py": "5c8169b352357ffb6ba41d403325b98487da1412bd5ab9f6ba2a8498d38dff24",
+        "packages/python/src/decilist/__main__.py": "9e373e1af43452f53b43782b070d6653060e9b50f8311c2f1a345467fb8b819e",
+        "packages/python/src/decilist/client.py": "51fd84355f4093eeaa3b1a2eca8e9931af4c59872d5c7a119a6bd4f1d55742e0",
+        "packages/python/src/decilist/contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8",
+        "packages/python/src/decilist/demo.py": "84e002f263fa1feb9bcbe77ba89c40f770b282ec752f2eaf83be4948723412b4",
+        "packages/python/src/decilist/engine.py": "9d9281477b8327874c733fe26e0f89bd14c5ff754a6c6cbddaf1542a93381db4",
+        "packages/python/src/decilist/evaluation.py": "a1be17b931fbf504e830c379a7144b2e71239d276224371446918af6aaa6335b",
+        "packages/python/src/decilist/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "packages/python/src/decilist/runtime.py": "7f8b1ec6d0bda03584167b6e0f6b4259c322477ea2a0957f55ed99d9f39ed59e",
+        "packages/python/src/decilist/server.py": "6b6ac14c2661fd4fa67f020061daa9ce0a5fb38ed52f34913e93a5e327474e4d",
+        "packages/python/src/decilist/static/app.js": "ae2988c19435ee808be61f4f50dd35bdef1185a151b14edaea64370681d8ca6e",
+        "packages/python/src/decilist/static/demo.html": "6ef3136106a61a8ef234c387b89a6683f5806794613c992723ff17a0abab401a",
+        "packages/python/src/decilist/static/demo.js": "c325c44b8e33e2b6592f9746a7506ef7a83ca2007cae47f8a38430cf0815b6be",
+        "packages/python/src/decilist/static/index.html": "549ce77205981fa199b7ce4c956fa0e251a56f733607f241f082d07f6e6840af",
+        "packages/python/src/decilist/static/style.css": "b672a75dd772123d943304f43b3e7ad96c91aa7043592be9b7bf83d0d6be72cd",
+        "packages/python/src/decilist/web.py": "a24caf6d9f7da73abec438b821df9ad7a2429c3775af3dcf420fb21b1d49f3ae",
+        ".triage/test_case.py": "04af80010c31049fdcde2c96329052732f4c035226560afebeacf7708527ad46",
+        ".triage/pytest.ini": "8250d20f42b419af40706490ead78aabab9feba93eab09a3f626e3de5256e1f4"
+      },
+      "editable_mutation_sha256": {
+        "packages/python/src/decilist/providers.py": "8bd37cc8af5735deda8066c4a3b75493601100b1e6185b95f247bd1a152a52d0"
+      }
+    },
+    {
+      "case_id": "t09",
+      "role": "passing_control",
+      "provenance": "unmodified_control",
+      "verified": true,
+      "baseline": {
+        "exit_code": 0,
+        "elapsed_ms": 621.5919999958714,
+        "stdout": "...                                                                      [100%]\n3 passed in 0.20s\n",
+        "log_path": ".triage/runs/e6e8893736464c9a96245de5c0fc9e9a.log",
+        "command": [
+          "python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--tb=short",
+          "-c",
+          ".triage/pytest.ini",
+          "--confcutdir=.triage",
+          "-o",
+          "asyncio_mode=auto",
+          "-p",
+          "no:cacheprovider",
+          "-p",
+          "pytest_asyncio.plugin",
+          ".triage/test_case.py"
+        ],
+        "protected_files_ok": true,
+        "integrity_issues": [],
+        "run_sha256": "05f7f7d7e74af6e23fe4984046332ed347e22cf50f99a33856b9d2f589167249",
+        "timed_out": false,
+        "source_stable": true,
+        "editable_sha256_before": {},
+        "editable_sha256_after": {},
+        "raw_log_sha256": "05f7f7d7e74af6e23fe4984046332ed347e22cf50f99a33856b9d2f589167249",
+        "log_truncated": false,
+        "log_redaction_count": 0
+      },
+      "mutation": {
+        "exit_code": 0,
+        "elapsed_ms": 657.5761999993119,
+        "stdout": "...                                                                      [100%]\n3 passed in 0.20s\n",
+        "log_path": ".triage/runs/b2082e1a26de47f08db8057bd463cb18.log",
+        "command": [
+          "python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--tb=short",
+          "-c",
+          ".triage/pytest.ini",
+          "--confcutdir=.triage",
+          "-o",
+          "asyncio_mode=auto",
+          "-p",
+          "no:cacheprovider",
+          "-p",
+          "pytest_asyncio.plugin",
+          ".triage/test_case.py"
+        ],
+        "protected_files_ok": true,
+        "integrity_issues": [],
+        "run_sha256": "05f7f7d7e74af6e23fe4984046332ed347e22cf50f99a33856b9d2f589167249",
+        "timed_out": false,
+        "source_stable": true,
+        "editable_sha256_before": {},
+        "editable_sha256_after": {},
+        "raw_log_sha256": "05f7f7d7e74af6e23fe4984046332ed347e22cf50f99a33856b9d2f589167249",
+        "log_truncated": false,
+        "log_redaction_count": 0
+      },
+      "reference_repair": {
+        "passed": true,
+        "integrity_ok": true,
+        "run": {
+          "exit_code": 0,
+          "elapsed_ms": 584.3143999954918,
+          "stdout": "...                                                                      [100%]\n3 passed in 0.18s\n",
+          "log_path": ".triage/runs/6a65e1e6b4d643fcba047df1692b773f.log",
+          "command": [
+            "python.exe",
+            "-m",
+            "pytest",
+            "-q",
+            "--tb=short",
+            "-c",
+            ".triage/pytest.ini",
+            "--confcutdir=.triage",
+            "-o",
+            "asyncio_mode=auto",
+            "-p",
+            "no:cacheprovider",
+            "-p",
+            "pytest_asyncio.plugin",
+            ".triage/test_case.py"
+          ],
+          "protected_files_ok": true,
+          "integrity_issues": [],
+          "run_sha256": "e6cbc4c1da572f1c913992dec2cde873e23df72b0e423a19d110af3ee902563c",
+          "timed_out": false,
+          "source_stable": true,
+          "editable_sha256_before": {},
+          "editable_sha256_after": {},
+          "raw_log_sha256": "e6cbc4c1da572f1c913992dec2cde873e23df72b0e423a19d110af3ee902563c",
+          "log_truncated": false,
+          "log_redaction_count": 0
+        }
+      },
+      "protected_sha256": {
+        "packages/python/src/decilist/__init__.py": "5c8169b352357ffb6ba41d403325b98487da1412bd5ab9f6ba2a8498d38dff24",
+        "packages/python/src/decilist/__main__.py": "9e373e1af43452f53b43782b070d6653060e9b50f8311c2f1a345467fb8b819e",
+        "packages/python/src/decilist/client.py": "51fd84355f4093eeaa3b1a2eca8e9931af4c59872d5c7a119a6bd4f1d55742e0",
+        "packages/python/src/decilist/contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8",
+        "packages/python/src/decilist/demo.py": "84e002f263fa1feb9bcbe77ba89c40f770b282ec752f2eaf83be4948723412b4",
+        "packages/python/src/decilist/engine.py": "9d9281477b8327874c733fe26e0f89bd14c5ff754a6c6cbddaf1542a93381db4",
+        "packages/python/src/decilist/evaluation.py": "a1be17b931fbf504e830c379a7144b2e71239d276224371446918af6aaa6335b",
+        "packages/python/src/decilist/providers.py": "1d6e208f70930e190f752bbe0ef3096c646066e8ff469629927d081b7f756ea3",
+        "packages/python/src/decilist/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "packages/python/src/decilist/runtime.py": "7f8b1ec6d0bda03584167b6e0f6b4259c322477ea2a0957f55ed99d9f39ed59e",
+        "packages/python/src/decilist/server.py": "6b6ac14c2661fd4fa67f020061daa9ce0a5fb38ed52f34913e93a5e327474e4d",
+        "packages/python/src/decilist/static/app.js": "ae2988c19435ee808be61f4f50dd35bdef1185a151b14edaea64370681d8ca6e",
+        "packages/python/src/decilist/static/demo.html": "6ef3136106a61a8ef234c387b89a6683f5806794613c992723ff17a0abab401a",
+        "packages/python/src/decilist/static/demo.js": "c325c44b8e33e2b6592f9746a7506ef7a83ca2007cae47f8a38430cf0815b6be",
+        "packages/python/src/decilist/static/index.html": "549ce77205981fa199b7ce4c956fa0e251a56f733607f241f082d07f6e6840af",
+        "packages/python/src/decilist/static/style.css": "b672a75dd772123d943304f43b3e7ad96c91aa7043592be9b7bf83d0d6be72cd",
+        "packages/python/src/decilist/web.py": "a24caf6d9f7da73abec438b821df9ad7a2429c3775af3dcf420fb21b1d49f3ae",
+        ".triage/test_case.py": "04af80010c31049fdcde2c96329052732f4c035226560afebeacf7708527ad46",
+        ".triage/pytest.ini": "8250d20f42b419af40706490ead78aabab9feba93eab09a3f626e3de5256e1f4"
+      },
+      "editable_mutation_sha256": {}
+    },
+    {
+      "case_id": "t10",
+      "role": "insufficient_control",
+      "provenance": "seeded_regression_with_withheld_evidence",
+      "verified": true,
+      "baseline": {
+        "exit_code": 0,
+        "elapsed_ms": 593.5319000127492,
+        "stdout": "...                                                                      [100%]\n3 passed in 0.19s\n",
+        "log_path": ".triage/runs/d72324e7d43742e4bc26c29f64937742.log",
+        "command": [
+          "python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--tb=short",
+          "-c",
+          ".triage/pytest.ini",
+          "--confcutdir=.triage",
+          "-o",
+          "asyncio_mode=auto",
+          "-p",
+          "no:cacheprovider",
+          "-p",
+          "pytest_asyncio.plugin",
+          ".triage/test_case.py"
+        ],
+        "protected_files_ok": true,
+        "integrity_issues": [],
+        "run_sha256": "3dda496087ef21e2a2cf70552e7962179ac5dbb2ea30ff9b654d99231ed1382d",
+        "timed_out": false,
+        "source_stable": true,
+        "editable_sha256_before": {
+          "packages/python/src/decilist/demo.py": "84e002f263fa1feb9bcbe77ba89c40f770b282ec752f2eaf83be4948723412b4"
+        },
+        "editable_sha256_after": {
+          "packages/python/src/decilist/demo.py": "84e002f263fa1feb9bcbe77ba89c40f770b282ec752f2eaf83be4948723412b4"
+        },
+        "raw_log_sha256": "3dda496087ef21e2a2cf70552e7962179ac5dbb2ea30ff9b654d99231ed1382d",
+        "log_truncated": false,
+        "log_redaction_count": 0
+      },
+      "mutation": {
+        "exit_code": 1,
+        "elapsed_ms": 644.1192000056617,
+        "stdout": "FFF                                                                      [100%]\n================================== FAILURES ===================================\n______ test_supported_format_is_recognized[Prepare a summary-expected0] _______\n.triage\\test_case.py:15: in test_supported_format_is_recognized\n    assert app_formats(text) == expected, \"known supported format must survive application parsing\"\nE   AssertionError: known supported format must survive application parsing\nE   assert set() == {'summary'}\nE     \nE     Extra items in the right set:\nE     'summary'\nE     Use -v to get more diff\n______ test_supported_format_is_recognized[Prepare an outline-expected1] ______\n.triage\\test_case.py:15: in test_supported_format_is_recognized\n    assert app_formats(text) == expected, \"known supported format must survive application parsing\"\nE   AssertionError: known supported format must survive application parsing\nE   assert set() == {'outline'}\nE     \nE     Extra items in the right set:\nE     'outline'\nE     Use -v to get more diff\n_____ test_supported_format_is_recognized[Prepare a checklist-expected2] ______\n.triage\\test_case.py:15: in test_supported_format_is_recognized\n    assert app_formats(text) == expected, \"known supported format must survive application parsing\"\nE   AssertionError: known supported format must survive application parsing\nE   assert set() == {'checklist'}\nE     \nE     Extra items in the right set:\nE     'checklist'\nE     Use -v to get more diff\n=========================== short test summary info ===========================\nFAILED .triage\\test_case.py::test_supported_format_is_recognized[Prepare a summary-expected0]\nFAILED .triage\\test_case.py::test_supported_format_is_recognized[Prepare an outline-expected1]\nFAILED .triage\\test_case.py::test_supported_format_is_recognized[Prepare a checklist-expected2]\n3 failed in 0.25s\n",
+        "log_path": ".triage/runs/5a945a356d4348b1aa4b8e084af5d43d.log",
+        "command": [
+          "python.exe",
+          "-m",
+          "pytest",
+          "-q",
+          "--tb=short",
+          "-c",
+          ".triage/pytest.ini",
+          "--confcutdir=.triage",
+          "-o",
+          "asyncio_mode=auto",
+          "-p",
+          "no:cacheprovider",
+          "-p",
+          "pytest_asyncio.plugin",
+          ".triage/test_case.py"
+        ],
+        "protected_files_ok": true,
+        "integrity_issues": [],
+        "run_sha256": "a5088f7c059784df0e81560d084048c3d39f3166bf0b5e1a3f7528d837dd077d",
+        "timed_out": false,
+        "source_stable": true,
+        "editable_sha256_before": {
+          "packages/python/src/decilist/demo.py": "032783ba0a011bdc36556037d1c631d5bfd53e68ae9a4be7f387d324caa2eb90"
+        },
+        "editable_sha256_after": {
+          "packages/python/src/decilist/demo.py": "032783ba0a011bdc36556037d1c631d5bfd53e68ae9a4be7f387d324caa2eb90"
+        },
+        "raw_log_sha256": "a5088f7c059784df0e81560d084048c3d39f3166bf0b5e1a3f7528d837dd077d",
+        "log_truncated": false,
+        "log_redaction_count": 0
+      },
+      "reference_repair": {
+        "passed": true,
+        "integrity_ok": true,
+        "run": {
+          "exit_code": 0,
+          "elapsed_ms": 589.254799997434,
+          "stdout": "...                                                                      [100%]\n3 passed in 0.18s\n",
+          "log_path": ".triage/runs/f00c44f8cdce47c5813517068f7d5319.log",
+          "command": [
+            "python.exe",
+            "-m",
+            "pytest",
+            "-q",
+            "--tb=short",
+            "-c",
+            ".triage/pytest.ini",
+            "--confcutdir=.triage",
+            "-o",
+            "asyncio_mode=auto",
+            "-p",
+            "no:cacheprovider",
+            "-p",
+            "pytest_asyncio.plugin",
+            ".triage/test_case.py"
+          ],
+          "protected_files_ok": true,
+          "integrity_issues": [],
+          "run_sha256": "e6cbc4c1da572f1c913992dec2cde873e23df72b0e423a19d110af3ee902563c",
+          "timed_out": false,
+          "source_stable": true,
+          "editable_sha256_before": {
+            "packages/python/src/decilist/demo.py": "84e002f263fa1feb9bcbe77ba89c40f770b282ec752f2eaf83be4948723412b4"
+          },
+          "editable_sha256_after": {
+            "packages/python/src/decilist/demo.py": "84e002f263fa1feb9bcbe77ba89c40f770b282ec752f2eaf83be4948723412b4"
+          },
+          "raw_log_sha256": "e6cbc4c1da572f1c913992dec2cde873e23df72b0e423a19d110af3ee902563c",
+          "log_truncated": false,
+          "log_redaction_count": 0
+        }
+      },
+      "protected_sha256": {
+        "packages/python/src/decilist/__init__.py": "5c8169b352357ffb6ba41d403325b98487da1412bd5ab9f6ba2a8498d38dff24",
+        "packages/python/src/decilist/__main__.py": "9e373e1af43452f53b43782b070d6653060e9b50f8311c2f1a345467fb8b819e",
+        "packages/python/src/decilist/client.py": "51fd84355f4093eeaa3b1a2eca8e9931af4c59872d5c7a119a6bd4f1d55742e0",
+        "packages/python/src/decilist/contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8",
+        "packages/python/src/decilist/engine.py": "9d9281477b8327874c733fe26e0f89bd14c5ff754a6c6cbddaf1542a93381db4",
+        "packages/python/src/decilist/evaluation.py": "a1be17b931fbf504e830c379a7144b2e71239d276224371446918af6aaa6335b",
+        "packages/python/src/decilist/providers.py": "1d6e208f70930e190f752bbe0ef3096c646066e8ff469629927d081b7f756ea3",
+        "packages/python/src/decilist/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "packages/python/src/decilist/runtime.py": "7f8b1ec6d0bda03584167b6e0f6b4259c322477ea2a0957f55ed99d9f39ed59e",
+        "packages/python/src/decilist/server.py": "6b6ac14c2661fd4fa67f020061daa9ce0a5fb38ed52f34913e93a5e327474e4d",
+        "packages/python/src/decilist/static/app.js": "ae2988c19435ee808be61f4f50dd35bdef1185a151b14edaea64370681d8ca6e",
+        "packages/python/src/decilist/static/demo.html": "6ef3136106a61a8ef234c387b89a6683f5806794613c992723ff17a0abab401a",
+        "packages/python/src/decilist/static/demo.js": "c325c44b8e33e2b6592f9746a7506ef7a83ca2007cae47f8a38430cf0815b6be",
+        "packages/python/src/decilist/static/index.html": "549ce77205981fa199b7ce4c956fa0e251a56f733607f241f082d07f6e6840af",
+        "packages/python/src/decilist/static/style.css": "b672a75dd772123d943304f43b3e7ad96c91aa7043592be9b7bf83d0d6be72cd",
+        "packages/python/src/decilist/web.py": "a24caf6d9f7da73abec438b821df9ad7a2429c3775af3dcf420fb21b1d49f3ae",
+        ".triage/test_case.py": "4571c1733b7e6724197e09978eeed6551ebfbeafea899a5eed80fafffa5466ce",
+        ".triage/pytest.ini": "8250d20f42b419af40706490ead78aabab9feba93eab09a3f626e3de5256e1f4"
+      },
+      "editable_mutation_sha256": {
+        "packages/python/src/decilist/demo.py": "032783ba0a011bdc36556037d1c631d5bfd53e68ae9a4be7f387d324caa2eb90"
+      }
+    }
+  ]
+}

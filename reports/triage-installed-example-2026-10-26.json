@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "status": "suggested",
+  "route": "dependency_environment",
+  "next_check": {
+    "title": "Check dependencies and the runtime environment",
+    "steps": [
+      "Inspect the reported missing or incompatible component and the referenced import or setup location.",
+      "Compare the installed environment with the project's declared versions and supported device requirements."
+    ]
+  },
+  "confidence": 0.9229900248152326,
+  "confidence_note": "Confidence is the model's probability for this route; it is not the probability that a diagnosis or repair is correct.",
+  "decision": {
+    "schema_version": "1",
+    "request_id": "d0d0164a-8380-4f2e-bc4a-2f0c08da4d37",
+    "kind": "choose",
+    "status": "accepted",
+    "value": "dependency_environment",
+    "probabilities": {
+      "dependency_environment": 0.9229900248152326,
+      "contract_validation": 0.005842264199488431,
+      "decision_policy": 0.006620152640058015,
+      "runtime_lifecycle": 0.004843407137478816,
+      "application_logic": 0.004274291796781176,
+      "manual_review": 0.05542985941096083
+    },
+    "confidence": 0.9229900248152326,
+    "provider": "liquid-local",
+    "model": "LiquidAI/d1-3B",
+    "latency_ms": 293.0125999992015,
+    "cost_usd": null,
+    "attempts": [
+      {
+        "provider": "liquid-local",
+        "outcome": "accepted",
+        "latency_ms": 292.96969999268185
+      }
+    ]
+  },
+  "evidence": {
+    "schema_version": 1,
+    "command": null,
+    "log": "\n=================================== ERRORS ====================================\n________________________ ERROR collecting test_case.py ________________________\nImportError while importing test module '[PROJECT]\\.triage\\test_case.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n[EXTERNAL]/__init__.py:90: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n.triage\\test_case.py:7: in <module>\n    import decilist\npackages\\python\\src\\decilist\\__init__.py:4: in <module>\n    from .providers import FunctionProvider, LiquidLocalProvider, UniformProvider\npackages\\python\\src\\decilist\\providers.py:5: in <module>\n    import decilist_fixture_missing_dependency\nE   ModuleNotFoundError: No module named 'decilist_fixture_missing_dependency'\n=========================== short test summary info ===========================\nERROR .triage\\test_case.py\n!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n1 error in 0.34s\n",
+    "references": [
+      {
+        "path": ".triage/test_case.py",
+        "line": 7,
+        "excerpt": "5 | from types import ModuleType, SimpleNamespace\n6 | import pytest\n7 | import decilist\n8 | \n9 | CASE_ROOT = Path(__file__).resolve().parents[1]"
+      },
+      {
+        "path": "packages/python/src/decilist/__init__.py",
+        "line": 4,
+        "excerpt": "2 | from .contracts import Choose, Decision, DecisionRequest, Policy, Predict, Score\n3 | from .engine import Decilist, Provider\n4 | from .providers import FunctionProvider, LiquidLocalProvider, UniformProvider\n5 | from .runtime import RuntimeCompatibilityError, RuntimeConnectionError\n6 | "
+      },
+      {
+        "path": "packages/python/src/decilist/providers.py",
+        "line": 5,
+        "excerpt": "3 | \n4 | import asyncio\n5 | import decilist_fixture_missing_dependency\n6 | import importlib\n7 | from collections.abc import Callable"
+      }
+    ],
+    "signals": [
+      {
+        "kind": "stack_frame",
+        "line": 7,
+        "text": "[EXTERNAL]/__init__.py:90: in import_module"
+      },
+      {
+        "kind": "stack_frame",
+        "line": 10,
+        "text": ".triage\\test_case.py:7: in <module>"
+      },
+      {
+        "kind": "stack_frame",
+        "line": 12,
+        "text": "packages\\python\\src\\decilist\\__init__.py:4: in <module>"
+      },
+      {
+        "kind": "stack_frame",
+        "line": 14,
+        "text": "packages\\python\\src\\decilist\\providers.py:5: in <module>"
+      },
+      {
+        "kind": "failure",
+        "line": 16,
+        "text": "E   ModuleNotFoundError: No module named 'decilist_fixture_missing_dependency'"
+      },
+      {
+        "kind": "failure",
+        "line": 19,
+        "text": "!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!"
+      },
+      {
+        "kind": "failure",
+        "line": 20,
+        "text": "1 error in 0.34s"
+      }
+    ],
+    "truncated": false,
+    "redaction_count": 0,
+    "log_path": "edffc90eae3d4040bb9423634ae0c657.log"
+  },
+  "runtime": {
+    "service": "decilist",
+    "schema_version": "1",
+    "runtime_version": "0.1.0a1",
+    "ready": true,
+    "status": "ok",
+    "provider": "liquid",
+    "local_only": true,
+    "providers": [
+      {
+        "name": "liquid-local",
+        "model": "LiquidAI/d1-3B",
+        "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+        "locality": "local"
+      }
+    ]
+  },
+  "message": null,
+  "limitations": [
+    "This chooses a next check, not a proven root cause; it generates no repair code or commands.",
+    "Evidence redaction is heuristic. Review saved logs and source excerpts before sharing them.",
+    "The endpoint is restricted to loopback; local-only provider policy is not an OS firewall guarantee."
+  ]
+}

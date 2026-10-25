@@ -108,6 +108,30 @@ The TypeScript SDK performs request and response validation. The Python runtime 
 
 The demo's rules only implement the documented workflow gate; they do not interpret arbitrary prompts. Generated OpenAPI is served at `/openapi.json`, with a checked-in copy in [contracts/openapi.json](contracts/openapi.json).
 
+## Inspect a failing test in an existing project
+
+The optional Python triage helper consumes your existing failure log and bounded source references. It proposes one next check, preserves the model's decision trace, and abstains when evidence or confidence is insufficient. It does not execute commands or repair files. This helper needs a learned local runtime; the `demo` rules runtime is deliberately rejected.
+
+```bash
+python -m decilist.triage --log failure.log --project .
+```
+
+Or call it directly from your existing Python tooling:
+
+```python
+from pathlib import Path
+from decilist.triage import diagnose
+from decilist.triage_evidence import prepare_evidence
+
+evidence = prepare_evidence(Path("failure.log").read_text(), project=Path("."))
+report = await diagnose(evidence)  # use inside your existing async function
+print(report["next_check"]["title"])
+```
+
+The transport is restricted to a local loopback endpoint. Credential filtering is heuristic, so inspect evidence before sharing reports. The [walkthrough](docs/triage.md) covers saving logs, status handling, and setup. The [deferred human experiment](docs/triage-study.md) measures time to a verified repair; model latency alone is not debugging-time savings. The [product roadmap in Arabic](docs/product-roadmap-ar.md) sets measurable adoption and quality gates for November 1 and beyond.
+
+**First triage result: the learned assistant has not demonstrated added value.** On eight authored regressions replayed in this repository, the frozen error-pattern comparator suggested an acceptable next check for all eight. Liquid suggested one and abstained on seven; it abstained on all four evaluation regressions. This small suite does not establish general superiority for either approach. Human debugging-time savings remain unmeasured. See the [full triage findings](docs/triage-results.md).
+
 ## Verify and compare
 
 Contributors also install the test/build dependencies. From the repository root with `.venv` active:
@@ -136,7 +160,7 @@ The [new text suite](docs/evaluation-v2.md) has 20 development and 40 held-out c
 | `packages/python/src/decilist/static` | Optional Playground and normal-app example |
 | `contracts` | Shared parity cases and OpenAPI |
 | `examples` | Domain-neutral workflow gate |
-| `benchmarks` | Original smoke suite and frozen text evaluation |
+| `benchmarks` | Smoke/text evaluations, isolated triage regression lab, deferred study |
 | `docs` | MVP plan, architecture, provider compatibility, licensing |
 
 ## License and roadmap
