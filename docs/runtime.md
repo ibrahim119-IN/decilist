@@ -6,7 +6,7 @@ Connect once, then call `choose`, `predict`, or `score` directly. Saved decision
 
 Python and the packaged UI require Python 3.11 or later (3.12 recommended) and Git. These alpha packages are installed from source or local artifacts; they are not published on PyPI or npm.
 
-[CI for commit `0b8ba2c`](https://github.com/ibrahim119-IN/decilist/actions/runs/40226959697) passed scripted launcher integration on Windows and Ubuntu. Native GPU inference on the Windows presentation machine remains pending. macOS and first-use human usability have not been verified.
+[CI for the model compatibility implementation](https://github.com/ibrahim119-IN/decilist/actions/runs/40228553717) passed scripted launcher integration on Windows and Ubuntu. Native Liquid GPU inference and both installed HTTP SDKs were separately verified on Windows with an RTX 3090; see [measured results](model-validation.md). Linux GPU execution, macOS, and first-use human usability have not been verified.
 
 From the repository root, create a local environment:
 

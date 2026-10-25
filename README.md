@@ -4,9 +4,9 @@
 
 Decilist is an early, open-source Decision Intelligence SDK. Ask a bounded question directly in your code, validate its answer, apply a policy, and evaluate the result through the same contract across providers. It is local-first and model-agnostic by design. No decision registration or Playground session is required; reusable decision definitions are an optional future convenience.
 
-**Status: integration alpha, not a completed platform.** Direct SDK calls, an explicit runtime launcher, packaged UI, and a frozen text evaluation suite are implemented. The default demo uses deterministic local rules and an uninformative baseline. Liquid d1-3B compatibility and learned quality are separate acceptance gates; see [verification](docs/verification.md). OpenAI Decisions is planned. Packages are not published to npm or PyPI.
+**Status: measured local alpha, not a completed platform.** Direct SDK calls, an explicit runtime launcher, packaged UI, and evaluation are implemented. Liquid d1-3B runs locally on the tested Windows RTX 3090. Its frozen held-out evaluation exposed substantial decision errors: 66.7% accepted classification accuracy and 60% overall coverage. See the [actual model results and failures](docs/model-validation.md). The default `demo` provider remains explicitly labelled deterministic rules. OpenAI Decisions is planned. Packages are not published to npm or PyPI.
 
-![Local decision playground](reports/ui/playground-desktop.png)
+![Normal-app example using the local model](reports/ui/demo-liquid.png)
 
 ## Why this exists
 
@@ -117,15 +117,14 @@ python -m pip install -c requirements-dev.lock -e "./packages/python[server,dev]
 npm ci
 python -m pytest -q
 npm test
-node --test tests/test_sdk_snippets.mjs
 python -m benchmarks.run --output reports/local/workflow.json
 ```
 
-[CI for commit `0b8ba2c`](https://github.com/ibrahim119-IN/decilist/actions/runs/40226959697) passed scripted launcher integration on Windows and Ubuntu. Native GPU inference on the Windows presentation machine and first-use human usability remain separate, pending checks.
+[CI for the model compatibility implementation](https://github.com/ibrahim119-IN/decilist/actions/runs/40228553717) passed on Windows and Ubuntu. Native GPU inference was separately verified on the Windows presentation machine. First-use human usability remains unmeasured.
 
 The original 12-case smoke suite checks wiring. Its perfect rule score follows from rules implementing its labels; it is **not** model-quality evidence. [Initial measured report](reports/baseline-2026-10-25.json).
 
-The [new text suite](docs/evaluation-v2.md) has 20 development and 40 held-out cases across all three operations, with frozen labels and policy. It reports classification accuracy, numeric score error, coverage, abstention, validity, latency, and failure cases. The original rules do not implement this different task, so no misleading numeric comparison is made. The [uniform reference report](benchmarks/results/request-text-uniform.json) is a baseline, not a model result.
+The [new text suite](docs/evaluation-v2.md) has 20 development and 40 held-out cases across all three operations, with frozen labels and policy. It reports classification accuracy, numeric score error, coverage, abstention, validity, latency, and failure cases. The [Liquid report](benchmarks/results/request-text-liquid.json) records three repetitions of each case. The original rules do not implement this different task, so no misleading numeric comparison is made. The [uniform reference report](benchmarks/results/request-text-uniform.json) is a baseline, not a model result.
 
 ## Repository map
 

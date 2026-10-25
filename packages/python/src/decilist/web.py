@@ -10,7 +10,7 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel, ConfigDict, StringConstraints
 
 from .contracts import Policy
-from .demo import APP_INSTRUCTIONS, APP_OPTIONS, CONSEQUENTIAL_WORDS
+from .demo import APP_INSTRUCTIONS, APP_OPTIONS, app_review_reason
 from .engine import Decilist
 
 
@@ -63,6 +63,9 @@ def attach_ui(app: FastAPI, engine: Decilist) -> None:
             APP_OPTIONS,
             policy=Policy(local_only=True, min_confidence=0.7, timeout_ms=30000),
         )
+        # Guardrails belong to the app. Keep the actual SDK result, probabilities,
+        # and confidence below even when the app declines its selected next step.
+        guard_reason = app_review_reason(body.request, body.clarification)
         outcome = "review"
         message = "This request needs a closer look. Your request is kept here so you can revise it."
         if result.status == "abstained":
@@ -81,6 +84,8 @@ def attach_ui(app: FastAPI, engine: Decilist) -> None:
                     "There isn't enough certainty to prepare this draft. "
                     "Please make your request more specific."
                 )
+        elif guard_reason:
+            outcome = "review"
         elif result.value == "clarify" and not body.clarification:
             outcome = "clarify"
             message = (
@@ -90,8 +95,7 @@ def attach_ui(app: FastAPI, engine: Decilist) -> None:
         elif result.value == "proceed":
             # The app owns execution and only prepares a local preview. The model
             # cannot authorize consequential actions, even if it misclassifies one.
-            if not CONSEQUENTIAL_WORDS.search(body.request + " " + body.clarification):
-                outcome, message = "proceed", "Your request draft is ready."
+            outcome, message = "proceed", "Your request draft is ready."
         draft = None
         if outcome == "proceed":
             draft = {

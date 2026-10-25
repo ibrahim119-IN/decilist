@@ -10,7 +10,7 @@ The primary journey is **install the SDK, connect a provider once, call choose/p
 
 The end user stays in the application's normal flow. The application uses existing context and asks for genuinely missing information in place. It never asks the user to fill in Decilist configuration, inspect JSON, select a model, or understand confidence thresholds.
 
-## Starting point
+## Historical starting point
 
 | Capability | Observed state on October 25 |
 | --- | --- |
@@ -28,8 +28,9 @@ Passing the foundation tests does not establish learned decision quality or inte
 
 - Implemented explicit runtime setup/start/run/status, compatibility/readiness checks, once-configured client policies, and owned-server shutdown. Fresh wheel/tarball applications outside the monorepo have exercised all three operations against the baseline.
 - Implemented the packaged optional one-workspace Playground, local correction/test loop, and copied SDK integration. Implemented a separate normal-app request composer with one clarification and no exposed model settings.
-- Added a frozen 60-case text dataset and evaluator with classification accuracy, numeric score error, coverage, validity, latency, and failure records. The uniform reference is measured; learned-model results are pending.
-- Real Liquid dependencies and the pinned model snapshot are being prepared in an isolated local environment. No model-quality or offline-inference claim follows from the completed wiring tests.
+- Added and ran a frozen 60-case text dataset, three repetitions each. The [measured model report](model-validation.md) records 60% held-out coverage, 66.7% accepted classification accuracy, score MAE 0.985, and concrete failures. This is limited task quality, not production readiness.
+- Installed and verified the pinned Liquid snapshot in an isolated environment. Cached local inference succeeds on Windows RTX 3090, including a second primary-agent run with Python socket connections blocked. This bounded check does not establish OS-level network isolation.
+- Both installed SDK artifacts executed all three operations against the real Liquid HTTP runtime from applications outside the repository. Windows/Ubuntu CI passed. Human first-use timing, Linux GPU compatibility, and the November 1 presentation rehearsal remain outstanding.
 
 The dated acceptance gates below remain the completion criteria. A working baseline or package does not tick a gate that requires a real model run, human usability observation, or later presentation rehearsal.
 
@@ -120,13 +121,13 @@ Defer mobile applications, multimodal API, fine-tuning, hosted dashboards, multi
 
 ## Definition of presentation readiness
 
-- [ ] A new project can make direct choose/predict/score calls without registering decisions or opening a UI.
-- [ ] Runtime setup is repeatable; remaining manual requirements and supported systems are explicit.
-- [ ] Liquid executes locally with recorded versions, real outputs, and verified offline behavior.
-- [ ] Invalid, uncertain, timed-out, or unavailable results lead to inspectable outcomes that the app handles.
-- [ ] A held-out report distinguishes model quality, coverage, latency, and unmeasured costs.
-- [ ] The end-user example stays in its own interface and reuses existing context.
-- [ ] The optional Playground has one primary workspace and reproduces its result in copied SDK code.
+- [x] A new project can make direct choose/predict/score calls without registering decisions or opening a UI.
+- [x] Runtime setup is documented and scripted launcher behavior verified; remaining manual requirements and supported systems are explicit.
+- [x] Liquid executes locally with recorded versions and real outputs; offline verification is bounded to cached loading and blocked Python socket connects.
+- [x] Invalid, uncertain, timed-out, or unavailable results lead to inspectable outcomes that the app handles.
+- [x] A held-out report distinguishes model quality, coverage, latency, and unmeasured costs.
+- [x] The end-user example stays in its own interface and reuses existing context.
+- [x] The optional Playground has one primary workspace and reproduces its result in copied SDK code.
 - [ ] The final candidate, packaging, tests, browser flows, and rehearsal are verified.
 
-These boxes remain unchecked until evidence for each gate exists. The initial foundation commit alone does not complete them.
+Completed gates refer to the measured alpha scope. Current model errors remain visible; no production-readiness claim follows. First-time human usability, a final candidate freeze, recording, and full offline presentation rehearsal still need to happen before November 1. Any future prompt/model improvements need development-only tuning followed by fresh held-out evaluation; the existing report and labels must remain intact.

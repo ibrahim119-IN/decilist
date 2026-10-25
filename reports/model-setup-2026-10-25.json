@@ -1,0 +1,316 @@
+{
+  "source_revision": "65e3cc1d343d40ef836d42b3e0648680286a1443",
+  "source_dirty_during_benchmark": false,
+  "integrity": {
+    "snapshot_total_bytes": 6265052644,
+    "snapshot_files": 15,
+    "all_snapshot_hashes_passed": true,
+    "model_revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+    "weights_bytes": 6247065504,
+    "weights_sha256": "50e03317847caf6df9a9aee27ed40f20554a86a21e60d1d47ba41a422b546c0c",
+    "torch_wheel_sha256": "380081ea098bf2b9e727aa85205d94790d884d17c62df3bb00a4f6a1047010a2",
+    "torch_wheel_hash_passed": true
+  },
+  "runtime": {
+    "python": "3.12.0rc2",
+    "packages": {
+      "torch": "2.13.0+cu126",
+      "torchvision": "0.28.0+cu126",
+      "transformers": "5.14.1",
+      "huggingface-hub": "1.33.0",
+      "decilist": "0.1.0a1"
+    },
+    "cuda_runtime": "12.6",
+    "cuda_available": true,
+    "gpus": [
+      "NVIDIA GeForce RTX 3090",
+      "NVIDIA GeForce RTX 3090"
+    ],
+    "checked_at_utc": "2026-10-25T20:02:28.453332+00:00"
+  },
+  "gpu": {
+    "tested_device": "cuda:1",
+    "name": "NVIDIA GeForce RTX 3090",
+    "driver": "610.88",
+    "memory_mib": 24576,
+    "compute_capability": "8.6"
+  },
+  "setup_timing": {
+    "observed_start_utc": "2026-10-25T19:15:31.716248+00:00",
+    "runtime_and_snapshot_ready_utc": "2026-10-25T20:02:28.453332+00:00",
+    "observed_parallel_setup_span_seconds": 2816.737084,
+    "model_snapshot_download_seconds": 2658.5589861999906,
+    "scope": "Observed span begins at original Torch installer process creation; excludes earlier environment creation, whose duration is unknown. Torch and model downloads overlapped; do not add elapsed times.",
+    "torch_install_process_seconds": 2289.5567861
+  },
+  "attention_compatibility_probe": {
+    "checked_at_utc": "2026-10-25T20:02:37.819804+00:00",
+    "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+    "device": "cuda:1",
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "torch": "2.13.0+cu126",
+    "flash_compiled": false,
+    "attention_backend": "vendor-explicit",
+    "model_class_module": "transformers_modules._051bcc464b01b9f92942b364d9586b0ef5912432.d54b5b95345ee51e.modeling_d1",
+    "hybrid_module": "transformers_modules._051bcc464b01b9f92942b364d9586b0ef5912432.d54b5b95345ee51e.hybrid",
+    "sources": [
+      {
+        "file": "api.py",
+        "git_blob_sha1": "964955dc245966920c4617a50b35210e3bfa3a2a",
+        "passed": true
+      },
+      {
+        "file": "hybrid.py",
+        "git_blob_sha1": "4db7239e8d13b0e8945e4bd5f02de9e1c689d7f9",
+        "passed": true
+      },
+      {
+        "file": "lfm2_vl.py",
+        "git_blob_sha1": "9cd6f49c1e7db8e9f514d901c5cf455ccd0020f7",
+        "passed": true
+      },
+      {
+        "file": "modeling_d1.py",
+        "git_blob_sha1": "00309150da7422e2bdcc4056a7af64c7cc9ea558",
+        "passed": true
+      },
+      {
+        "file": "prompt.py",
+        "git_blob_sha1": "6c44c47b600f1b41015a273cb9e03c3e18ef918a",
+        "passed": true
+      },
+      {
+        "file": "runner.py",
+        "git_blob_sha1": "057e7c8455037183f96e0d06fdd738b3ff4556d3",
+        "passed": true
+      }
+    ],
+    "reference": "Independent explicit branch/position boolean mask with dense float32 SDPA MATH backend; GQA enabled",
+    "scope": "Small tensor test of actual vendor explicit tree attention; no model instance or weights loaded",
+    "cases": [
+      {
+        "dtype": "torch.float32",
+        "batch": 1,
+        "query_heads": 32,
+        "kv_heads": 8,
+        "head_dim": 64,
+        "trunk_tokens": 5,
+        "branch_lengths": [
+          3,
+          1,
+          4
+        ],
+        "window": null,
+        "atol": 2e-06,
+        "rtol": 1e-05,
+        "max_absolute_error": 7.152557373046875e-07,
+        "mean_absolute_error": 3.184768360142698e-08,
+        "passed": true
+      },
+      {
+        "dtype": "torch.float32",
+        "batch": 1,
+        "query_heads": 32,
+        "kv_heads": 8,
+        "head_dim": 64,
+        "trunk_tokens": 0,
+        "branch_lengths": [
+          2,
+          4,
+          1
+        ],
+        "window": null,
+        "atol": 2e-06,
+        "rtol": 1e-05,
+        "max_absolute_error": 4.76837158203125e-07,
+        "mean_absolute_error": 1.8893649311735317e-08,
+        "passed": true
+      },
+      {
+        "dtype": "torch.float32",
+        "batch": 1,
+        "query_heads": 32,
+        "kv_heads": 8,
+        "head_dim": 64,
+        "trunk_tokens": 5,
+        "branch_lengths": [
+          4,
+          2,
+          5
+        ],
+        "window": 3,
+        "atol": 2e-06,
+        "rtol": 1e-05,
+        "max_absolute_error": 9.5367431640625e-07,
+        "mean_absolute_error": 3.283240346263483e-08,
+        "passed": true
+      },
+      {
+        "dtype": "torch.float32",
+        "batch": 1,
+        "query_heads": 32,
+        "kv_heads": 8,
+        "head_dim": 64,
+        "trunk_tokens": 2,
+        "branch_lengths": [
+          2,
+          3
+        ],
+        "window": 1,
+        "atol": 2e-06,
+        "rtol": 1e-05,
+        "max_absolute_error": 0.0,
+        "mean_absolute_error": 0.0,
+        "passed": true
+      },
+      {
+        "dtype": "torch.float32",
+        "batch": 2,
+        "query_heads": 32,
+        "kv_heads": 8,
+        "head_dim": 64,
+        "trunk_tokens": 1,
+        "branch_lengths": [
+          1,
+          3,
+          2
+        ],
+        "window": 4,
+        "atol": 2e-06,
+        "rtol": 1e-05,
+        "max_absolute_error": 5.960464477539062e-07,
+        "mean_absolute_error": 4.002953701842671e-08,
+        "passed": true
+      },
+      {
+        "dtype": "torch.float32",
+        "batch": 1,
+        "query_heads": 32,
+        "kv_heads": 8,
+        "head_dim": 64,
+        "trunk_tokens": 8,
+        "branch_lengths": [
+          1
+        ],
+        "window": null,
+        "atol": 2e-06,
+        "rtol": 1e-05,
+        "max_absolute_error": 3.427267074584961e-07,
+        "mean_absolute_error": 1.4078565868658188e-08,
+        "passed": true
+      },
+      {
+        "dtype": "torch.bfloat16",
+        "batch": 1,
+        "query_heads": 32,
+        "kv_heads": 8,
+        "head_dim": 64,
+        "trunk_tokens": 5,
+        "branch_lengths": [
+          3,
+          1,
+          4
+        ],
+        "window": null,
+        "atol": 0.01,
+        "rtol": 0.01,
+        "max_absolute_error": 0.007581472396850586,
+        "mean_absolute_error": 0.0005529667832888663,
+        "passed": true
+      },
+      {
+        "dtype": "torch.bfloat16",
+        "batch": 1,
+        "query_heads": 32,
+        "kv_heads": 8,
+        "head_dim": 64,
+        "trunk_tokens": 0,
+        "branch_lengths": [
+          2,
+          4,
+          1
+        ],
+        "window": null,
+        "atol": 0.01,
+        "rtol": 0.01,
+        "max_absolute_error": 0.007552623748779297,
+        "mean_absolute_error": 0.0004641056584659964,
+        "passed": true
+      },
+      {
+        "dtype": "torch.bfloat16",
+        "batch": 1,
+        "query_heads": 32,
+        "kv_heads": 8,
+        "head_dim": 64,
+        "trunk_tokens": 5,
+        "branch_lengths": [
+          4,
+          2,
+          5
+        ],
+        "window": 3,
+        "atol": 0.01,
+        "rtol": 0.01,
+        "max_absolute_error": 0.007793903350830078,
+        "mean_absolute_error": 0.000725459074601531,
+        "passed": true
+      },
+      {
+        "dtype": "torch.bfloat16",
+        "batch": 1,
+        "query_heads": 32,
+        "kv_heads": 8,
+        "head_dim": 64,
+        "trunk_tokens": 2,
+        "branch_lengths": [
+          2,
+          3
+        ],
+        "window": 1,
+        "atol": 0.01,
+        "rtol": 0.01,
+        "max_absolute_error": 0.0,
+        "mean_absolute_error": 0.0,
+        "passed": true
+      },
+      {
+        "dtype": "torch.bfloat16",
+        "batch": 2,
+        "query_heads": 32,
+        "kv_heads": 8,
+        "head_dim": 64,
+        "trunk_tokens": 1,
+        "branch_lengths": [
+          1,
+          3,
+          2
+        ],
+        "window": 4,
+        "atol": 0.01,
+        "rtol": 0.01,
+        "max_absolute_error": 0.00780177116394043,
+        "mean_absolute_error": 0.000703569792676717,
+        "passed": true
+      },
+      {
+        "dtype": "torch.bfloat16",
+        "batch": 1,
+        "query_heads": 32,
+        "kv_heads": 8,
+        "head_dim": 64,
+        "trunk_tokens": 8,
+        "branch_lengths": [
+          1
+        ],
+        "window": null,
+        "atol": 0.01,
+        "rtol": 0.01,
+        "max_absolute_error": 0.0074291229248046875,
+        "mean_absolute_error": 0.0006012064986862242,
+        "passed": true
+      }
+    ],
+    "passed": true
+  }
+}

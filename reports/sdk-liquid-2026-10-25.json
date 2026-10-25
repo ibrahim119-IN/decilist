@@ -1,0 +1,166 @@
+{
+  "purpose": "Installed SDK artifacts outside the monorepo called the real local Liquid HTTP runtime; six illustrative calls, not a quality benchmark",
+  "source_revision": "65e3cc1d343d40ef836d42b3e0648680286a1443",
+  "python": {
+    "sdk": "installed-python-wheel",
+    "policy": {
+      "min_confidence": 0.7,
+      "timeout_ms": 30000,
+      "local_only": true
+    },
+    "results": [
+      {
+        "schema_version": "1",
+        "request_id": "86d7ff8b-77cf-48c6-8b2c-94f3b9873e37",
+        "kind": "choose",
+        "status": "accepted",
+        "value": "summarize",
+        "probabilities": {
+          "summarize": 0.9849305403410742,
+          "translate": 0.008005038222499027,
+          "compare": 0.007064421436426688
+        },
+        "confidence": 0.9849305403410742,
+        "provider": "liquid-local",
+        "model": "LiquidAI/d1-3B",
+        "latency_ms": 1671.655500002089,
+        "cost_usd": null,
+        "attempts": [
+          {
+            "provider": "liquid-local",
+            "outcome": "accepted",
+            "latency_ms": 1671.609000011813
+          }
+        ]
+      },
+      {
+        "schema_version": "1",
+        "request_id": "c4583d9f-b2c3-4bee-b5d0-4282d90705a4",
+        "kind": "predict",
+        "status": "accepted",
+        "value": true,
+        "probabilities": {
+          "false": 0.033085978388704196,
+          "true": 0.9669140216112958
+        },
+        "confidence": 0.9669140216112958,
+        "provider": "liquid-local",
+        "model": "LiquidAI/d1-3B",
+        "latency_ms": 21.376200005761348,
+        "cost_usd": null,
+        "attempts": [
+          {
+            "provider": "liquid-local",
+            "outcome": "accepted",
+            "latency_ms": 21.336899997550063
+          }
+        ]
+      },
+      {
+        "schema_version": "1",
+        "request_id": "f4b8b10b-3184-4adb-8fa8-b224a051d589",
+        "kind": "score",
+        "status": "accepted",
+        "value": 1.9384756068981595,
+        "probabilities": {
+          "0": 0.007220478716071712,
+          "1": 0.04708343566969704,
+          "2": 0.9456960856142312
+        },
+        "confidence": 0.9456960856142312,
+        "provider": "liquid-local",
+        "model": "LiquidAI/d1-3B",
+        "latency_ms": 25.554500010912307,
+        "cost_usd": null,
+        "attempts": [
+          {
+            "provider": "liquid-local",
+            "outcome": "accepted",
+            "latency_ms": 25.513099986710586
+          }
+        ]
+      }
+    ]
+  },
+  "typescript": {
+    "sdk": "installed-typescript-tarball",
+    "policy": {
+      "min_confidence": 0.7,
+      "timeout_ms": 30000,
+      "local_only": true
+    },
+    "results": [
+      {
+        "schema_version": "1",
+        "request_id": "fe18c1a1-9930-4bad-8579-c3455edb79e1",
+        "kind": "choose",
+        "status": "accepted",
+        "value": "summarize",
+        "probabilities": {
+          "summarize": 0.9849305403410742,
+          "translate": 0.008005038222499027,
+          "compare": 0.007064421436426688
+        },
+        "confidence": 0.9849305403410742,
+        "provider": "liquid-local",
+        "model": "LiquidAI/d1-3B",
+        "latency_ms": 24.252299990621395,
+        "cost_usd": null,
+        "attempts": [
+          {
+            "provider": "liquid-local",
+            "outcome": "accepted",
+            "latency_ms": 24.210899995523505
+          }
+        ]
+      },
+      {
+        "schema_version": "1",
+        "request_id": "ad36abac-eb77-40db-ba7b-de09a1bbc642",
+        "kind": "predict",
+        "status": "accepted",
+        "value": true,
+        "probabilities": {
+          "false": 0.033085978388704196,
+          "true": 0.9669140216112958
+        },
+        "confidence": 0.9669140216112958,
+        "provider": "liquid-local",
+        "model": "LiquidAI/d1-3B",
+        "latency_ms": 19.69489999464713,
+        "cost_usd": null,
+        "attempts": [
+          {
+            "provider": "liquid-local",
+            "outcome": "accepted",
+            "latency_ms": 19.647799999802373
+          }
+        ]
+      },
+      {
+        "schema_version": "1",
+        "request_id": "dc9ab609-624f-4e1c-9aab-eed2bd4f85b1",
+        "kind": "score",
+        "status": "accepted",
+        "value": 1.9384756068981595,
+        "probabilities": {
+          "0": 0.007220478716071712,
+          "1": 0.04708343566969704,
+          "2": 0.9456960856142312
+        },
+        "confidence": 0.9456960856142312,
+        "provider": "liquid-local",
+        "model": "LiquidAI/d1-3B",
+        "latency_ms": 25.514599998132326,
+        "cost_usd": null,
+        "attempts": [
+          {
+            "provider": "liquid-local",
+            "outcome": "accepted",
+            "latency_ms": 25.472500012256205
+          }
+        ]
+      }
+    ]
+  }
+}

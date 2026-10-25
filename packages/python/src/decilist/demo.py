@@ -45,6 +45,51 @@ CONSEQUENTIAL_WORDS = re.compile(
     r"|ابعت|أرسل|ارسل|انشر|احذف|امسح|اشتري|ادفع|شارك",
     re.I,
 )
+AMBIGUITY_WORDS = re.compile(
+    r"\b(maybe|perhaps|either|not\s+sure|unsure|uncertain|undecided|whatever)\b"
+    r"|\b(?:cannot|can't|can’t)\s+(?:choose|decide)\b"
+    r"|مش\s+(?:متأكد|متاكد|عارف|محدد)|لست\s+متأكد|لم\s+أقرر|ربما",
+    re.I,
+)
+TRANSLATION_REQUEST = re.compile(
+    r"\b(?:translate|retranslate|translating)\b"
+    r"|\btranslation\s+(?:of|into|to)\b"
+    r"|\b(?:need|want|give|provide|prepare|create|get)\b"
+    r"(?:\s+(?:me|us|a|an|the|full|complete|new))*"
+    r"\s+(?:[a-z]+\s+)?translation\b"
+    r"|(?<!\w)(?:ترجم|ترجملي|ترجمي|تترجم|تترجملي|ترجمة|ترجمه)(?!\w)",
+    re.I,
+)
+APP_FORMAT_WORDS = {
+    "summary": re.compile(r"\b(summary|summarize|summarise)\b|ملخص|لخص", re.I),
+    "outline": re.compile(r"\boutline\b|مخطط", re.I),
+    "checklist": re.compile(r"\bchecklist\b|قائمة", re.I),
+}
+
+
+def app_formats(text: str) -> set[str]:
+    """Count distinct supported format families, not repeated aliases of one format."""
+    return {name for name, words in APP_FORMAT_WORDS.items() if words.search(text)}
+
+
+def app_review_reason(request: str, clarification: str = "") -> str | None:
+    """Conservative app-owned checks for explicit cues in this small example.
+
+    This is a limited English/Arabic lexical guard, not semantic understanding
+    or an exhaustive unsupported-task detector. It may review quoted, negated,
+    or source-format mentions too. The model's original decision stays intact.
+    A formerly missing format is allowed once a single format is supplied.
+    """
+    text = request + " " + clarification
+    if CONSEQUENTIAL_WORDS.search(text):
+        return "consequential_request"
+    if TRANSLATION_REQUEST.search(text):
+        return "unsupported_translation"
+    if AMBIGUITY_WORDS.search(text):
+        return "explicit_ambiguity"
+    if len(app_formats(text)) > 1:
+        return "multiple_formats"
+    return None
 
 
 def walkthrough_rules(question: Question) -> dict[str, float]:
@@ -62,18 +107,9 @@ def walkthrough_rules(question: Question) -> dict[str, float]:
         request = str(state.get("request", ""))
         clarification = str(state.get("clarification", ""))
         text = (request + " " + clarification).lower()
-        consequential = CONSEQUENTIAL_WORDS.search(text)
-        supported = re.search(
-            r"\b(summary|summarize|summarise|outline|checklist)\b|ملخص|لخص|مخطط|قائمة",
-            text,
-        )
-        ambiguous = re.search(
-            r"\b(maybe|either|not sure|unsure|whatever|or)\b|مش متأكد|مش عارف|أو|او ",
-            text,
-        )
-        if consequential or ambiguous:
+        if app_review_reason(request, clarification):
             action = "review"
-        elif supported:
+        elif app_formats(text):
             action = "proceed"
         else:
             action = "review" if clarification else "clarify"

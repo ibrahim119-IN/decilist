@@ -1,0 +1,160 @@
+{
+  "checked_at_utc": "2026-10-25T20:04:11.040723+00:00",
+  "purpose": "Compatibility and typed-contract smoke check; not a quality benchmark",
+  "policy": {
+    "local_only": true,
+    "min_confidence": 0,
+    "timeout_ms": 120000
+  },
+  "model": "LiquidAI/d1-3B",
+  "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+  "device": "cuda:1",
+  "attention_backend": "vendor-explicit",
+  "platform": "Windows",
+  "python": "3.12.0rc2",
+  "versions": {
+    "torch": "2.13.0+cu126",
+    "torchvision": "0.28.0+cu126",
+    "transformers": "5.14.1",
+    "huggingface-hub": "1.33.0",
+    "decilist": "0.1.0a1"
+  },
+  "cuda_runtime": "12.6",
+  "gpu": "NVIDIA GeForce RTX 3090",
+  "cached_load_seconds": 5.332785999999032,
+  "first_inference_ms": 1389.6888999879593,
+  "repetitions_per_kind": 3,
+  "gpu_memory": {
+    "allocated_bytes": 6275670528,
+    "peak_allocated_bytes": 6282294784,
+    "reserved_bytes": 6350176256
+  },
+  "offline_check": {
+    "hub_offline": true,
+    "python_socket_connections_blocked": true,
+    "attempt_count": 0,
+    "scope": "Python socket connect/connect_ex only; not process-level packet capture"
+  },
+  "results": [
+    {
+      "question": {
+        "state": "Please summarize the attached document in three bullet points.",
+        "instructions": "Which action is explicitly requested?",
+        "kind": "choose",
+        "options": {
+          "summarize": "Summarize a document",
+          "translate": "Translate text",
+          "compare": "Compare documents"
+        }
+      },
+      "last_result": {
+        "schema_version": "1",
+        "request_id": "5942c12f-3f4a-4e38-bf94-0f2373e9403d",
+        "kind": "choose",
+        "status": "accepted",
+        "value": "summarize",
+        "probabilities": {
+          "summarize": 0.9849305403410742,
+          "translate": 0.008005038222499027,
+          "compare": 0.007064421436426688
+        },
+        "confidence": 0.9849305403410742,
+        "provider": "liquid-local",
+        "model": "LiquidAI/d1-3B",
+        "latency_ms": 19.75549999042414,
+        "cost_usd": null,
+        "attempts": [
+          {
+            "provider": "liquid-local",
+            "outcome": "accepted",
+            "latency_ms": 19.71409999532625
+          }
+        ]
+      },
+      "latency_ms": [
+        20.43699999921955,
+        20.281499993870966,
+        19.75549999042414
+      ],
+      "median_ms": 20.281499993870966
+    },
+    {
+      "question": {
+        "state": "Please translate this paragraph from English into Arabic.",
+        "instructions": "Does the request explicitly specify a target language?",
+        "kind": "predict"
+      },
+      "last_result": {
+        "schema_version": "1",
+        "request_id": "c3bb29ad-d1b4-41d5-934f-1289d7201321",
+        "kind": "predict",
+        "status": "accepted",
+        "value": true,
+        "probabilities": {
+          "false": 0.033085978388704196,
+          "true": 0.9669140216112958
+        },
+        "confidence": 0.9669140216112958,
+        "provider": "liquid-local",
+        "model": "LiquidAI/d1-3B",
+        "latency_ms": 19.463300006464124,
+        "cost_usd": null,
+        "attempts": [
+          {
+            "provider": "liquid-local",
+            "outcome": "accepted",
+            "latency_ms": 19.42730000882875
+          }
+        ]
+      },
+      "latency_ms": [
+        19.547500007320195,
+        19.289300005766563,
+        19.463300006464124
+      ],
+      "median_ms": 19.463300006464124
+    },
+    {
+      "question": {
+        "state": "The request includes an action, an input document, and a requested output format.",
+        "instructions": "Rate completeness of the request using only the stated fields.",
+        "kind": "score",
+        "levels": [
+          "No fields are present",
+          "One or two fields are present",
+          "All three fields are present"
+        ]
+      },
+      "last_result": {
+        "schema_version": "1",
+        "request_id": "db720daf-d8c4-446f-970a-c02c6afe98e7",
+        "kind": "score",
+        "status": "accepted",
+        "value": 1.9384756068981595,
+        "probabilities": {
+          "0": 0.007220478716071712,
+          "1": 0.04708343566969704,
+          "2": 0.9456960856142312
+        },
+        "confidence": 0.9456960856142312,
+        "provider": "liquid-local",
+        "model": "LiquidAI/d1-3B",
+        "latency_ms": 23.47390000068117,
+        "cost_usd": null,
+        "attempts": [
+          {
+            "provider": "liquid-local",
+            "outcome": "accepted",
+            "latency_ms": 23.433599999407306
+          }
+        ]
+      },
+      "latency_ms": [
+        25.212199994712137,
+        23.235200002091005,
+        23.47390000068117
+      ],
+      "median_ms": 23.47390000068117
+    }
+  ]
+}

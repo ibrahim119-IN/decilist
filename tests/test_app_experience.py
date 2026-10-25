@@ -6,7 +6,7 @@ import httpx
 import pytest
 
 from decilist import Decilist, FunctionProvider, UniformProvider
-from decilist.demo import APP_INSTRUCTIONS, APP_OPTIONS
+from decilist.demo import APP_INSTRUCTIONS, APP_OPTIONS, app_review_reason
 from decilist.server import create_app
 
 
@@ -84,6 +84,80 @@ async def test_app_refuses_consequential_action_even_when_provider_says_proceed(
     async with httpx.AsyncClient(transport=httpx.ASGITransport(app=create_app(engine)), base_url="http://localhost") as client:
         result = (await client.post("/v1/demo/request", json={"request": "Publish this summary"})).json()
     assert result["decision"]["value"] == "proceed"
+    assert result["outcome"] == "review"
+    assert result["draft"] is None
+
+
+@pytest.mark.parametrize("selected", ["proceed", "clarify"])
+@pytest.mark.parametrize("request_text", [
+    "I'm uncertain whether I want a short outline.",
+    "Perhaps a checklist would work, but I can't decide.",
+    "Prepare a summary and a checklist from this document.",
+    "Give me an outline plus a summary.",
+    "Translate the current document into Spanish.",
+    "Please give me a French translation of the project update.",
+    "مش متأكد أنا محتاج ملخص ولا لأ",
+    "عايز ملخص ومخطط للمستند",
+    "ترجم المستند للعربية",
+    "محتاج ترجمة للمستند ده",
+])
+async def test_app_guards_override_model_proceed_or_clarify(selected, request_text):
+    probabilities = {
+        label: 0.94 if label == selected else 0.03 for label in APP_OPTIONS
+    }
+    engine = Decilist([
+        FunctionProvider(lambda _: probabilities, name="test-model", model="test-model-v1")
+    ])
+    async with httpx.AsyncClient(
+        transport=httpx.ASGITransport(app=create_app(engine, provider="liquid")),
+        base_url="http://localhost",
+    ) as client:
+        result = (await client.post(
+            "/v1/demo/request", json={"request": request_text}
+        )).json()
+    assert result["outcome"] == "review"
+    assert result["draft"] is None
+    assert result["decision"]["status"] == "accepted"
+    assert result["decision"]["value"] == selected
+    assert result["decision"]["confidence"] == 0.94
+    assert result["decision"]["probabilities"] == probabilities
+    assert result["decision"]["attempts"][0]["outcome"] == "accepted"
+
+
+@pytest.mark.parametrize("body", [
+    {"request": "Summarize this document in a short summary."},
+    {"request": "Prepare a checklist for the current document."},
+    {"request": "عايز ملخص قصير للمستند"},
+    {"request": "Prepare something from this document.", "clarification": "An outline, please."},
+    {"request": "جهز حاجة من المستند", "clarification": "ملخص قصير"},
+])
+async def test_one_format_and_resolved_missing_format_can_proceed(body):
+    assert app_review_reason(body["request"], body.get("clarification", "")) is None
+    engine = Decilist([
+        FunctionProvider(lambda _: {"proceed": 0.94, "clarify": 0.03, "review": 0.03})
+    ])
+    async with httpx.AsyncClient(
+        transport=httpx.ASGITransport(app=create_app(engine, provider="liquid")),
+        base_url="http://localhost",
+    ) as client:
+        result = (await client.post("/v1/demo/request", json=body)).json()
+    assert result["outcome"] == "proceed"
+    assert result["draft"] is not None
+    assert result["draft"]["request"] == body["request"]
+    assert result["draft"]["clarification"] == body.get("clarification", "")
+
+
+@pytest.mark.parametrize("request_text", [
+    "Translate this document into German.",
+    "I want a translation into French.",
+    "ممكن تترجم المستند للإنجليزي",
+])
+async def test_baseline_reviews_explicit_translation(ui_client, request_text):
+    result = (await ui_client.post(
+        "/v1/demo/request", json={"request": request_text}
+    )).json()
+    assert result["decision"]["value"] == "review"
+    assert result["decision"]["model"] == "rules-v1"
     assert result["outcome"] == "review"
     assert result["draft"] is None
 
