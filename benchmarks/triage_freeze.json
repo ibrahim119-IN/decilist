@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "suite": "decilist-triage-v1",
+  "frozen_at_utc": "2026-10-25T21:02:15.213759+00:00",
+  "frozen_before_model_run": true,
+  "base_revision": "bf2a1df0a5a0b95dfc923eaa0a67c6fea2f07063",
+  "files_sha256": {
+    "benchmarks/triage_cases.json": "fc7d9821ef9e1ffa7a95308a434d5b967c0e7e555e55d6a75d4463cc524c8994",
+    "benchmarks/triage_lab.py": "cb47cde24a8d8646708391f815083f6fc973a3ec92246180431f0ff336a0e980",
+    "benchmarks/run_triage.py": "86033e86a3d558689cd246ccdc7e310af49a4b70857bafdf8a321d6f3dcac268",
+    "tests/test_triage_lab.py": "ac5307ac71bf09ebec8c6840ebddcd5b02e7bd293c1c6a725d3152049fc453df",
+    "packages/python/src/decilist/triage.py": "c246194e22da66967c88b1911a169944fc7c66f7049146cdd70435ca4c832e6f",
+    "packages/python/src/decilist/triage_evidence.py": "f63cfd51225ecc3948f27bfc78a07c01c77fa8dddf745f1b98de635b58536f43"
+  },
+  "diagnosis_contract_sha256": "7c16ab0f051a306cce3790c3149196872499c34bedc3a356d8641ea9c3de37fd",
+  "case_test_sha256": {
+    "t01": "a7e41d7ad10adedd345912eac175e07e0409a9f20a68802520c7fcb38735ba76",
+    "t02": "fa38d56e79f79b4917e5d85a1fbf033a102d5be22ef8402ef9ce872e9f0dc86a",
+    "t03": "806adb1fd4decd1cc4cceec561d7b42bcc21842c0c8ae1a81d9a52fb7c45e2db",
+    "t04": "14f4103c0e1c3740032d0e32008b0569658a7de268bea0cb7ddade8865cd4ce9",
+    "t05": "8995ba1a60acbaa35038bb867e01f5f8e879018a93549f61b698525d5e767145",
+    "t06": "aa6039f1ee32ca92cad2235b49316b5248bc76de65aa4a830ce1f297749f31fd",
+    "t07": "243403b2e1d1711d74b16291144be2e15f558c7ff5ed0bbbe8d579382bae5ef7",
+    "t08": "04af80010c31049fdcde2c96329052732f4c035226560afebeacf7708527ad46",
+    "t09": "04af80010c31049fdcde2c96329052732f4c035226560afebeacf7708527ad46",
+    "t10": "4571c1733b7e6724197e09978eeed6551ebfbeafea899a5eed80fafffa5466ce"
+  },
+  "baseline_files_sha256": {
+    "packages/python/src/decilist/__init__.py": "5c8169b352357ffb6ba41d403325b98487da1412bd5ab9f6ba2a8498d38dff24",
+    "packages/python/src/decilist/__main__.py": "9e373e1af43452f53b43782b070d6653060e9b50f8311c2f1a345467fb8b819e",
+    "packages/python/src/decilist/client.py": "51fd84355f4093eeaa3b1a2eca8e9931af4c59872d5c7a119a6bd4f1d55742e0",
+    "packages/python/src/decilist/contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8",
+    "packages/python/src/decilist/demo.py": "84e002f263fa1feb9bcbe77ba89c40f770b282ec752f2eaf83be4948723412b4",
+    "packages/python/src/decilist/engine.py": "9d9281477b8327874c733fe26e0f89bd14c5ff754a6c6cbddaf1542a93381db4",
+    "packages/python/src/decilist/evaluation.py": "a1be17b931fbf504e830c379a7144b2e71239d276224371446918af6aaa6335b",
+    "packages/python/src/decilist/providers.py": "1d6e208f70930e190f752bbe0ef3096c646066e8ff469629927d081b7f756ea3",
+    "packages/python/src/decilist/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "packages/python/src/decilist/runtime.py": "7f8b1ec6d0bda03584167b6e0f6b4259c322477ea2a0957f55ed99d9f39ed59e",
+    "packages/python/src/decilist/server.py": "6b6ac14c2661fd4fa67f020061daa9ce0a5fb38ed52f34913e93a5e327474e4d",
+    "packages/python/src/decilist/static/app.js": "ae2988c19435ee808be61f4f50dd35bdef1185a151b14edaea64370681d8ca6e",
+    "packages/python/src/decilist/static/demo.html": "6ef3136106a61a8ef234c387b89a6683f5806794613c992723ff17a0abab401a",
+    "packages/python/src/decilist/static/demo.js": "c325c44b8e33e2b6592f9746a7506ef7a83ca2007cae47f8a38430cf0815b6be",
+    "packages/python/src/decilist/static/index.html": "549ce77205981fa199b7ce4c956fa0e251a56f733607f241f082d07f6e6840af",
+    "packages/python/src/decilist/static/style.css": "b672a75dd772123d943304f43b3e7ad96c91aa7043592be9b7bf83d0d6be72cd",
+    "packages/python/src/decilist/web.py": "a24caf6d9f7da73abec438b821df9ad7a2429c3775af3dcf420fb21b1d49f3ae"
+  },
+  "historical_blobs_sha256": {
+    "t01": "a67930ed6e088756d7a537ff9e9d8b8acbda3ad0b3862e58a9076d167dab8818",
+    "t02": "f23357d3a6a9ada22fd693a4bb06643b8bf6a84b1443d970b31d54f295d5dea6",
+    "t03": "fa05b878a89cba6a5b44836c474671afe15b8c4ebbb0869870f67355fea84a0c"
+  },
+  "case_ground_truth": {
+    "t01": {
+      "split": "dev",
+      "role": "regression",
+      "acceptable_routes": [
+        "contract_validation",
+        "application_logic"
+      ]
+    },
+    "t02": {
+      "split": "evaluation",
+      "role": "regression",
+      "acceptable_routes": [
+        "application_logic"
+      ]
+    },
+    "t03": {
+      "split": "evaluation",
+      "role": "regression",
+      "acceptable_routes": [
+        "dependency_environment",
+        "application_logic"
+      ]
+    },
+    "t04": {
+      "split": "evaluation",
+      "role": "regression",
+      "acceptable_routes": [
+        "contract_validation"
+      ]
+    },
+    "t05": {
+      "split": "dev",
+      "role": "regression",
+      "acceptable_routes": [
+        "decision_policy"
+      ]
+    },
+    "t06": {
+      "split": "evaluation",
+      "role": "regression",
+      "acceptable_routes": [
+        "decision_policy"
+      ]
+    },
+    "t07": {
+      "split": "dev",
+      "role": "regression",
+      "acceptable_routes": [
+        "runtime_lifecycle",
+        "contract_validation"
+      ]
+    },
+    "t08": {
+      "split": "dev",
+      "role": "regression",
+      "acceptable_routes": [
+        "dependency_environment"
+      ]
+    },
+    "t09": {
+      "split": "evaluation",
+      "role": "passing_control",
+      "acceptable_routes": [
+        "manual_review"
+      ]
+    },
+    "t10": {
+      "split": "evaluation",
+      "role": "insufficient_control",
+      "acceptable_routes": [
+        "manual_review"
+      ]
+    }
+  }
+}
