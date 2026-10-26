@@ -1,0 +1,362 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-10-26T02:04:17.962183+00:00",
+  "scope": "Actual artifact setup and cached model HTTP server readiness. Task-quality evaluation is separate.",
+  "repository": {
+    "commit": "457182e587b7c993dd1332bb084f59db14667806",
+    "tracked_changes_at_recording": true
+  },
+  "selection": {
+    "repo": "ggml-org/Qwen3-Coder-30B-A3B-Instruct-GGUF",
+    "revision": "0ca51122012fe4a20dc82988ee58780b008ce4e3",
+    "file": "Qwen3-Coder-30B-A3B-Instruct-Q4_K_M.gguf",
+    "bytes": 17988419552,
+    "sha256": "f6050b4da22869aa3fb9d94bb3314e9fc5a027d4741c1f97761c387d6b2b2335",
+    "source_publisher": "Qwen/Qwen3-Coder-30B-A3B-Instruct",
+    "source_metadata_revision": "b2cff646eb4bb1d68355c01b18ae02e7cf42d120",
+    "license": "Apache-2.0",
+    "capability_rationale": "Specialized code and agentic instruction post-training; can generate bounded JSON diagnostics as well as code-token distributions. Stronger-task performance is a hypothesis until held-out comparison, not inferred from parameter count.",
+    "sources": [
+      "https://huggingface.co/Qwen/Qwen3-Coder-30B-A3B-Instruct",
+      "https://huggingface.co/ggml-org/Qwen3-Coder-30B-A3B-Instruct-GGUF"
+    ]
+  },
+  "model_verification": {
+    "repo": "ggml-org/Qwen3-Coder-30B-A3B-Instruct-GGUF",
+    "revision": "0ca51122012fe4a20dc82988ee58780b008ce4e3",
+    "file": "Qwen3-Coder-30B-A3B-Instruct-Q4_K_M.gguf",
+    "bytes": 17988419552,
+    "sha256": "f6050b4da22869aa3fb9d94bb3314e9fc5a027d4741c1f97761c387d6b2b2335",
+    "download_seconds": 5400.836251400004,
+    "hash_seconds": 11.297342000005301,
+    "verified": true,
+    "checked_at_utc": "2026-10-26T02:03:28.086756+00:00"
+  },
+  "runtime": {
+    "tag": "b11889",
+    "commit": "d854d98bae598388ecea1ed84396587e5edc326d",
+    "version": "version: 0.7.0-dev (build 11889, commit d854d98ba)\nbuilt with Clang 20.1.8 for Windows x86_64",
+    "executable_sha256": "049243ee4986362abecbe70b1a2ac1457d01bc4dc6178f3a3a46d9d199f57022",
+    "verified_official_server_archive": {
+      "name": "llama-b11889-bin-win-cuda-12.4-x64.zip",
+      "bytes": 279414515,
+      "sha256": "ce07031c3e4ab2a98d8b6addf1937b9f60d743208a569d3aad116cd25d6a41bd",
+      "url": "https://github.com/ggml-org/llama.cpp/releases/download/b11889/llama-b11889-bin-win-cuda-12.4-x64.zip",
+      "elapsed_seconds": 522.7792741000012,
+      "verified": true
+    },
+    "verified_official_cuda_archive": null,
+    "uncompressed_runtime_bytes": 656241437,
+    "license": "MIT for llama.cpp; CUDA DLLs retain NVIDIA terms",
+    "cuda_dependency_source": "Existing official PyTorch2.13.0+cu126 DLLs, child-process PATH only",
+    "cuda_dlls": [
+      {
+        "file": "cublas64_12.dll",
+        "bytes": 104883712,
+        "sha256": "01d8172b25d8e2d2cb6a276e76e719f5908c6124f484c8c8ca310fbe7b6634f3"
+      },
+      {
+        "file": "cublasLt64_12.dll",
+        "bytes": 531812352,
+        "sha256": "0d59d264782cec2782b9ac72483e53c9ba485a9d3a1e19b34071a17b8152102e"
+      },
+      {
+        "file": "cudart64_12.dll",
+        "bytes": 556544,
+        "sha256": "d954ca542b3b6bcf03cc2b798a7d00051501cf734ca751050e986af505cf9dad"
+      }
+    ],
+    "loaded_cuda_modules": {
+      "checked_at_utc": "2026-10-26T02:04:17.732514+00:00",
+      "pid": 38352,
+      "missing_or_not_yet_loaded": [],
+      "all_observed_paths_and_hashes_match": true,
+      "scope": "Read-only native loaded-module enumeration; absent modules may be lazy loaded and are not invented.",
+      "all_three_loaded_and_match": true,
+      "observed": [
+        {
+          "file": "cudart64_12.dll",
+          "expected_path_matches": true,
+          "sha256": "d954ca542b3b6bcf03cc2b798a7d00051501cf734ca751050e986af505cf9dad",
+          "sha256_matches_ready_manifest": true
+        },
+        {
+          "file": "cublas64_12.dll",
+          "expected_path_matches": true,
+          "sha256": "01d8172b25d8e2d2cb6a276e76e719f5908c6124f484c8c8ca310fbe7b6634f3",
+          "sha256_matches_ready_manifest": true
+        },
+        {
+          "file": "cublasLt64_12.dll",
+          "expected_path_matches": true,
+          "sha256": "0d59d264782cec2782b9ac72483e53c9ba485a9d3a1e19b34071a17b8152102e",
+          "sha256_matches_ready_manifest": true
+        }
+      ]
+    },
+    "auxiliary_cuda_archive": {
+      "used_for_live_runtime": false,
+      "partial_bytes_observed": 369098752,
+      "status": "incomplete_not_used",
+      "attempt_errors": [
+        {
+          "at_utc": "2026-10-26T01:33:58.613091+00:00",
+          "attempt": 1,
+          "error_type": "RuntimeError",
+          "reason": "Artifact length did not match pinned metadata"
+        }
+      ],
+      "stop_record": {
+        "stopped_at_utc": "2026-10-26T02:03:47.3822150Z",
+        "stopped_owned_pids": [
+          37144
+        ],
+        "model_sha256_gate": "f6050b4da22869aa3fb9d94bb3314e9fc5a027d4741c1f97761c387d6b2b2335",
+        "reason": "Complete model size and SHA verified; stopped only unused auxiliary CUDA archive transfer, preserving partial file",
+        "original_liquid_pid": 36324,
+        "original_liquid_untouched": true
+      }
+    }
+  },
+  "environment": {
+    "os": "Windows",
+    "architecture": "AMD64",
+    "python": "3.12.0rc2",
+    "cache_locations": {
+      "weights": "<cache>/model",
+      "huggingface": "<cache>/hf-home",
+      "cuda": "<cache>/cuda-cache"
+    },
+    "downloader_versions": {
+      "huggingface-hub": "1.33.0",
+      "hf-xet": "1.7.0"
+    },
+    "gpu_before": {
+      "utc": "2026-10-26T01:04:41.2191715Z",
+      "scope": "Before stronger-model runtime; whole GPU allocation, not process-attributed",
+      "rows": [
+        "0, NVIDIA GeForce RTX 3090, 24576, 1172, 23151, 610.88",
+        "1, NVIDIA GeForce RTX 3090, 24576, 11170, 13157, 610.88"
+      ]
+    },
+    "gpu_after": {
+      "utc": "2026-10-26T02:04:17.951654+00:00",
+      "rows": [
+        "0, NVIDIA GeForce RTX 3090, 24576, 19114, 5209, 610.88",
+        "1, NVIDIA GeForce RTX 3090, 24576, 11170, 13157, 610.88"
+      ],
+      "scope": "Whole-GPU MiB counters; allocation is not attributed solely to the model process."
+    }
+  },
+  "timings_seconds": {
+    "initial_download_started_at_utc": "2026-10-26T00:33:15.662977+00:00",
+    "verified_server_ready_at_utc": "2026-10-26T02:03:49.496433+00:00",
+    "initial_setup_to_verified_server_ready": 5433.833456,
+    "model_download": 5400.836251400004,
+    "download_model_hash": 11.297342000005301,
+    "pre_start_full_model_reverification": 8.605191899987403,
+    "cached_process_start_to_health": 7.088795700008632,
+    "first_inference": null,
+    "warm_inference": null,
+    "inference_timing_note": "Setup sends no task/quality prompts. Protocol and task inference timing belongs to separate reports."
+  },
+  "live_server": {
+    "url": "http://127.0.0.1:8792",
+    "pid": 38352,
+    "owned_listener_pid_verified": 38352,
+    "physical_gpu_requested": 0,
+    "context_tokens": 8192,
+    "parallel_slots": 1,
+    "health": {
+      "status": "ok"
+    },
+    "model_config": {
+      "model": "qwen3-coder-30b-a3b-q4km",
+      "expected_build": "b11889-d854d98ba"
+    },
+    "model_path_basename": "Qwen3-Coder-30B-A3B-Instruct-Q4_K_M.gguf",
+    "models": {
+      "models": [
+        {
+          "name": "qwen3-coder-30b-a3b-q4km",
+          "model": "qwen3-coder-30b-a3b-q4km",
+          "modified_at": "",
+          "size": "",
+          "digest": "",
+          "type": "model",
+          "description": "",
+          "tags": [
+            ""
+          ],
+          "capabilities": [
+            "completion"
+          ],
+          "parameters": "",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "",
+            "families": [
+              ""
+            ],
+            "parameter_size": "",
+            "quantization_level": ""
+          }
+        }
+      ],
+      "object": "list",
+      "data": [
+        {
+          "id": "qwen3-coder-30b-a3b-q4km",
+          "aliases": [
+            "qwen3-coder-30b-a3b-q4km"
+          ],
+          "tags": [],
+          "object": "model",
+          "architecture": {
+            "input_modalities": [
+              "text"
+            ],
+            "output_modalities": [
+              "text"
+            ]
+          },
+          "created": 1792980227,
+          "owned_by": "llamacpp",
+          "meta": {
+            "vocab_type": 2,
+            "n_vocab": 151936,
+            "n_ctx": 8192,
+            "n_ctx_train": 262144,
+            "n_embd": 2048,
+            "n_params": 30532122624,
+            "size": 17982447616,
+            "ftype": "Q4_K - Medium"
+          }
+        }
+      ]
+    },
+    "native_allocation_log": []
+  },
+  "verification": {
+    "helper_targeted_tests_passed": 6,
+    "model_size_and_whole_sha256": true,
+    "official_archive_and_executable_sha256": true,
+    "actual_cuda_device_enumeration": true,
+    "live_identity_and_owned_listener": true,
+    "quality_prompts_sent_by_setup_role": 0,
+    "read_only_parallel_range_probe": {
+      "checked_at_utc": "2026-10-26T00:47:03.838785+00:00",
+      "workers": 8,
+      "existing_file_bytes_at_start": 1588160385,
+      "requested_prefix_bytes": 134217728,
+      "verified_contiguous_prefix_bytes": 134217728,
+      "elapsed_seconds": 197.6362114000076,
+      "verified_bytes_per_second": 679115.0622106837,
+      "ranges": [
+        {
+          "start": 0,
+          "end": 16777215,
+          "bytes": 16777216,
+          "sha256": "2adf4a0cb23194b27c2354208040efd8b786965d05ed21aaf6925fa72d07c730",
+          "seconds": 137.0576119000034,
+          "verified": true
+        },
+        {
+          "start": 16777216,
+          "end": 33554431,
+          "bytes": 16777216,
+          "sha256": "3a82527c8d14cb223e5bd116a7eeec232723fd9b8e2b6a3e341794bb9a6b68e3",
+          "seconds": 115.91102099999262,
+          "verified": true
+        },
+        {
+          "start": 33554432,
+          "end": 50331647,
+          "bytes": 16777216,
+          "sha256": "2351a2cc7e9be0186dab7fc102b448c3a92f101c954526ad87a75f117b2986c7",
+          "seconds": 127.99178540000867,
+          "verified": true
+        },
+        {
+          "start": 50331648,
+          "end": 67108863,
+          "bytes": 16777216,
+          "sha256": "acfc9763a26678fb9b5b23dac69d09547a9e9e4cc0484f2788e7631053dd19f9",
+          "seconds": 125.77328569999372,
+          "verified": true
+        },
+        {
+          "start": 67108864,
+          "end": 83886079,
+          "bytes": 16777216,
+          "sha256": "44d1aaada9ebb2d70bc1771352423fccc75122729f0bda4e143107cf74a00766",
+          "seconds": 103.31044060000568,
+          "verified": true
+        },
+        {
+          "start": 83886080,
+          "end": 100663295,
+          "bytes": 16777216,
+          "sha256": "b12d47f6908b40060a06fd188ed3314b2bfad13f63a1148a800ecea9e19b3b3e",
+          "seconds": 113.2975393000088,
+          "verified": true
+        },
+        {
+          "start": 100663296,
+          "end": 117440511,
+          "bytes": 16777216,
+          "sha256": "ee0a51a5e8d601132d933498a4a63b7bd49a9a7d022b4d743ca28dad4b7f38a4",
+          "seconds": 197.57512389999465,
+          "verified": true
+        },
+        {
+          "start": 117440512,
+          "end": 134217727,
+          "bytes": 16777216,
+          "sha256": "2d602ec11c1d0c5beaac2685f5b3fffadef40ac394904056c37630acc1aa8f6c",
+          "seconds": 115.1244069999957,
+          "verified": true
+        }
+      ],
+      "errors": [],
+      "scope": "Read-only parallel range verification of a bounded prefix; not a whole-model hash or task evaluation"
+    },
+    "buffered_transfer_observation": {
+      "sample_ended_at_utc": "2026-10-26T01:40:38.9301400Z",
+      "elapsed_seconds": 20.9509662,
+      "nic_received_bytes_delta": 73588349,
+      "worker_pid": 37144,
+      "worker_working_set_before": 1155670016,
+      "worker_working_set_after": 1228144640,
+      "worker_cpu_seconds_delta": 0.328125,
+      "worker_established_tcp_connections": 59,
+      "model_open_handle_end_bytes": 12272310855,
+      "free_bytes": 14388125696,
+      "scope": "NIC bytes are machine-wide, not process-attributed. Near-matching worker RAM growth supports buffered reception; file logical end is not a transfer counter or verified prefix."
+    }
+  },
+  "reproduce": {
+    "portable_full_download": "python scripts/setup_stronger_local.py download --cache-dir <cache>",
+    "portable_serve": "python scripts/setup_stronger_local.py serve --cache-dir <cache> --gpu 0 --port 8792 --context 8192",
+    "actual_serve_command": "python scripts/setup_stronger_local.py serve --cache-dir <cache> --runtime-dir <cache>/runtime-quick --cuda-dll-dir <verified-existing-cuda12-dll-dir> --gpu 0 --port 8792 --context 8192",
+    "config_file": "<cache>/decilist-model.json",
+    "helper_sha256": "3f25e068ecbabaa389d99f114d4162c1923cbb108d87fe7aa2554c58865a22d3"
+  },
+  "licenses": {
+    "model_license": "Apache-2.0",
+    "model_license_text_sha256": "832dd9e00a68dd83b3c3fb9f5588dad7dcf337a0db50f7d9483f310cd292e92e",
+    "runtime_license": "MIT",
+    "runtime_license_text_sha256": "94f29bbed6a22c35b992c5c6ebf0e7c92f13b836b90f36f461c9cf2f0f1d010d",
+    "cuda_terms": "NVIDIA component terms remain applicable; neither model Apache-2.0 nor runtime MIT relicenses the DLLs."
+  },
+  "limits": [
+    "Serving uses cached verified files with --offline and HF offline flags; this is not OS network isolation or a packet audit.",
+    "No new weights were selected using task evaluation results; stronger task performance remains to be measured separately.",
+    "Initial install/download time is separate from cached startup and inference latency.",
+    "Startup follows whole-file hash verification and may benefit from OS disk caching; it is not a cold-disk benchmark.",
+    "Download logical file lengths can pause due to buffering or stale Windows directory metadata; whole-file integrity was checked after completion.",
+    "Network byte samples are machine-wide and are not process-attributed.",
+    "Original Liquid runtime on port 8765 was neither stopped nor reconfigured by this setup."
+  ]
+}

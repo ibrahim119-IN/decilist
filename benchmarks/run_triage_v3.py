@@ -46,6 +46,7 @@ CELLS = ("first_grounded_action", "liquid_route", "liquid_action", "qwen_route",
 SOURCE_FILES = (
     "docs/triage-v3-experiment.md", "scripts/setup_stronger_local.py",
     "benchmarks/run_triage_v3.py", "benchmarks/triage_v3_lab.py", "benchmarks/triage_v3_trial.py",
+    "benchmarks/report_triage_v3_trials.py",
     "benchmarks/triage_agent_trial.py", "benchmarks/triage_study.py",
     *[f"packages/python/src/decilist/{name}.py" for name in (
         "triage_v3", "triage_diagnostic", "triage_actions", "triage_context", "triage_context_v3", "triage_inspect",

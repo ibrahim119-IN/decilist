@@ -26,6 +26,7 @@ LIMITATIONS = [
     "Fresh protected root verification is outside the timed agent run; it never repairs or edits participant source.",
     "Local ledgers are not a tamper-proof audit; current verification and source/hash comparisons are reported separately.",
     "Hint creation hashes detect report drift against mutable local records; instruction-based filesystem isolation is not a security seal.",
+    "Recorded task-attempt ordering is checked against the sole initial hint; this cannot prove absence of unrecorded source or log inspection.",
 ]
 
 
@@ -75,6 +76,8 @@ def _hints(directory: Path, state: dict, issues: list[str]):
     for entry in entries:
         if not isinstance(entry, dict):
             issues.append("invalid_hint_record")
+            result.append({"entry": {"status": "invalid_record", "callback_invoked": False},
+                           "invalid_record": entry, "report": None, "current_report_sha256": None})
             continue
         report, report_sha = None, None
         if entry.get("report_path"):
@@ -119,6 +122,50 @@ def _hints(directory: Path, state: dict, issues: list[str]):
                        "report_hash_matches_creation": report_sha is not None and report_sha == entry.get("report_sha256"),
                        "hash_observed_phase": "post_trial_export"})
     return result
+
+
+def _initial_hint_protocol(state: dict, issues: list[str]):
+    entries, attempts = state.get("hints", []), state.get("attempts", [])
+    assisted = state.get("treatment") in trial.TREATMENTS[1:]
+    details = {"required_hint_records": 1 if assisted else 0,
+               "recorded_hint_records": len(entries) if isinstance(entries, list) else None,
+               "recorded_task_attempts": len(attempts) if isinstance(attempts, list) else None,
+               "order_checked": "not_applicable", "unrecorded_reads_verifiable": False}
+    if not isinstance(entries, list):
+        return details  # _hints retains the malformed-list issue.
+    if not assisted:
+        if entries:
+            issues.append("normal_tools_requires_zero_hint_records")
+        return details
+    if len(entries) != 1:
+        issues.append("assisted_run_requires_exactly_one_initial_hint")
+        details["order_checked"] = "invalid_hint_count"
+        return details
+    hint = entries[0]
+    if not isinstance(hint, dict) or hint.get("callback_invoked") is not True:
+        issues.append("initial_hint_was_not_called_live")
+        details["order_checked"] = "live_attempt_unverified"
+        return details
+    if not isinstance(attempts, list):
+        issues.append("invalid_recorded_task_attempt_list")
+        details["order_checked"] = "unverifiable"
+        return details
+    details["order_checked"] = "recorded_attempts_only"
+    # Hint calls have their own ledger. Conservatively order all recorded task
+    # work after the initial hint; command text is never parsed or executed here.
+    for attempt in attempts:
+        if not isinstance(attempt, dict):
+            issues.append("invalid_recorded_task_attempt")
+            continue
+        try:
+            _, problem = clocks._elapsed(hint["end_clock"], attempt["start_clock"])
+            if problem == "negative_clock_interval" and attempt["start_clock"]["monotonic_ns"] < hint["end_clock"]["monotonic_ns"]:
+                issues.append("recorded_task_began_before_initial_hint_finished")
+            elif problem:
+                issues.append("initial_hint_task_order_unverifiable")
+        except (KeyError, TypeError, ValueError):
+            issues.append("initial_hint_task_order_unverifiable")
+    return details
 
 
 def _observe(directory: Path, lab):
@@ -170,6 +217,7 @@ def _observe(directory: Path, lab):
                        final_source_sha256=state.get("final_source_sha256"))
     observation["hints"] = _hints(directory, state, issues)
     private["hints"] = observation["hints"]
+    observation["initial_hint_protocol"] = _initial_hint_protocol(state, issues)
     if outcome not in clocks.ENDED:
         issues.append("trial_not_finished")
         return observation, private

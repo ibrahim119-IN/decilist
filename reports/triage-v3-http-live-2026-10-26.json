@@ -1,0 +1,205 @@
+{
+  "started_at": "2026-10-26T02:05:33.639127+00:00",
+  "kind": "neutral live Python and TypeScript HTTP compatibility",
+  "quality_benchmark": false,
+  "python": [
+    {
+      "method": "choose",
+      "elapsed_ms": 827.9609000019263,
+      "decision": {
+        "schema_version": "1",
+        "request_id": "d0806e36-99a6-47eb-9e3e-5efc58ae1411",
+        "kind": "choose",
+        "status": "accepted",
+        "value": "blue",
+        "probabilities": {
+          "red": 7.969659654438743e-11,
+          "blue": 1.0
+        },
+        "confidence": 1.0,
+        "provider": "llama-cpp-local",
+        "model": "qwen3-coder-30b-a3b-q4km",
+        "latency_ms": 815.9348999906797,
+        "cost_usd": null,
+        "attempts": [
+          {
+            "provider": "llama-cpp-local",
+            "outcome": "accepted",
+            "latency_ms": 815.8838999952422
+          }
+        ]
+      }
+    },
+    {
+      "method": "predict",
+      "elapsed_ms": 595.4877000040142,
+      "decision": {
+        "schema_version": "1",
+        "request_id": "69db1b56-6299-4525-994f-69a8f95a3737",
+        "kind": "predict",
+        "status": "accepted",
+        "value": true,
+        "probabilities": {
+          "false": 7.526078649178203e-10,
+          "true": 1.0
+        },
+        "confidence": 1.0,
+        "provider": "llama-cpp-local",
+        "model": "qwen3-coder-30b-a3b-q4km",
+        "latency_ms": 591.8148999917321,
+        "cost_usd": null,
+        "attempts": [
+          {
+            "provider": "llama-cpp-local",
+            "outcome": "accepted",
+            "latency_ms": 591.7754999973113
+          }
+        ]
+      }
+    },
+    {
+      "method": "score",
+      "elapsed_ms": 695.0588000036078,
+      "decision": {
+        "schema_version": "1",
+        "request_id": "0cefc976-ddf7-44c2-ab5e-efbc444e5fda",
+        "kind": "score",
+        "status": "accepted",
+        "value": 1.0000000013742159,
+        "probabilities": {
+          "0": 1.3122604336501809e-08,
+          "1": 1.0,
+          "2": 6.871078706005562e-10
+        },
+        "confidence": 1.0,
+        "provider": "llama-cpp-local",
+        "model": "qwen3-coder-30b-a3b-q4km",
+        "latency_ms": 690.8881999988807,
+        "cost_usd": null,
+        "attempts": [
+          {
+            "provider": "llama-cpp-local",
+            "outcome": "accepted",
+            "latency_ms": 690.8385999995517
+          }
+        ]
+      }
+    }
+  ],
+  "typescript": [
+    {
+      "method": "choose",
+      "elapsed_ms": 707.934,
+      "decision": {
+        "schema_version": "1",
+        "request_id": "89dabebd-8ee7-43e8-9405-b97d8f12b10f",
+        "kind": "choose",
+        "status": "accepted",
+        "value": "blue",
+        "probabilities": {
+          "red": 7.969659654438743e-11,
+          "blue": 1
+        },
+        "confidence": 1,
+        "provider": "llama-cpp-local",
+        "model": "qwen3-coder-30b-a3b-q4km",
+        "latency_ms": 636.4029999967897,
+        "cost_usd": null,
+        "attempts": [
+          {
+            "provider": "llama-cpp-local",
+            "outcome": "accepted",
+            "latency_ms": 636.3520000013523
+          }
+        ]
+      }
+    },
+    {
+      "method": "predict",
+      "elapsed_ms": 624.5586999999999,
+      "decision": {
+        "schema_version": "1",
+        "request_id": "b535a36f-7419-4593-b298-c334e70a244d",
+        "kind": "predict",
+        "status": "accepted",
+        "value": true,
+        "probabilities": {
+          "false": 7.526078649178203e-10,
+          "true": 1
+        },
+        "confidence": 1,
+        "provider": "llama-cpp-local",
+        "model": "qwen3-coder-30b-a3b-q4km",
+        "latency_ms": 620.0517999968724,
+        "cost_usd": null,
+        "attempts": [
+          {
+            "provider": "llama-cpp-local",
+            "outcome": "accepted",
+            "latency_ms": 620.0119999994058
+          }
+        ]
+      }
+    },
+    {
+      "method": "score",
+      "elapsed_ms": 689.8648000000001,
+      "decision": {
+        "schema_version": "1",
+        "request_id": "ee2359e3-2cde-4076-90e9-9f52187884af",
+        "kind": "score",
+        "status": "accepted",
+        "value": 1.0000000013742159,
+        "probabilities": {
+          "0": 1.3122604336501809e-08,
+          "1": 1,
+          "2": 6.871078706005562e-10
+        },
+        "confidence": 1,
+        "provider": "llama-cpp-local",
+        "model": "qwen3-coder-30b-a3b-q4km",
+        "latency_ms": 685.338800001773,
+        "cost_usd": null,
+        "attempts": [
+          {
+            "provider": "llama-cpp-local",
+            "outcome": "accepted",
+            "latency_ms": 685.284799998044
+          }
+        ]
+      }
+    }
+  ],
+  "source_sha256": {
+    "examples/llama_http.py": "eebf8e864691ce2cab5e9b7bfb793e66a7f059afde4cd8d6cdc957b34258b6ec",
+    "packages/python/src/decilist/llama_cpp.py": "c63b8098d2ad1f346189a75e05e4f7fba899ddad57867ff33307dbde4b8546eb",
+    "packages/python/src/decilist/server.py": "6b6ac14c2661fd4fa67f020061daa9ce0a5fb38ed52f34913e93a5e327474e4d",
+    "packages/python/src/decilist/contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8",
+    "packages/python/src/decilist/client.py": "51fd84355f4093eeaa3b1a2eca8e9931af4c59872d5c7a119a6bd4f1d55742e0",
+    "packages/typescript/dist/index.js": "875165940773b9c3a503f643bfa159720df58e4109f0e7465f05766cd98cbf59"
+  },
+  "owned_http_process_pid": 41048,
+  "health": {
+    "service": "decilist",
+    "schema_version": "1",
+    "runtime_version": "0.1.0a1",
+    "ready": true,
+    "status": "ok",
+    "provider": "llama-cpp",
+    "local_only": true,
+    "providers": [
+      {
+        "name": "llama-cpp-local",
+        "model": "qwen3-coder-30b-a3b-q4km",
+        "revision": null,
+        "locality": "local"
+      }
+    ]
+  },
+  "typescript_exit_code": 0,
+  "outcome": "passed",
+  "owned_http_process_exit_code": 1,
+  "completed_at": "2026-10-26T02:05:39.840759+00:00",
+  "original_private_sha256": "aee13ae14bdc76b5c07e52317bd6264d5725d6356c17948c4c5d5d6e85229d07",
+  "cleanup_note": "The owned temporary HTTP wrapper was terminated after all client checks; Windows termination exit1 is a cleanup result, not a failed client test. The native model and original Liquid services remain running."
+}

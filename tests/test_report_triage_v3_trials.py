@@ -1,4 +1,5 @@
 """Post-trial reporter tests use synthetic ledgers and a nonexecuting fake lab."""
+from copy import deepcopy
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -276,6 +277,85 @@ def test_model_summary_uses_runtime_then_decision_when_top_level_is_missing(suit
     assert report["per_treatment"]["qwen_route"]["reported_models"] == ["stub-qwen-decision", "stub-qwen-runtime"]
     assert all(row["outcome"] == "solved" for row in report["slots"])
     assert reporting._reported_model({"model": "top", "runtime": {"model": "runtime"}}) == "top"
+
+
+@pytest.mark.parametrize("count", [0, 2])
+def test_assisted_run_requires_one_hint_and_retains_missing_or_extra_records(suite, count):
+    lab, pairs = suite
+    directory, state = pairs[1]
+    initial = deepcopy(state["hints"][0])
+    state["hints"] = [] if count == 0 else [initial, deepcopy(initial)]
+    write_state(directory, state)
+    report = reporting.build_report([path for path, _ in pairs], lab=lab)
+    slot = report["slots"][1]
+    record = slot["records"][0]
+    assert slot["outcome"] == "invalid" and not slot["timed_success_confirmed"]
+    assert "assisted_run_requires_exactly_one_initial_hint" in record["issues"]
+    assert len(record["hints"]) == record["initial_hint_protocol"]["recorded_hint_records"] == count
+    assert len(report["slots"]) == len(lab.calls) == 8
+    assert report["private_full_records"][1]["state"]["hints"] == state["hints"]
+
+
+def test_normal_tools_rejects_even_an_uncalled_error_hint_record(suite):
+    lab, pairs = suite
+    directory, state = pairs[0]
+    state["hints"] = [{"status": "error", "callback_invoked": False,
+                       "start_clock": clock(1), "end_clock": clock(2), "elapsed_seconds": 1}]
+    write_state(directory, state)
+    report = reporting.build_report([path for path, _ in pairs], lab=lab)
+    record = report["slots"][0]["records"][0]
+    assert report["slots"][0]["outcome"] == "invalid"
+    assert "normal_tools_requires_zero_hint_records" in record["issues"]
+    assert record["hints"][0]["entry"]["status"] == "error"
+
+
+@pytest.mark.parametrize("tool,command", [("shell", "Read case source and original failure log"), ("edit", "Apply a production edit")])
+def test_recorded_inspection_or_edit_before_initial_hint_finishes_is_invalid(suite, tool, command):
+    lab, pairs = suite
+    directory, state = pairs[1]
+    attempt = {"tool": tool, "command": command, "start_clock": clock(2), "end_clock": clock(4)}
+    state["attempts"] = [attempt]  # The initial hint ends at clock(3).
+    write_state(directory, state)
+    report = reporting.build_report([path for path, _ in pairs], lab=lab)
+    record = report["slots"][1]["records"][0]
+    assert report["slots"][1]["outcome"] == "invalid"
+    assert "recorded_task_began_before_initial_hint_finished" in record["issues"]
+    assert record["attempts"] == [attempt]
+    assert record["initial_hint_protocol"]["unrecorded_reads_verifiable"] is False
+
+
+@pytest.mark.parametrize("hint_status", ["needs_review", "error"])
+def test_single_initial_abstention_or_error_is_still_the_assigned_treatment(suite, hint_status):
+    lab, pairs = suite
+    directory, state = pairs[1]
+    entry = state["hints"][0]
+    entry["status"] = hint_status
+    if hint_status == "error":
+        entry["report_path"], entry["report_sha256"] = None, None
+    else:
+        target = Path(entry["report_path"])
+        body = json.loads(target.read_text())
+        body["status"] = hint_status
+        target.write_text(json.dumps(body))
+        entry["report_sha256"] = reporting._digest(target)
+    state["attempts"] = [{"tool": "shell", "command": "Read the allowed source",
+                           "start_clock": clock(3), "end_clock": clock(4)}]
+    write_state(directory, state)
+    report = reporting.build_report([path for path, _ in pairs], lab=lab)
+    record = report["slots"][1]["records"][0]
+    assert report["slots"][1]["timed_success_confirmed"]
+    assert record["hints"][0]["entry"]["status"] == hint_status
+    assert record["initial_hint_protocol"]["recorded_hint_records"] == 1
+
+
+def test_missing_task_start_clock_cannot_prove_inspection_order(suite):
+    lab, pairs = suite
+    directory, state = pairs[1]
+    state["attempts"] = [{"tool": "edit", "command": "Observed edit without its start timestamp"}]
+    write_state(directory, state)
+    report = reporting.build_report([path for path, _ in pairs], lab=lab)
+    assert report["slots"][1]["outcome"] == "invalid"
+    assert "initial_hint_task_order_unverifiable" in report["slots"][1]["records"][0]["issues"]
 
 
 def test_public_export_redacts_paths_omits_only_bulky_traces_and_private_keeps_full(suite, tmp_path):

@@ -1,0 +1,825 @@
+{
+  "schema_version": 1,
+  "execution": "agent-run real local llama.cpp probability protocol smoke, not a quality evaluation or human study",
+  "started_at_utc": "2026-10-26T02:05:19.630282+00:00",
+  "provider_source_sha256": "c63b8098d2ad1f346189a75e05e4f7fba899ddad57867ff33307dbde4b8546eb",
+  "policy": {
+    "local_only": true,
+    "min_confidence": 0.7,
+    "timeout_ms": 120000
+  },
+  "planned_inference_requests": 5,
+  "cases": [
+    {
+      "name": "raw_two_options",
+      "question": {
+        "state": "The label on the object says blue.",
+        "instructions": "Which color is explicitly named in the object label?",
+        "kind": "choose",
+        "options": {
+          "red": "Red",
+          "blue": "Blue"
+        }
+      },
+      "kind": "raw",
+      "probabilities": {
+        "red": 7.969659654438743e-11,
+        "blue": 1.0
+      },
+      "passed": true,
+      "inference_wall_ms_including_identity_tokenization_mask_and_http": 1054.9518000043463,
+      "public_completion_wall_ms": 952.3821999900974,
+      "request_json_bytes": 2168985,
+      "request_sha256": "5d6eff30d5c37001b78e5fffce30ab2c827d9b2c123a336934d4d57362bc7631",
+      "explicit_forbidden_token_count": 151934,
+      "response_reencoded_json_bytes": 4297336,
+      "response_sha256": "1bdcf92eea1bfbe9fb2807ffb2c3c8bad4cc0b16a526bec9601323dd7c81f75d",
+      "native_timings": {
+        "cache_n": 0,
+        "prompt_n": 127,
+        "prompt_ms": 473.04,
+        "prompt_per_token_ms": 3.724724409448819,
+        "prompt_per_second": 268.4762387958735,
+        "predicted_n": 1,
+        "predicted_ms": 0.002,
+        "predicted_per_token_ms": 0.0,
+        "predicted_per_second": 0.0
+      },
+      "raw_completion_probabilities": [
+        {
+          "id": 33,
+          "token": "B",
+          "bytes": [
+            66
+          ],
+          "prob": 1.0,
+          "top_probs": [
+            {
+              "id": 33,
+              "token": "B",
+              "bytes": [
+                66
+              ],
+              "prob": 1.0
+            },
+            {
+              "id": 32,
+              "token": "A",
+              "bytes": [
+                65
+              ],
+              "prob": 7.969659654438743e-11
+            }
+          ]
+        }
+      ],
+      "echoed_settings_without_large_mask": {
+        "seed": 0,
+        "temperature": 1.0,
+        "dynatemp_range": 0.0,
+        "dynatemp_exponent": 1.0,
+        "top_k": 0,
+        "top_p": 1.0,
+        "min_p": 0.0,
+        "top_n_sigma": -1.0,
+        "xtc_probability": 0.0,
+        "xtc_threshold": 0.10000000149011612,
+        "typical_p": 1.0,
+        "repeat_last_n": 64,
+        "repeat_penalty": 1.0,
+        "presence_penalty": 0.0,
+        "frequency_penalty": 0.0,
+        "dry_multiplier": 0.0,
+        "dry_base": 1.75,
+        "dry_allowed_length": 2,
+        "dry_penalty_last_n": 64,
+        "dry_sequence_breakers": [
+          "\n",
+          ":",
+          "\"",
+          "*"
+        ],
+        "mirostat": 0,
+        "mirostat_tau": 5.0,
+        "mirostat_eta": 0.10000000149011612,
+        "adaptive_target": -1.0,
+        "adaptive_decay": 0.8999999761581421,
+        "stop": [],
+        "max_tokens": 1,
+        "n_predict": 1,
+        "n_keep": 0,
+        "n_discard": 0,
+        "ignore_eos": false,
+        "stream": false,
+        "n_probs": 2,
+        "min_keep": 0,
+        "grammar": "root ::= \"A\" | \"B\"\n",
+        "grammar_lazy": false,
+        "grammar_triggers": [],
+        "preserved_tokens": [],
+        "chat_format": "Content-only",
+        "reasoning_format": "deepseek",
+        "reasoning_in_content": false,
+        "generation_prompt": "",
+        "samplers": [],
+        "speculative.types": "none",
+        "timings_per_token": false,
+        "post_sampling_probs": true,
+        "backend_sampling": false,
+        "lora": []
+      },
+      "non_native_generation_wall_difference_ms": 581.9098000043463,
+      "recording_hash_and_gzip_wall_ms_excluded_from_inference_timing": 83.45160000317264
+    },
+    {
+      "name": "raw_six_options",
+      "question": {
+        "state": "The label on the object says blue.",
+        "instructions": "Which color is explicitly named in the object label?",
+        "kind": "choose",
+        "options": {
+          "red": "Red",
+          "blue": "Blue",
+          "green": "Green",
+          "yellow": "Yellow",
+          "white": "White",
+          "black": "Black"
+        }
+      },
+      "kind": "raw",
+      "probabilities": {
+        "red": 6.228811910702348e-11,
+        "blue": 1.0,
+        "green": 1.8030479995330417e-13,
+        "yellow": 1.739936794360568e-14,
+        "white": 9.75457711024745e-15,
+        "black": 2.065075642768404e-14
+      },
+      "passed": true,
+      "inference_wall_ms_including_identity_tokenization_mask_and_http": 736.4541999995708,
+      "public_completion_wall_ms": 575.1208000001498,
+      "request_json_bytes": 2169146,
+      "request_sha256": "724c209898fa8ab14db8ac84ac1a9d7bb96eb778e5c64fb1b1a19441e8ab0ab5",
+      "explicit_forbidden_token_count": 151930,
+      "response_reencoded_json_bytes": 4297700,
+      "response_sha256": "1f81f091b42b0e9e508b66eb390e60981182189a53d76953e93cb12bba73c5d8",
+      "native_timings": {
+        "cache_n": 0,
+        "prompt_n": 175,
+        "prompt_ms": 113.453,
+        "prompt_per_token_ms": 0.6483028571428572,
+        "prompt_per_second": 1542.4889601861562,
+        "predicted_n": 1,
+        "predicted_ms": 0.001,
+        "predicted_per_token_ms": 0.0,
+        "predicted_per_second": 0.0
+      },
+      "raw_completion_probabilities": [
+        {
+          "id": 33,
+          "token": "B",
+          "bytes": [
+            66
+          ],
+          "prob": 1.0,
+          "top_probs": [
+            {
+              "id": 33,
+              "token": "B",
+              "bytes": [
+                66
+              ],
+              "prob": 1.0
+            },
+            {
+              "id": 32,
+              "token": "A",
+              "bytes": [
+                65
+              ],
+              "prob": 6.228811910702348e-11
+            },
+            {
+              "id": 34,
+              "token": "C",
+              "bytes": [
+                67
+              ],
+              "prob": 1.8030479995330417e-13
+            },
+            {
+              "id": 37,
+              "token": "F",
+              "bytes": [
+                70
+              ],
+              "prob": 2.065075642768404e-14
+            },
+            {
+              "id": 35,
+              "token": "D",
+              "bytes": [
+                68
+              ],
+              "prob": 1.739936794360568e-14
+            },
+            {
+              "id": 36,
+              "token": "E",
+              "bytes": [
+                69
+              ],
+              "prob": 9.75457711024745e-15
+            }
+          ]
+        }
+      ],
+      "echoed_settings_without_large_mask": {
+        "seed": 0,
+        "temperature": 1.0,
+        "dynatemp_range": 0.0,
+        "dynatemp_exponent": 1.0,
+        "top_k": 0,
+        "top_p": 1.0,
+        "min_p": 0.0,
+        "top_n_sigma": -1.0,
+        "xtc_probability": 0.0,
+        "xtc_threshold": 0.10000000149011612,
+        "typical_p": 1.0,
+        "repeat_last_n": 64,
+        "repeat_penalty": 1.0,
+        "presence_penalty": 0.0,
+        "frequency_penalty": 0.0,
+        "dry_multiplier": 0.0,
+        "dry_base": 1.75,
+        "dry_allowed_length": 2,
+        "dry_penalty_last_n": 64,
+        "dry_sequence_breakers": [
+          "\n",
+          ":",
+          "\"",
+          "*"
+        ],
+        "mirostat": 0,
+        "mirostat_tau": 5.0,
+        "mirostat_eta": 0.10000000149011612,
+        "adaptive_target": -1.0,
+        "adaptive_decay": 0.8999999761581421,
+        "stop": [],
+        "max_tokens": 1,
+        "n_predict": 1,
+        "n_keep": 0,
+        "n_discard": 0,
+        "ignore_eos": false,
+        "stream": false,
+        "n_probs": 6,
+        "min_keep": 0,
+        "grammar": "root ::= \"A\" | \"B\" | \"C\" | \"D\" | \"E\" | \"F\"\n",
+        "grammar_lazy": false,
+        "grammar_triggers": [],
+        "preserved_tokens": [],
+        "chat_format": "Content-only",
+        "reasoning_format": "deepseek",
+        "reasoning_in_content": false,
+        "generation_prompt": "",
+        "samplers": [],
+        "speculative.types": "none",
+        "timings_per_token": false,
+        "post_sampling_probs": true,
+        "backend_sampling": false,
+        "lora": []
+      },
+      "non_native_generation_wall_difference_ms": 623.0001999995709,
+      "recording_hash_and_gzip_wall_ms_excluded_from_inference_timing": 89.4964000035543
+    },
+    {
+      "name": "typed_choose",
+      "question": {
+        "state": "The label on the object says blue.",
+        "instructions": "Which color is explicitly named in the object label?",
+        "kind": "choose",
+        "options": {
+          "red": "Red",
+          "blue": "Blue"
+        }
+      },
+      "kind": "typed",
+      "decision": {
+        "schema_version": "1",
+        "request_id": "74cd56b2-e711-4bfd-8f12-9c06b0636857",
+        "kind": "choose",
+        "status": "accepted",
+        "value": "blue",
+        "probabilities": {
+          "red": 7.969659654438743e-11,
+          "blue": 1.0
+        },
+        "confidence": 1.0,
+        "provider": "llama-cpp-local",
+        "model": "qwen3-coder-30b-a3b-q4km",
+        "latency_ms": 613.3649999974295,
+        "cost_usd": null,
+        "attempts": [
+          {
+            "provider": "llama-cpp-local",
+            "outcome": "accepted",
+            "latency_ms": 613.1307999894489
+          }
+        ]
+      },
+      "passed": true,
+      "inference_wall_ms_including_identity_tokenization_mask_and_http": 613.7764000013703,
+      "public_completion_wall_ms": 536.1447000032058,
+      "request_json_bytes": 2168985,
+      "request_sha256": "5d6eff30d5c37001b78e5fffce30ab2c827d9b2c123a336934d4d57362bc7631",
+      "explicit_forbidden_token_count": 151934,
+      "response_reencoded_json_bytes": 4297337,
+      "response_sha256": "18a6d444dda054fb8821923150a789a2b7c6109b9aab1e0579172e32eac83d8c",
+      "native_timings": {
+        "cache_n": 0,
+        "prompt_n": 127,
+        "prompt_ms": 77.594,
+        "prompt_per_token_ms": 0.6109763779527558,
+        "prompt_per_second": 1636.724489006882,
+        "predicted_n": 1,
+        "predicted_ms": 0.001,
+        "predicted_per_token_ms": 0.0,
+        "predicted_per_second": 0.0
+      },
+      "raw_completion_probabilities": [
+        {
+          "id": 33,
+          "token": "B",
+          "bytes": [
+            66
+          ],
+          "prob": 1.0,
+          "top_probs": [
+            {
+              "id": 33,
+              "token": "B",
+              "bytes": [
+                66
+              ],
+              "prob": 1.0
+            },
+            {
+              "id": 32,
+              "token": "A",
+              "bytes": [
+                65
+              ],
+              "prob": 7.969659654438743e-11
+            }
+          ]
+        }
+      ],
+      "echoed_settings_without_large_mask": {
+        "seed": 0,
+        "temperature": 1.0,
+        "dynatemp_range": 0.0,
+        "dynatemp_exponent": 1.0,
+        "top_k": 0,
+        "top_p": 1.0,
+        "min_p": 0.0,
+        "top_n_sigma": -1.0,
+        "xtc_probability": 0.0,
+        "xtc_threshold": 0.10000000149011612,
+        "typical_p": 1.0,
+        "repeat_last_n": 64,
+        "repeat_penalty": 1.0,
+        "presence_penalty": 0.0,
+        "frequency_penalty": 0.0,
+        "dry_multiplier": 0.0,
+        "dry_base": 1.75,
+        "dry_allowed_length": 2,
+        "dry_penalty_last_n": 64,
+        "dry_sequence_breakers": [
+          "\n",
+          ":",
+          "\"",
+          "*"
+        ],
+        "mirostat": 0,
+        "mirostat_tau": 5.0,
+        "mirostat_eta": 0.10000000149011612,
+        "adaptive_target": -1.0,
+        "adaptive_decay": 0.8999999761581421,
+        "stop": [],
+        "max_tokens": 1,
+        "n_predict": 1,
+        "n_keep": 0,
+        "n_discard": 0,
+        "ignore_eos": false,
+        "stream": false,
+        "n_probs": 2,
+        "min_keep": 0,
+        "grammar": "root ::= \"A\" | \"B\"\n",
+        "grammar_lazy": false,
+        "grammar_triggers": [],
+        "preserved_tokens": [],
+        "chat_format": "Content-only",
+        "reasoning_format": "deepseek",
+        "reasoning_in_content": false,
+        "generation_prompt": "",
+        "samplers": [],
+        "speculative.types": "none",
+        "timings_per_token": false,
+        "post_sampling_probs": true,
+        "backend_sampling": false,
+        "lora": []
+      },
+      "non_native_generation_wall_difference_ms": 536.1814000013703,
+      "recording_hash_and_gzip_wall_ms_excluded_from_inference_timing": 88.54389999760315
+    },
+    {
+      "name": "typed_predict",
+      "question": {
+        "state": "The test log reports 1 failed test.",
+        "instructions": "Does the log report at least one failed test?",
+        "kind": "predict"
+      },
+      "kind": "typed",
+      "decision": {
+        "schema_version": "1",
+        "request_id": "bb1e9400-e2bf-4e9a-ae33-765f54ab6f59",
+        "kind": "predict",
+        "status": "accepted",
+        "value": true,
+        "probabilities": {
+          "false": 7.526078649178203e-10,
+          "true": 1.0
+        },
+        "confidence": 1.0,
+        "provider": "llama-cpp-local",
+        "model": "qwen3-coder-30b-a3b-q4km",
+        "latency_ms": 590.9282999928109,
+        "cost_usd": null,
+        "attempts": [
+          {
+            "provider": "llama-cpp-local",
+            "outcome": "accepted",
+            "latency_ms": 590.8855000016047
+          }
+        ]
+      },
+      "passed": true,
+      "inference_wall_ms_including_identity_tokenization_mask_and_http": 591.3926999928663,
+      "public_completion_wall_ms": 543.6006000090856,
+      "request_json_bytes": 2168993,
+      "request_sha256": "34aae45050034aa08dffc3117e25733dd76460d154c77db1d959fdf53dc03200",
+      "explicit_forbidden_token_count": 151934,
+      "response_reencoded_json_bytes": 4297347,
+      "response_sha256": "905a08230b2502f5f829fb3ea6234307fc0a6d8f52299d116485c860f211054d",
+      "native_timings": {
+        "cache_n": 0,
+        "prompt_n": 132,
+        "prompt_ms": 103.632,
+        "prompt_per_token_ms": 0.7850909090909092,
+        "prompt_per_second": 1273.7378415933301,
+        "predicted_n": 1,
+        "predicted_ms": 0.001,
+        "predicted_per_token_ms": 0.0,
+        "predicted_per_second": 0.0
+      },
+      "raw_completion_probabilities": [
+        {
+          "id": 33,
+          "token": "B",
+          "bytes": [
+            66
+          ],
+          "prob": 1.0,
+          "top_probs": [
+            {
+              "id": 33,
+              "token": "B",
+              "bytes": [
+                66
+              ],
+              "prob": 1.0
+            },
+            {
+              "id": 32,
+              "token": "A",
+              "bytes": [
+                65
+              ],
+              "prob": 7.526078649178203e-10
+            }
+          ]
+        }
+      ],
+      "echoed_settings_without_large_mask": {
+        "seed": 0,
+        "temperature": 1.0,
+        "dynatemp_range": 0.0,
+        "dynatemp_exponent": 1.0,
+        "top_k": 0,
+        "top_p": 1.0,
+        "min_p": 0.0,
+        "top_n_sigma": -1.0,
+        "xtc_probability": 0.0,
+        "xtc_threshold": 0.10000000149011612,
+        "typical_p": 1.0,
+        "repeat_last_n": 64,
+        "repeat_penalty": 1.0,
+        "presence_penalty": 0.0,
+        "frequency_penalty": 0.0,
+        "dry_multiplier": 0.0,
+        "dry_base": 1.75,
+        "dry_allowed_length": 2,
+        "dry_penalty_last_n": 64,
+        "dry_sequence_breakers": [
+          "\n",
+          ":",
+          "\"",
+          "*"
+        ],
+        "mirostat": 0,
+        "mirostat_tau": 5.0,
+        "mirostat_eta": 0.10000000149011612,
+        "adaptive_target": -1.0,
+        "adaptive_decay": 0.8999999761581421,
+        "stop": [],
+        "max_tokens": 1,
+        "n_predict": 1,
+        "n_keep": 0,
+        "n_discard": 0,
+        "ignore_eos": false,
+        "stream": false,
+        "n_probs": 2,
+        "min_keep": 0,
+        "grammar": "root ::= \"A\" | \"B\"\n",
+        "grammar_lazy": false,
+        "grammar_triggers": [],
+        "preserved_tokens": [],
+        "chat_format": "Content-only",
+        "reasoning_format": "deepseek",
+        "reasoning_in_content": false,
+        "generation_prompt": "",
+        "samplers": [],
+        "speculative.types": "none",
+        "timings_per_token": false,
+        "post_sampling_probs": true,
+        "backend_sampling": false,
+        "lora": []
+      },
+      "non_native_generation_wall_difference_ms": 487.7596999928662,
+      "recording_hash_and_gzip_wall_ms_excluded_from_inference_timing": 87.95259999169502
+    },
+    {
+      "name": "typed_score",
+      "question": {
+        "state": "All required fields are present and validation passed. Human approval has not been given.",
+        "instructions": "Select readiness on the ordered levels.",
+        "kind": "score",
+        "levels": [
+          "Missing required input",
+          "Ready for human review",
+          "Already approved"
+        ]
+      },
+      "kind": "typed",
+      "decision": {
+        "schema_version": "1",
+        "request_id": "e59fb11f-10a1-4818-a23c-732397c9f9ae",
+        "kind": "score",
+        "status": "accepted",
+        "value": 1.0000000013742159,
+        "probabilities": {
+          "0": 1.3122604336501809e-08,
+          "1": 1.0,
+          "2": 6.871078706005562e-10
+        },
+        "confidence": 1.0,
+        "provider": "llama-cpp-local",
+        "model": "qwen3-coder-30b-a3b-q4km",
+        "latency_ms": 665.6922999973176,
+        "cost_usd": null,
+        "attempts": [
+          {
+            "provider": "llama-cpp-local",
+            "outcome": "accepted",
+            "latency_ms": 665.6049999874085
+          }
+        ]
+      },
+      "passed": true,
+      "inference_wall_ms_including_identity_tokenization_mask_and_http": 666.0128000075929,
+      "public_completion_wall_ms": 549.6448999911081,
+      "request_json_bytes": 2169114,
+      "request_sha256": "459b1306afcc264398285fd708dc03413b1c54c2683ad06c9f48f808c7de084d",
+      "explicit_forbidden_token_count": 151933,
+      "response_reencoded_json_bytes": 4297517,
+      "response_sha256": "6061499f4578fc669190179b243c106798c7579d489f6c652f26cc40b39ed909",
+      "native_timings": {
+        "cache_n": 0,
+        "prompt_n": 150,
+        "prompt_ms": 97.24,
+        "prompt_per_token_ms": 0.6482666666666667,
+        "prompt_per_second": 1542.5750719868367,
+        "predicted_n": 1,
+        "predicted_ms": 0.001,
+        "predicted_per_token_ms": 0.0,
+        "predicted_per_second": 0.0
+      },
+      "raw_completion_probabilities": [
+        {
+          "id": 33,
+          "token": "B",
+          "bytes": [
+            66
+          ],
+          "prob": 1.0,
+          "top_probs": [
+            {
+              "id": 33,
+              "token": "B",
+              "bytes": [
+                66
+              ],
+              "prob": 1.0
+            },
+            {
+              "id": 32,
+              "token": "A",
+              "bytes": [
+                65
+              ],
+              "prob": 1.3122604336501809e-08
+            },
+            {
+              "id": 34,
+              "token": "C",
+              "bytes": [
+                67
+              ],
+              "prob": 6.871078706005562e-10
+            }
+          ]
+        }
+      ],
+      "echoed_settings_without_large_mask": {
+        "seed": 0,
+        "temperature": 1.0,
+        "dynatemp_range": 0.0,
+        "dynatemp_exponent": 1.0,
+        "top_k": 0,
+        "top_p": 1.0,
+        "min_p": 0.0,
+        "top_n_sigma": -1.0,
+        "xtc_probability": 0.0,
+        "xtc_threshold": 0.10000000149011612,
+        "typical_p": 1.0,
+        "repeat_last_n": 64,
+        "repeat_penalty": 1.0,
+        "presence_penalty": 0.0,
+        "frequency_penalty": 0.0,
+        "dry_multiplier": 0.0,
+        "dry_base": 1.75,
+        "dry_allowed_length": 2,
+        "dry_penalty_last_n": 64,
+        "dry_sequence_breakers": [
+          "\n",
+          ":",
+          "\"",
+          "*"
+        ],
+        "mirostat": 0,
+        "mirostat_tau": 5.0,
+        "mirostat_eta": 0.10000000149011612,
+        "adaptive_target": -1.0,
+        "adaptive_decay": 0.8999999761581421,
+        "stop": [],
+        "max_tokens": 1,
+        "n_predict": 1,
+        "n_keep": 0,
+        "n_discard": 0,
+        "ignore_eos": false,
+        "stream": false,
+        "n_probs": 3,
+        "min_keep": 0,
+        "grammar": "root ::= \"A\" | \"B\" | \"C\"\n",
+        "grammar_lazy": false,
+        "grammar_triggers": [],
+        "preserved_tokens": [],
+        "chat_format": "Content-only",
+        "reasoning_format": "deepseek",
+        "reasoning_in_content": false,
+        "generation_prompt": "",
+        "samplers": [],
+        "speculative.types": "none",
+        "timings_per_token": false,
+        "post_sampling_probs": true,
+        "backend_sampling": false,
+        "lora": []
+      },
+      "non_native_generation_wall_difference_ms": 568.7718000075929,
+      "recording_hash_and_gzip_wall_ms_excluded_from_inference_timing": 87.8890999883879
+    }
+  ],
+  "server_restarted": false,
+  "downloads_requested": false,
+  "identity": {
+    "service": "llama.cpp",
+    "ready": true,
+    "provider": "llama-cpp-local",
+    "model": "qwen3-coder-30b-a3b-q4km",
+    "build_info": "b11889-d854d98ba",
+    "chat_template_sha256": "32bf2564d2245b98298677d3ac2332ab50bc3279740c13c3974689464b38aa3c",
+    "n_vocab": 151936,
+    "n_ctx": 8192,
+    "n_ctx_train": 262144,
+    "protocol": {
+      "version": "llama-cpp-alias-mask-v1",
+      "upstream_commit": "d854d98bae598388ecea1ed84396587e5edc326d",
+      "probability_semantics": "Uncalibrated next-token probabilities conditional on the complete allowed alias set; not calibrated against Liquid",
+      "sampling": {
+        "samplers": [],
+        "temperature": 1.0,
+        "top_k": 0,
+        "top_p": 1.0,
+        "min_p": 0.0,
+        "typical_p": 1.0,
+        "mirostat": 0,
+        "repeat_penalty": 1.0,
+        "presence_penalty": 0.0,
+        "frequency_penalty": 0.0,
+        "dry_multiplier": 0.0,
+        "backend_sampling": false
+      },
+      "choice_completion": {
+        "n_predict": 1,
+        "n_probs": "exact option count",
+        "post_sampling_probs": true,
+        "return_tokens": true,
+        "cache_prompt": false,
+        "seed": 0,
+        "grammar_lazy": false,
+        "grammar": "Exactly one allowed alias, with no whitespace or suffix"
+      },
+      "option_aliases": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-",
+      "model_visible_options": "Only code and meaning; original option label keys remain inside the adapter mapping",
+      "alias_validation": "Distinct single canonical tokens, exact pieces, and exact detokenization round trips",
+      "normalization": "None: all aliases must be explicitly present with nonnegative finite probabilities and unit mass; no missing alias is zero-filled",
+      "mask": "Every non-alias vocabulary token is explicitly forbidden using logit_bias=false",
+      "max_vocabulary": 262144,
+      "max_output_tokens": 512,
+      "max_request_bytes": 8388608,
+      "max_response_bytes": 16777216,
+      "limitations": "The full-vocabulary mask adds bounded local HTTP/JSON overhead. Identity fields are not cryptographic file attestation."
+    },
+    "model_path_basename": "Qwen3-Coder-30B-A3B-Instruct-Q4_K_M.gguf"
+  },
+  "protocol": {
+    "version": "llama-cpp-alias-mask-v1",
+    "upstream_commit": "d854d98bae598388ecea1ed84396587e5edc326d",
+    "probability_semantics": "Uncalibrated next-token probabilities conditional on the complete allowed alias set; not calibrated against Liquid",
+    "sampling": {
+      "samplers": [],
+      "temperature": 1.0,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "typical_p": 1.0,
+      "mirostat": 0,
+      "repeat_penalty": 1.0,
+      "presence_penalty": 0.0,
+      "frequency_penalty": 0.0,
+      "dry_multiplier": 0.0,
+      "backend_sampling": false
+    },
+    "choice_completion": {
+      "n_predict": 1,
+      "n_probs": "exact option count",
+      "post_sampling_probs": true,
+      "return_tokens": true,
+      "cache_prompt": false,
+      "seed": 0,
+      "grammar_lazy": false,
+      "grammar": "Exactly one allowed alias, with no whitespace or suffix"
+    },
+    "option_aliases": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-",
+    "model_visible_options": "Only code and meaning; original option label keys remain inside the adapter mapping",
+    "alias_validation": "Distinct single canonical tokens, exact pieces, and exact detokenization round trips",
+    "normalization": "None: all aliases must be explicitly present with nonnegative finite probabilities and unit mass; no missing alias is zero-filled",
+    "mask": "Every non-alias vocabulary token is explicitly forbidden using logit_bias=false",
+    "max_vocabulary": 262144,
+    "max_output_tokens": 512,
+    "max_request_bytes": 8388608,
+    "max_response_bytes": 16777216,
+    "limitations": "The full-vocabulary mask adds bounded local HTTP/JSON overhead. Identity fields are not cryptographic file attestation."
+  },
+  "completed_at_utc": "2026-10-26T02:05:23.961028+00:00",
+  "total_wall_seconds": 4.330980599988834,
+  "completed_cases": 5,
+  "outcome": "passed",
+  "limitations": [
+    "All fixtures are authored public smoke inputs; no quality or usability estimate is derived.",
+    "Request mask and response echo add local JSON overhead; the wall-time difference is not an isolated network benchmark.",
+    "Recorded response sizes are canonical re-encoded JSON sizes, not wire byte counters.",
+    "Every inference attempt and captured request is retained. Parsed raw responses are retained whenever the public completion method returned, including subsequent distribution failures; transport/metadata/early completion errors may have no captured parsed response."
+  ],
+  "original_private_sha256": "c085b3c34cb0cc9b55abf17c1f7560fa3ccc52fbbb354c0d2b16e53fc068870a"
+}
