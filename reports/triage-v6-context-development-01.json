@@ -1,0 +1,66 @@
+{
+  "kind": "root_context_development_probe_no_model_calls",
+  "sources_sha256": {
+    "triage_context_v5.py": "379bbb67bccb3116ca8c3a96e9738284a026a11113016bf208a9e67cd2d32e28",
+    "triage_context_v6.py": "7fcbb218d2e2bc1705a4fd818ea0b91a99881a9f1395576ed5932a1a1f516c1b"
+  },
+  "rows": [
+    {
+      "case_id": "e01",
+      "trace_sha256": "ae8b7336b4b664349c815087846366fd635a53a3c1300bef667651218aa172f7",
+      "before_chars": 23924,
+      "after_chars": 23958,
+      "before_required": {
+        "MultipartStream.__init__": false,
+        "MultipartStream._iter_fields": false,
+        "DataField.__init__": false
+      },
+      "after_required": {
+        "MultipartStream.__init__": {
+          "complete": true,
+          "editable": true,
+          "source_chars": 436
+        },
+        "MultipartStream._iter_fields": {
+          "complete": true,
+          "editable": true,
+          "source_chars": 524
+        },
+        "DataField.__init__": {
+          "complete": true,
+          "editable": true,
+          "source_chars": 641
+        }
+      },
+      "state_links": 5,
+      "helpers": []
+    },
+    {
+      "case_id": "e05",
+      "trace_sha256": "5a8c6fca10d886df7c4123d93013f8f1900d029030fb359745b2d8977eaf11fa",
+      "before_chars": 23959,
+      "after_chars": 23962,
+      "before_required": {
+        "WSGIByteStream.__init__": false
+      },
+      "after_required": {
+        "WSGIByteStream.__init__": {
+          "complete": true,
+          "editable": true,
+          "source_chars": 153
+        }
+      },
+      "state_links": 2,
+      "helpers": [
+        {
+          "symbol": "_skip_leading_empty_chunks",
+          "runtime_observed": false,
+          "editable": false,
+          "source_sha256": "15f5433069b6a820c84424cea84bfd71898527377de3bb22a73eaf13c94da259"
+        }
+      ]
+    }
+  ],
+  "model_calls": 0,
+  "claim": "Source availability and provenance only; no model repair or time-saving credit."
+}
