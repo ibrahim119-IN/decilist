@@ -1,0 +1,988 @@
+{
+  "suite": "testtriage-repair-v5",
+  "version": 5,
+  "base_revision": "a6f3bd51f58c28b59f4dca2c496ab0a5960e7a1a",
+  "purpose": "Frozen debugging fixtures for observed repair behavior. Explicitly seeded regressions in two real projects; no claim of naturally occurring production bugs, human difficulty, representative workload, or guaranteed speedup.",
+  "authorship": "Independent corpus-author agent created these fixtures without reading the V5 assistant implementation or any model outputs. Held-out mechanisms remain private until assistant freeze.",
+  "difficulty_policy": "Multiple callable transitions and parameterized observations describe investigation surfaces; this does not establish human difficulty.",
+  "case_split_policy": "2 development, 6 evaluation, 4 reserved blind repair trials, and 2 current-product controls. No V2/V3/V4 mutation mechanism is reused except the mixed control combines the two V5 development seeds.",
+  "control_policy": "c01 is an unchanged passing reproduction requiring zero model or repair work; c02 is a genuine mixed failure requiring both repairs and every unchanged protected test. All controls expose actual collected observations and allow test reruns.",
+  "measurement_policy": "Observed tests, logs and source may be collected by the active product. No private fixture labels, seeds, target hints, test withholding or reference patches are participant evidence.",
+  "projects": {
+    "decilist": {
+      "revision": "a6f3bd51f58c28b59f4dca2c496ab0a5960e7a1a",
+      "source": "pinned Git tree in this repository",
+      "license": "Apache-2.0",
+      "license_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    "httpx": {
+      "version": "0.28.1",
+      "repository": "https://github.com/encode/httpx",
+      "revision": "26d48e0634e6ee9cdc0533996db289ce4b430177",
+      "tag": "0.28.1",
+      "verified_via": "Pinned HTTPX 0.28.1 GitHub commit and BSD-3-Clause license verified previously; _client.py, _models.py, _content.py, _decoders.py, _multipart.py Git blobs additionally fetched through the GitHub connector on 2026-10-26 and compared to installed source. Every copied source file is SHA-256 pinned.",
+      "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_urls.py",
+      "urls_git_blob_sha": "147a8fa333acaf31618d37ba2896e3a5bf5e4d02",
+      "urls_sha256": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd",
+      "license": "BSD-3-Clause",
+      "license_source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/LICENSE.md",
+      "license_sha256": "4ec59d544f12b5f539a3a716fd321ac58ccd8030b465221f2c880200cdf28d8d",
+      "license_text": "Copyright © 2019, [Encode OSS Ltd](https://www.encode.io/).\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n\n* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\n\n* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\n* Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n",
+      "installed_source_sha256": {
+        "vendor/httpx/__init__.py": "0ac6997bac998f4ac783adf6d8058a587193315afdb718047c3e4fdff46bcfad",
+        "vendor/httpx/__version__.py": "2e853261e3974e2786cee3ffeb850bd30c5db718eebbf41b3af13b34e83e22a5",
+        "vendor/httpx/_api.py": "aff660b388c8a5c3c92ea2b975b6d26b2aa8fe254c2856b164277ea0e1f12c4b",
+        "vendor/httpx/_auth.py": "62bdd0c1a5122b5eeb198c7eee3f85762705233cf863d14557ed45e3eed15d7e",
+        "vendor/httpx/_client.py": "c43f941baefe58c91e96d00039e1868fe719d91453026d7db1647194563bff8d",
+        "vendor/httpx/_config.py": "a4fa7653ec2271f70ab05f8a6111352d876dddee84446788a1767c1a3a372d67",
+        "vendor/httpx/_content.py": "2c61b3ac94d1dcebcde0c6f519554d2d7917247fbaa0a97002db4ef69e70ff28",
+        "vendor/httpx/_decoders.py": "a74757f08d0d1077b1b37506a784ac66eb62321b17aeb5a5ebe1a7a956f488a3",
+        "vendor/httpx/_exceptions.py": "6f15bb7f1ce054c01d3536f04f4567ab4e202435b5fe023f1858903ee3328cbd",
+        "vendor/httpx/_main.py": "0a0f4631a6e24d3fecc1a0df5202118ad4b0c4b44c4b05033a6ecb7521aa940e",
+        "vendor/httpx/_models.py": "e3ffc6bb2bf580bc6e6428708a6f247d036220e709f5a72b785392babbd97e6b",
+        "vendor/httpx/_multipart.py": "28e1c465997aa28860f663da2b2caedf8e6aab5ac92e0df94d41b7600cd70776",
+        "vendor/httpx/_status_codes.py": "0d89fedae7c180c797cb9b3cc77fd307bc2302e00031ec136a43eb9b9ad712c7",
+        "vendor/httpx/_transports/__init__.py": "19b52805200ea7bcfe97ef63e5884c851dc3308727e8554b863d3bd8edcd9e7a",
+        "vendor/httpx/_transports/asgi.py": "1d17e20d830fb78c101f6805807660e1cfa2dec6e5a3a6cbe464ea7044fec73f",
+        "vendor/httpx/_transports/base.py": "9194bf54c6d58987c5e7bd29a205022756ee973fb26df2f9d4faacf7292d79b5",
+        "vendor/httpx/_transports/default.py": "03379a454c95c0271c4f2c8d25ec437f49f57457f3cf2769748420bf0ecf2e79",
+        "vendor/httpx/_transports/mock.py": "3d3a34779ebb4484d7c46ae48ba90deffebbc300317f088c0dcb972626428c4a",
+        "vendor/httpx/_transports/wsgi.py": "35c3d7dd76a9fc4c0215958efce692c9036e227098c7540c35b3bc1807a2ea36",
+        "vendor/httpx/_types.py": "272878d4642aec039ebfc20e58a0c083bcc26ef1c07ee7e65b983f3e24ed12b6",
+        "vendor/httpx/_urlparse.py": "640987e3b38d7e4c6bae3f8f3d88467a21e36fa0232824be00d58837838bfca6",
+        "vendor/httpx/_urls.py": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd",
+        "vendor/httpx/_utils.py": "fd355ea802afc4990a1ddcfb74579be2cd0b66a41781e1645d281f88704aff5a",
+        "vendor/httpx/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "verified_modules": {
+        "vendor/httpx/_urls.py": {
+          "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_urls.py",
+          "git_blob_sha": "147a8fa333acaf31618d37ba2896e3a5bf5e4d02",
+          "sha256": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd"
+        },
+        "vendor/httpx/_urlparse.py": {
+          "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_urlparse.py",
+          "git_blob_sha": "bf190fd560ee4fc8a11af371a15fc5f1dc284d34",
+          "sha256": "640987e3b38d7e4c6bae3f8f3d88467a21e36fa0232824be00d58837838bfca6"
+        },
+        "vendor/httpx/_client.py": {
+          "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_client.py",
+          "git_blob_sha": "2249231f8c3b912c731ff160344d3672e2f11738",
+          "sha256": "c43f941baefe58c91e96d00039e1868fe719d91453026d7db1647194563bff8d"
+        },
+        "vendor/httpx/_models.py": {
+          "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_models.py",
+          "git_blob_sha": "67d74bf86bfc80e22d9a4a3153572845accd9039",
+          "sha256": "e3ffc6bb2bf580bc6e6428708a6f247d036220e709f5a72b785392babbd97e6b"
+        },
+        "vendor/httpx/_content.py": {
+          "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_content.py",
+          "git_blob_sha": "6f479a0885f723b7395843d41164a87041820776",
+          "sha256": "2c61b3ac94d1dcebcde0c6f519554d2d7917247fbaa0a97002db4ef69e70ff28"
+        },
+        "vendor/httpx/_decoders.py": {
+          "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_decoders.py",
+          "git_blob_sha": "899dfada878e1181fca6d3c75a79526a076abb9e",
+          "sha256": "a74757f08d0d1077b1b37506a784ac66eb62321b17aeb5a5ebe1a7a956f488a3"
+        },
+        "vendor/httpx/_multipart.py": {
+          "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_multipart.py",
+          "git_blob_sha": "b4761af9b2cf384de5189269927d781a700dbe46",
+          "sha256": "28e1c465997aa28860f663da2b2caedf8e6aab5ac92e0df94d41b7600cd70776"
+        }
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "d01",
+      "split": "development",
+      "project": "httpx",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "Incremental line splitting must carry a terminal carriage return across byte-stream boundaries",
+      "mechanism_family": "stream_crlf_carry",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_decoders.py",
+          "old": "            text = \"\\r\" + text",
+          "new": "            text = \"\\n\" + text"
+        }
+      ],
+      "case_tests": "@pytest.mark.parametrize('chunks', [(b'alpha\\r',b'\\nbeta\\r',b'\\ngamma'),(b'\\r',b'\\n',b'last\\r',b'\\n'),(b'first\\r',b'second\\n',b'final')])\n@pytest.mark.parametrize('asynchronous', [False,True])\nasync def test_observed_records(chunks,asynchronous):\n    expected=b''.join(chunks).decode().splitlines()\n    if asynchronous:\n        stream=AsyncChunks(chunks)\n        response=httpx.Response(200,stream=stream)\n        actual=[line async for line in response.aiter_lines()]\n    else:\n        stream=SyncChunks(chunks)\n        response=httpx.Response(200,stream=stream)\n        actual=list(response.iter_lines())\n    assert actual == expected\n    assert response.is_closed and stream.closes == 1\n",
+      "regression_tests": "@pytest.mark.parametrize('chunks', [(b'one\\n',b'two'),(b'one\\r\\ntwo\\r\\n',),(b'\\n\\n',b'end')])\ndef test_adjacent_records(chunks):\n    response=httpx.Response(200,stream=SyncChunks(chunks))\n    assert list(response.iter_lines()) == b''.join(chunks).decode().splitlines()\n    assert response.num_bytes_downloaded == sum(map(len,chunks))\n",
+      "evidence_mode": "full",
+      "investigation_surface": [
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Response.iter_lines",
+            "Response.aiter_lines",
+            "Response.iter_text"
+          ]
+        ],
+        [
+          "vendor/httpx/_decoders.py",
+          [
+            "LineDecoder.decode",
+            "LineDecoder.flush",
+            "TextDecoder.decode"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "Sync and async line iteration must equal whole-message splitlines for split CRLF, isolated CR, empty lines and final tails, while closing exactly once."
+      ],
+      "minimal_repair_invariants": [
+        "Sync and async line iteration must equal whole-message splitlines for split CRLF, isolated CR, empty lines and final tails, while closing exactly once."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated behavior using observed protected tests and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "Incremental line splitting must carry a terminal carriage return across byte-stream boundaries",
+        "Sync and async line iteration must equal whole-message splitlines for split CRLF, isolated CR, empty lines and final tails, while closing exactly once."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 2,
+        "minimum_relevant_callable_transitions": 6,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "d02",
+      "split": "development",
+      "project": "decilist",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "Choice canonicalization must preserve JavaScript array-index key order when positional probabilities are decoded",
+      "mechanism_family": "js_index_canonicalization",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "packages/python/src/decilist/contracts.py",
+          "old": "    return sorted(keys, key=order)",
+          "new": "    return sorted(keys)"
+        }
+      ],
+      "case_tests": "from decilist import Decilist, Policy\nfrom decilist.contracts import Choose, labels_for\nfrom decilist.providers import LiquidLocalProvider, FunctionProvider\n@pytest.mark.parametrize('keys,wanted', [(['10','2','alpha'],['2','10','alpha']),(['01','1','0'],['0','1','01']),(['4294967295','3','z','02'],['3','4294967295','z','02'])])\nasync def test_observed_records(keys,wanted):\n    question=Choose(state='sample',instructions='pick',options={k:'meaning '+k for k in keys})\n    vector=[.8]+[.2/(len(keys)-1)]*(len(keys)-1)\n    probabilities=LiquidLocalProvider.decode_answer(question,{'answers':{'decision':{'probabilities':vector}}})\n    provider=FunctionProvider(lambda q: probabilities)\n    result=await Decilist([provider],Policy(min_confidence=.7)).decide(question)\n    assert list(question.options) == wanted\n    assert labels_for(question) == wanted and list(probabilities) == wanted\n    assert result.value == wanted[0] and result.status == 'accepted'\n",
+      "regression_tests": "from decilist.contracts import Choose, Predict, Score, labels_for\nfrom decilist.providers import LiquidLocalProvider\n@pytest.mark.parametrize('keys', [['z','a'],['left','right','middle'],['01','00','-1']])\ndef test_adjacent_records(keys):\n    q=Choose(state='s',instructions='i',options={k:k for k in keys})\n    assert labels_for(q) == keys\n    assert list(LiquidLocalProvider.question_payload(q)['criteria']) == keys\n    assert labels_for(Predict(state='s',instructions='i')) == ['false','true']\n    assert labels_for(Score(state='s',instructions='i',levels=['low','high'])) == ['0','1']\n",
+      "evidence_mode": "full",
+      "investigation_surface": [
+        [
+          "packages/python/src/decilist/contracts.py",
+          [
+            "_json_key_order",
+            "Choose.exact_keys",
+            "labels_for",
+            "value_from"
+          ]
+        ],
+        [
+          "packages/python/src/decilist/providers.py",
+          [
+            "LiquidLocalProvider.decode_answer",
+            "LiquidLocalProvider.question_payload"
+          ]
+        ],
+        [
+          "packages/python/src/decilist/engine.py",
+          [
+            "Decilist.decide"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "Canonical numeric keys precede other keys in numeric order; non-index keys keep insertion order; vector-to-label mapping and accepted choice must agree."
+      ],
+      "minimal_repair_invariants": [
+        "Canonical numeric keys precede other keys in numeric order; non-index keys keep insertion order; vector-to-label mapping and accepted choice must agree."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated behavior using observed protected tests and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "Choice canonicalization must preserve JavaScript array-index key order when positional probabilities are decoded",
+        "Canonical numeric keys precede other keys in numeric order; non-index keys keep insertion order; vector-to-label mapping and accepted choice must agree."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 3,
+        "minimum_relevant_callable_transitions": 7,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "e01",
+      "split": "evaluation",
+      "project": "httpx",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "Multipart repeated form values must serialize as distinct fields without changing scalar coercion or file framing",
+      "mechanism_family": "multipart_repeated_fields",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_multipart.py",
+          "old": "                for item in value:\n                    yield DataField(name=name, value=item)",
+          "new": "                yield DataField(name=name, value=str(value))"
+        }
+      ],
+      "case_tests": "@pytest.mark.parametrize('values', [['one','two'],[True,False,None],('red','green','blue')])\ndef test_observed_records(values):\n    import email.parser, email.policy\n    request=httpx.Request('POST','https://case.invalid/upload',data={'tag':values,'single':'keep'},files={'file':('x.txt',b'payload')})\n    body=request.read()\n    message=email.parser.BytesParser(policy=email.policy.default).parsebytes(('Content-Type: '+request.headers['content-type']+'\\r\\nMIME-Version: 1.0\\r\\n\\r\\n').encode()+body)\n    parts=list(message.iter_parts())\n    tags=[p.get_payload(decode=True).decode() for p in parts if p.get_param('name',header='content-disposition')=='tag']\n    wanted=[('true' if v is True else 'false' if v is False else '' if v is None else str(v)) for v in values]\n    assert tags == wanted\n    assert int(request.headers['content-length']) == len(body)\n    assert [p.get_payload(decode=True) for p in parts][-2:] == [b'keep',b'payload']\n",
+      "regression_tests": "@pytest.mark.parametrize('scalar,wanted', [(True,b'true'),(None,b''),(42,b'42')])\ndef test_adjacent_records(scalar,wanted):\n    request=httpx.Request('POST','https://case.invalid/upload',data={'tag':scalar},files={'file':('x.txt',b'payload')})\n    content=request.read()\n    assert b'name=\"tag\"\\r\\n\\r\\n'+wanted+b'\\r\\n' in content\n    assert content.count(b'name=\"tag\"') == 1\n    assert len(content) == int(request.headers['content-length'])\n",
+      "evidence_mode": "full",
+      "investigation_surface": [
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Request.__init__",
+            "Request.read"
+          ]
+        ],
+        [
+          "vendor/httpx/_content.py",
+          [
+            "encode_request",
+            "encode_multipart_data"
+          ]
+        ],
+        [
+          "vendor/httpx/_multipart.py",
+          [
+            "MultipartStream._iter_fields",
+            "DataField.render",
+            "MultipartStream.get_headers"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "Repeated list/tuple entries produce separate ordered MIME fields; boolean/null coercion, unrelated fields, files and advertised content length remain unchanged."
+      ],
+      "minimal_repair_invariants": [
+        "Repeated list/tuple entries produce separate ordered MIME fields; boolean/null coercion, unrelated fields, files and advertised content length remain unchanged."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated behavior using observed protected tests and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "Multipart repeated form values must serialize as distinct fields without changing scalar coercion or file framing",
+        "Repeated list/tuple entries produce separate ordered MIME fields; boolean/null coercion, unrelated fields, files and advertised content length remain unchanged."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 3,
+        "minimum_relevant_callable_transitions": 7,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "e02",
+      "split": "evaluation",
+      "project": "httpx",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "Incremental text decoding must retain partial multibyte characters and honor the response charset",
+      "mechanism_family": "incremental_text_codec",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_decoders.py",
+          "old": "        return self.decoder.decode(data)",
+          "new": "        return data.decode(\"utf-8\", errors=\"replace\")"
+        }
+      ],
+      "case_tests": "@pytest.mark.parametrize('text,encoding,width', [('A€ΩZ','utf-8',1),('snow ☃ done','utf-16-le',3),('café été','iso-8859-1',2)])\n@pytest.mark.parametrize('asynchronous', [False,True])\nasync def test_observed_records(text,encoding,width,asynchronous):\n    body=text.encode(encoding)\n    chunks=[body[i:i+width] for i in range(0,len(body),width)]\n    response=httpx.Response(200,headers={'content-type':'text/plain; charset='+encoding},stream=AsyncChunks(chunks) if asynchronous else SyncChunks(chunks))\n    actual=[part async for part in response.aiter_text(chunk_size=2)] if asynchronous else list(response.iter_text(chunk_size=2))\n    assert ''.join(actual) == text\n    assert all(len(part)==2 for part in actual[:-1])\n    assert response.is_closed and response.num_bytes_downloaded==len(body)\n",
+      "regression_tests": "@pytest.mark.parametrize('body', [b'plain ASCII',b'',b'line\\nnext'])\ndef test_adjacent_records(body):\n    response=httpx.Response(200,stream=SyncChunks([body]))\n    assert ''.join(response.iter_text()) == body.decode()\n    direct=httpx.Response(200,content=body)\n    assert direct.text == body.decode()\n",
+      "evidence_mode": "full",
+      "investigation_surface": [
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Response.iter_text",
+            "Response.aiter_text",
+            "Response.encoding"
+          ]
+        ],
+        [
+          "vendor/httpx/_decoders.py",
+          [
+            "TextDecoder.__init__",
+            "TextDecoder.decode",
+            "TextDecoder.flush",
+            "TextChunker.decode"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "Text emitted from arbitrary byte boundaries must match a whole-message decode using the selected charset and retain normal chunk sizes and stream completion."
+      ],
+      "minimal_repair_invariants": [
+        "Text emitted from arbitrary byte boundaries must match a whole-message decode using the selected charset and retain normal chunk sizes and stream completion."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated behavior using observed protected tests and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "Incremental text decoding must retain partial multibyte characters and honor the response charset",
+        "Text emitted from arbitrary byte boundaries must match a whole-message decode using the selected charset and retain normal chunk sizes and stream completion."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 2,
+        "minimum_relevant_callable_transitions": 7,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "e03",
+      "split": "evaluation",
+      "project": "httpx",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "Deflate content decoding must retry the raw wire format without losing state for subsequent chunks",
+      "mechanism_family": "deflate_wire_format_retry",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_decoders.py",
+          "old": "                self.decompressor = zlib.decompressobj(-zlib.MAX_WBITS)",
+          "new": "                self.decompressor = zlib.decompressobj(zlib.MAX_WBITS)"
+        }
+      ],
+      "case_tests": "import zlib\n@pytest.mark.parametrize('payload,width', [(b'alpha '*40,2),(bytes(range(128))*3,7),('café Ω'.encode()*25,13)])\ndef test_observed_records(payload,width):\n    compressor=zlib.compressobj(wbits=-zlib.MAX_WBITS)\n    wire=compressor.compress(payload)+compressor.flush()\n    response=httpx.Response(200,headers={'content-encoding':'deflate'},stream=SyncChunks([wire[i:i+width] for i in range(0,len(wire),width)]))\n    assert b''.join(response.iter_bytes(chunk_size=11)) == payload\n    assert response.num_bytes_downloaded==len(wire) and response.is_closed\n",
+      "regression_tests": "import zlib\n@pytest.mark.parametrize('payload', [b'ordinary '*8,b'\\x00'*100,b''])\ndef test_adjacent_records(payload):\n    wire=zlib.compress(payload)\n    response=httpx.Response(200,headers={'content-encoding':'deflate'},stream=SyncChunks([wire[:2],wire[2:]]))\n    assert response.read()==payload\n    assert response.read()==payload\n    assert httpx.Response(200,content=payload).content==payload\n",
+      "evidence_mode": "full",
+      "investigation_surface": [
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Response._get_content_decoder",
+            "Response.iter_bytes",
+            "Response.iter_raw"
+          ]
+        ],
+        [
+          "vendor/httpx/_decoders.py",
+          [
+            "DeflateDecoder.__init__",
+            "DeflateDecoder.decode",
+            "DeflateDecoder.flush"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "Raw and zlib-wrapped deflate streams decode to the same original bytes at several chunk boundaries, and cached reads and wire byte counts remain valid."
+      ],
+      "minimal_repair_invariants": [
+        "Raw and zlib-wrapped deflate streams decode to the same original bytes at several chunk boundaries, and cached reads and wire byte counts remain valid."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated behavior using observed protected tests and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "Deflate content decoding must retry the raw wire format without losing state for subsequent chunks",
+        "Raw and zlib-wrapped deflate streams decode to the same original bytes at several chunk boundaries, and cached reads and wire byte counts remain valid."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 2,
+        "minimum_relevant_callable_transitions": 6,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "e04",
+      "split": "evaluation",
+      "project": "httpx",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "Transport mount dispatch must apply port and host specificity before scheme specificity",
+      "mechanism_family": "mount_specificity_dispatch",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_utils.py",
+          "old": "        return (port_priority, host_priority, scheme_priority)",
+          "new": "        return (scheme_priority, host_priority, port_priority)"
+        }
+      ],
+      "case_tests": "@pytest.mark.parametrize('url,wanted', [('https://api.example.test:8443/x','port'),('https://api.example.test/x','host'),('https://other.test/x','scheme')])\ndef test_observed_records(url,wanted):\n    def transport(name): return httpx.MockTransport(lambda request: httpx.Response(200,json={'route':name,'url':str(request.url)}))\n    mounts={'https://':transport('scheme'),'all://api.example.test':transport('host'),'all://api.example.test:8443':transport('port')}\n    with httpx.Client(mounts=mounts,transport=transport('default'),trust_env=False) as client:\n        response=client.get(url)\n    assert response.json()=={'route':wanted,'url':url}\n",
+      "regression_tests": "@pytest.mark.parametrize('url', ['http://unmatched.test/','https://unmatched.test/','http://unmatched.test:8080/'])\ndef test_adjacent_records(url):\n    selected=[]\n    def handler(request): selected.append(str(request.url)); return httpx.Response(200,text='fallback')\n    with httpx.Client(mounts={'all://other.test':httpx.MockTransport(lambda r:httpx.Response(201))},transport=httpx.MockTransport(handler),trust_env=False) as client:\n        response=client.get(url)\n    assert response.status_code==200 and response.text=='fallback' and selected==[url]\n",
+      "evidence_mode": "full",
+      "investigation_surface": [
+        [
+          "vendor/httpx/_client.py",
+          [
+            "Client.__init__",
+            "Client._transport_for_url",
+            "Client._send_single_request"
+          ]
+        ],
+        [
+          "vendor/httpx/_utils.py",
+          [
+            "URLPattern.__init__",
+            "URLPattern.matches",
+            "URLPattern.priority",
+            "URLPattern.__lt__"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "Competing local mount patterns select the most specific port, then host, then scheme, while unmatched URLs use the supplied fallback transport."
+      ],
+      "minimal_repair_invariants": [
+        "Competing local mount patterns select the most specific port, then host, then scheme, while unmatched URLs use the supplied fallback transport."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated behavior using observed protected tests and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "Transport mount dispatch must apply port and host specificity before scheme specificity",
+        "Competing local mount patterns select the most specific port, then host, then scheme, while unmatched URLs use the supplied fallback transport."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 2,
+        "minimum_relevant_callable_transitions": 7,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "e05",
+      "split": "evaluation",
+      "project": "httpx",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "WSGI lazy-start response iteration must advance through leading empty chunks before reading status and headers",
+      "mechanism_family": "wsgi_lazy_start",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_transports/wsgi.py",
+          "old": "        self._result = _skip_leading_empty_chunks(result)",
+          "new": "        self._result = iter(result)"
+        }
+      ],
+      "case_tests": "@pytest.mark.parametrize('leading', [0,1,3])\ndef test_observed_records(leading):\n    events=[]\n    def app(environ,start_response):\n        def body():\n            try:\n                for _ in range(leading): yield b''\n                start_response('202 Accepted',[('Content-Type','text/plain'),('X-Mode','lazy')])\n                events.append(environ['PATH_INFO'])\n                yield b'first'; yield b''; yield b'last'\n            finally: events.append('closed')\n        return body()\n    with httpx.Client(transport=httpx.WSGITransport(app),base_url='http://case.invalid',trust_env=False) as client:\n        response=client.get('/lazy')\n    assert response.status_code==202 and response.headers['x-mode']=='lazy'\n    assert response.content==b'firstlast' and events==['/lazy','closed']\n",
+      "regression_tests": "@pytest.mark.parametrize('body', [[],[b'one'],[b'',b'two',b'']])\ndef test_adjacent_records(body):\n    events=[]\n    class Result:\n        def __iter__(self): return iter(body)\n        def close(self): events.append('closed')\n    def app(environ,start_response):\n        start_response('200 OK',[('X-Mode','eager')]); return Result()\n    with httpx.Client(transport=httpx.WSGITransport(app),trust_env=False) as client:\n        response=client.get('http://case.invalid/eager')\n    assert response.content==b''.join(body) and response.headers['x-mode']=='eager' and events==['closed']\n",
+      "evidence_mode": "full",
+      "investigation_surface": [
+        [
+          "vendor/httpx/_client.py",
+          [
+            "Client._send_single_request",
+            "Client.send"
+          ]
+        ],
+        [
+          "vendor/httpx/_transports/wsgi.py",
+          [
+            "WSGITransport.handle_request",
+            "WSGIByteStream.__init__",
+            "_skip_leading_empty_chunks",
+            "WSGIByteStream.close"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "Lazy WSGI start_response calls before the first nonempty body must supply status/headers; leading empties must not drop bytes and result.close must run once."
+      ],
+      "minimal_repair_invariants": [
+        "Lazy WSGI start_response calls before the first nonempty body must supply status/headers; leading empties must not drop bytes and result.close must run once."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated behavior using observed protected tests and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "WSGI lazy-start response iteration must advance through leading empty chunks before reading status and headers",
+        "Lazy WSGI start_response calls before the first nonempty body must supply status/headers; leading empties must not drop bytes and result.close must run once."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 2,
+        "minimum_relevant_callable_transitions": 6,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "e06",
+      "split": "evaluation",
+      "project": "httpx",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "ASGI upload messages must mark intermediate chunks as incomplete until the request iterator is exhausted",
+      "mechanism_family": "asgi_request_message_completion",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_transports/asgi.py",
+          "old": "            return {\"type\": \"http.request\", \"body\": body, \"more_body\": True}",
+          "new": "            return {\"type\": \"http.request\", \"body\": body, \"more_body\": False}"
+        }
+      ],
+      "case_tests": "@pytest.mark.parametrize('chunks', [(b'first',b'second'),(b'',b'a',b'',b'b'),(b'one',b'two',b'three')])\nasync def test_observed_records(chunks):\n    seen=[]\n    async def app(scope,receive,send):\n        while True:\n            message=await receive(); seen.append(message)\n            if not message.get('more_body',False): break\n        content=b''.join(m.get('body',b'') for m in seen)\n        await send({'type':'http.response.start','status':201,'headers':[(b'x-method',scope['method'].encode())]})\n        await send({'type':'http.response.body','body':content})\n    async with httpx.AsyncClient(transport=httpx.ASGITransport(app),trust_env=False) as client:\n        response=await client.post('http://case.invalid/upload',content=AsyncChunks(chunks))\n    assert response.content==b''.join(chunks) and response.headers['x-method']=='POST'\n    assert [m['more_body'] for m in seen]==[True]*len(chunks)+[False]\n    assert seen[-1]['body']==b''\n",
+      "regression_tests": "@pytest.mark.parametrize('method,payload', [('GET',b''),('POST',b'whole'),('HEAD',b'ignored')])\nasync def test_adjacent_records(method,payload):\n    async def app(scope,receive,send):\n        body=b''\n        while True:\n            event=await receive(); body+=event.get('body',b'')\n            if not event.get('more_body'): break\n        await send({'type':'http.response.start','status':200,'headers':[(b'x-size',str(len(body)).encode())]})\n        await send({'type':'http.response.body','body':body})\n    async with httpx.AsyncClient(transport=httpx.ASGITransport(app),trust_env=False) as client:\n        response=await client.request(method,'http://case.invalid/',content=payload)\n    assert response.headers['x-size']==str(len(payload))\n    assert response.content==(b'' if method=='HEAD' else payload)\n",
+      "evidence_mode": "full",
+      "investigation_surface": [
+        [
+          "vendor/httpx/_client.py",
+          [
+            "AsyncClient._send_single_request",
+            "AsyncClient.send"
+          ]
+        ],
+        [
+          "vendor/httpx/_transports/asgi.py",
+          [
+            "ASGITransport.handle_async_request",
+            "receive",
+            "send",
+            "ASGIResponseStream.__aiter__"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "ASGI consumers receive every upload chunk with more_body true followed by one terminal empty message; whole-body requests and HEAD response semantics remain intact."
+      ],
+      "minimal_repair_invariants": [
+        "ASGI consumers receive every upload chunk with more_body true followed by one terminal empty message; whole-body requests and HEAD response semantics remain intact."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated behavior using observed protected tests and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "ASGI upload messages must mark intermediate chunks as incomplete until the request iterator is exhausted",
+        "ASGI consumers receive every upload chunk with more_body true followed by one terminal empty message; whole-body requests and HEAD response semantics remain intact."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 2,
+        "minimum_relevant_callable_transitions": 6,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "r01",
+      "split": "reserved",
+      "project": "httpx",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "Response charset selection must prefer a valid declared charset over string or callable defaults",
+      "mechanism_family": "response_charset_precedence",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_models.py",
+          "old": "            encoding = self.charset_encoding",
+          "new": "            encoding = None"
+        }
+      ],
+      "case_tests": "@pytest.mark.parametrize('encoding,text', [('iso-8859-1','café'),('utf-16-le','snow ☃'),('cp1252','cost €')])\n@pytest.mark.parametrize('callable_default',[False,True])\ndef test_observed_records(encoding,text,callable_default):\n    called=[]\n    def detector(content): called.append(content); return 'utf-8'\n    default=detector if callable_default else 'utf-8'\n    with httpx.Client(transport=httpx.MockTransport(lambda r:httpx.Response(200,content=text.encode(encoding),headers={'content-type':'text/plain; charset=\"'+encoding+'\"'})),default_encoding=default,trust_env=False) as client:\n        response=client.get('http://case.invalid/text')\n    assert response.text==text and response.encoding==encoding\n    assert called==[]\n",
+      "regression_tests": "@pytest.mark.parametrize('header', [None,'text/plain','text/plain; charset=missing-codec'])\ndef test_adjacent_records(header):\n    called=[]\n    body='café'.encode('iso-8859-1')\n    def detector(content): called.append(content); return 'iso-8859-1'\n    response=httpx.Response(200,content=body,headers={} if header is None else {'content-type':header},default_encoding=detector)\n    assert response.text=='café' and called==[body]\n    explicit=httpx.Response(200,content=body,headers={'content-type':'text/plain; charset=utf-8'})\n    explicit.encoding='iso-8859-1'\n    assert explicit.text=='café'\n",
+      "evidence_mode": "full",
+      "investigation_surface": [
+        [
+          "vendor/httpx/_client.py",
+          [
+            "Client._send_single_request",
+            "Client.__init__"
+          ]
+        ],
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Response.text",
+            "Response.encoding",
+            "Response.charset_encoding",
+            "_parse_content_type_charset",
+            "_is_known_encoding"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "Known declared charset wins without invoking detectors; absent or unknown charsets use defaults, and an explicit encoding assignment retains highest precedence."
+      ],
+      "minimal_repair_invariants": [
+        "Known declared charset wins without invoking detectors; absent or unknown charsets use defaults, and an explicit encoding assignment retains highest precedence."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated behavior using observed protected tests and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "Response charset selection must prefer a valid declared charset over string or callable defaults",
+        "Known declared charset wins without invoking detectors; absent or unknown charsets use defaults, and an explicit encoding assignment retains highest precedence."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 2,
+        "minimum_relevant_callable_transitions": 7,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "r02",
+      "split": "reserved",
+      "project": "httpx",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "Async response closure must update lifecycle state before forwarding close to the underlying stream",
+      "mechanism_family": "async_response_close_lifecycle",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_models.py",
+          "old": "        if not self.is_closed:\n            self.is_closed = True\n            with request_context(request=self._request):\n                await self.stream.aclose()",
+          "new": "        if not self.is_closed:\n            with request_context(request=self._request):\n                await self.stream.aclose()"
+        }
+      ],
+      "case_tests": "@pytest.mark.parametrize('mode', ['aread','aiter','manual'])\nasync def test_observed_records(mode):\n    stream=AsyncChunks([b'one',b'two'])\n    response=httpx.Response(200,stream=stream)\n    if mode=='aread': assert await response.aread()==b'onetwo'\n    elif mode=='aiter': assert b''.join([p async for p in response.aiter_bytes()])==b'onetwo'\n    else: await response.aclose()\n    assert response.is_closed and stream.closes==1\n    await response.aclose()\n    assert stream.closes==1\n    with pytest.raises((httpx.StreamClosed,httpx.StreamConsumed)):\n        _=[p async for p in response.aiter_raw()]\n",
+      "regression_tests": "@pytest.mark.parametrize('mode', ['read','iter','manual'])\ndef test_adjacent_records(mode):\n    stream=SyncChunks([b'one',b'two'])\n    response=httpx.Response(200,stream=stream)\n    if mode=='read': assert response.read()==b'onetwo'\n    elif mode=='iter': assert b''.join(response.iter_bytes())==b'onetwo'\n    else: response.close()\n    assert response.is_closed and stream.closes==1\n    response.close(); assert stream.closes==1\n",
+      "evidence_mode": "full",
+      "investigation_surface": [
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Response.aclose",
+            "Response.aread",
+            "Response.aiter_raw",
+            "Response.aiter_bytes"
+          ]
+        ],
+        [
+          "vendor/httpx/_types.py",
+          [
+            "AsyncByteStream.aclose"
+          ]
+        ],
+        [
+          "vendor/httpx/_client.py",
+          [
+            "BoundAsyncStream.aclose"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "Every asynchronous completion/manual-close path marks the response closed, rejects another raw iteration and closes its stream exactly once; synchronous lifecycle remains unchanged."
+      ],
+      "minimal_repair_invariants": [
+        "Every asynchronous completion/manual-close path marks the response closed, rejects another raw iteration and closes its stream exactly once; synchronous lifecycle remains unchanged."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated behavior using observed protected tests and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "Async response closure must update lifecycle state before forwarding close to the underlying stream",
+        "Every asynchronous completion/manual-close path marks the response closed, rejects another raw iteration and closes its stream exactly once; synchronous lifecycle remains unchanged."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 3,
+        "minimum_relevant_callable_transitions": 6,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "r03",
+      "split": "reserved",
+      "project": "httpx",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "Multipart unknown file length must propagate to chunked framing rather than a partial fixed length",
+      "mechanism_family": "multipart_unknown_length_propagation",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_multipart.py",
+          "old": "            if field_length is None:\n                return None",
+          "new": "            if field_length is None:\n                continue"
+        }
+      ],
+      "case_tests": "@pytest.mark.parametrize('payload', [b'one',b'x'*100,b''])\ndef test_observed_records(payload):\n    import io\n    class Unknown:\n        def __init__(self,body): self.stream=io.BytesIO(body)\n        def read(self,size=-1): return self.stream.read(size)\n    request=httpx.Request('POST','http://case.invalid/upload',data={'note':'keep'},files={'known':('known.txt',b'known'),'unknown':('unknown.bin',Unknown(payload))})\n    body=request.read()\n    assert request.headers.get('transfer-encoding')=='chunked'\n    assert 'content-length' not in request.headers\n    assert b'name=\"unknown\"; filename=\"unknown.bin\"' in body\n    assert b'\\r\\n\\r\\n'+payload+b'\\r\\n' in body and b'known' in body and b'keep' in body\n",
+      "regression_tests": "@pytest.mark.parametrize('payload', [b'one',b'x'*100,b''])\ndef test_adjacent_records(payload):\n    import io\n    request=httpx.Request('POST','http://case.invalid/upload',data={'note':'keep'},files={'known':('known.txt',io.BytesIO(payload))})\n    content=request.read()\n    assert int(request.headers['content-length'])==len(content)\n    assert 'transfer-encoding' not in request.headers\n    assert b'\\r\\n\\r\\n'+payload+b'\\r\\n' in content\n",
+      "evidence_mode": "full",
+      "investigation_surface": [
+        [
+          "vendor/httpx/_multipart.py",
+          [
+            "MultipartStream.get_content_length",
+            "FileField.get_length",
+            "MultipartStream.get_headers",
+            "MultipartStream.iter_chunks"
+          ]
+        ],
+        [
+          "vendor/httpx/_utils.py",
+          [
+            "peek_filelike_length"
+          ]
+        ],
+        [
+          "vendor/httpx/_content.py",
+          [
+            "encode_multipart_data"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "A single unseekable multipart file makes total entity length unknown and selects chunked framing; all field bytes remain present, while fully seekable entities retain exact content lengths."
+      ],
+      "minimal_repair_invariants": [
+        "A single unseekable multipart file makes total entity length unknown and selects chunked framing; all field bytes remain present, while fully seekable entities retain exact content lengths."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated behavior using observed protected tests and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "Multipart unknown file length must propagate to chunked framing rather than a partial fixed length",
+        "A single unseekable multipart file makes total entity length unknown and selects chunked framing; all field bytes remain present, while fully seekable entities retain exact content lengths."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 3,
+        "minimum_relevant_callable_transitions": 6,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "r04",
+      "split": "reserved",
+      "project": "decilist",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "Ordinal score decisions must return the distribution expectation rather than its modal index",
+      "mechanism_family": "ordinal_expectation",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "packages/python/src/decilist/contracts.py",
+          "old": "        return sum(int(k) * p for k, p in probabilities.items())",
+          "new": "        return float(max(probabilities, key=probabilities.__getitem__))"
+        }
+      ],
+      "case_tests": "from decilist import Decilist, Policy\nfrom decilist.providers import FunctionProvider, LiquidLocalProvider\nfrom decilist.contracts import Score, validate_decision\n@pytest.mark.parametrize('vector,expected', [([.4,.35,.25],.85),([.1,.2,.7],1.6),([.5,.5,0.0],.5)])\nasync def test_observed_records(vector,expected):\n    question=Score(state='sample',instructions='rate',levels=['low','medium','high'])\n    raw=LiquidLocalProvider.decode_answer(question,{'answers':{'decision':{'probabilities':vector}}})\n    result=await Decilist([FunctionProvider(lambda q:raw)],Policy(min_confidence=.3)).decide(question)\n    assert result.status=='accepted' and type(result.value) is float\n    assert result.value==pytest.approx(expected)\n    assert result.confidence==max(vector)\n    assert validate_decision(question,result) is result\n",
+      "regression_tests": "from decilist import Decilist, Policy\nfrom decilist.providers import FunctionProvider\n@pytest.mark.parametrize('kind', ['predict','choose','score'])\nasync def test_adjacent_records(kind):\n    raw={'false':.1,'true':.9} if kind=='predict' else {'a':.9,'b':.1} if kind=='choose' else {'0':0.0,'1':1.0}\n    engine=Decilist([FunctionProvider(lambda q:raw)],Policy(min_confidence=.7))\n    result=await engine.predict('s','i') if kind=='predict' else await engine.choose('s','i',{'a':'A','b':'B'}) if kind=='choose' else await engine.score('s','i',['low','high'])\n    assert result.value==({'predict':True,'choose':'a','score':1.0}[kind])\n    assert result.attempts[0].outcome=='accepted'\n",
+      "evidence_mode": "full",
+      "investigation_surface": [
+        [
+          "packages/python/src/decilist/contracts.py",
+          [
+            "labels_for",
+            "validate_probabilities",
+            "value_from",
+            "validate_decision"
+          ]
+        ],
+        [
+          "packages/python/src/decilist/providers.py",
+          [
+            "LiquidLocalProvider.decode_answer"
+          ]
+        ],
+        [
+          "packages/python/src/decilist/engine.py",
+          [
+            "Decilist.score",
+            "Decilist.decide"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "Score value equals the probability-weighted ordinal expectation, with confidence and validation consistent; deterministic scores, choose and predict decisions retain their semantics."
+      ],
+      "minimal_repair_invariants": [
+        "Score value equals the probability-weighted ordinal expectation, with confidence and validation consistent; deterministic scores, choose and predict decisions retain their semantics."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated behavior using observed protected tests and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "Ordinal score decisions must return the distribution expectation rather than its modal index",
+        "Score value equals the probability-weighted ordinal expectation, with confidence and validation consistent; deterministic scores, choose and predict decisions retain their semantics."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 3,
+        "minimum_relevant_callable_transitions": 7,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "c01",
+      "split": "controls",
+      "project": "httpx",
+      "provenance": "unchanged_non_failing_control",
+      "private_mechanism": "A passing reproduction must terminate before model invocation or repair",
+      "mechanism_family": "passing_reproduction_control",
+      "mutations": [],
+      "case_tests": "@pytest.mark.parametrize('value', [{'message':'café Ω','items':[True,None,3]},['one','two'],{'nested':{'amount':2.5}}])\ndef test_observed_records(value):\n    observed=[]\n    def handler(request):\n        observed.append(request)\n        return httpx.Response(200,json={'received':json.loads(request.content)})\n    with httpx.Client(transport=httpx.MockTransport(handler),trust_env=False) as client:\n        response=client.post('https://case.invalid/json',json=value)\n    assert response.json()=={'received':value}\n    assert observed[0].headers['content-type']=='application/json'\n    assert int(observed[0].headers['content-length'])==len(observed[0].content)\n",
+      "regression_tests": "@pytest.mark.parametrize('text', ['plain','café Ω',''])\ndef test_adjacent_records(text):\n    response=httpx.Response(200,text=text)\n    assert response.text==text and response.content==text.encode()\n    assert response.headers['content-type']=='text/plain; charset=utf-8'\n",
+      "evidence_mode": "full",
+      "investigation_surface": [
+        [
+          "vendor/httpx/_client.py",
+          [
+            "Client.post",
+            "Client.build_request",
+            "Client._send_single_request"
+          ]
+        ],
+        [
+          "vendor/httpx/_content.py",
+          [
+            "encode_json",
+            "encode_text"
+          ]
+        ],
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Response.json",
+            "Response.text"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "The observed reproduction and adjacent tests all pass against unchanged source; the V5 product must report non-reproduction without asking a model or attempting a repair."
+      ],
+      "minimal_repair_invariants": [
+        "The observed reproduction and adjacent tests all pass against unchanged source; the V5 product must report non-reproduction without asking a model or attempting a repair."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated behavior using observed protected tests and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "A passing reproduction must terminate before model invocation or repair",
+        "The observed reproduction and adjacent tests all pass against unchanged source; the V5 product must report non-reproduction without asking a model or attempting a repair."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 3,
+        "minimum_relevant_callable_transitions": 7,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "c02",
+      "split": "controls",
+      "project": "httpx",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "Two distinct executable failures require both production repairs before unchanged protected tests pass",
+      "mechanism_family": "mixed_development_mechanisms",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_decoders.py",
+          "old": "            text = \"\\r\" + text",
+          "new": "            text = \"\\n\" + text"
+        },
+        {
+          "kind": "replace",
+          "path": "packages/python/src/decilist/contracts.py",
+          "old": "    return sorted(keys, key=order)",
+          "new": "    return sorted(keys)"
+        }
+      ],
+      "case_tests": "@pytest.mark.parametrize('chunks', [(b'alpha\\r',b'\\nbeta\\r',b'\\ngamma'),(b'\\r',b'\\n',b'last\\r',b'\\n'),(b'first\\r',b'second\\n',b'final')])\n@pytest.mark.parametrize('asynchronous', [False,True])\nasync def test_stream_records(chunks,asynchronous):\n    expected=b''.join(chunks).decode().splitlines()\n    if asynchronous:\n        stream=AsyncChunks(chunks)\n        response=httpx.Response(200,stream=stream)\n        actual=[line async for line in response.aiter_lines()]\n    else:\n        stream=SyncChunks(chunks)\n        response=httpx.Response(200,stream=stream)\n        actual=list(response.iter_lines())\n    assert actual == expected\n    assert response.is_closed and stream.closes == 1\n\nfrom decilist import Decilist, Policy\nfrom decilist.contracts import Choose, labels_for\nfrom decilist.providers import LiquidLocalProvider, FunctionProvider\n@pytest.mark.parametrize('keys,wanted', [(['10','2','alpha'],['2','10','alpha']),(['01','1','0'],['0','1','01']),(['4294967295','3','z','02'],['3','4294967295','z','02'])])\nasync def test_choice_records(keys,wanted):\n    question=Choose(state='sample',instructions='pick',options={k:'meaning '+k for k in keys})\n    vector=[.8]+[.2/(len(keys)-1)]*(len(keys)-1)\n    probabilities=LiquidLocalProvider.decode_answer(question,{'answers':{'decision':{'probabilities':vector}}})\n    provider=FunctionProvider(lambda q: probabilities)\n    result=await Decilist([provider],Policy(min_confidence=.7)).decide(question)\n    assert list(question.options) == wanted\n    assert labels_for(question) == wanted and list(probabilities) == wanted\n    assert result.value == wanted[0] and result.status == 'accepted'\n",
+      "regression_tests": "@pytest.mark.parametrize('chunks', [(b'one\\n',b'two'),(b'one\\r\\ntwo\\r\\n',),(b'\\n\\n',b'end')])\ndef test_stream_invariants(chunks):\n    response=httpx.Response(200,stream=SyncChunks(chunks))\n    assert list(response.iter_lines()) == b''.join(chunks).decode().splitlines()\n    assert response.num_bytes_downloaded == sum(map(len,chunks))\n\nfrom decilist.contracts import Choose, Predict, Score, labels_for\nfrom decilist.providers import LiquidLocalProvider\n@pytest.mark.parametrize('keys', [['z','a'],['left','right','middle'],['01','00','-1']])\ndef test_choice_invariants(keys):\n    q=Choose(state='s',instructions='i',options={k:k for k in keys})\n    assert labels_for(q) == keys\n    assert list(LiquidLocalProvider.question_payload(q)['criteria']) == keys\n    assert labels_for(Predict(state='s',instructions='i')) == ['false','true']\n    assert labels_for(Score(state='s',instructions='i',levels=['low','high'])) == ['0','1']\n",
+      "evidence_mode": "full",
+      "investigation_surface": [
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Response.iter_lines",
+            "Response.aiter_lines",
+            "Response.iter_text"
+          ]
+        ],
+        [
+          "vendor/httpx/_decoders.py",
+          [
+            "LineDecoder.decode",
+            "LineDecoder.flush",
+            "TextDecoder.decode"
+          ]
+        ],
+        [
+          "packages/python/src/decilist/contracts.py",
+          [
+            "_json_key_order",
+            "Choose.exact_keys",
+            "labels_for",
+            "value_from"
+          ]
+        ],
+        [
+          "packages/python/src/decilist/providers.py",
+          [
+            "LiquidLocalProvider.decode_answer",
+            "LiquidLocalProvider.question_payload"
+          ]
+        ],
+        [
+          "packages/python/src/decilist/engine.py",
+          [
+            "Decilist.decide"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "Sync and async line iteration must equal whole-message splitlines for split CRLF, isolated CR, empty lines and final tails, while closing exactly once.",
+        "Canonical numeric keys precede other keys in numeric order; non-index keys keep insertion order; vector-to-label mapping and accepted choice must agree."
+      ],
+      "minimal_repair_invariants": [
+        "Sync and async line iteration must equal whole-message splitlines for split CRLF, isolated CR, empty lines and final tails, while closing exactly once.",
+        "Canonical numeric keys precede other keys in numeric order; non-index keys keep insertion order; vector-to-label mapping and accepted choice must agree."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated behavior using observed protected tests and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "Two distinct executable failures require both production repairs before unchanged protected tests pass",
+        "Both independent mechanisms must be repaired with all reproduction and invariant tests unchanged; either single repair must leave an observed failing suite."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 5,
+        "minimum_relevant_callable_transitions": 13,
+        "human_difficulty_established": false
+      },
+      "control_components": [
+        "d01",
+        "d02"
+      ]
+    }
+  ]
+}

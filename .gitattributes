@@ -2,3 +2,7 @@
 # These retained evidence files have documented hashes of their original bytes.
 benchmarks/results/request-text-liquid.json -text
 reports/liquid-smoke-2026-10-25.json -text
+# Exact pre-freeze V5 development source bytes, including original line endings.
+reports/provenance/triage-v5-development01-*.py.txt -text
+# This corpus test file is byte-pinned by the pre-evaluation fixture freeze.
+tests/test_triage_v5_lab.py -text

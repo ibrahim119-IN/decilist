@@ -1,0 +1,469 @@
+"""Bounded pytest execution metadata for trusted tests in a disposable snapshot.
+
+This plugin is deliberately standalone so a worker can load it by file path
+without importing the snapshot's decilist package. It observes code locations,
+not locals, arguments, return values, exception objects, or environment values.
+Dynamic failure text is opt-in and its redaction is only a heuristic.
+"""
+from __future__ import annotations
+
+import dis
+from collections import OrderedDict, deque
+import inspect
+import json
+import os
+from pathlib import Path, PureWindowsPath
+import re
+import sys
+import tempfile
+import threading
+
+import pytest
+
+__all__ = ["TraceRecorder"]
+_LIMITS = {"max_events": 2000, "max_functions": 256, "max_edges": 512,
+           "max_lines_per_function": 256, "max_tests": 128, "max_failures": 16,
+           "max_longrepr_chars": 6000, "max_output_chars": 512000,
+           "max_active_frames": 512}
+_KEY = r"(?:[a-z0-9]+[_-])*(?:api[_-]?(?:key|token|secret)|access[_-]?(?:token|key)|secret[_-]?(?:access[_-]?)?key|private[_-]?key|auth[_-]?token|authorization|password|passwd|pwd|secret|client[_-]?secret|token)"
+_ASSIGNMENT = re.compile(rf"(?P<prefix>\b{_KEY}[\"']?\s*[:=]\s*)(?P<value>\"[^\"\r\n]*\"|'[^'\r\n]*'|Bearer[ \t]+[^\s,;}}]+|[^\s,;}}]+)", re.I)
+_TOKEN = re.compile(r"\b(?:sk-[A-Za-z0-9_-]{12,}|gh[pousr]_[A-Za-z0-9]{12,}|github_pat_[A-Za-z0-9_]{12,}|hf_[A-Za-z0-9]{12,}|AKIA[0-9A-Z]{16})\b")
+_PRIVATE = re.compile(r"-----BEGIN(?: [A-Z0-9]+)* PRIVATE KEY-----.*?(?:-----END(?: [A-Z0-9]+)* PRIVATE KEY-----|\Z)", re.S)
+_BEARER = re.compile(r"\bBearer[ \t]+(?!\[REDACTED\])[A-Za-z0-9._~+/=-]+", re.I)
+_CONTROL = re.compile(r"\x1b\[[0-?]*[ -/]*[@-~]|[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]")
+_SECRET_PARTS = {"secret", "secrets", "credential", "credentials", "password", "passwords", "token", "tokens", "private", "env"}
+_INSTRUMENTATION = {"triage_trace_v4.py", "triage_context_v4.py", "triage_trace_v5.py", "triage_context_v5.py"}
+
+
+def _sanitize_text(text: str, root: Path | None = None) -> tuple[str, int]:
+    """Redact common literals without rewriting benign application paths."""
+    text = _CONTROL.sub("", text.replace("\r\n", "\n").replace("\r", "\n"))
+    count = 0
+
+    def private(match):
+        nonlocal count
+        count += 1
+        return "[REDACTED PRIVATE KEY]" + "\n" * match.group().count("\n")
+
+    def assignment(match):
+        nonlocal count
+        if match["value"].strip("\"'") == "[REDACTED]":
+            return match.group()
+        count += 1
+        quote = match["value"][0] if match["value"][:1] in {"'", '"'} else ""
+        return match["prefix"] + quote + "[REDACTED]" + quote
+
+    text = _PRIVATE.sub(private, text)
+    text = _ASSIGNMENT.sub(assignment, text)
+    text, found = _TOKEN.subn("[REDACTED]", text)
+    count += found
+    text, found = _BEARER.subn("Bearer [REDACTED]", text)
+    count += found
+    if root is not None:
+        pattern = r"[\\/]".join(re.escape(part) for part in re.split(r"[\\/]", str(root)))
+        text = re.sub(pattern + r"(?=[\\/]|[\s\"']|$)", "[PROJECT]", text,
+                      flags=re.I if os.name == "nt" else 0)
+    return text, count
+
+
+def _source_path(raw: str, root: Path) -> tuple[Path, str] | None:
+    """Resolve only a local Python file contained by root, including symlinks."""
+    if not isinstance(raw, str) or not raw or len(raw) > 1024 or "\x00" in raw:
+        return None
+    windows = PureWindowsPath(raw)
+    if raw.startswith(("\\\\", "//")) or (windows.drive and (not windows.root or os.name != "nt")):
+        return None
+    if ":" in raw and not windows.drive or ".." in re.split(r"[\\/]", raw):
+        return None
+    path = Path(raw.replace("\\", "/"))
+    if path.suffix.lower() != ".py":
+        return None
+    candidate = path if path.is_absolute() else root / path
+    try:
+        relative = candidate.relative_to(root)
+        resolved = candidate.resolve(strict=True)
+        physical = resolved.relative_to(root)
+        if not resolved.is_file():
+            return None
+        for part in (*relative.parts, *physical.parts):
+            lower = part.lower()
+            if (lower in {"site-packages", "dist-packages"} or lower.startswith(".env")
+                    or set(re.split(r"[._-]+", lower)) & _SECRET_PARTS
+                    or lower.startswith("id_rsa")):
+                return None
+        return resolved, relative.as_posix()
+    except (OSError, ValueError, RuntimeError):
+        return None
+
+
+class TraceRecorder:
+    """Small deterministic trace collector. Limits are independently enforced."""
+
+    def __init__(self, project: Path, *, capture_failure_text: bool = False, **limits):
+        self.project = Path(project).resolve(strict=True)
+        if not self.project.is_dir() or str(project).startswith(("\\\\", "//")):
+            raise ValueError("Trace root must be a local directory")
+        self.limits = dict(_LIMITS)
+        for key, value in limits.items():
+            if key not in self.limits or type(value) is not int or not 1 <= value <= _LIMITS[key]:
+                raise ValueError("Invalid trace limit")
+            self.limits[key] = value
+        self.capture_failure_text = capture_failure_text
+        self.functions = OrderedDict()
+        self.edges = OrderedDict()
+        self.events = []
+        self._recent_events = deque()
+        self._prefix_functions = set()
+        self._test_functions = set()
+        self._prefix_edges = set()
+        self._active_ids = {}
+        self._evicted_examples = []
+        self.function_admissions = 0
+        self.function_evictions = 0
+        self.function_rejections = 0
+        self.edge_evictions = 0
+        self.failures = []
+        self.tests = {}
+        self.reasons = set()
+        self.dropped_events = 0
+        self.nodeid = ""
+        self.phase = ""
+        self._code_cache = {}
+        self._frames = {}
+        self._invocation = 0
+        self._sequence = 0
+        self._prior_trace = None
+        self._prior_thread_trace = None
+        self._running = False
+
+    def _function(self, code):
+        if code in self._code_cache:
+            identifier = self._code_cache[code]
+            if identifier is None or identifier in self.functions:
+                return identifier
+        # Cache only a bounded number of rejected external code objects too.
+        if len(self._code_cache) >= self.limits["max_functions"] * 16:
+            self.reasons.add("code_cache_limit")
+            return None
+        self._code_cache[code] = None
+        if code.co_name.startswith("<") and code.co_name != "<lambda>":
+            return None
+        source = _source_path(code.co_filename, self.project)
+        if source is None or Path(source[1]).name in _INSTRUMENTATION:
+            return None
+        symbol = getattr(code, "co_qualname", code.co_name)[:256]
+        identifier = f"{source[1]}:{code.co_firstlineno}:{symbol}"
+        if identifier in self.functions:
+            self._code_cache[code] = identifier
+            return identifier
+        if len(self.functions) >= self.limits["max_functions"]:
+            # First functions retain early setup/test anchors; the remaining
+            # slots roll forward so late validators/adapters are observable.
+            # Active caller functions and test bodies cannot be evicted.
+            victim = next((key for key in self.functions if key not in self._prefix_functions
+                           and key not in self._test_functions and key not in self._active_ids.values()), None)
+            if victim is None:
+                self.function_rejections += 1
+                self.reasons.add("function_capacity_active")
+                self._code_cache.pop(code, None)  # permit later admission
+                return None
+            old = self.functions.pop(victim)
+            self.function_evictions += 1
+            self.reasons.add("function_metadata_evicted")
+            if len(self._evicted_examples) < 12:
+                self._evicted_examples.append({"id": old["id"], "reason": "recent_function_reserve"})
+        self.function_admissions += 1
+        lines = [line for _, _, line in code.co_lines() if line is not None]
+        self.functions[identifier] = {
+            "id": identifier, "path": source[1], "symbol": symbol,
+            "first_line": code.co_firstlineno,
+            "last_line": max(lines, default=code.co_firstlineno),
+            "executed_lines": set(), "test_ids": set(), "phases": set(),
+        }
+        self._code_cache[code] = identifier
+        prefix_size = max(1, self.limits["max_functions"] // 4)
+        if len(self._prefix_functions) < prefix_size:
+            self._prefix_functions.add(identifier)
+        path = Path(source[1])
+        test_name = self.nodeid.rsplit("::", 1)[-1].split("[", 1)[0]
+        if (path.name.startswith("test_") or path.name.endswith("_test.py")) and (code.co_name == test_name or code.co_name.startswith("test_")):
+            self._test_functions.add(identifier)
+        return identifier
+
+    def _event(self, kind, identifier, frame, invocation, **extra):
+        self._sequence += 1
+        row = {"seq": self._sequence, "kind": kind,
+                            "function_id": identifier, "line": frame.f_lineno,
+                            "nodeid": self.nodeid, "phase": self.phase,
+                            "invocation": invocation, **extra}
+        prefix_size = max(1, self.limits["max_events"] // 4)
+        if len(self.events) < prefix_size:
+            self.events.append(row)
+        else:
+            recent_size = self.limits["max_events"] - prefix_size
+            if recent_size < 1:
+                self.dropped_events += 1
+            else:
+                if len(self._recent_events) >= recent_size:
+                    self._recent_events.popleft()
+                    self.dropped_events += 1
+                self._recent_events.append(row)
+            if self.dropped_events:
+                self.reasons.add("event_prefix_recent_limit")
+
+    def trace(self, frame, event, arg):
+        if not self._running or not self.nodeid:
+            return None
+        identifier = self._function(frame.f_code)
+        if identifier is None:
+            return None
+        row = self.functions[identifier]
+        if len(row["test_ids"]) < self.limits["max_tests"]:
+            row["test_ids"].add(self.nodeid)
+        row["phases"].add(self.phase)
+        frame_key = id(frame)
+        invocation = self._frames.get(frame_key)
+        if event == "call":
+            resume = invocation is not None
+            if not resume:
+                self._invocation += 1
+                invocation = self._invocation
+                if len(self._frames) < self.limits["max_active_frames"]:
+                    self._frames[frame_key] = invocation
+                    self._active_ids[frame_key] = identifier
+                else:
+                    self.reasons.add("active_frame_limit")
+                caller = frame.f_back
+                for _ in range(32):
+                    if caller is None:
+                        break
+                    caller_id = self._function(caller.f_code)
+                    if caller_id:
+                        edge = (caller_id, identifier, caller.f_lineno)
+                        if edge in self.edges:
+                            self.edges[edge] += 1
+                        else:
+                            if len(self.edges) >= self.limits["max_edges"]:
+                                victim = next((key for key in self.edges if key not in self._prefix_edges), None)
+                                if victim is not None:
+                                    self.edges.pop(victim)
+                                    self.edge_evictions += 1
+                                    self.reasons.add("edge_metadata_evicted")
+                            if len(self.edges) < self.limits["max_edges"]:
+                                self.edges[edge] = 1
+                                if len(self._prefix_edges) < max(1, self.limits["max_edges"] // 4):
+                                    self._prefix_edges.add(edge)
+                            else:
+                                self.reasons.add("edge_capacity_limit")
+                        break
+                    caller = caller.f_back
+            self._event("resume" if resume else "call", identifier, frame, invocation)
+        elif event == "line":
+            if len(row["executed_lines"]) < self.limits["max_lines_per_function"]:
+                row["executed_lines"].add(frame.f_lineno)
+            elif frame.f_lineno not in row["executed_lines"]:
+                self.reasons.add("executed_line_limit")
+            self._event("line", identifier, frame, invocation)
+        elif event == "exception":
+            # The exception class is the only inspected part of this tuple.
+            name = getattr(arg[0], "__name__", "Exception")[:128]
+            self._event("exception", identifier, frame, invocation, exception_type=name)
+        elif event == "return":
+            opcode = frame.f_code.co_code[frame.f_lasti] if frame.f_lasti >= 0 else 0
+            suspended = bool(frame.f_code.co_flags & (inspect.CO_COROUTINE | inspect.CO_ASYNC_GENERATOR | inspect.CO_GENERATOR)) and dis.opname[opcode] in {"YIELD_VALUE", "YIELD_FROM"}
+            self._event("suspend" if suspended else "return", identifier, frame, invocation)
+            if not suspended:
+                self._frames.pop(frame_key, None)
+                self._active_ids.pop(frame_key, None)
+        return self.trace
+
+    def start(self):
+        self._prior_trace = sys.gettrace()
+        self._prior_thread_trace = threading.gettrace()
+        self._running = True
+        sys.settrace(self.trace)
+        threading.settrace(self.trace)
+
+    def stop(self):
+        self._running = False
+        sys.settrace(self._prior_trace)
+        threading.settrace(self._prior_thread_trace)
+        self._frames.clear()
+        self._active_ids.clear()
+
+    def record_report(self, report, call):
+        nodeid, _ = _sanitize_text(str(report.nodeid)[:1024], self.project)
+        if nodeid not in self.tests and len(self.tests) < self.limits["max_tests"]:
+            self.tests[nodeid] = {"nodeid": nodeid, "outcomes": {}}
+        if nodeid in self.tests:
+            self.tests[nodeid]["outcomes"][report.when] = report.outcome
+        else:
+            self.reasons.add("test_limit")
+        if not report.failed:
+            return
+        if len(self.failures) >= self.limits["max_failures"]:
+            self.reasons.add("failure_limit")
+            return
+        locations = []
+        exception_type = "Failure"
+        if call.excinfo is not None:
+            exception_type = call.excinfo.type.__name__[:128]
+            for entry in call.excinfo.traceback:
+                source = _source_path(str(entry.path), self.project)
+                if source and len(locations) < 24:
+                    locations.append({"path": source[1], "line": entry.lineno + 1,
+                                      "symbol": entry.frame.code.name[:256]})
+        longrepr = "\n".join(f'{row["path"]}:{row["line"]}: in {row["symbol"]}' for row in locations)
+        longrepr += f"\n{exception_type}: [dynamic assertion and exception values omitted]"
+        redactions = 0
+        if self.capture_failure_text:
+            longrepr, redactions = _sanitize_text(report.longreprtext, self.project)
+        if len(longrepr) > self.limits["max_longrepr_chars"]:
+            longrepr = longrepr[:self.limits["max_longrepr_chars"]]
+            self.reasons.add("longrepr_limit")
+        self.failures.append({"nodeid": nodeid, "phase": report.when,
+                              "exception_type": exception_type, "longrepr": longrepr,
+                              "traceback": locations,
+                              "failure_text_captured": self.capture_failure_text,
+                              "redaction_count": redactions})
+
+    def as_dict(self):
+        rows = []
+        for key in sorted(self.functions):
+            row = self.functions[key]
+            rows.append({**row, "executed_lines": sorted(row["executed_lines"]),
+                         "test_ids": sorted(row["test_ids"]), "phases": sorted(row["phases"])})
+        retained = set(self.functions)
+        events = [row for row in (*self.events, *self._recent_events) if row["function_id"] in retained]
+        edges = [{"caller": key[0], "callee": key[1], "line": key[2], "count": self.edges[key]}
+                 for key in sorted(self.edges) if key[0] in retained and key[1] in retained]
+        lost_events = len(self.events) + len(self._recent_events) - len(events)
+        lost_edges = len(self.edges) - len(edges)
+        reasons = set(self.reasons)
+        if lost_events or lost_edges:
+            reasons.add("evicted_function_references_omitted")
+        result = {"schema_version": 5, "root": ".", "functions": rows,
+                  "edges": edges,
+                  "events": events, "failures": list(self.failures),
+                  "tests": [self.tests[key] for key in sorted(self.tests)],
+                  "limits": dict(self.limits),
+                  "truncation": {"truncated": bool(reasons), "reasons": sorted(reasons),
+                                 "dropped_events": self.dropped_events + lost_events},
+                  "coverage": {"policy": "early_prefix_and_recent_tail; active_callers_and_tests_protected",
+                               "function_admissions": self.function_admissions,
+                               "function_evictions": self.function_evictions,
+                               "function_rejections": self.function_rejections,
+                               "edge_evictions": self.edge_evictions,
+                               "edges_omitted_with_functions": lost_edges,
+                               "events_omitted_with_functions": lost_events,
+                               "function_omission_examples": list(self._evicted_examples),
+                               "output_events_omitted": 0, "output_edges_omitted": 0,
+                               "output_functions_omitted": 0},
+                  "note": "Project-local observed Python locations only; incomplete coverage is explicit. No locals, arguments, return values or environment values. Early and recent metadata are retained with bounded eviction. Opt-in failure text/source redaction are heuristic; event order is observation order, not causation. Threads are traced; already-running threads and child processes are not."}
+        def fit_records(field, ranked):
+            original = len(ranked)
+            low, high = 0, original
+            while low < high:
+                middle = (low + high + 1) // 2
+                result[field] = ranked[:middle]
+                if len(json.dumps(result, ensure_ascii=True, sort_keys=True)) <= self.limits["max_output_chars"] - 160:
+                    low = middle
+                else:
+                    high = middle - 1
+            result[field] = ranked[:low]
+            return original - low
+        while len(json.dumps(result, ensure_ascii=True, sort_keys=True)) > self.limits["max_output_chars"]:
+            result["truncation"]["truncated"] = True
+            result["truncation"]["reasons"] = sorted(set(result["truncation"]["reasons"]) | {"output_char_limit"})
+            if result["events"]:
+                lifecycle = [row for row in result["events"] if row["kind"] != "line"]
+                anchors = {row["seq"] for row in lifecycle[:8] + lifecycle[-8:]}
+                ranked = sorted(result["events"], key=lambda row: (row["kind"] != "exception", row["seq"] not in anchors,
+                                                                 row["kind"] == "line", -row["seq"]))
+                dropped = fit_records("events", ranked)
+                result["events"].sort(key=lambda row: row["seq"])
+                result["truncation"]["dropped_events"] += dropped
+                result["coverage"]["output_events_omitted"] += dropped
+            elif any(row["longrepr"] for row in result["failures"]):
+                row = next(row for row in reversed(result["failures"]) if row["longrepr"])
+                row["longrepr"] = ""
+                row["longrepr_omitted_by_output_limit"] = True
+            elif result["edges"]:
+                dropped = fit_records("edges", list(reversed(result["edges"])))
+                result["coverage"]["output_edges_omitted"] += dropped
+            elif result["functions"]:
+                recency = {identifier: index for index, identifier in enumerate(self.functions)}
+                ranked = sorted(result["functions"], key=lambda row: (row["id"] not in self._test_functions, -recency[row["id"]]))
+                dropped = fit_records("functions", ranked)
+                result["coverage"]["output_functions_omitted"] += dropped
+            elif result["tests"]:
+                result["tests"].pop()
+            else:
+                raise ValueError("Trace output limit is too small for metadata")
+        return result
+
+    def write(self, output: Path):
+        output = Path(output)
+        data = json.dumps(self.as_dict(), ensure_ascii=True, sort_keys=True, separators=(",", ":")) + "\n"
+        temporary = None
+        try:
+            with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=output.parent, delete=False) as handle:
+                temporary = Path(handle.name)
+                handle.write(data)
+            os.replace(temporary, output)
+        finally:
+            if temporary is not None and temporary.exists():
+                temporary.unlink()
+
+
+_RECORDER = None
+_OUTPUT = None
+
+
+def pytest_configure(config):
+    global _RECORDER, _OUTPUT
+    root = os.environ.get("DECILIST_TRACE_ROOT")
+    output = os.environ.get("DECILIST_TRACE_OUTPUT")
+    if not root or not output:
+        raise pytest.UsageError("V5 tracing requires DECILIST_TRACE_ROOT and DECILIST_TRACE_OUTPUT")
+    capture = os.environ.get("DECILIST_TRACE_FAILURE_TEXT") == "1"
+    if capture and config.getoption("showlocals", default=False):
+        raise pytest.UsageError("V5 trusted failure text cannot be combined with --showlocals")
+    try:
+        _RECORDER = TraceRecorder(Path(root), capture_failure_text=capture)
+    except (OSError, ValueError, RuntimeError) as error:
+        raise pytest.UsageError("V5 trace root must be a local directory") from error
+    _OUTPUT = Path(output)
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_protocol(item, nextitem):
+    _RECORDER.nodeid, _ = _sanitize_text(item.nodeid[:1024], _RECORDER.project)
+    _RECORDER.start()
+    try:
+        yield
+    finally:
+        _RECORDER.stop()
+        _RECORDER.nodeid = ""
+
+
+def pytest_runtest_setup(item):
+    _RECORDER.phase = "setup"
+
+
+def pytest_runtest_call(item):
+    _RECORDER.phase = "call"
+
+
+def pytest_runtest_teardown(item, nextitem):
+    _RECORDER.phase = "teardown"
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    _RECORDER.record_report(outcome.get_result(), call)
+
+
+def pytest_sessionfinish(session, exitstatus):
+    _RECORDER.write(_OUTPUT)

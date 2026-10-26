@@ -1,0 +1,395 @@
+{
+  "schema_version": 1,
+  "kind": "retained_v5_development_history",
+  "iterations": [
+    {
+      "iteration": "01",
+      "replay_role": "previously exposed V4 development cases, not fresh accuracy",
+      "replay_report": "triage-v5-development-replay-01.json",
+      "development_report": "triage-v5-development-01-2026-10-26.json",
+      "source_stable": true,
+      "product_sha256": {
+        "__init__.py": "5c8169b352357ffb6ba41d403325b98487da1412bd5ab9f6ba2a8498d38dff24",
+        "__main__.py": "307299fda7b77d22c64cb51430ec75e5f59d78e9c948786afb3b2544fe45e4b7",
+        "cli.py": "6f6c3e998c03891b7ab3591b9901e13242695c63d8bab0857c05cd79c5323860",
+        "client.py": "51fd84355f4093eeaa3b1a2eca8e9931af4c59872d5c7a119a6bd4f1d55742e0",
+        "contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8",
+        "demo.py": "84e002f263fa1feb9bcbe77ba89c40f770b282ec752f2eaf83be4948723412b4",
+        "engine.py": "9d9281477b8327874c733fe26e0f89bd14c5ff754a6c6cbddaf1542a93381db4",
+        "evaluation.py": "a1be17b931fbf504e830c379a7144b2e71239d276224371446918af6aaa6335b",
+        "llama_cpp.py": "c63b8098d2ad1f346189a75e05e4f7fba899ddad57867ff33307dbde4b8546eb",
+        "providers.py": "1d6e208f70930e190f752bbe0ef3096c646066e8ff469629927d081b7f756ea3",
+        "runtime.py": "7f8b1ec6d0bda03584167b6e0f6b4259c322477ea2a0957f55ed99d9f39ed59e",
+        "server.py": "6b6ac14c2661fd4fa67f020061daa9ce0a5fb38ed52f34913e93a5e327474e4d",
+        "triage.py": "c246194e22da66967c88b1911a169944fc7c66f7049146cdd70435ca4c832e6f",
+        "triage_actions.py": "84cf16be3b8c83e7a59e26de438eda78579c59b2a7508d5349c56d33f9283bc2",
+        "triage_assistant.py": "feae88f9e73c867af1e783e956008fd064ed8370dea32eaaee31c360941e5962",
+        "triage_context.py": "ab6853369a4ec67f978e57e17da56dd77f78c5f2e73480ac8d0bc8d6c7a555c7",
+        "triage_context_v3.py": "6e528c85a5960411b6345e6bf1a38643e7b24b573eb73e71b0bab6145c27b9c6",
+        "triage_context_v4.py": "b85a9dc1310f401f63e3a4b0f784f0f6c0d78741f47a1b5d64265de438e49b47",
+        "triage_context_v5.py": "f437b76c760a3b6870283cccb9319156279b4de668b5954e78a75e2c4c45e084",
+        "triage_diagnostic.py": "2214ba74dce604d672f6099d184ee1092b8b6377483d14252080505f0f86e9f6",
+        "triage_evidence.py": "50067926f906660380999595b207a5c7bd2082e4cd66f52f44cea24f8c2eef58",
+        "triage_hypothesis_v4.py": "7480df914f3c23081d2109543a387e1bba5d6b06d3c1999340bb968101ba3b74",
+        "triage_hypothesis_v5.py": "7a20f7f4b08f26ff006f31dfafb5ac4360bfc6e15bbfb5b3647b8419c4eb7691",
+        "triage_inspect.py": "bf104ad0eaa4ee3dd176599c7903099f9fc01d6938a165e526f39a1c86b0b751",
+        "triage_test_worker_v4.py": "738b7d21af4d3fa75d43cb33a9d24de4b877fa8d93117c2e80af94c51ba634d6",
+        "triage_trace_v4.py": "38fc3de29050a1b4b7e43142cb0ccf8aeed4b8f0b96894ab1f1a4ee303358e18",
+        "triage_trace_v5.py": "9dbbe252d0636a2f54c49ee05439767696210eaf98af7b4d7857c07bf6d9bb0c",
+        "triage_v3.py": "49468e11901f05bd5dbfff6b5ffb1f8e9064923839e6114529d4f69c988c43d2",
+        "triage_v4.py": "f86f7614c6611f04408760d0986ba98abc9c9ae83df69675c2ee60c6cd32c3ce",
+        "triage_v5.py": "5d70f8f2aecd03e25a00f7e59d8967f26670369fd74c2d1023ea8f5adbbef0cc",
+        "triage_verify_v4.py": "fdc8a34f336142423e9e8e9af46c0dcf58d610a02946e3d2af56d97c67d9d3e1",
+        "triage_verify_v5.py": "8c1f41d4089502f08d00d9047177d0a0e831ea0d474282dae3519bc9a0121271",
+        "web.py": "a24caf6d9f7da73abec438b821df9ad7a2429c3775af3dcf420fb21b1d49f3ae"
+      },
+      "replay_outcomes": [
+        {
+          "case_id": "e01",
+          "state": "unverified",
+          "reason": "candidate_patch_rejected",
+          "seconds": 11.189499200001592
+        },
+        {
+          "case_id": "e02",
+          "state": "hypothesis_supported_by_tests",
+          "reason": "failing_and_existing_regression_tests_passed",
+          "seconds": 11.870697299978929
+        },
+        {
+          "case_id": "e03",
+          "state": "hypothesis_supported_by_tests",
+          "reason": "failing_and_existing_regression_tests_passed",
+          "seconds": 13.810115900007077
+        },
+        {
+          "case_id": "e04",
+          "state": "unverified",
+          "reason": "repeated_intervention",
+          "seconds": 24.6806289999804
+        },
+        {
+          "case_id": "e05",
+          "state": "unverified",
+          "reason": "no_op_replacement",
+          "seconds": 12.35211049998179
+        },
+        {
+          "case_id": "e06",
+          "state": "unverified",
+          "reason": "no_safe_intervention",
+          "seconds": 11.051601699989988
+        }
+      ],
+      "development_outcomes": [
+        {
+          "case_id": "d01",
+          "state": "unverified",
+          "reason": "repeated_intervention",
+          "seconds": 22.57768329998362,
+          "root_protected_repair_verified": false
+        },
+        {
+          "case_id": "d02",
+          "state": "hypothesis_supported_by_tests",
+          "reason": "failing_and_existing_regression_tests_passed",
+          "seconds": 14.403927699982887,
+          "root_protected_repair_verified": true
+        }
+      ],
+      "development_summary": {
+        "unique_regressions": 2,
+        "observations": 2,
+        "first_observation_attempt_counts": {
+          "generation_helper_attempted": 3,
+          "model_request_attempted": 3,
+          "generated_output_retained": 3,
+          "structurally_valid_hypothesis": 2,
+          "patched_disposable_copy": 2,
+          "target_tests_all_passed": 1,
+          "regression_tests_all_passed": 2,
+          "rejected_or_error": 2
+        },
+        "errors": 1,
+        "measurement_errors": 0,
+        "workflow_errors": 1,
+        "workflow_supported": 1,
+        "root_protected_repairs": 1,
+        "guarded_first_observations": 0,
+        "needs_review_first_observations": 0,
+        "first_observation_median_ms": 18490.805499983253,
+        "states": {
+          "unverified": 1,
+          "hypothesis_supported_by_tests": 1
+        },
+        "controls": [],
+        "human_time_saved": null,
+        "complete_causal_correctness": null
+      }
+    },
+    {
+      "iteration": "02",
+      "replay_role": "previously exposed V4 development cases, not fresh accuracy",
+      "replay_report": "triage-v5-development-replay-02.json",
+      "development_report": "triage-v5-development-02-2026-10-26.json",
+      "source_stable": true,
+      "product_sha256": {
+        "__init__.py": "5c8169b352357ffb6ba41d403325b98487da1412bd5ab9f6ba2a8498d38dff24",
+        "__main__.py": "307299fda7b77d22c64cb51430ec75e5f59d78e9c948786afb3b2544fe45e4b7",
+        "cli.py": "6f6c3e998c03891b7ab3591b9901e13242695c63d8bab0857c05cd79c5323860",
+        "client.py": "51fd84355f4093eeaa3b1a2eca8e9931af4c59872d5c7a119a6bd4f1d55742e0",
+        "contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8",
+        "demo.py": "84e002f263fa1feb9bcbe77ba89c40f770b282ec752f2eaf83be4948723412b4",
+        "engine.py": "9d9281477b8327874c733fe26e0f89bd14c5ff754a6c6cbddaf1542a93381db4",
+        "evaluation.py": "a1be17b931fbf504e830c379a7144b2e71239d276224371446918af6aaa6335b",
+        "llama_cpp.py": "c63b8098d2ad1f346189a75e05e4f7fba899ddad57867ff33307dbde4b8546eb",
+        "providers.py": "1d6e208f70930e190f752bbe0ef3096c646066e8ff469629927d081b7f756ea3",
+        "runtime.py": "7f8b1ec6d0bda03584167b6e0f6b4259c322477ea2a0957f55ed99d9f39ed59e",
+        "server.py": "6b6ac14c2661fd4fa67f020061daa9ce0a5fb38ed52f34913e93a5e327474e4d",
+        "triage.py": "c246194e22da66967c88b1911a169944fc7c66f7049146cdd70435ca4c832e6f",
+        "triage_actions.py": "84cf16be3b8c83e7a59e26de438eda78579c59b2a7508d5349c56d33f9283bc2",
+        "triage_assistant.py": "feae88f9e73c867af1e783e956008fd064ed8370dea32eaaee31c360941e5962",
+        "triage_context.py": "ab6853369a4ec67f978e57e17da56dd77f78c5f2e73480ac8d0bc8d6c7a555c7",
+        "triage_context_v3.py": "6e528c85a5960411b6345e6bf1a38643e7b24b573eb73e71b0bab6145c27b9c6",
+        "triage_context_v4.py": "b85a9dc1310f401f63e3a4b0f784f0f6c0d78741f47a1b5d64265de438e49b47",
+        "triage_context_v5.py": "379bbb67bccb3116ca8c3a96e9738284a026a11113016bf208a9e67cd2d32e28",
+        "triage_diagnostic.py": "2214ba74dce604d672f6099d184ee1092b8b6377483d14252080505f0f86e9f6",
+        "triage_evidence.py": "50067926f906660380999595b207a5c7bd2082e4cd66f52f44cea24f8c2eef58",
+        "triage_hypothesis_v4.py": "7480df914f3c23081d2109543a387e1bba5d6b06d3c1999340bb968101ba3b74",
+        "triage_hypothesis_v5.py": "6a9691acf46309514ba23f054091d4a0210d109ced64b3bef4934d98062b92d3",
+        "triage_inspect.py": "bf104ad0eaa4ee3dd176599c7903099f9fc01d6938a165e526f39a1c86b0b751",
+        "triage_test_worker_v4.py": "738b7d21af4d3fa75d43cb33a9d24de4b877fa8d93117c2e80af94c51ba634d6",
+        "triage_trace_v4.py": "38fc3de29050a1b4b7e43142cb0ccf8aeed4b8f0b96894ab1f1a4ee303358e18",
+        "triage_trace_v5.py": "ff378c837adcf318a88ed641ef52ce3b8055354e844ae4f79fd9c9efb04014d7",
+        "triage_v3.py": "49468e11901f05bd5dbfff6b5ffb1f8e9064923839e6114529d4f69c988c43d2",
+        "triage_v4.py": "f86f7614c6611f04408760d0986ba98abc9c9ae83df69675c2ee60c6cd32c3ce",
+        "triage_v5.py": "5d70f8f2aecd03e25a00f7e59d8967f26670369fd74c2d1023ea8f5adbbef0cc",
+        "triage_verify_v4.py": "fdc8a34f336142423e9e8e9af46c0dcf58d610a02946e3d2af56d97c67d9d3e1",
+        "triage_verify_v5.py": "8c1f41d4089502f08d00d9047177d0a0e831ea0d474282dae3519bc9a0121271",
+        "web.py": "a24caf6d9f7da73abec438b821df9ad7a2429c3775af3dcf420fb21b1d49f3ae"
+      },
+      "replay_outcomes": [
+        {
+          "case_id": "e01",
+          "state": "unverified",
+          "reason": "repeated_intervention",
+          "seconds": 24.090613200009102
+        },
+        {
+          "case_id": "e02",
+          "state": "hypothesis_supported_by_tests",
+          "reason": "failing_and_existing_regression_tests_passed",
+          "seconds": 12.695109599997522
+        },
+        {
+          "case_id": "e03",
+          "state": "hypothesis_supported_by_tests",
+          "reason": "failing_and_existing_regression_tests_passed",
+          "seconds": 14.382917099981569
+        },
+        {
+          "case_id": "e04",
+          "state": "unverified",
+          "reason": "no_op_replacement",
+          "seconds": 24.83780179999303
+        },
+        {
+          "case_id": "e05",
+          "state": "unverified",
+          "reason": "no_op_replacement",
+          "seconds": 13.663299200008623
+        },
+        {
+          "case_id": "e06",
+          "state": "unverified",
+          "reason": "no_op_replacement",
+          "seconds": 11.832662499975413
+        }
+      ],
+      "development_outcomes": [
+        {
+          "case_id": "d01",
+          "state": "unverified",
+          "reason": "no_op_replacement",
+          "seconds": 15.04310219999752,
+          "root_protected_repair_verified": false
+        },
+        {
+          "case_id": "d02",
+          "state": "hypothesis_supported_by_tests",
+          "reason": "failing_and_existing_regression_tests_passed",
+          "seconds": 14.687519799976144,
+          "root_protected_repair_verified": true
+        }
+      ],
+      "development_summary": {
+        "unique_regressions": 2,
+        "observations": 2,
+        "first_observation_attempt_counts": {
+          "generation_helper_attempted": 2,
+          "model_request_attempted": 2,
+          "generated_output_retained": 2,
+          "structurally_valid_hypothesis": 1,
+          "patched_disposable_copy": 1,
+          "target_tests_all_passed": 1,
+          "regression_tests_all_passed": 1,
+          "rejected_or_error": 1
+        },
+        "errors": 1,
+        "measurement_errors": 0,
+        "workflow_errors": 1,
+        "workflow_supported": 1,
+        "root_protected_repairs": 1,
+        "guarded_first_observations": 0,
+        "needs_review_first_observations": 0,
+        "first_observation_median_ms": 14865.310999986832,
+        "states": {
+          "unverified": 1,
+          "hypothesis_supported_by_tests": 1
+        },
+        "controls": [],
+        "human_time_saved": null,
+        "complete_causal_correctness": null
+      }
+    },
+    {
+      "iteration": "03",
+      "replay_role": "previously exposed V4 development cases, not fresh accuracy",
+      "replay_report": "triage-v5-development-replay-03.json",
+      "development_report": "triage-v5-development-03-2026-10-26.json",
+      "source_stable": true,
+      "product_sha256": {
+        "__init__.py": "5c8169b352357ffb6ba41d403325b98487da1412bd5ab9f6ba2a8498d38dff24",
+        "__main__.py": "307299fda7b77d22c64cb51430ec75e5f59d78e9c948786afb3b2544fe45e4b7",
+        "cli.py": "6f6c3e998c03891b7ab3591b9901e13242695c63d8bab0857c05cd79c5323860",
+        "client.py": "51fd84355f4093eeaa3b1a2eca8e9931af4c59872d5c7a119a6bd4f1d55742e0",
+        "contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8",
+        "demo.py": "84e002f263fa1feb9bcbe77ba89c40f770b282ec752f2eaf83be4948723412b4",
+        "engine.py": "9d9281477b8327874c733fe26e0f89bd14c5ff754a6c6cbddaf1542a93381db4",
+        "evaluation.py": "a1be17b931fbf504e830c379a7144b2e71239d276224371446918af6aaa6335b",
+        "llama_cpp.py": "c63b8098d2ad1f346189a75e05e4f7fba899ddad57867ff33307dbde4b8546eb",
+        "providers.py": "1d6e208f70930e190f752bbe0ef3096c646066e8ff469629927d081b7f756ea3",
+        "runtime.py": "7f8b1ec6d0bda03584167b6e0f6b4259c322477ea2a0957f55ed99d9f39ed59e",
+        "server.py": "6b6ac14c2661fd4fa67f020061daa9ce0a5fb38ed52f34913e93a5e327474e4d",
+        "triage.py": "c246194e22da66967c88b1911a169944fc7c66f7049146cdd70435ca4c832e6f",
+        "triage_actions.py": "84cf16be3b8c83e7a59e26de438eda78579c59b2a7508d5349c56d33f9283bc2",
+        "triage_assistant.py": "feae88f9e73c867af1e783e956008fd064ed8370dea32eaaee31c360941e5962",
+        "triage_context.py": "ab6853369a4ec67f978e57e17da56dd77f78c5f2e73480ac8d0bc8d6c7a555c7",
+        "triage_context_v3.py": "6e528c85a5960411b6345e6bf1a38643e7b24b573eb73e71b0bab6145c27b9c6",
+        "triage_context_v4.py": "b85a9dc1310f401f63e3a4b0f784f0f6c0d78741f47a1b5d64265de438e49b47",
+        "triage_context_v5.py": "379bbb67bccb3116ca8c3a96e9738284a026a11113016bf208a9e67cd2d32e28",
+        "triage_diagnostic.py": "2214ba74dce604d672f6099d184ee1092b8b6377483d14252080505f0f86e9f6",
+        "triage_evidence.py": "50067926f906660380999595b207a5c7bd2082e4cd66f52f44cea24f8c2eef58",
+        "triage_hypothesis_v4.py": "7480df914f3c23081d2109543a387e1bba5d6b06d3c1999340bb968101ba3b74",
+        "triage_hypothesis_v5.py": "f3ed2bd0e376216d5a89717aa72fbabc90cba2e7374daef9a1a6071a0831d514",
+        "triage_inspect.py": "bf104ad0eaa4ee3dd176599c7903099f9fc01d6938a165e526f39a1c86b0b751",
+        "triage_test_worker_v4.py": "738b7d21af4d3fa75d43cb33a9d24de4b877fa8d93117c2e80af94c51ba634d6",
+        "triage_trace_v4.py": "38fc3de29050a1b4b7e43142cb0ccf8aeed4b8f0b96894ab1f1a4ee303358e18",
+        "triage_trace_v5.py": "ff378c837adcf318a88ed641ef52ce3b8055354e844ae4f79fd9c9efb04014d7",
+        "triage_v3.py": "49468e11901f05bd5dbfff6b5ffb1f8e9064923839e6114529d4f69c988c43d2",
+        "triage_v4.py": "f86f7614c6611f04408760d0986ba98abc9c9ae83df69675c2ee60c6cd32c3ce",
+        "triage_v5.py": "5d70f8f2aecd03e25a00f7e59d8967f26670369fd74c2d1023ea8f5adbbef0cc",
+        "triage_verify_v4.py": "fdc8a34f336142423e9e8e9af46c0dcf58d610a02946e3d2af56d97c67d9d3e1",
+        "triage_verify_v5.py": "8c1f41d4089502f08d00d9047177d0a0e831ea0d474282dae3519bc9a0121271",
+        "web.py": "a24caf6d9f7da73abec438b821df9ad7a2429c3775af3dcf420fb21b1d49f3ae"
+      },
+      "replay_outcomes": [
+        {
+          "case_id": "e01",
+          "state": "unverified",
+          "reason": "candidate_patch_rejected",
+          "seconds": 13.252574699989054
+        },
+        {
+          "case_id": "e02",
+          "state": "hypothesis_supported_by_tests",
+          "reason": "failing_and_existing_regression_tests_passed",
+          "seconds": 13.703414300020086
+        },
+        {
+          "case_id": "e03",
+          "state": "hypothesis_supported_by_tests",
+          "reason": "failing_and_existing_regression_tests_passed",
+          "seconds": 14.71262399997795
+        },
+        {
+          "case_id": "e04",
+          "state": "unverified",
+          "reason": "candidate_did_not_pass_unchanged_tests",
+          "seconds": 28.391845200007083
+        },
+        {
+          "case_id": "e05",
+          "state": "unverified",
+          "reason": "no_op_replacement",
+          "seconds": 12.242741399997612
+        },
+        {
+          "case_id": "e06",
+          "state": "unverified",
+          "reason": "no_op_replacement",
+          "seconds": 12.435431899997639
+        }
+      ],
+      "development_outcomes": [
+        {
+          "case_id": "d01",
+          "state": "unverified",
+          "reason": "no_op_replacement",
+          "seconds": 17.923794200003613,
+          "root_protected_repair_verified": false
+        },
+        {
+          "case_id": "d02",
+          "state": "hypothesis_supported_by_tests",
+          "reason": "failing_and_existing_regression_tests_passed",
+          "seconds": 16.79131940001389,
+          "root_protected_repair_verified": true
+        }
+      ],
+      "development_summary": {
+        "unique_regressions": 2,
+        "observations": 2,
+        "first_observation_attempt_counts": {
+          "generation_helper_attempted": 2,
+          "model_request_attempted": 2,
+          "generated_output_retained": 2,
+          "structurally_valid_hypothesis": 1,
+          "patched_disposable_copy": 1,
+          "target_tests_all_passed": 1,
+          "regression_tests_all_passed": 1,
+          "rejected_or_error": 1
+        },
+        "errors": 1,
+        "measurement_errors": 0,
+        "workflow_errors": 1,
+        "workflow_supported": 1,
+        "root_protected_repairs": 1,
+        "guarded_first_observations": 0,
+        "needs_review_first_observations": 0,
+        "first_observation_median_ms": 17357.55680000875,
+        "states": {
+          "unverified": 1,
+          "hypothesis_supported_by_tests": 1
+        },
+        "controls": [],
+        "human_time_saved": null,
+        "complete_causal_correctness": null
+      }
+    }
+  ],
+  "changes": {
+    "01": "Late-function tracing, connected whole-body packing, precise prose checks, CRLF roundtrip, robust CLI and actual workflow measurement.",
+    "02": "Observed return/yield producers prioritized before small terminal helpers; exact source code normalized to LF; prompt preferred narrow edits.",
+    "03": "Clarified current old text versus changed new code, and represented actual-test feedback as native conversation turns."
+  },
+  "interpretation": "Old failures with missing source can become tested repairs. Merely exposing a fault body or describing its behavior does not guarantee a valid/correct intervention; no-op and failed-test outcomes remain failures.",
+  "unmeasured": {
+    "human_time_saved": null
+  },
+  "limitations": [
+    "All these cases were exposed for development. They are excluded from fresh accuracy and reserved timing claims.",
+    "All iterations and errors were retained; no best-retry or fastest-run selection.",
+    "Initial raw source artifacts preserve original CRLF bytes; .gitattributes prevents rewriting them."
+  ]
+}
