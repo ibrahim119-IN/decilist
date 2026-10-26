@@ -1,0 +1,95 @@
+{
+  "kind": "exposed_development_semantic_audit",
+  "rows": [
+    {
+      "run": "current-lines-02",
+      "source_stable": true,
+      "development_cases": [
+        {
+          "case": "d01",
+          "seconds": 17.58481460000621,
+          "protected_pass": true,
+          "generations": 1,
+          "diff": "--- a/vendor/httpx/_exceptions.py\n+++ b/vendor/httpx/_exceptions.py\n@@ -376,4 +376,4 @@\n     except RequestError as exc:\n         if request is not None:\n             exc.request = request\n-        raise type(exc)(str(exc)) from exc\n+        raise exc\n"
+        },
+        {
+          "case": "d02",
+          "seconds": 30.094908099999884,
+          "protected_pass": true,
+          "generations": 2,
+          "diff": "--- a/packages/python/src/decilist/evaluation.py\n+++ b/packages/python/src/decilist/evaluation.py\n@@ -70,7 +70,7 @@\n         \"cases\": n, \"accepted\": accepted, \"coverage\": accepted/n,\n         \"classification_cases\": discrete_cases, \"classification_accepted\": discrete_accepted,\n         \"accuracy_all\": correct/discrete_cases if discrete_cases else None,\n-        \"accuracy_accepted\": correct/accepted if discrete_accepted else None,\n+        \"accuracy_accepted\": correct/discrete_cases if discrete_cases else None,\n         \"score_cases\": score_cases, \"score_accepted\": len(score_errors),\n         \"score_coverage\": len(score_errors)/score_cases if score_cases else None,\n         \"score_mae\": sum(score_errors)/len(score_errors) if score_errors else None,\n"
+        }
+      ],
+      "separate_d02_counterexample": {
+        "exit_code": 1,
+        "expected_accuracy_accepted": 1.0,
+        "observed_accuracy_accepted": 0.5,
+        "contract_holds": false,
+        "evaluation_sha256": "07af891387323e017d58e28b47f8cbbb9b80ea8f669adb8ed922d10428d96098",
+        "worker_sha256": "fc5523aa6f8693675ac739411cebd4789969717ca3939b31c2208f34ead277e8"
+      }
+    },
+    {
+      "run": "stronger-lines-02",
+      "source_stable": true,
+      "development_cases": [
+        {
+          "case": "d01",
+          "seconds": 18.44485450000502,
+          "protected_pass": true,
+          "generations": 1,
+          "diff": "--- a/vendor/httpx/_exceptions.py\n+++ b/vendor/httpx/_exceptions.py\n@@ -376,4 +376,4 @@\n     except RequestError as exc:\n         if request is not None:\n             exc.request = request\n-        raise type(exc)(str(exc)) from exc\n+        raise\n"
+        },
+        {
+          "case": "d02",
+          "seconds": 18.624422900000354,
+          "protected_pass": true,
+          "generations": 1,
+          "diff": "--- a/packages/python/src/decilist/evaluation.py\n+++ b/packages/python/src/decilist/evaluation.py\n@@ -70,7 +70,7 @@\n         \"cases\": n, \"accepted\": accepted, \"coverage\": accepted/n,\n         \"classification_cases\": discrete_cases, \"classification_accepted\": discrete_accepted,\n         \"accuracy_all\": correct/discrete_cases if discrete_cases else None,\n-        \"accuracy_accepted\": correct/accepted if discrete_accepted else None,\n+        \"accuracy_accepted\": correct/discrete_accepted if discrete_accepted else None,\n         \"score_cases\": score_cases, \"score_accepted\": len(score_errors),\n         \"score_coverage\": len(score_errors)/score_cases if score_cases else None,\n         \"score_mae\": sum(score_errors)/len(score_errors) if score_errors else None,\n"
+        }
+      ],
+      "separate_d02_counterexample": {
+        "exit_code": 0,
+        "expected_accuracy_accepted": 1.0,
+        "observed_accuracy_accepted": 1.0,
+        "contract_holds": true,
+        "evaluation_sha256": "a1be17b931fbf504e830c379a7144b2e71239d276224371446918af6aaa6335b",
+        "worker_sha256": "fc5523aa6f8693675ac739411cebd4789969717ca3939b31c2208f34ead277e8"
+      }
+    },
+    {
+      "run": "stronger-alignment-04",
+      "source_stable": true,
+      "development_cases": [
+        {
+          "case": "d01",
+          "seconds": 20.977153899992118,
+          "protected_pass": true,
+          "generations": 1,
+          "diff": "--- a/vendor/httpx/_exceptions.py\n+++ b/vendor/httpx/_exceptions.py\n@@ -376,4 +376,4 @@\n     except RequestError as exc:\n         if request is not None:\n             exc.request = request\n-        raise type(exc)(str(exc)) from exc\n+        raise\n"
+        },
+        {
+          "case": "d02",
+          "seconds": 19.74764319998212,
+          "protected_pass": true,
+          "generations": 1,
+          "diff": "--- a/packages/python/src/decilist/evaluation.py\n+++ b/packages/python/src/decilist/evaluation.py\n@@ -70,7 +70,7 @@\n         \"cases\": n, \"accepted\": accepted, \"coverage\": accepted/n,\n         \"classification_cases\": discrete_cases, \"classification_accepted\": discrete_accepted,\n         \"accuracy_all\": correct/discrete_cases if discrete_cases else None,\n-        \"accuracy_accepted\": correct/accepted if discrete_accepted else None,\n+        \"accuracy_accepted\": correct/discrete_accepted if discrete_accepted else None,\n         \"score_cases\": score_cases, \"score_accepted\": len(score_errors),\n         \"score_coverage\": len(score_errors)/score_cases if score_cases else None,\n         \"score_mae\": sum(score_errors)/len(score_errors) if score_errors else None,\n"
+        }
+      ],
+      "separate_d02_counterexample": {
+        "exit_code": 0,
+        "expected_accuracy_accepted": 1.0,
+        "observed_accuracy_accepted": 1.0,
+        "contract_holds": true,
+        "evaluation_sha256": "a1be17b931fbf504e830c379a7144b2e71239d276224371446918af6aaa6335b",
+        "worker_sha256": "fc5523aa6f8693675ac739411cebd4789969717ca3939b31c2208f34ead277e8"
+      }
+    }
+  ],
+  "selected_contract": "evidence_absolute_lines_verbatim.2",
+  "limits": [
+    "No held-out result or human time saving is established by these development runs.",
+    "Protected-test pass and out-of-band semantic audit are separate observations; the old-model d02 repair is incorrect."
+  ],
+  "human_time_saved": null
+}

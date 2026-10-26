@@ -246,7 +246,7 @@ def end_attempt(directory, attempt_id, *, exit_code=None, observation=None, lab=
         return item
 
 
-async def hint_trial(directory, *, callback=None, callback_version="triage-v6-workflow.1",
+async def hint_trial(directory, *, callback=None, callback_version=None,
                      candidate_freeze=None, profiles_path=None, endpoint=None, apply=True,
                      provider_factory=None, lab=None):
     directory, lab, _ = _locate(directory, lab)
@@ -273,6 +273,7 @@ async def hint_trial(directory, *, callback=None, callback_version="triage-v6-wo
         if selected["config_path"].resolve() != config_path.resolve() or selected["endpoint"] != endpoint:
             raise TrialError("The selected stronger profile changed")
         target = callback or workflow_bridge
+        callback_version = _workflow_module().VERSION if callback_version is None else callback_version
         if not callable(target) or not callback_version.strip() or type(apply) is not bool:
             raise TrialError("Declare one live workflow callback, version and explicit apply boolean")
         source = inspect.getsourcefile(target)

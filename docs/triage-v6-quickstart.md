@@ -27,17 +27,17 @@ python scripts/setup_stronger_local.py serve --cache-dir L:/DecilistModels/qwen-
 python -m decilist.triage_setup --profile qwen3_coder_non_reasoning --output decilist-model.json
 ```
 
-الأمر بيتحقق من هوية الخادم وقالب الموديل ويحفظهم؛ ما بيولّدش إجابة، وما بيستبدلش ملف إعداد موجود. العنوان الافتراضي `http://127.0.0.1:8792`. إعداد Qwen3.6-27B التجريبي موجود في [دليل الموديلات](stronger-local-profiles.md). بعد تشغيله بوضع `--reasoning off`، استخدم `--profile qwen3_6_closed_thinking --url http://127.0.0.1:8794` في أمر الإعداد، ومرّر نفس `--url` لأمر الإصلاح. الخادم لازم يكون جاهز بالفعل؛ دعم القالب مش دليل إن الموديل أصلح العطل.
+الأمر بيتحقق من هوية الخادم وقالب الموديل ويحفظهم؛ ما بيولّدش إجابة، وما بيستبدلش ملف إعداد موجود. العنوان الافتراضي `http://127.0.0.1:8792`. إعداد Qwen3.6-27B التجريبي موجود في [دليل الموديلات](stronger-local-profiles.md). أداة الإعداد العامة شغّلته فعليًا على جهاز التجربة بكارتين RTX 3090، وسياق 16384 ووضع `--reasoning off`، بعد التحقق من بصمة الأوزان. ده تحقق على الجهاز ده؛ مش ضمان للتوافق العام أو جودة الإصلاح أو توفير وقت مطور بشري. لاستخدامه، اختار `--profile qwen3_6_closed_thinking --url http://127.0.0.1:8794` في أمر الإعداد، ومرّر نفس `--url` لأمر الإصلاح. الخادم لازم يكون جاهز بالفعل؛ دعم القالب مش دليل إن الموديل أصلح العطل.
 
 ## وقت فشل اختبار
 
 من التيرمنال اللي بتشتغل منه بالفعل:
 
 ```bash
-python -m decilist.triage_v6 --project . --test tests/test_checkout.py --regression tests/test_cart.py --work-dir ../debug-run-01 --model-config decilist-model.json --capture-failure-text --apply
+decilist debug --project . --test tests/test_checkout.py --regression tests/test_cart.py --work-dir ../debug-run-01 --model-config decilist-model.json --capture-failure-text --apply
 ```
 
-بدّل أسماء الاختبارات باختبارات مشروعك الحالية. اختار مجلد عمل جديد خارج المشروع لكل محاولة. `--apply` بيطبّق التعديل فقط بعد نجاح الاختبارات المحمية ومراجعة إن ملفاتك ما اتغيرتش أثناء التجربة. احذفه لو عايز تشوف التعديل والنتيجة الأول. `--capture-failure-text` بيسمح بإدخال تفاصيل فشل الاختبار للموديل المحلي؛ احذفه لو القيم حساسة.
+بدّل أسماء الاختبارات باختبارات مشروعك الحالية. ده مدخل النسخة المختارة من V6، ومش محتاج فورم أو تسجيل قرار. مع Qwen3.6 زوّد `--url http://127.0.0.1:8794` واستخدم ملف إعداد V6 اللي حفظته للخادم ده. اختار مجلد عمل جديد خارج المشروع لكل محاولة. `--apply` بيطبّق التعديل فقط بعد نجاح الاختبارات المحمية ومراجعة إن ملفاتك ما اتغيرتش أثناء التجربة. احذفه لو عايز تشوف التعديل والنتيجة الأول. `--capture-failure-text` بيسمح بإدخال تفاصيل فشل الاختبار للموديل المحلي؛ احذفه لو القيم حساسة.
 
 لو كودك في مجلد غير `src` أو `packages/python/src` أو `vendor`، حدده باستخدام `--production-root اسم_المجلد`. للمشروع اللي ملفاته مباشرة في الجذر استخدم `--production-root .`. اختار اختبارات رجوع تحمي السلوك المرتبط بالعطل؛ نجاح اختبار واحد مش ضمان لصحة المشروع كله.
 
@@ -46,7 +46,7 @@ python -m decilist.triage_v6 --project . --test tests/test_checkout.py --regress
 ## من أداة التطوير بتاعتك
 
 ```python
-from decilist.triage_v6 import run_triage_v6, format_text
+from decilist.triage_lines_v6 import run_triage_v6, format_text
 
 report = await run_triage_v6(
     project=project_path,

@@ -154,6 +154,24 @@ async def test_report_keeps_coverage_separate_from_accuracy():
         summarize([], [])
 
 
+async def test_accepted_accuracy_excludes_abstentions_and_numeric_scores():
+    abstained = QUESTION.model_copy(update={"state": "uncertain"})
+    score = Score(state="rubric", instructions="Rate", levels=["low", "high"])
+    def probabilities(question):
+        if question.kind == "score":
+            return {"0": 0.0, "1": 1.0}
+        return {"a": .5, "b": .5} if question.state == "uncertain" else {"a": 1.0, "b": 0.0}
+    report = await evaluate(Decilist([FunctionProvider(probabilities)]), [
+        Case("correct", QUESTION, "a"), Case("abstained", abstained, "b"), Case("score", score, 1.0)])
+    metrics = report["metrics"]
+    assert metrics["classification_cases"] == 2
+    assert metrics["classification_accepted"] == 1
+    assert metrics["accuracy_all"] == .5
+    assert metrics["accuracy_accepted"] == 1.0
+    assert metrics["score_accepted"] == 1 and metrics["score_mae"] == 0.0
+    assert metrics["coverage"] == pytest.approx(2 / 3)
+
+
 async def test_response_semantics_reject_mismatched_value():
     result = await Decilist([FunctionProvider(lambda q: {"a":1,"b":0})]).decide(QUESTION)
     with pytest.raises(ValueError):

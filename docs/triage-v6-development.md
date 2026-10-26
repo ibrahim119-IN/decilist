@@ -1,6 +1,6 @@
 # V6 development observations — not fresh evaluation
 
-These observations precede the frozen V6 model/context matrix. They informed development and receive no held-out accuracy or productivity credit. All files and inference ran from L on the presentation machine; the stronger model was still downloading during these observations.
+These observations precede the frozen V6 model/context matrix. They informed development and receive no held-out accuracy or productivity credit. All files and inference ran from L on the presentation machine. The stronger model was downloading during the early runs and was actually loaded for the final development comparisons below.
 
 ## Context and response changes
 
@@ -20,6 +20,9 @@ The generator separately verifies the actual native model template and selected 
 | Current model, manually reduced context, same draft instructions | Exposed d02 only | No repair candidate | The context was reduced to 12,775 characters and the model identified the accepted-count mismatch, but still returned identical 1,200-character fragments. Manual source selection receives no product accuracy credit. |
 | Current model, numbered-line draft v1 | Same exposed d01/d02 | 0/2 | Native constrained grammar worked, but both replacements violated the relative-indent contract. Raw output also contains unresolved citation/range/logic errors; shorter output alone did not repair a case. |
 | Current model, short instructions plus exact-anchor alignment | Same exposed d01/d02 | 1/2 | d01 was repaired and applied after unchanged target/regression checks; root protected validation passed. d02 again returned unchanged code. Both model inputs and raw outputs exactly match the earlier short-instruction probe. |
+| Current model, numbered lines with verbatim indentation | Same exposed d01/d02 | 2/2 frozen checks; **only 1/2 survived semantic audit** | d01 took 17.585s. d02 took 30.095s and two generations, but its denominator is wrong when a classification is abstained. Keep the protected-pass record and the separate counterexample failure. |
+| Stronger model, same numbered-line contract | Same exposed d01/d02 | 2/2; d02 counterexample also passed | 18.445s/18.624s, one generation each. Actual diffs preserve the exception object and restore the accepted-classification denominator. This contract is selected for fresh evaluation. |
+| Stronger model, short instructions plus alignment draft | Same exposed d01/d02 | 2/2; d02 counterexample also passed | 20.977s/19.748s, one generation each. Retained as an unselected development alternative. |
 
 Times in the second row are workflow observations, not paired comparisons with ordinary debugging. The third row took 10.638s and 12.940s respectively and retained both invalid outputs. No row establishes developer time savings.
 
@@ -48,9 +51,15 @@ Raw sanitized reports:
 - [Automatic alignment replay of retained d01 output](../reports/triage-v6-d01-alignment04-01.json)
 - [Numbered-line draft v1 live outcomes](../reports/triage-v6-development-current-lines-01.json)
 - [Short instructions and exact-anchor alignment live outcomes](../reports/triage-v6-development-current-alignment-04.json)
+- [Current model, numbered-line v2](../reports/triage-v6-development-current-lines-02.json)
+- [Stronger model, numbered-line v2](../reports/triage-v6-development-stronger-lines-02.json)
+- [Stronger model, alignment draft](../reports/triage-v6-development-stronger-alignment-04.json)
+- [Separate semantic audit and counterexample](../reports/triage-v6-development-semantic-audit-01.json)
 
 ## Installed-package check
 
 The built wheel was installed outside the source checkout and imported under Python's isolated mode. One-time setup reproduced the actual native model configuration without completion. The installed terminal entry then repaired the already exposed V5 e01 case, applied the tested two-line change and passed the independent protected check. This verifies the packaged integration, not a new accuracy observation or a time-saving comparison. [Retained installed-package run](../reports/triage-v6-installed-wheel-acceptance-02.json) also records an earlier driver argument-construction failure, which stopped before workflow or inference.
+
+After selecting the line2 workflow, a new wheel and source archive were built and the wheel was installed outside the checkout. The installed `debug` dispatch, imported in isolated mode, repaired exposed d01 with the stronger model and passed the independent protected check in 19.808s including CLI startup. The actual diff replaces construction of a new exception with a bare re-raise. [Installed line2 command evidence](../reports/triage-v6-installed-lines-02.json) retains the command, wheel/module hashes and checks. An earlier build without isolation lacked setuptools; that build failure is retained locally, and the normal isolated build succeeded. This is packaging acceptance, not fresh accuracy or saved debugging time.
 
 Exact source hashes and retained local source copies distinguish these observations from subsequent candidates. The V6 matrix, reserved timed trials and historical transfer experiment have separate prespecified protocols. Their results must be reported even when the targets fail.

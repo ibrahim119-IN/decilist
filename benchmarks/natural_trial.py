@@ -267,7 +267,7 @@ def end_attempt(directory, attempt_id, *, exit_code=None, observation=None, lab=
         return item
 
 
-async def hint_trial(directory, *, callback=None, callback_version="triage-v6-workflow.1",
+async def hint_trial(directory, *, callback=None, callback_version=None,
                      candidate_freeze=None, profiles_path=None, endpoint=None, apply=True,
                      provider_factory=None, lab=None):
     directory, lab, _ = _locate(directory, lab)
@@ -294,6 +294,7 @@ async def hint_trial(directory, *, callback=None, callback_version="triage-v6-wo
         if selected["config_path"].resolve() != config_path.resolve() or selected["endpoint"] != endpoint:
             raise TrialError("The selected stronger profile changed")
         target = callback or workflow_bridge
+        callback_version = _workflow_module().VERSION if callback_version is None else callback_version
         if not callable(target) or not callback_version.strip() or type(apply) is not bool:
             raise TrialError("Declare one live workflow callback, version and explicit apply boolean")
         source = inspect.getsourcefile(target)
@@ -353,6 +354,9 @@ async def hint_trial(directory, *, callback=None, callback_version="triage-v6-wo
                 retain_context(report, work_dir=directory / "workflow")
             entry["status"] = report.get("state", report.get("status", "unverified"))
         except BaseException as exc:
+            if report is None and isinstance(getattr(exc, "workflow_report", None), dict):
+                report = exc.workflow_report
+                entry["workflow_returned_report"] = True
             entry.update(status="interrupted" if isinstance(exc, (KeyboardInterrupt, asyncio.CancelledError)) else "error",
                          error_type=type(exc).__name__, error=str(exc))
             report = {**(report if isinstance(report, dict) else {}),

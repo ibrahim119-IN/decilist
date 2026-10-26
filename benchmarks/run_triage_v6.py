@@ -50,13 +50,13 @@ def _utc():
 
 
 def _workflow_module():
-    from decilist import triage_v6
-    return triage_v6
+    from decilist import triage_lines_v6
+    return triage_lines_v6
 
 
 def _generator_module():
-    from decilist import triage_hypothesis_v6
-    return triage_hypothesis_v6
+    from decilist import triage_line_hypothesis_v6
+    return triage_line_hypothesis_v6
 
 
 def _source_files():

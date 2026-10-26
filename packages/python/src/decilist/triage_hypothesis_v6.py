@@ -710,6 +710,15 @@ def _error_details(exc: Exception, stage: str) -> dict:
 
 
 async def generate_hypothesis(context: dict, *, provider: _llama.LlamaCppProvider, feedback: dict | None = None) -> dict:
+    """Legacy exact-replacement API; its original contract remains the default."""
+    return await _generate_with_contract(context, provider=provider, feedback=feedback,
+        version=VERSION, specification_fn=specification, messages_fn=input_messages,
+        schema_fn=generation_schema, validate_fn=validate_generated)
+
+
+async def _generate_with_contract(context: dict, *, provider: _llama.LlamaCppProvider,
+                                  feedback: dict | None, version: str, specification_fn,
+                                  messages_fn, schema_fn, validate_fn) -> dict:
     """Generate one candidate, or one revision using only an actual test rejection.
 
     Pass V6LlamaCppProvider for the isolated 1200-token generation budget. The
@@ -717,8 +726,8 @@ async def generate_hypothesis(context: dict, *, provider: _llama.LlamaCppProvide
     All failure outputs obtained from the provider remain in the returned report.
     """
     started = perf_counter()
-    report = {"schema_version": 6, "generator_version": VERSION,
-              "specification_sha256": _fingerprint(specification()), "status": "needs_review", "reason": None, "source": "none",
+    report = {"schema_version": 6, "generator_version": version,
+              "specification_sha256": _fingerprint(specification_fn()), "status": "needs_review", "reason": None, "source": "none",
               "result": None, "raw_output": None, "raw_completion": None, "generation_metrics": None,
               "runtime": None, "timings_ms": {}, "generation_input_sha256": None, "context_sha256": None,
               "context_schema_version": None, "generation_profile": None, "generation_mode_proof": None,
@@ -739,8 +748,8 @@ async def generate_hypothesis(context: dict, *, provider: _llama.LlamaCppProvide
         if not isinstance(provider, V6LlamaCppProvider) or provider.locality != "local":
             raise ValueError("V6 generation requires the explicitly configured local llama.cpp provider")
         report["generation_profile"] = generation_profile_specification(provider.generation_profile, provider.expected_chat_template_sha256)
-        messages = input_messages(context, feedback)
-        schema = generation_schema(context)
+        messages = messages_fn(context, feedback)
+        schema = schema_fn(context)
         report["generation_input_sha256"] = _fingerprint({"messages": messages, "json_schema": schema})
         stage, tick = "ready", perf_counter()
         report["runtime"] = await provider.ready()
@@ -765,7 +774,7 @@ async def generate_hypothesis(context: dict, *, provider: _llama.LlamaCppProvide
         if not isinstance(content, str) or not content.strip() or len(content) > MAX_OUTPUT_CHARS:
             raise ValueError("Invalid bounded generated content")
         raw = json.loads(content, object_pairs_hook=_llama._unique_object, parse_constant=_llama._nonfinite)
-        result = validate_generated(raw, context)
+        result = validate_fn(raw, context)
         report["intervention_signature_sha256"] = _validate_revision(result, context, feedback)
         supported = result.hypothesis is not None
         report.update(result=result.model_dump(), source="local_model_generation",

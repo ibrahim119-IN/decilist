@@ -246,7 +246,7 @@ async def run_triage_v6(project: Path | str, tests: Sequence[str], regressions: 
                         provider=None, endpoint: str = "http://127.0.0.1:8792",
                         timeout_seconds: float = 30, max_context_chars: int = DEFAULT_MAX_CONTEXT_CHARS,
                         allowed_production_roots: Sequence[str] = _PRODUCTION_ROOTS,
-                        context_policy: str = "v6") -> dict:
+                        context_policy: str = "v6", _generator=None) -> dict:
     """Reproduce once, generate at most twice, and verify unchanged selections.
 
     A supplied provider is caller-owned and is useful for explicit test
@@ -346,7 +346,7 @@ async def run_triage_v6(project: Path | str, tests: Sequence[str], regressions: 
                 result["reason"] = "source_changed_before_feedback_attempt"
                 return result
             with _stage(result, "model", attempt=attempt):
-                generation = attempt["generation"] = await generate_hypothesis(context, provider=provider, feedback=feedback)
+                generation = attempt["generation"] = await (_generator or generate_hypothesis)(context, provider=provider, feedback=feedback)
                 _write_json(original.evidence / f"generation_{index + 1}.json", generation)
                 if isinstance(generation.get("result"), dict):
                     proposed = validate_generated(generation["result"], context).model_dump()
@@ -475,7 +475,7 @@ def format_text(report: dict | None) -> str:
     return "\n".join(lines) + "\n"
 
 
-def main(argv=None) -> int:
+def main(argv=None, *, _workflow=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", type=Path, required=True)
     parser.add_argument("--test", action="append", required=True, help="Explicit failing Python test selector; repeatable")
@@ -495,7 +495,7 @@ def main(argv=None) -> int:
         help="Permitted implementation directory; repeatable. Use . explicitly for flat-module projects")
     parser.add_argument("--format", choices=("text", "json"), default="text")
     args = parser.parse_args(argv)
-    report = asyncio.run(run_triage_v6(args.project, args.test, args.regression, args.work_dir, args.model_config,
+    report = asyncio.run((_workflow or run_triage_v6)(args.project, args.test, args.regression, args.work_dir, args.model_config,
         capture_failure_text=args.capture_failure_text, apply=args.apply, endpoint=args.url,
         timeout_seconds=args.timeout_seconds, max_context_chars=args.max_context_chars,
         allowed_production_roots=args.production_root or _PRODUCTION_ROOTS, context_policy=args.context_policy))

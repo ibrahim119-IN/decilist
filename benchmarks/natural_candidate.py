@@ -30,8 +30,20 @@ SUITE = "natural-historical-transfer-agent-trials"
 
 
 def _workflow_module():
-    from decilist import triage_v6
-    return triage_v6
+    from decilist import triage_lines_v6
+    return triage_lines_v6
+
+
+def _generator_module():
+    from decilist import triage_line_hypothesis_v6
+    return triage_line_hypothesis_v6
+
+
+class SelectedProtocolError(ValueError):
+    """Reject mismatched provenance while retaining the complete workflow output."""
+    def __init__(self, message, workflow_report):
+        super().__init__(message)
+        self.workflow_report = workflow_report
 
 
 def _json(path):
@@ -105,8 +117,9 @@ def candidate_snapshot(profiles_path):
             "temperature": 0, "seed": 42, "cache_prompt": False, "serving_context": 16384,
             "case_ids": list(CASE_IDS), "first_assistant_call_is_timed": True,
             "source_citation_is_correctness": False, "no_prior_transfer_assistant_evaluation": True}}
-    from decilist.triage_hypothesis_v6 import specification
-    snapshot["specification"]["generator"] = specification()
+    generator = _generator_module()
+    snapshot["specification"].update(generator=generator.specification(), edit_protocol=generator.VERSION,
+        generation_module=generator.__name__)
     return _public(snapshot)
 
 
@@ -276,6 +289,12 @@ async def workflow_bridge(evidence, *, project, manifest, work_dir, config_path,
     report = await _workflow_module().run_triage_v6(project, tests, regressions, work_dir, config_path,
         capture_failure_text=True, apply=True, provider=provider, endpoint=endpoint,
         max_context_chars=24000, allowed_production_roots=["src"], context_policy="v6")
+    generator = _generator_module()
+    if (report.get("workflow_version") != _workflow_module().VERSION
+            or report.get("edit_protocol") != generator.VERSION
+            or report.get("generation_module") != generator.__name__
+            or report.get("generation_specification") != generator.specification()):
+        raise SelectedProtocolError("Natural workflow returned a different selected line protocol or generator specification", report)
     report["measurement_test_args"] = {"failing_tests": tests, "regression_tests": regressions}
     retain_context(report, work_dir=Path(work_dir))
     return report

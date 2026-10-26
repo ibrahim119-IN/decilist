@@ -1,6 +1,8 @@
 # Explicit local model profiles
 
-`scripts/setup_stronger_local.py` supports explicit model profiles. The integrated plans and setup guards passed 21 focused tests. **Qwen3.6 loading, GPU fit, the actual default template and inference compatibility remain unverified.** Those tests used stubs and pure plans, with no model process or inference. The commands below describe checkout usage.
+`scripts/setup_stronger_local.py` supports explicit model profiles. The integrated plans and setup guards passed 21 focused tests using stubs and pure plans. Separately, on 2026-10-26 the public setup helper successfully loaded Qwen3.6-27B Q8_0 on the existing Windows machine with two RTX 3090 24 GB cards, 16,384 context tokens, a 3:2 layer split and native `--reasoning off`. It verified the full pinned weight SHA-256, owned listener PID 64136, serving context, actual CUDA DLL paths/hashes and the default closed-thinking template prefix. This is observed setup readiness on that hardware, not a general compatibility, diagnostic-quality or human-speed claim.
+
+The retained local manifest is `L:/CodexData/Decilist/work/triage-v6-model/launches/20261026T201514864850Z-qwen36-27b-q8/server-ready-manifest.json`. That launch reused the pinned runtime and existing CUDA DLLs through the explicit directory options below. The setup helper made zero generation requests; the commands in this guide describe checkout usage.
 
 The existing default remains Qwen3-Coder-30B-A3B-Instruct Q4_K_M. Select Qwen3.6 explicitly; installing or importing the SDK does not select, download or start either model. Windows x64 CUDA is the setup helper's supported target. The ordinary `decilist triage` command and existing provider/config schemas are unchanged.
 
@@ -67,7 +69,7 @@ The helper refuses an occupied port and never stops or adopts another service. K
 
 ## Configure V6 after serving
 
-The launch helper's two-field identity config is a lower-level config; it does not supply the five-field identity discovered for V6. After successful future serving, run the existing metadata/template setup command against the explicit candidate endpoint and choose a **new** output file:
+The launch helper's two-field identity config is a lower-level config; it does not supply the five-field identity discovered for V6. Once the server is ready, run the existing metadata/template setup command against the explicit candidate endpoint and choose a **new** output file:
 
 ```powershell
 & $python -B -m decilist.triage_setup --profile qwen3_6_closed_thinking `
@@ -77,17 +79,17 @@ The launch helper's two-field identity config is a lower-level config; it does n
 This verifies the native profile and records the model, build, generation profile, chat-template hash and model path. It requests no generation and refuses to overwrite an existing file. Then pass that V6 config and the same endpoint to the workflow. Replace the illustrative project path, existing test selectors and production directory with your own; choose a new work directory outside the project:
 
 ```powershell
-& $python -B -m decilist.triage_v6 --url http://127.0.0.1:8794 `
+decilist debug --url http://127.0.0.1:8794 `
   --model-config "$setupRoot/NEW-V6.json" --project L:/path/to/app `
   --test tests/test_bug.py::test_bug --regression tests/test_existing.py `
   --production-root src --work-dir "$setupRoot/runs/new-v6-run"
 ```
 
-V6 performs the requested diagnostic/repair workflow in its disposable copy and checks unchanged tests; this example does not request applying edits to the original project. It has not been run against the candidate in this draft.
+`decilist debug` selects the V6 line-edit workflow. It performs the requested diagnostic/repair workflow in its disposable copy and checks unchanged tests; this example does not request applying edits to the original project. Setup readiness alone does not validate a particular repair. See the [V6 quickstart](triage-v6-quickstart.md) for the same workflow through Python.
 
 ## Optional lower-level V3 and SDK integration
 
-After successful future readiness, the candidate writes an identity-only config at `$setupRoot/decilist-model-qwen36-27b-q8.json`, preserving the old default config. Its separate port must be supplied explicitly to consumers:
+After readiness, the candidate writes an identity-only config at `$setupRoot/decilist-model-qwen36-27b-q8.json`, preserving the old default config. Its separate port must be supplied explicitly to consumers:
 
 ```powershell
 & $python -B -m decilist.triage_v3 --log failed.log --project . `
@@ -133,6 +135,6 @@ The selected official GGUF repository is [`ggml-org/Qwen3.6-27B-GGUF`](https://h
 
 The runtime remains llama.cpp b11889 at commit `d854d98bae598388ecea1ed84396587e5edc326d`, with the existing pinned Windows CUDA archives and executable hash. llama.cpp is MIT licensed; NVIDIA CUDA dependency terms are separate.
 
-The retained source audit identifies native [`--reasoning off`](https://github.com/ggml-org/llama.cpp/blob/d854d98bae598388ecea1ed84396587e5edc326d/common/arg.cpp#L3739) as the control that sets the default thinking parameter false. `--reasoning-format none` alone only controls parsing. The candidate uses both, with f16 K/V cache and one slot. After future identity, serving-context, owned-listener and loaded-DLL checks, the helper makes one neutral `/apply-template` request without a request override. It requires the pinned publisher template's closed thinking block before writing readiness. This is a default-template check with zero generation requests, not a quality result. Actual requests can still change template parameters; the caller must retain and inspect its own settings.
+The retained source audit identifies native [`--reasoning off`](https://github.com/ggml-org/llama.cpp/blob/d854d98bae598388ecea1ed84396587e5edc326d/common/arg.cpp#L3739) as the control that sets the default thinking parameter false. `--reasoning-format none` alone only controls parsing. The candidate uses both, with f16 K/V cache and one slot. After identity, serving-context, owned-listener and loaded-DLL checks, the helper makes one neutral `/apply-template` request without a request override. It requires the pinned publisher template's closed thinking block before writing readiness. This check passed in the retained launch above, with zero generation requests. It is not a quality result. Actual requests can still change template parameters; the caller must retain and inspect its own settings.
 
-Keep stronger-model use experimental until actual loading, default-template proof, neutral choose/predict/score protocol checks and separately authorized quality measurements have been retained. The current draft supplies no new inference or benchmark evidence.
+Keep stronger-model use experimental. The retained launch establishes loading, hardware fit and default-template mode on one machine. Neutral decision-protocol checks and quality measurements are separate evidence; neither valid setup metadata nor a closed template proves a diagnosis or repair correct, or a human time saving.
