@@ -27,7 +27,7 @@ python scripts/setup_stronger_local.py serve --cache-dir L:/DecilistModels/qwen-
 python -m decilist.triage_setup --profile qwen3_coder_non_reasoning --output decilist-model.json
 ```
 
-الأمر بيتحقق من هوية الخادم وقالب الموديل ويحفظهم؛ ما بيولّدش إجابة، وما بيستبدلش ملف إعداد موجود. العنوان الافتراضي `http://127.0.0.1:8792`. لو اخترت Qwen3.6-27B، شغّله بوضع `--reasoning off` واستخدم `--profile qwen3_6_closed_thinking`. الخادم لازم يكون جاهز بالفعل؛ دعم القالب مش دليل إن الموديل أصلح العطل.
+الأمر بيتحقق من هوية الخادم وقالب الموديل ويحفظهم؛ ما بيولّدش إجابة، وما بيستبدلش ملف إعداد موجود. العنوان الافتراضي `http://127.0.0.1:8792`. إعداد Qwen3.6-27B التجريبي موجود في [دليل الموديلات](stronger-local-profiles.md). بعد تشغيله بوضع `--reasoning off`، استخدم `--profile qwen3_6_closed_thinking --url http://127.0.0.1:8794` في أمر الإعداد، ومرّر نفس `--url` لأمر الإصلاح. الخادم لازم يكون جاهز بالفعل؛ دعم القالب مش دليل إن الموديل أصلح العطل.
 
 ## وقت فشل اختبار
 

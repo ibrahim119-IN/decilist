@@ -4,6 +4,8 @@ This experimental path connects the Python SDK to a caller-owned llama.cpp servi
 
 The selected artifact is Qwen3-Coder-30B-A3B-Instruct Q4_K_M, from `ggml-org/Qwen3-Coder-30B-A3B-Instruct-GGUF`, revision `0ca51122012fe4a20dc82988ee58780b008ce4e3`. The file is 17,988,419,552 bytes. Its SHA-256 is `f6050b4da22869aa3fb9d94bb3314e9fc5a027d4741c1f97761c387d6b2b2335`. The setup helper pins llama.cpp b11889 and verifies the model and executable before serving. These setup identities are separate from evidence of useful diagnoses.
 
+For the explicit Qwen3.6-27B profile and L: storage settings, see [local model profiles](stronger-local-profiles.md). The existing Coder defaults below remain available. V6 requires `--context 16384` and its separate [one-time identity setup](triage-v6-quickstart.md).
+
 ## Windows CUDA setup
 
 The helper targets Windows x64 CUDA. The HTTP provider itself is Python code, but compatibility with other binaries/platforms needs its own verification. The current experimental configuration requests one GPU, 8,192 context tokens and one inference slot; it does not promise to fit an ordinary laptop. Keep at least 3 GB spare disk space in addition to the weights and runtime artifacts.

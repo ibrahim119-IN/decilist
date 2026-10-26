@@ -17,6 +17,9 @@ The generator separately verifies the actual native model template and selected 
 | Current model, V6 context | V6 development d01/d02 | 0/2 | Both outputs omitted failure citations; d01 had no edit and d02 repeated unchanged code. Relaxing the citation check would not produce a valid repair. |
 | Current model, revised exception context | Same exposed V6 development d01/d02 | 0/2 | d01 produced an unchanged replacement; d02 proposed two changes that failed the unchanged target tests. Neither was applied. |
 | Current model, 250-word draft instructions | Same exposed V6 development d01/d02 | 0/2; run excluded from stable-candidate comparison | d01 proposed an exception-preserving change with a uniform indentation mismatch; d02 copied an unchanged, truncated fragment. Only the preparation manifest changed during the run; executable source and prompt bytes remained unchanged. The original drift failure is retained. |
+| Current model, manually reduced context, same draft instructions | Exposed d02 only | No repair candidate | The context was reduced to 12,775 characters and the model identified the accepted-count mismatch, but still returned identical 1,200-character fragments. Manual source selection receives no product accuracy credit. |
+| Current model, numbered-line draft v1 | Same exposed d01/d02 | 0/2 | Native constrained grammar worked, but both replacements violated the relative-indent contract. Raw output also contains unresolved citation/range/logic errors; shorter output alone did not repair a case. |
+| Current model, short instructions plus exact-anchor alignment | Same exposed d01/d02 | 1/2 | d01 was repaired and applied after unchanged target/regression checks; root protected validation passed. d02 again returned unchanged code. Both model inputs and raw outputs exactly match the earlier short-instruction probe. |
 
 Times in the second row are workflow observations, not paired comparisons with ordinary debugging. The third row took 10.638s and 12.940s respectively and retained both invalid outputs. No row establishes developer time savings.
 
@@ -24,7 +27,13 @@ The exception-context revision addresses a measured packing loss: the d01 trace 
 
 The manual e05 diagnostic intervention was also checked: calling its existing canonical helper passes all six protected checks. V5's guard rejected that call; V6's narrow evidence-backed allowance accepts it. This is a manual guard diagnosis, not a model-generated repair result.
 
-The short-instruction probe took 13.832s and 16.015s and applied neither candidate. Root compared every recorded before/after source hash: the only changed file was the draft manifest, which gained its completed preparation checks and additional file hashes. This explains the drift without reclassifying the run as a valid frozen comparison. The d01 raw replacement contains the intended local change but does not match canonical source indentation; its correctness still requires independent protected execution. The d02 unchanged replacement has no repair to recover. No fresh case or timed trial was used for these observations.
+The short-instruction probe took 13.832s and 16.015s and applied neither candidate. Root compared every recorded before/after source hash: the only changed file was the draft manifest, which gained its completed preparation checks and additional file hashes. This explains the drift without reclassifying the run as a valid frozen comparison. The d01 raw replacement contains the intended local change but does not match canonical source indentation. In a separate manual diagnosis, root aligned that retained replacement, ran the unchanged source/AST guards and target/regression selections, and independently passed the protected checks. The resulting diff changes only the exception re-raise. This demonstrates recoverable intent, not a live assistant repair or a general permission to reindent strings. The d02 unchanged replacement has no repair to recover. No fresh case or timed trial was used for these observations.
+
+For a separate d02 diagnostic, root manually retained the failing test and its evaluation path while preserving the canonical function text. The 12,775-character input produced a specific explanation of the classification denominator error in 12.010s, but its old/new strings still copied the same initial function fragment up to the schema limit. Source hashes remained stable. This supports investigating output representation as a bottleneck; it does not establish that a general context selector or a changed response schema will repair new failures.
+
+A separate exact-anchor alignment draft subsequently recovered the retained d01 proposal automatically. It requires the entire original old fragment to match one canonical whole-line location after the same uniform space offset; identical but invented surrounding text cannot authorize a match. Only the changed core is applied, with literal contents and all existing validation and test guards preserved. Root ran 188 focused checks and replayed the retained output through the draft, then ran the six target and three regression checks plus independent protected validation. All passed. This remains an exposed-output replay with zero new generation requests; the draft is not an active product change or new accuracy/timing credit.
+
+The first live numbered-line probe used 202/254 output tokens and took 9.102s/8.985s, but produced no applied repair. The next live short-instruction/alignment probe took 13.820s/12.646s: d01 passed all protected checks, while d02 remained a no-op. Root compared the actual generation input hashes and raw response strings against the original short-instruction run: both are identical for both cases. The recovered d01 outcome therefore demonstrates a formatting/validation correction on that known output, without claiming improved model reasoning, fresh-case accuracy, or ordinary-debugging time savings. All implementation hashes remained stable during these later runs.
 
 Raw sanitized reports:
 
@@ -34,6 +43,11 @@ Raw sanitized reports:
 - [Root exception-context replay](../reports/triage-v6-context-development-02.json)
 - [Revised-context development outcomes](../reports/triage-v6-development-current-context-02.json)
 - [Short-instruction probe, including source drift](../reports/triage-v6-development-current-prompt-03.json)
+- [Manual execution of the retained d01 intent](../reports/triage-v6-d01-intent-manual-01.json)
+- [Manual reduced-context d02 diagnostic](../reports/triage-v6-d02-minimal-context-01.json)
+- [Automatic alignment replay of retained d01 output](../reports/triage-v6-d01-alignment04-01.json)
+- [Numbered-line draft v1 live outcomes](../reports/triage-v6-development-current-lines-01.json)
+- [Short instructions and exact-anchor alignment live outcomes](../reports/triage-v6-development-current-alignment-04.json)
 
 ## Installed-package check
 
