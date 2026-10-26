@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "rows": [
+    {
+      "slot": 1,
+      "case_id": "r01",
+      "treatment": "normal_tools",
+      "root_confirmed": true,
+      "changed_files": [
+        {
+          "path": "vendor/httpx/_models.py",
+          "before_sha256": "281a742e182ded40a2f7ab58c73a2c57ad080d6a94fd2d7d7031b018bd13c0c6",
+          "after_sha256": "e3ffc6bb2bf580bc6e6428708a6f247d036220e709f5a72b785392babbd97e6b",
+          "before_crlf_lines": 0,
+          "after_crlf_lines": 0,
+          "normalized_line_diff": [
+            "--- initial/vendor/httpx/_models.py",
+            "+++ terminal/vendor/httpx/_models.py",
+            "@@ -662,7 +662,7 @@",
+            "           which enables charset autodetection.",
+            "         \"\"\"",
+            "         if not hasattr(self, \"_encoding\"):",
+            "-            encoding = None",
+            "+            encoding = self.charset_encoding",
+            "             if encoding is None or not _is_known_encoding(encoding):",
+            "                 if isinstance(self.default_encoding, str):",
+            "                     encoding = self.default_encoding"
+          ]
+        }
+      ]
+    },
+    {
+      "slot": 2,
+      "case_id": "r02",
+      "treatment": "verified_assistant",
+      "root_confirmed": true,
+      "changed_files": [
+        {
+          "path": "vendor/httpx/_models.py",
+          "before_sha256": "7647d4951f1db9f36c53697f6e2f82047365692ccf7da129a15ebca780e39767",
+          "after_sha256": "e3ffc6bb2bf580bc6e6428708a6f247d036220e709f5a72b785392babbd97e6b",
+          "before_crlf_lines": 0,
+          "after_crlf_lines": 0,
+          "normalized_line_diff": [
+            "--- initial/vendor/httpx/_models.py",
+            "+++ terminal/vendor/httpx/_models.py",
+            "@@ -1071,6 +1071,7 @@",
+            "             raise RuntimeError(\"Attempted to call an async close on an sync stream.\")",
+            " ",
+            "         if not self.is_closed:",
+            "+            self.is_closed = True",
+            "             with request_context(request=self._request):",
+            "                 await self.stream.aclose()",
+            " "
+          ]
+        }
+      ]
+    },
+    {
+      "slot": 3,
+      "case_id": "r03",
+      "treatment": "normal_tools",
+      "root_confirmed": true,
+      "changed_files": [
+        {
+          "path": "vendor/httpx/_multipart.py",
+          "before_sha256": "a1c6c7704bc5728e1efbe50a871f4619a1b9ca815ad8a2f7a1c06f7fa138ec16",
+          "after_sha256": "28e1c465997aa28860f663da2b2caedf8e6aab5ac92e0df94d41b7600cd70776",
+          "before_crlf_lines": 0,
+          "after_crlf_lines": 0,
+          "normalized_line_diff": [
+            "--- initial/vendor/httpx/_multipart.py",
+            "+++ terminal/vendor/httpx/_multipart.py",
+            "@@ -273,7 +273,7 @@",
+            "         for field in self.fields:",
+            "             field_length = field.get_length()",
+            "             if field_length is None:",
+            "-                continue",
+            "+                return None",
+            " ",
+            "             length += 2 + boundary_length + 2  # b\"--{boundary}\\r\\n\"",
+            "             length += field_length"
+          ]
+        }
+      ]
+    },
+    {
+      "slot": 4,
+      "case_id": "r04",
+      "treatment": "verified_assistant",
+      "root_confirmed": true,
+      "changed_files": [
+        {
+          "path": "packages/python/src/decilist/contracts.py",
+          "before_sha256": "a083747e4ba65efd6feb501c1daf2f851ede39feea7100465b0b45d1aef7747d",
+          "after_sha256": "f39e87307f37228cb7ead8ca7cdd35319676b38e370ed1338d1f538a355221ce",
+          "before_crlf_lines": 0,
+          "after_crlf_lines": 0,
+          "normalized_line_diff": [
+            "--- initial/packages/python/src/decilist/contracts.py",
+            "+++ terminal/packages/python/src/decilist/contracts.py",
+            "@@ -119,7 +119,7 @@",
+            "     if isinstance(question, Predict):",
+            "         return probabilities[\"true\"] >= 0.5",
+            "     if isinstance(question, Score):",
+            "-        return float(max(probabilities, key=probabilities.__getitem__))",
+            "+        return sum(float(label) * probability for label, probability in probabilities.items())",
+            "     return max(probabilities, key=probabilities.__getitem__)",
+            " ",
+            " "
+          ]
+        }
+      ]
+    },
+    {
+      "slot": 5,
+      "case_id": "r01",
+      "treatment": "verified_assistant",
+      "root_confirmed": true,
+      "changed_files": [
+        {
+          "path": "vendor/httpx/_models.py",
+          "before_sha256": "281a742e182ded40a2f7ab58c73a2c57ad080d6a94fd2d7d7031b018bd13c0c6",
+          "after_sha256": "e3ffc6bb2bf580bc6e6428708a6f247d036220e709f5a72b785392babbd97e6b",
+          "before_crlf_lines": 0,
+          "after_crlf_lines": 0,
+          "normalized_line_diff": [
+            "--- initial/vendor/httpx/_models.py",
+            "+++ terminal/vendor/httpx/_models.py",
+            "@@ -662,7 +662,7 @@",
+            "           which enables charset autodetection.",
+            "         \"\"\"",
+            "         if not hasattr(self, \"_encoding\"):",
+            "-            encoding = None",
+            "+            encoding = self.charset_encoding",
+            "             if encoding is None or not _is_known_encoding(encoding):",
+            "                 if isinstance(self.default_encoding, str):",
+            "                     encoding = self.default_encoding"
+          ]
+        }
+      ]
+    },
+    {
+      "slot": 6,
+      "case_id": "r02",
+      "treatment": "normal_tools",
+      "root_confirmed": true,
+      "changed_files": [
+        {
+          "path": "vendor/httpx/_models.py",
+          "before_sha256": "7647d4951f1db9f36c53697f6e2f82047365692ccf7da129a15ebca780e39767",
+          "after_sha256": "e3ffc6bb2bf580bc6e6428708a6f247d036220e709f5a72b785392babbd97e6b",
+          "before_crlf_lines": 0,
+          "after_crlf_lines": 0,
+          "normalized_line_diff": [
+            "--- initial/vendor/httpx/_models.py",
+            "+++ terminal/vendor/httpx/_models.py",
+            "@@ -1071,6 +1071,7 @@",
+            "             raise RuntimeError(\"Attempted to call an async close on an sync stream.\")",
+            " ",
+            "         if not self.is_closed:",
+            "+            self.is_closed = True",
+            "             with request_context(request=self._request):",
+            "                 await self.stream.aclose()",
+            " "
+          ]
+        }
+      ]
+    },
+    {
+      "slot": 7,
+      "case_id": "r03",
+      "treatment": "verified_assistant",
+      "root_confirmed": true,
+      "changed_files": [
+        {
+          "path": "vendor/httpx/_multipart.py",
+          "before_sha256": "a1c6c7704bc5728e1efbe50a871f4619a1b9ca815ad8a2f7a1c06f7fa138ec16",
+          "after_sha256": "28e1c465997aa28860f663da2b2caedf8e6aab5ac92e0df94d41b7600cd70776",
+          "before_crlf_lines": 0,
+          "after_crlf_lines": 0,
+          "normalized_line_diff": [
+            "--- initial/vendor/httpx/_multipart.py",
+            "+++ terminal/vendor/httpx/_multipart.py",
+            "@@ -273,7 +273,7 @@",
+            "         for field in self.fields:",
+            "             field_length = field.get_length()",
+            "             if field_length is None:",
+            "-                continue",
+            "+                return None",
+            " ",
+            "             length += 2 + boundary_length + 2  # b\"--{boundary}\\r\\n\"",
+            "             length += field_length"
+          ]
+        }
+      ]
+    },
+    {
+      "slot": 8,
+      "case_id": "r04",
+      "treatment": "normal_tools",
+      "root_confirmed": true,
+      "changed_files": [
+        {
+          "path": "packages/python/src/decilist/contracts.py",
+          "before_sha256": "a083747e4ba65efd6feb501c1daf2f851ede39feea7100465b0b45d1aef7747d",
+          "after_sha256": "f39e87307f37228cb7ead8ca7cdd35319676b38e370ed1338d1f538a355221ce",
+          "before_crlf_lines": 0,
+          "after_crlf_lines": 0,
+          "normalized_line_diff": [
+            "--- initial/packages/python/src/decilist/contracts.py",
+            "+++ terminal/packages/python/src/decilist/contracts.py",
+            "@@ -119,7 +119,7 @@",
+            "     if isinstance(question, Predict):",
+            "         return probabilities[\"true\"] >= 0.5",
+            "     if isinstance(question, Score):",
+            "-        return float(max(probabilities, key=probabilities.__getitem__))",
+            "+        return sum(float(label) * probability for label, probability in probabilities.items())",
+            "     return max(probabilities, key=probabilities.__getitem__)",
+            " ",
+            " "
+          ]
+        }
+      ]
+    }
+  ],
+  "preclock_preparation": {
+    "slot": 4,
+    "observed": "Participant read generic trial helper signatures before starting the clock. No case source, failure, catalog, or hint was opened during that preparation.",
+    "policy": "Protocol allows importing generic trial helpers before clock. This preparation supplied no defect information. Original assigned-arm time retained without subtraction."
+  },
+  "note": "Normalized line diffs are an additional review view. Original bytes, byte hashes, reports, and trial times remain untouched. Root freshly reran protected validation for all eight slots before this source inspection."
+}

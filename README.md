@@ -134,7 +134,7 @@ Transport is restricted to a local loopback endpoint. Credential filtering is he
 
 **Triage quality remains limited.** The [original result](docs/triage-results.md) is preserved: Liquid suggested one next check and abstained on seven known cases. On eight fresh evaluation regressions, v2's learned path accepted two correct next checks versus one for v1, at the unchanged 0.7 threshold. The default hybrid also accepted two (one explicit rule, one model result). All three ambiguity/mixed/insufficient controls went to review in v2. These small authored suites do not establish general diagnosis quality or human productivity savings. [Full results and retained failures](docs/triage-v2-results.md).
 
-The separate experimental **V4 verification workflow** gathers executed Python function context, proposes a small intervention with a local coding model, and reruns unchanged target and regression tests in a disposable copy. It leaves the original project untouched unless explicitly invoked with `--apply`. Use it directly from a terminal or Python API in an existing trusted project; no Playground or new form is required. See the [V4 quickstart](docs/triage-v4-quickstart.md), [measurement protocol](docs/triage-v4-experiment.md), and [actual results](docs/triage-v4-results.md). V4 verified **0/6** fresh evaluation repairs; the assisted arm was slower on all four reserved agent tasks. Passing selected tests supports an intervention; it does not establish complete correctness or human debugging-time savings.
+The separate experimental **V5 verification workflow** gathers executed Python function context, proposes a small intervention with a local coding model, and reruns unchanged target and regression tests in a disposable copy. It leaves the original project untouched unless explicitly invoked with `--apply`. Use it directly from a terminal or Python API in an existing trusted project; no Playground or new form is required. See the [V5 quickstart](docs/triage-v5-quickstart.md), [measurement protocol](docs/triage-v5-experiment.md), and [actual results](docs/triage-v5-results.md). V5 verified **2/6** fresh evaluation repairs. The assisted agent median was **67.875s versus 58.703s** with ordinary tools; all four hints failed and agents continued manually. Both arms ultimately repaired all four reserved cases. The prespecified quality and time targets failed. Passing selected tests supports an intervention; it does not establish complete correctness or human debugging-time savings. [V4's negative results](docs/triage-v4-results.md) remain available unchanged.
 
 ## Verify and compare
 
@@ -143,6 +143,7 @@ Contributors also install the test/build dependencies. From the repository root 
 ```bash
 python -m pip install -c requirements-dev.lock -e "./packages/python[server,dev]"
 npm ci
+python scripts/restore_triage_v5_fixture_evidence.py
 python -m pytest -q
 npm test
 python -m benchmarks.run --output reports/local/workflow.json

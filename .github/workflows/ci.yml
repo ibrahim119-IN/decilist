@@ -23,7 +23,13 @@ jobs:
           cache: npm
       - run: python -m pip install --upgrade pip
       - run: python -m pip install -c requirements-dev.lock -e 'packages/python[server,dev]'
+      - name: Restore byte-pinned historical V5 fixture evidence
+        env:
+          DECILIST_TRIAGE_V5_WORK_ROOT: ${{ runner.temp }}/decilist-fixtures/work/triage-v5-lab
+        run: python scripts/restore_triage_v5_fixture_evidence.py
       - run: python -m pytest -q
+        env:
+          DECILIST_TRIAGE_V5_WORK_ROOT: ${{ runner.temp }}/decilist-fixtures/work/triage-v5-lab
       - run: npm ci
       - run: npm test
       - run: python scripts/verify_contract_parity.py

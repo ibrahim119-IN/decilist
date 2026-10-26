@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "suite": "testtriage-repair-v5",
+  "relative_directory": "attempt-02-all",
+  "archive": "original-proof.zip",
+  "archive_sha256": "e09f80bd94fbe31ef2e6dfd544b6208881682998fbc3dc59a5fee534d5ad6db2",
+  "files": {
+    "catalog_snapshot.json": {
+      "sha256": "f626ea4254f5519782f56d5c32fa2ae35e12346c1a95887fb2881f6cd2c5a923",
+      "bytes": 63716
+    },
+    "development-proof.json": {
+      "sha256": "026edebfd58b14b1afe09ab439fb05853921015949ac3224cff68d7aad1cb21f",
+      "bytes": 111385
+    },
+    "freeze_snapshot.json": {
+      "sha256": "658ce7b5d2bcf8b5d001153205d48db01ac05ce77082d5fa95d6fd2b98808ed2",
+      "bytes": 601
+    },
+    "lab_snapshot.py": {
+      "sha256": "c640b9d12009f0172a589e6b3c5119f5b781501c931d748fb35592e06a703189",
+      "bytes": 27615
+    },
+    "proof.json": {
+      "sha256": "2e5821821a4d3d3da88c018371cb99badc77795cc42e6c64517651d45226242a",
+      "bytes": 781622
+    }
+  },
+  "privacy_review": {
+    "scope": "All five original files, decoded JSON keys/string values, raw source and raw log strings; not only already-redacted reports.",
+    "absolute_windows_paths": 0,
+    "private_posix_paths": 0,
+    "email_addresses": 0,
+    "private_key_markers": 0,
+    "known_service_token_patterns": 0,
+    "credential_keyword_hits_reviewed": [
+      "auth=auth",
+      "auth\\n    response (Python traceback formatting)"
+    ],
+    "url_review": "Public GitHub/source/license links and synthetic .test/.invalid hosts; no URL userinfo or secret query parameters.",
+    "limits": "Pattern scans plus manual review are not a general secret-detection guarantee. No model requests or model output are included."
+  }
+}
