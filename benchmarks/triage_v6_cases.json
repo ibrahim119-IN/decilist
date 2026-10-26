@@ -1,0 +1,1012 @@
+{
+  "suite": "testtriage-repair-v6",
+  "version": 6,
+  "base_revision": "8327d24aceee015af3c79bf8a679cd7aad6917f7",
+  "purpose": "Frozen debugging fixtures for observed repair behavior. Explicitly seeded regressions in two real projects; no claim of naturally occurring production bugs, human difficulty, representative workload, or guaranteed speedup.",
+  "authorship": "Independent corpus-author agent authored fixtures without inspecting V6 assistant drafts, model outputs, or performance. Held-out mechanisms remain private until assistant freeze.",
+  "difficulty_policy": "Multiple callable transitions and parameterized observations describe investigation surfaces; this does not establish human difficulty.",
+  "case_split_policy": "2 development, 6 evaluation, 4 reserved blind repair cases, and 2 controls. All regression mechanisms are new against V2/V3/V4/V5; the mixed control combines the V6 development seeds.",
+  "control_policy": "c01 is an unchanged passing reproduction requiring zero inference and zero repair; c02 is an actual mixed failure requiring both repairs and all unchanged protected tests. Controls expose actual observations with no log withholding.",
+  "measurement_policy": "The product may collect actual test/log/source evidence. Private seeds, labels, target hints, protected authoring metadata and reference restoration remain outside participant input.",
+  "source_byte_policy": "All new corpus source, catalog, test and freeze files are UTF-8 LF bytes before freeze. Source snapshots and proof hashes are retained for every authoring attempt.",
+  "projects": {
+    "decilist": {
+      "revision": "8327d24aceee015af3c79bf8a679cd7aad6917f7",
+      "source": "pinned Git tree in this repository",
+      "license": "Apache-2.0",
+      "license_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    "httpx": {
+      "version": "0.28.1",
+      "repository": "https://github.com/encode/httpx",
+      "revision": "26d48e0634e6ee9cdc0533996db289ce4b430177",
+      "tag": "0.28.1",
+      "verified_via": "Pinned HTTPX 0.28.1 GitHub commit and BSD-3-Clause license verified previously; _client.py, _models.py, _content.py, _decoders.py, _multipart.py Git blobs additionally fetched through the GitHub connector on 2026-10-26 and compared to installed source. Every copied source file is SHA-256 pinned.",
+      "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_urls.py",
+      "urls_git_blob_sha": "147a8fa333acaf31618d37ba2896e3a5bf5e4d02",
+      "urls_sha256": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd",
+      "license": "BSD-3-Clause",
+      "license_source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/LICENSE.md",
+      "license_sha256": "4ec59d544f12b5f539a3a716fd321ac58ccd8030b465221f2c880200cdf28d8d",
+      "license_text": "Copyright © 2019, [Encode OSS Ltd](https://www.encode.io/).\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n\n* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\n\n* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\n* Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n",
+      "installed_source_sha256": {
+        "vendor/httpx/__init__.py": "0ac6997bac998f4ac783adf6d8058a587193315afdb718047c3e4fdff46bcfad",
+        "vendor/httpx/__version__.py": "2e853261e3974e2786cee3ffeb850bd30c5db718eebbf41b3af13b34e83e22a5",
+        "vendor/httpx/_api.py": "aff660b388c8a5c3c92ea2b975b6d26b2aa8fe254c2856b164277ea0e1f12c4b",
+        "vendor/httpx/_auth.py": "62bdd0c1a5122b5eeb198c7eee3f85762705233cf863d14557ed45e3eed15d7e",
+        "vendor/httpx/_client.py": "c43f941baefe58c91e96d00039e1868fe719d91453026d7db1647194563bff8d",
+        "vendor/httpx/_config.py": "a4fa7653ec2271f70ab05f8a6111352d876dddee84446788a1767c1a3a372d67",
+        "vendor/httpx/_content.py": "2c61b3ac94d1dcebcde0c6f519554d2d7917247fbaa0a97002db4ef69e70ff28",
+        "vendor/httpx/_decoders.py": "a74757f08d0d1077b1b37506a784ac66eb62321b17aeb5a5ebe1a7a956f488a3",
+        "vendor/httpx/_exceptions.py": "6f15bb7f1ce054c01d3536f04f4567ab4e202435b5fe023f1858903ee3328cbd",
+        "vendor/httpx/_main.py": "0a0f4631a6e24d3fecc1a0df5202118ad4b0c4b44c4b05033a6ecb7521aa940e",
+        "vendor/httpx/_models.py": "e3ffc6bb2bf580bc6e6428708a6f247d036220e709f5a72b785392babbd97e6b",
+        "vendor/httpx/_multipart.py": "28e1c465997aa28860f663da2b2caedf8e6aab5ac92e0df94d41b7600cd70776",
+        "vendor/httpx/_status_codes.py": "0d89fedae7c180c797cb9b3cc77fd307bc2302e00031ec136a43eb9b9ad712c7",
+        "vendor/httpx/_transports/__init__.py": "19b52805200ea7bcfe97ef63e5884c851dc3308727e8554b863d3bd8edcd9e7a",
+        "vendor/httpx/_transports/asgi.py": "1d17e20d830fb78c101f6805807660e1cfa2dec6e5a3a6cbe464ea7044fec73f",
+        "vendor/httpx/_transports/base.py": "9194bf54c6d58987c5e7bd29a205022756ee973fb26df2f9d4faacf7292d79b5",
+        "vendor/httpx/_transports/default.py": "03379a454c95c0271c4f2c8d25ec437f49f57457f3cf2769748420bf0ecf2e79",
+        "vendor/httpx/_transports/mock.py": "3d3a34779ebb4484d7c46ae48ba90deffebbc300317f088c0dcb972626428c4a",
+        "vendor/httpx/_transports/wsgi.py": "35c3d7dd76a9fc4c0215958efce692c9036e227098c7540c35b3bc1807a2ea36",
+        "vendor/httpx/_types.py": "272878d4642aec039ebfc20e58a0c083bcc26ef1c07ee7e65b983f3e24ed12b6",
+        "vendor/httpx/_urlparse.py": "640987e3b38d7e4c6bae3f8f3d88467a21e36fa0232824be00d58837838bfca6",
+        "vendor/httpx/_urls.py": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd",
+        "vendor/httpx/_utils.py": "fd355ea802afc4990a1ddcfb74579be2cd0b66a41781e1645d281f88704aff5a",
+        "vendor/httpx/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "verified_modules": {
+        "vendor/httpx/_urls.py": {
+          "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_urls.py",
+          "git_blob_sha": "147a8fa333acaf31618d37ba2896e3a5bf5e4d02",
+          "sha256": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd"
+        },
+        "vendor/httpx/_urlparse.py": {
+          "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_urlparse.py",
+          "git_blob_sha": "bf190fd560ee4fc8a11af371a15fc5f1dc284d34",
+          "sha256": "640987e3b38d7e4c6bae3f8f3d88467a21e36fa0232824be00d58837838bfca6"
+        },
+        "vendor/httpx/_client.py": {
+          "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_client.py",
+          "git_blob_sha": "2249231f8c3b912c731ff160344d3672e2f11738",
+          "sha256": "c43f941baefe58c91e96d00039e1868fe719d91453026d7db1647194563bff8d"
+        },
+        "vendor/httpx/_models.py": {
+          "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_models.py",
+          "git_blob_sha": "67d74bf86bfc80e22d9a4a3153572845accd9039",
+          "sha256": "e3ffc6bb2bf580bc6e6428708a6f247d036220e709f5a72b785392babbd97e6b"
+        },
+        "vendor/httpx/_content.py": {
+          "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_content.py",
+          "git_blob_sha": "6f479a0885f723b7395843d41164a87041820776",
+          "sha256": "2c61b3ac94d1dcebcde0c6f519554d2d7917247fbaa0a97002db4ef69e70ff28"
+        },
+        "vendor/httpx/_decoders.py": {
+          "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_decoders.py",
+          "git_blob_sha": "899dfada878e1181fca6d3c75a79526a076abb9e",
+          "sha256": "a74757f08d0d1077b1b37506a784ac66eb62321b17aeb5a5ebe1a7a956f488a3"
+        },
+        "vendor/httpx/_multipart.py": {
+          "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_multipart.py",
+          "git_blob_sha": "b4761af9b2cf384de5189269927d781a700dbe46",
+          "sha256": "28e1c465997aa28860f663da2b2caedf8e6aab5ac92e0df94d41b7600cd70776"
+        }
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "d01",
+      "split": "development",
+      "project": "httpx",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "Request-error propagation must preserve originating request context across synchronous and asynchronous clients",
+      "mechanism_family": "exception_request_provenance",
+      "novelty_rationale": "Earlier suites cover exception categories and deadlines, but none covers loss of diagnostic request provenance when the exception itself is reconstructed.",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_exceptions.py",
+          "old": "        raise exc",
+          "new": "        raise type(exc)(str(exc)) from exc"
+        }
+      ],
+      "case_tests": "@pytest.mark.parametrize('error_name',['ReadError','ConnectTimeout','RemoteProtocolError'])\n@pytest.mark.parametrize('asynchronous',[False,True])\nasync def test_observed_records(error_name,asynchronous):\n    error_type=getattr(httpx,error_name)\n    original=error_type('observed failure')\n    def handler(request): raise original\n    if asynchronous:\n        async with httpx.AsyncClient(transport=httpx.MockTransport(handler),trust_env=False) as client:\n            request=client.build_request('POST','http://case.invalid/records',content=b'input')\n            with pytest.raises(error_type) as caught: await client.send(request)\n    else:\n        with httpx.Client(transport=httpx.MockTransport(handler),trust_env=False) as client:\n            request=client.build_request('POST','http://case.invalid/records',content=b'input')\n            with pytest.raises(error_type) as caught: client.send(request)\n    assert caught.value.request is request\n    assert caught.value is original\n    assert str(caught.value)=='observed failure'\n",
+      "regression_tests": "@pytest.mark.parametrize('method',['GET','POST','DELETE'])\ndef test_adjacent_records(method):\n    seen=[]\n    def handler(request): seen.append(request); return httpx.Response(200,text='ok')\n    with httpx.Client(transport=httpx.MockTransport(handler),trust_env=False) as client:\n        request=client.build_request(method,'http://case.invalid/success')\n        response=client.send(request)\n    assert response.request is request and seen==[request] and response.text=='ok'\n",
+      "evidence_mode": "full",
+      "expected_check_count": 9,
+      "investigation_surface": [
+        [
+          "vendor/httpx/_exceptions.py",
+          [
+            "RequestError.__init__",
+            "request_context",
+            "HTTPError.request"
+          ]
+        ],
+        [
+          "vendor/httpx/_client.py",
+          [
+            "Client._send_single_request",
+            "AsyncClient._send_single_request",
+            "Client.send"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "A propagated RequestError retains both its original identity and originating Request object in sync and async dispatch; successful response/request association remains unchanged."
+      ],
+      "minimal_repair_invariants": [
+        "A propagated RequestError retains both its original identity and originating Request object in sync and async dispatch; successful response/request association remains unchanged."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated public contract using actual protected observations and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "Request-error propagation must preserve originating request context across synchronous and asynchronous clients",
+        "A propagated RequestError retains both its original identity and originating Request object in sync and async dispatch; successful response/request association remains unchanged."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 2,
+        "minimum_relevant_callable_transitions": 6,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "d02",
+      "split": "development",
+      "project": "decilist",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "Classification accuracy among accepted results must exclude accepted ordinal-score results from its denominator",
+      "mechanism_family": "mixed_task_metric_denominators",
+      "novelty_rationale": "No prior corpus mutates evaluation aggregation. This case partitions metric populations rather than changing score inference, probability validation or choice ordering.",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "packages/python/src/decilist/evaluation.py",
+          "old": "\"accuracy_accepted\": correct/discrete_accepted if discrete_accepted else None",
+          "new": "\"accuracy_accepted\": correct/accepted if discrete_accepted else None"
+        }
+      ],
+      "case_tests": "from decilist import Decilist,Policy\nfrom decilist.contracts import Choose,Predict,Score\nfrom decilist.providers import FunctionProvider\nfrom decilist.evaluation import Case,evaluate\n@pytest.mark.parametrize('score_count',[1,2,3])\nasync def test_observed_records(score_count):\n    def probabilities(q):\n        return {'a':.8,'b':.2} if q.kind=='choose' else {'false':.2,'true':.8} if q.kind=='predict' else {'0':.2,'1':.8}\n    rows=[Case('choice',Choose(state='s',instructions='i',options={'a':'A','b':'B'}),'a'),Case('predicate',Predict(state='s',instructions='i'),False)]\n    rows += [Case('score'+str(i),Score(state='s',instructions='i',levels=['low','high']),.8) for i in range(score_count)]\n    observed=await evaluate(Decilist([FunctionProvider(probabilities)],Policy(min_confidence=.7)),rows)\n    metrics=observed['metrics']\n    assert metrics['classification_accepted']==2 and metrics['accepted']==2+score_count\n    assert metrics['accuracy_accepted']==.5 and metrics['accuracy_all']==.5\n    assert metrics['score_accepted']==score_count and metrics['score_coverage']==1 and metrics['score_mae']==pytest.approx(0)\n    assert metrics['coverage']==1 and len(observed['results'])==len(rows)\n",
+      "regression_tests": "from decilist import Decilist,Policy\nfrom decilist.contracts import Choose,Predict,Score\nfrom decilist.providers import FunctionProvider\nfrom decilist.evaluation import Case,evaluate\n@pytest.mark.parametrize('kind',['choose','predict','score'])\nasync def test_adjacent_records(kind):\n    q=Choose(state='s',instructions='i',options={'a':'A','b':'B'}) if kind=='choose' else Predict(state='s',instructions='i') if kind=='predict' else Score(state='s',instructions='i',levels=['low','high'])\n    expected='a' if kind=='choose' else True if kind=='predict' else 1.0\n    raw={'a':1.0,'b':0.0} if kind=='choose' else {'false':0.0,'true':1.0} if kind=='predict' else {'0':0.0,'1':1.0}\n    metrics=(await evaluate(Decilist([FunctionProvider(lambda _:raw)],Policy(min_confidence=.7)),[Case('single',q,expected)]))['metrics']\n    assert metrics['coverage']==1 and metrics['abstention_rate']==0\n    assert metrics['accuracy_accepted']==(None if kind=='score' else 1)\n    assert metrics['score_mae']==(0 if kind=='score' else None)\n",
+      "evidence_mode": "full",
+      "expected_check_count": 6,
+      "investigation_surface": [
+        [
+          "packages/python/src/decilist/evaluation.py",
+          [
+            "evaluate",
+            "validate_cases",
+            "summarize"
+          ]
+        ],
+        [
+          "packages/python/src/decilist/engine.py",
+          [
+            "Decilist.decide"
+          ]
+        ],
+        [
+          "packages/python/src/decilist/contracts.py",
+          [
+            "validate_decision",
+            "value_from"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "Mixed-task reports keep overall acceptance, classification accuracy, score coverage and score error in their own populations; homogeneous datasets retain their existing metrics."
+      ],
+      "minimal_repair_invariants": [
+        "Mixed-task reports keep overall acceptance, classification accuracy, score coverage and score error in their own populations; homogeneous datasets retain their existing metrics."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated public contract using actual protected observations and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "Classification accuracy among accepted results must exclude accepted ordinal-score results from its denominator",
+        "Mixed-task reports keep overall acceptance, classification accuracy, score coverage and score error in their own populations; homogeneous datasets retain their existing metrics."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 3,
+        "minimum_relevant_callable_transitions": 6,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "e01",
+      "split": "evaluation",
+      "project": "httpx",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "HTTP-core exceptions must map to the most specific public HTTPX exception rather than the first matching superclass",
+      "mechanism_family": "transport_exception_specificity",
+      "novelty_rationale": "Earlier timeout fixtures alter units or attempt labels. This regression is polymorphic exception-map resolution across the external transport boundary, not deadline behavior.",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_transports/default.py",
+          "old": "            if mapped_exc is None or issubclass(to_exc, mapped_exc):",
+          "new": "            if mapped_exc is None or issubclass(mapped_exc, to_exc):"
+        }
+      ],
+      "case_tests": "import httpcore\n@pytest.mark.parametrize('error_name',['ReadTimeout','ReadError','RemoteProtocolError'])\n@pytest.mark.parametrize('asynchronous',[False,True])\nasync def test_observed_records(error_name,asynchronous):\n    core_error=getattr(httpcore,error_name)('wire operation failed')\n    class Pool:\n        def handle_request(self,request): raise core_error\n        async def handle_async_request(self,request): raise core_error\n        def close(self): pass\n        async def aclose(self): pass\n        def __enter__(self): return self\n        def __exit__(self,*args): pass\n        async def __aenter__(self): return self\n        async def __aexit__(self,*args): pass\n    expected=getattr(httpx,error_name)\n    if asynchronous:\n        transport=httpx.AsyncHTTPTransport()\n        await transport.aclose(); transport._pool=Pool()\n        async with httpx.AsyncClient(transport=transport,trust_env=False) as client:\n            request=client.build_request('GET','https://case.invalid/resource')\n            with pytest.raises(httpx.HTTPError) as caught: await client.send(request)\n    else:\n        transport=httpx.HTTPTransport()\n        transport.close(); transport._pool=Pool()\n        with httpx.Client(transport=transport,trust_env=False) as client:\n            request=client.build_request('GET','https://case.invalid/resource')\n            with pytest.raises(httpx.HTTPError) as caught: client.send(request)\n    assert type(caught.value) is expected\n    assert caught.value.__cause__ is core_error and caught.value.request is request\n",
+      "regression_tests": "import httpcore\nfrom httpx._transports.default import ResponseStream\n@pytest.mark.parametrize('name',['NetworkError','ProtocolError','TimeoutException'])\ndef test_adjacent_records(name):\n    original=getattr(httpcore,name)('generic stream failure')\n    def stream(): raise original; yield b''\n    with pytest.raises(getattr(httpx,name)) as caught: list(ResponseStream(stream()))\n    assert type(caught.value) is getattr(httpx,name) and caught.value.__cause__ is original\n",
+      "evidence_mode": "full",
+      "expected_check_count": 9,
+      "investigation_surface": [
+        [
+          "vendor/httpx/_transports/default.py",
+          [
+            "_load_httpcore_exceptions",
+            "map_httpcore_exceptions",
+            "HTTPTransport.handle_request",
+            "AsyncHTTPTransport.handle_async_request"
+          ]
+        ],
+        [
+          "vendor/httpx/_client.py",
+          [
+            "Client._send_single_request",
+            "AsyncClient._send_single_request"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "Specific transport exceptions preserve exact public types, messages, causes and request context, while genuine superclass failures retain superclass mappings."
+      ],
+      "minimal_repair_invariants": [
+        "Specific transport exceptions preserve exact public types, messages, causes and request context, while genuine superclass failures retain superclass mappings."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated public contract using actual protected observations and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "HTTP-core exceptions must map to the most specific public HTTPX exception rather than the first matching superclass",
+        "Specific transport exceptions preserve exact public types, messages, causes and request context, while genuine superclass failures retain superclass mappings."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 2,
+        "minimum_relevant_callable_transitions": 6,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "e02",
+      "split": "evaluation",
+      "project": "httpx",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "Response serialization must detach live transport streams while preserving already buffered content and metadata",
+      "mechanism_family": "pickle_transport_detachment",
+      "novelty_rationale": "No earlier suite covers Python serialization or detaching transport handles. This is neither stream replay after redirects nor async close-state mutation.",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_models.py",
+          "old": "            if name not in [\"extensions\", \"stream\", \"is_closed\", \"_decoder\"]",
+          "new": "            if name not in [\"extensions\", \"is_closed\", \"_decoder\"]"
+        }
+      ],
+      "case_tests": "import pickle\n@pytest.mark.parametrize('body',[b'alpha',b'\\x00\\xff\\x01','café'.encode()])\ndef test_observed_records(body):\n    stream=SyncChunks([body[:1],body[1:]])\n    stream.live_callback=lambda:None\n    response=httpx.Response(202,stream=stream,headers={'x-id':'saved'},request=httpx.Request('GET','http://case.invalid/snapshot'),extensions={'live':lambda:None})\n    assert response.read()==body and stream.closes==1\n    restored=pickle.loads(pickle.dumps(response))\n    assert restored.content==body and restored.read()==body\n    assert restored.status_code==202 and restored.headers['x-id']=='saved'\n    assert str(restored.request.url)=='http://case.invalid/snapshot'\n    assert restored.is_closed and restored.extensions=={}\n    assert type(restored.stream).__name__=='UnattachedStream'\n",
+      "regression_tests": "import pickle\n@pytest.mark.parametrize('body',[b'one',b'',b'two\\nthree'])\ndef test_adjacent_records(body):\n    response=httpx.Response(200,content=body,request=httpx.Request('GET','http://case.invalid/cached'),extensions={'callback':lambda:None})\n    restored=pickle.loads(pickle.dumps(response))\n    assert restored.content==body and restored.text==body.decode()\n    assert restored.is_closed and restored.extensions=={}\n    with pytest.raises(httpx.StreamConsumed): list(restored.iter_raw())\n",
+      "evidence_mode": "full",
+      "expected_check_count": 6,
+      "investigation_surface": [
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Response.__getstate__",
+            "Response.__setstate__",
+            "Response.read",
+            "Response.iter_raw"
+          ]
+        ],
+        [
+          "vendor/httpx/_content.py",
+          [
+            "UnattachedStream.__iter__",
+            "ByteStream.__iter__"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "A response containing unpicklable transport callbacks can be serialized after reading; buffered bytes and public metadata survive while live I/O handles and extensions do not."
+      ],
+      "minimal_repair_invariants": [
+        "A response containing unpicklable transport callbacks can be serialized after reading; buffered bytes and public metadata survive while live I/O handles and extensions do not."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated public contract using actual protected observations and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "Response serialization must detach live transport streams while preserving already buffered content and metadata",
+        "A response containing unpicklable transport callbacks can be serialized after reading; buffered bytes and public metadata survive while live I/O handles and extensions do not."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 2,
+        "minimum_relevant_callable_transitions": 6,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "e03",
+      "split": "evaluation",
+      "project": "httpx",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "Body-requiring auth flows must receive a buffered response before their synchronous generator resumes",
+      "mechanism_family": "auth_response_body_handoff",
+      "novelty_rationale": "This tests a generic auth-generator body handoff, with no credentials, network or permission bypass. No earlier suite mutates the auth protocol.",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_auth.py",
+          "old": "            if self.requires_response_body:\n                response.read()",
+          "new": "            if self.requires_response_body:\n                request.read()"
+        },
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_auth.py",
+          "old": "            if self.requires_response_body:\n                await response.aread()",
+          "new": "            if self.requires_response_body:\n                await request.aread()"
+        }
+      ],
+      "case_tests": "@pytest.mark.parametrize('token',['first','second','third'])\n@pytest.mark.parametrize('asynchronous',[False,True])\nasync def test_observed_records(token,asynchronous):\n    seen=[]\n    class BodyAuth(httpx.Auth):\n        requires_response_body=True\n        def auth_flow(self,request):\n            response=yield request\n            request.headers['x-proof']=response.json()['token']\n            yield request\n    def handler(request):\n        seen.append(request.headers.get('x-proof'))\n        body=json.dumps({'token':token}).encode() if len(seen)==1 else b'accepted'\n        return httpx.Response(401 if len(seen)==1 else 200,stream=AsyncChunks([body[:2],body[2:]]) if asynchronous else SyncChunks([body[:2],body[2:]]))\n    if asynchronous:\n        async with httpx.AsyncClient(transport=httpx.MockTransport(handler),auth=BodyAuth(),trust_env=False) as client: response=await client.get('http://case.invalid/flow')\n    else:\n        with httpx.Client(transport=httpx.MockTransport(handler),auth=BodyAuth(),trust_env=False) as client: response=client.get('http://case.invalid/flow')\n    assert response.status_code==200 and response.content==b'accepted' and seen==[None,token]\n",
+      "regression_tests": "@pytest.mark.parametrize('body',[b'plain',b'chunked body',b''])\ndef test_adjacent_records(body):\n    class PassAuth(httpx.Auth):\n        def auth_flow(self,request): yield request\n    stream=SyncChunks([body[:1],body[1:]])\n    with httpx.Client(transport=httpx.MockTransport(lambda _:httpx.Response(200,stream=stream)),auth=PassAuth(),trust_env=False) as client:\n        response=client.get('http://case.invalid/pass')\n    assert response.content==body and stream.closes==1 and response.is_closed\n",
+      "evidence_mode": "full",
+      "expected_check_count": 9,
+      "investigation_surface": [
+        [
+          "vendor/httpx/_auth.py",
+          [
+            "Auth.sync_auth_flow",
+            "Auth.async_auth_flow",
+            "Auth.auth_flow"
+          ]
+        ],
+        [
+          "vendor/httpx/_client.py",
+          [
+            "Client._send_handling_auth",
+            "AsyncClient._send_handling_auth"
+          ]
+        ],
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Response.read",
+            "Response.aread",
+            "Response.json"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "Flows that declare response-body access can parse a streamed challenge before yielding the next request in both execution modes; pass-through flows retain ordinary stream handling."
+      ],
+      "minimal_repair_invariants": [
+        "Flows that declare response-body access can parse a streamed challenge before yielding the next request in both execution modes; pass-through flows retain ordinary stream handling."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated public contract using actual protected observations and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "Body-requiring auth flows must receive a buffered response before their synchronous generator resumes",
+        "Flows that declare response-body access can parse a streamed challenge before yielding the next request in both execution modes; pass-through flows retain ordinary stream handling."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 3,
+        "minimum_relevant_callable_transitions": 8,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "e04",
+      "split": "evaluation",
+      "project": "httpx",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "Deleting duplicated headers must account for list-index invalidation before inserting a replacement header",
+      "mechanism_family": "duplicate_header_index_removal",
+      "novelty_rationale": "V4 changes client-vs-request precedence. This seed corrupts duplicate deletion by shifting list indices; it does not reverse precedence or reuse immutable-query aliasing.",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_models.py",
+          "old": "        for idx in reversed(pop_indexes):",
+          "new": "        for idx in pop_indexes:"
+        }
+      ],
+      "case_tests": "@pytest.mark.parametrize('duplicate_count',[2,3,4])\ndef test_observed_records(duplicate_count):\n    headers=[]\n    for i in range(duplicate_count): headers += [('X-Route','old'+str(i)),('X-Keep-'+str(i),'keep'+str(i))]\n    with httpx.Client(headers=headers,trust_env=False) as client:\n        request=client.build_request('GET','http://case.invalid/headers',headers={'x-route':'new'})\n        assert request.headers.get_list('x-route')==['new']\n        for i in range(duplicate_count): assert request.headers['x-keep-'+str(i)]=='keep'+str(i)\n        assert client.headers.get_list('x-route')==['old'+str(i) for i in range(duplicate_count)]\n",
+      "regression_tests": "@pytest.mark.parametrize('operation',['single-delete','missing-delete','duplicate-assign'])\ndef test_adjacent_records(operation):\n    headers=httpx.Headers([('X-One','one'),('X-Keep','keep')])\n    if operation=='single-delete':\n        del headers['x-one']; assert 'x-one' not in headers\n    elif operation=='missing-delete':\n        with pytest.raises(KeyError): del headers['absent']\n        assert headers['x-one']=='one'\n    else:\n        headers=httpx.Headers([('X-One','one'),('x-one','two'),('X-Keep','keep')])\n        headers['X-One']='new'; assert headers.get_list('x-one')==['new']\n    assert headers['x-keep']=='keep'\n",
+      "evidence_mode": "full",
+      "expected_check_count": 6,
+      "investigation_surface": [
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Headers.__delitem__",
+            "Headers.update",
+            "Headers.__init__",
+            "Headers.get_list"
+          ]
+        ],
+        [
+          "vendor/httpx/_client.py",
+          [
+            "BaseClient._merge_headers",
+            "BaseClient.build_request"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "Replacing a duplicated header removes every old occurrence while preserving all unrelated entries and client defaults; missing/single deletion and direct assignment retain their contracts."
+      ],
+      "minimal_repair_invariants": [
+        "Replacing a duplicated header removes every old occurrence while preserving all unrelated entries and client defaults; missing/single deletion and direct assignment retain their contracts."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated public contract using actual protected observations and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "Deleting duplicated headers must account for list-index invalidation before inserting a replacement header",
+        "Replacing a duplicated header removes every old occurrence while preserving all unrelated entries and client defaults; missing/single deletion and direct assignment retain their contracts."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 2,
+        "minimum_relevant_callable_transitions": 6,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "e05",
+      "split": "evaluation",
+      "project": "httpx",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "Cookie extraction must retain separate Set-Cookie field occurrences rather than comma-folding their values",
+      "mechanism_family": "cookie_header_multiplicity_bridge",
+      "novelty_rationale": "Earlier cookie work concerns redirect refresh. This is repeated response-header projection into CookieJar, without redirects or changed cookie-scope rules.",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_models.py",
+          "old": "            for key, value in self.response.headers.multi_items():",
+          "new": "            for key, value in self.response.headers.items():"
+        }
+      ],
+      "case_tests": "from http.cookies import SimpleCookie\n@pytest.mark.parametrize('pairs',[(('first','1'),('second','2')),(('alpha','a'),('beta','b'),('gamma','g')),(('left','x'),('right','y'))])\ndef test_observed_records(pairs):\n    seen=[]\n    def handler(request):\n        seen.append(request)\n        if len(seen)==1:\n            headers=[('Set-Cookie',name+'='+value+'; Path=/; Expires=Wed, 09 Jun 2038 10:18:14 GMT') for name,value in pairs]\n            return httpx.Response(200,headers=headers,text='stored')\n        return httpx.Response(200,json={'cookie':request.headers.get('cookie','')})\n    with httpx.Client(transport=httpx.MockTransport(handler),trust_env=False) as client:\n        first=client.get('http://case.invalid/set')\n        assert dict(first.cookies)==dict(pairs) and dict(client.cookies)==dict(pairs)\n        second=client.get('http://case.invalid/check')\n    jar=SimpleCookie(); jar.load(second.json()['cookie'])\n    assert {name:m.value for name,m in jar.items()}==dict(pairs)\n",
+      "regression_tests": "@pytest.mark.parametrize('name,value',[('one','1'),('two','2'),('three','3')])\ndef test_adjacent_records(name,value):\n    response=httpx.Response(200,headers={'Set-Cookie':name+'='+value+'; Path=/'},request=httpx.Request('GET','http://case.invalid/'))\n    assert response.cookies[name]==value and len(response.cookies)==1\n    request=httpx.Request('GET','http://case.invalid/',cookies=response.cookies)\n    assert request.headers['cookie']==name+'='+value\n",
+      "evidence_mode": "full",
+      "expected_check_count": 6,
+      "investigation_surface": [
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Cookies.extract_cookies",
+            "Cookies._CookieCompatResponse.info",
+            "Headers.multi_items",
+            "Headers.items"
+          ]
+        ],
+        [
+          "vendor/httpx/_client.py",
+          [
+            "Client._send_single_request",
+            "BaseClient._merge_cookies"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "All Set-Cookie occurrences survive the email/CookieJar bridge and appear in the client store and subsequent request; single-cookie extraction remains unchanged."
+      ],
+      "minimal_repair_invariants": [
+        "All Set-Cookie occurrences survive the email/CookieJar bridge and appear in the client store and subsequent request; single-cookie extraction remains unchanged."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated public contract using actual protected observations and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "Cookie extraction must retain separate Set-Cookie field occurrences rather than comma-folding their values",
+        "All Set-Cookie occurrences survive the email/CookieJar bridge and appear in the client store and subsequent request; single-cookie extraction remains unchanged."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 2,
+        "minimum_relevant_callable_transitions": 6,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "e06",
+      "split": "evaluation",
+      "project": "httpx",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "WSGI request projection must keep content metadata in CGI special variables while prefixing ordinary HTTP headers",
+      "mechanism_family": "wsgi_cgi_content_metadata_projection",
+      "novelty_rationale": "V5 tests lazy WSGI response startup. This seed changes the unrelated incoming CGI environment projection, including generated request-body metadata.",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_transports/wsgi.py",
+          "old": "            if key not in (\"CONTENT_TYPE\", \"CONTENT_LENGTH\"):",
+          "new": "            if key not in (\"Content-Type\", \"Content-Length\"):"
+        }
+      ],
+      "case_tests": "@pytest.mark.parametrize('kind',['json','form','raw'])\ndef test_observed_records(kind):\n    captured=[]\n    def app(environ,start_response):\n        captured.append(environ)\n        length=environ.get('CONTENT_LENGTH','0')\n        body=environ['wsgi.input'].read(int(length))\n        payload={'length':length,'type':environ.get('CONTENT_TYPE'),'body':body.decode(),'mode':environ.get('HTTP_X_MODE')}\n        start_response('200 OK',[('Content-Type','application/json')]); return [json.dumps(payload).encode()]\n    options={'json':{'x':2}} if kind=='json' else {'data':{'x':'two'}} if kind=='form' else {'content':b'raw-body','headers':{'content-type':'application/octet-stream','x-mode':'keep'}}\n    options.setdefault('headers',{})['x-mode']='keep'\n    with httpx.Client(transport=httpx.WSGITransport(app),trust_env=False) as client:\n        request=client.build_request('POST','http://case.invalid/upload',**options)\n        expected_body=request.read().decode()\n        result=client.send(request).json()\n    assert result=={'length':str(len(expected_body.encode())),'type':request.headers['content-type'],'body':expected_body,'mode':'keep'}\n    assert 'HTTP_CONTENT_LENGTH' not in captured[0] and 'HTTP_CONTENT_TYPE' not in captured[0]\n",
+      "regression_tests": "@pytest.mark.parametrize('mode',['one','two','three'])\ndef test_adjacent_records(mode):\n    def app(environ,start_response):\n        assert environ['REQUEST_METHOD']=='GET' and environ['HTTP_X_MODE']==mode\n        assert 'CONTENT_TYPE' not in environ and 'CONTENT_LENGTH' not in environ\n        start_response('200 OK',[('Content-Type','text/plain')]); return [environ['PATH_INFO'].encode()]\n    with httpx.Client(transport=httpx.WSGITransport(app),trust_env=False) as client:\n        response=client.get('http://case.invalid/ordinary',headers={'x-mode':mode})\n    assert response.text=='/ordinary'\n",
+      "evidence_mode": "full",
+      "expected_check_count": 6,
+      "investigation_surface": [
+        [
+          "vendor/httpx/_transports/wsgi.py",
+          [
+            "WSGITransport.handle_request",
+            "start_response",
+            "WSGIByteStream.__iter__"
+          ]
+        ],
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Request.read",
+            "Headers.raw"
+          ]
+        ],
+        [
+          "vendor/httpx/_client.py",
+          [
+            "Client._send_single_request"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "Body length/type are supplied under CONTENT_LENGTH/CONTENT_TYPE, ordinary headers under HTTP_ names, and body bytes reach WSGI readers unchanged; header-only GET remains valid."
+      ],
+      "minimal_repair_invariants": [
+        "Body length/type are supplied under CONTENT_LENGTH/CONTENT_TYPE, ordinary headers under HTTP_ names, and body bytes reach WSGI readers unchanged; header-only GET remains valid."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated public contract using actual protected observations and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "WSGI request projection must keep content metadata in CGI special variables while prefixing ordinary HTTP headers",
+        "Body length/type are supplied under CONTENT_LENGTH/CONTENT_TYPE, ordinary headers under HTTP_ names, and body bytes reach WSGI readers unchanged; header-only GET remains valid."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 3,
+        "minimum_relevant_callable_transitions": 6,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "r01",
+      "split": "reserved",
+      "project": "httpx",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "ASGI scope projection must separate encoded routing path bytes from the query-string bytes",
+      "mechanism_family": "asgi_raw_target_partition",
+      "novelty_rationale": "V5 mutates the upload-message completion protocol. This regression is independent scope-field partitioning of the incoming request target, not stream framing.",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_transports/asgi.py",
+          "old": "            \"raw_path\": request.url.raw_path.split(b\"?\")[0],",
+          "new": "            \"raw_path\": request.url.raw_path,"
+        }
+      ],
+      "case_tests": "@pytest.mark.parametrize('url,path,raw,query',[\n ('http://case.invalid/caf%C3%A9/part%2Ftwo?q=a%20b','/café/part/two','/caf%C3%A9/part%2Ftwo','q=a%20b'),\n ('http://case.invalid/a?x=1&x=2','/a','/a','x=1&x=2'),\n ('http://case.invalid/?empty=','/','/','empty=')])\nasync def test_observed_records(url,path,raw,query):\n    async def app(scope,receive,send):\n        payload={'path':scope['path'],'raw':scope['raw_path'].decode('ascii'),'query':scope['query_string'].decode('ascii')}\n        await send({'type':'http.response.start','status':200,'headers':[(b'content-type',b'application/json')]})\n        await send({'type':'http.response.body','body':json.dumps(payload).encode()})\n    async with httpx.AsyncClient(transport=httpx.ASGITransport(app),trust_env=False) as client: observed=(await client.get(url)).json()\n    assert observed=={'path':path,'raw':raw,'query':query}\n",
+      "regression_tests": "@pytest.mark.parametrize('target',['/','/plain/path','/caf%C3%A9'])\nasync def test_adjacent_records(target):\n    async def app(scope,receive,send):\n        assert scope['query_string']==b'' and scope['raw_path']==target.encode()\n        await send({'type':'http.response.start','status':204,'headers':[]})\n        await send({'type':'http.response.body','body':b''})\n    async with httpx.AsyncClient(transport=httpx.ASGITransport(app),trust_env=False) as client: response=await client.get('http://case.invalid'+target)\n    assert response.status_code==204 and response.content==b''\n",
+      "evidence_mode": "full",
+      "expected_check_count": 6,
+      "investigation_surface": [
+        [
+          "vendor/httpx/_transports/asgi.py",
+          [
+            "ASGITransport.handle_async_request",
+            "send",
+            "ASGIResponseStream.__aiter__"
+          ]
+        ],
+        [
+          "vendor/httpx/_urls.py",
+          [
+            "URL.raw_path",
+            "URL.path",
+            "URL.query"
+          ]
+        ],
+        [
+          "vendor/httpx/_client.py",
+          [
+            "AsyncClient._send_single_request"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "ASGI path is decoded routing text, raw_path is encoded path alone, and query_string is separate; empty-query routes retain identical raw bytes."
+      ],
+      "minimal_repair_invariants": [
+        "ASGI path is decoded routing text, raw_path is encoded path alone, and query_string is separate; empty-query routes retain identical raw bytes."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated public contract using actual protected observations and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "ASGI scope projection must separate encoded routing path bytes from the query-string bytes",
+        "ASGI path is decoded routing text, raw_path is encoded path alone, and query_string is separate; empty-query routes retain identical raw bytes."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 3,
+        "minimum_relevant_callable_transitions": 7,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "r02",
+      "split": "reserved",
+      "project": "httpx",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "Asynchronous response hooks must be awaited in declaration order before a completed request is returned",
+      "mechanism_family": "async_hook_sequential_handoff",
+      "novelty_rationale": "No earlier corpus changes event-hook dispatch. This is a coroutine sequencing contract rather than timeout cancellation, shared histories or response closure.",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_client.py",
+          "old": "                    await hook(response)",
+          "new": "                    hook(response)"
+        }
+      ],
+      "case_tests": "@pytest.mark.parametrize('status',[200,201,418])\nasync def test_observed_records(status):\n    events=[]\n    async def request_hook(request): await asyncio.sleep(0); events.append('request'); request.headers['x-step']='ready'\n    async def first(response):\n        await asyncio.sleep(0); await response.aread(); events.append('response-a'); response.headers['x-observed']='first'\n    async def second(response):\n        await asyncio.sleep(0); assert response.headers['x-observed']=='first'; events.append('response-b'); response.headers['x-observed']='both'\n    async def handler(request):\n        assert request.headers['x-step']=='ready'; events.append('transport')\n        return httpx.Response(status,stream=AsyncChunks([b'one',b'two']))\n    async with httpx.AsyncClient(transport=httpx.MockTransport(handler),event_hooks={'request':[request_hook],'response':[first,second]},trust_env=False) as client:\n        response=await client.get('http://case.invalid/hooks')\n    assert events==['request','transport','response-a','response-b']\n    assert response.headers['x-observed']=='both' and response.content==b'onetwo' and response.status_code==status\n",
+      "regression_tests": "@pytest.mark.parametrize('status',[200,201,418])\ndef test_adjacent_records(status):\n    events=[]\n    def one(response): events.append('one'); response.headers['x-hook']='one'\n    def two(response): assert response.headers['x-hook']=='one'; events.append('two')\n    with httpx.Client(transport=httpx.MockTransport(lambda r:httpx.Response(status,text='sync')),event_hooks={'response':[one,two]},trust_env=False) as client:\n        response=client.get('http://case.invalid/hooks')\n    assert events==['one','two'] and response.text=='sync' and response.status_code==status\n",
+      "evidence_mode": "full",
+      "expected_check_count": 6,
+      "investigation_surface": [
+        [
+          "vendor/httpx/_client.py",
+          [
+            "AsyncClient._send_handling_redirects",
+            "AsyncClient.send",
+            "AsyncClient._send_single_request"
+          ]
+        ],
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Response.aread",
+            "Response.aiter_bytes"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "Each asynchronous response hook completes before the next hook and before the caller receives the response, including body reads and mutations; synchronous hook ordering remains intact."
+      ],
+      "minimal_repair_invariants": [
+        "Each asynchronous response hook completes before the next hook and before the caller receives the response, including body reads and mutations; synchronous hook ordering remains intact."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated public contract using actual protected observations and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "Asynchronous response hooks must be awaited in declaration order before a completed request is returned",
+        "Each asynchronous response hook completes before the next hook and before the caller receives the response, including body reads and mutations; synchronous hook ordering remains intact."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 2,
+        "minimum_relevant_callable_transitions": 5,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "r03",
+      "split": "reserved",
+      "project": "httpx",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "Relative redirect references must resolve using the originating absolute URL as the base",
+      "mechanism_family": "relative_reference_base_resolution",
+      "novelty_rationale": "Previous redirect fixtures change entity streams and cookie refresh. This seed changes RFC relative-reference base/target resolution rather than body, cookie or escaping behavior.",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_urls.py",
+          "old": "        return URL(urljoin(str(self), str(URL(url))))",
+          "new": "        return URL(urljoin(str(URL(url)), str(self)))"
+        }
+      ],
+      "case_tests": "@pytest.mark.parametrize('location,wanted',[('../done?new=2','http://case.invalid/done?new=2'),('?new=2','http://case.invalid/dir/start?new=2'),('/target#piece','http://case.invalid/target#piece')])\ndef test_observed_records(location,wanted):\n    seen=[]\n    def handler(request):\n        seen.append(str(request.url))\n        return httpx.Response(302,headers={'location':location}) if len(seen)==1 else httpx.Response(200,text='arrived')\n    with httpx.Client(transport=httpx.MockTransport(handler),follow_redirects=True,max_redirects=2,trust_env=False) as client:\n        response=client.get('http://case.invalid/dir/start?old=1')\n    assert str(response.url)==wanted and seen==['http://case.invalid/dir/start?old=1',wanted]\n    assert response.text=='arrived' and len(response.history)==1\n",
+      "regression_tests": "@pytest.mark.parametrize('target',['https://other.invalid/done','http://case.invalid/absolute?x=1','http://next.invalid/path#tail'])\ndef test_adjacent_records(target):\n    seen=[]\n    def handler(request):\n        seen.append(str(request.url)); return httpx.Response(302,headers={'location':target}) if len(seen)==1 else httpx.Response(200,text='absolute')\n    with httpx.Client(transport=httpx.MockTransport(handler),follow_redirects=True,trust_env=False) as client: response=client.get('http://case.invalid/start')\n    assert str(response.url)==target and seen[-1]==target and response.text=='absolute'\n",
+      "evidence_mode": "full",
+      "expected_check_count": 6,
+      "investigation_surface": [
+        [
+          "vendor/httpx/_urls.py",
+          [
+            "URL.join",
+            "URL.__str__",
+            "URL.__init__"
+          ]
+        ],
+        [
+          "vendor/httpx/_client.py",
+          [
+            "BaseClient._redirect_url",
+            "BaseClient._build_redirect_request",
+            "Client._send_handling_redirects"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "Path-relative, query-only and root-relative locations resolve against the original request URL with correct authority/path/query/fragment; absolute redirects retain direct-target semantics."
+      ],
+      "minimal_repair_invariants": [
+        "Path-relative, query-only and root-relative locations resolve against the original request URL with correct authority/path/query/fragment; absolute redirects retain direct-target semantics."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated public contract using actual protected observations and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "Relative redirect references must resolve using the originating absolute URL as the base",
+        "Path-relative, query-only and root-relative locations resolve against the original request URL with correct authority/path/query/fragment; absolute redirects retain direct-target semantics."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 2,
+        "minimum_relevant_callable_transitions": 6,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "r04",
+      "split": "reserved",
+      "project": "decilist",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "Evaluation provider accounting must include every failed or blocked fallback attempt rather than only the final attempt",
+      "mechanism_family": "attempt_ledger_flattening",
+      "novelty_rationale": "This is complete ledger reduction across fallback chains. It does not reuse history aliasing, timeout classification, score inference or the separate mixed-task accuracy denominator seed.",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "packages/python/src/decilist/evaluation.py",
+          "old": "    attempts = [attempt for result in results for attempt in result.attempts]",
+          "new": "    attempts = [result.attempts[-1] for result in results if result.attempts]"
+        }
+      ],
+      "case_tests": "from decilist import Decilist,Policy\nfrom decilist.contracts import Predict\nfrom decilist.providers import FunctionProvider\nfrom decilist.evaluation import Case,evaluate\n@pytest.mark.parametrize('failure',['low_confidence','invalid_output','error'])\nasync def test_observed_records(failure):\n    def first(q):\n        if failure=='error': raise RuntimeError('provider failure')\n        return {'false':.5,'true':.5} if failure=='low_confidence' else {'unexpected':1.0}\n    blocked=FunctionProvider(lambda q:(_ for _ in ()).throw(AssertionError('blocked provider ran')),name='remote'); blocked.locality='remote'\n    providers=[blocked,FunctionProvider(first,name='first'),FunctionProvider(lambda q:{'false':.1,'true':.9},name='final')]\n    observed=await evaluate(Decilist(providers,Policy(min_confidence=.7,local_only=True)),[Case('one',Predict(state='s',instructions='i'),True)])\n    metrics=observed['metrics']\n    assert [a['outcome'] for a in observed['results'][0]['attempts']]==['blocked',failure,'accepted']\n    assert metrics['provider_attempts']==2 and metrics['blocked_attempts']==1\n    assert metrics[failure+'_attempts']==1 and metrics['valid_output_attempts']==(2 if failure=='low_confidence' else 1)\n    assert metrics['valid_output_rate']==(1 if failure=='low_confidence' else .5)\n    assert metrics['fallback_cases']==metrics['fallback_successes']==1\n",
+      "regression_tests": "from decilist import Decilist,Policy\nfrom decilist.contracts import Predict\nfrom decilist.providers import FunctionProvider\nfrom decilist.evaluation import Case,evaluate\n@pytest.mark.parametrize('count',[1,2,3])\nasync def test_adjacent_records(count):\n    engine=Decilist([FunctionProvider(lambda q:{'false':.1,'true':.9})],Policy(min_confidence=.7))\n    rows=[Case(str(i),Predict(state='s',instructions='i'),True) for i in range(count)]\n    metrics=(await evaluate(engine,rows))['metrics']\n    assert metrics['provider_attempts']==metrics['valid_output_attempts']==count\n    assert metrics['blocked_attempts']==metrics['fallback_cases']==0\n    assert metrics['valid_output_rate']==metrics['coverage']==1\n",
+      "evidence_mode": "full",
+      "expected_check_count": 6,
+      "investigation_surface": [
+        [
+          "packages/python/src/decilist/evaluation.py",
+          [
+            "evaluate",
+            "summarize",
+            "validate_cases"
+          ]
+        ],
+        [
+          "packages/python/src/decilist/engine.py",
+          [
+            "Decilist.decide"
+          ]
+        ],
+        [
+          "packages/python/src/decilist/contracts.py",
+          [
+            "Attempt",
+            "validate_decision"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "All per-result provider attempts contribute to counts and rates, with blocked attempts excluded only from attempted-provider denominators; successful single-attempt reports remain unchanged."
+      ],
+      "minimal_repair_invariants": [
+        "All per-result provider attempts contribute to counts and rates, with blocked attempts excluded only from attempted-provider denominators; successful single-attempt reports remain unchanged."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated public contract using actual protected observations and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "Evaluation provider accounting must include every failed or blocked fallback attempt rather than only the final attempt",
+        "All per-result provider attempts contribute to counts and rates, with blocked attempts excluded only from attempted-provider denominators; successful single-attempt reports remain unchanged."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 3,
+        "minimum_relevant_callable_transitions": 6,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "c01",
+      "split": "controls",
+      "project": "httpx",
+      "provenance": "unchanged_non_failing_control",
+      "private_mechanism": "Passing response-link and success-status observations must stop before model inference or repair",
+      "mechanism_family": "passing_link_status_control",
+      "novelty_rationale": "The non-failing control uses link/status observations instead of the V5 JSON/text example; it contains no seeded regression.",
+      "mutations": [],
+      "case_tests": "@pytest.mark.parametrize('target',['/page/2','https://next.invalid/page','/search?q=next'])\ndef test_observed_records(target):\n    def handler(request): return httpx.Response(200,headers={'link':'<'+target+'>; rel=\"next\"'},text='ready')\n    with httpx.Client(transport=httpx.MockTransport(handler),trust_env=False) as client: response=client.get('http://case.invalid/current')\n    assert response.links['next']=={'url':target,'rel':'next'} and response.text=='ready'\n    assert response.raise_for_status() is response\n",
+      "regression_tests": "@pytest.mark.parametrize('status',[200,201,204])\ndef test_adjacent_records(status):\n    response=httpx.Response(status,request=httpx.Request('GET','http://case.invalid/success'))\n    assert response.is_success and response.raise_for_status() is response\n    assert response.links=={} and response.content==b''\n",
+      "evidence_mode": "full",
+      "expected_check_count": 6,
+      "investigation_surface": [
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Response.links",
+            "_parse_header_links",
+            "Response.raise_for_status",
+            "Response.is_success"
+          ]
+        ],
+        [
+          "vendor/httpx/_client.py",
+          [
+            "Client.get",
+            "Client._send_single_request"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "All observations pass against unchanged source; the product reports non-reproduction without model invocation or production edits."
+      ],
+      "minimal_repair_invariants": [
+        "All observations pass against unchanged source; the product reports non-reproduction without model invocation or production edits."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated public contract using actual protected observations and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "Passing response-link and success-status observations must stop before model inference or repair",
+        "All observations pass against unchanged source; the product reports non-reproduction without model invocation or production edits."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 2,
+        "minimum_relevant_callable_transitions": 6,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "c02",
+      "split": "controls",
+      "project": "httpx",
+      "provenance": "explicitly_seeded_regression",
+      "private_mechanism": "Independent request-provenance and mixed-task-accounting failures require both repairs",
+      "mechanism_family": "mixed_v6_development_contracts",
+      "novelty_rationale": "This control combines only the two new V6 development seeds, not any V2-V5 failure.",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_exceptions.py",
+          "old": "        raise exc",
+          "new": "        raise type(exc)(str(exc)) from exc"
+        },
+        {
+          "kind": "replace",
+          "path": "packages/python/src/decilist/evaluation.py",
+          "old": "\"accuracy_accepted\": correct/discrete_accepted if discrete_accepted else None",
+          "new": "\"accuracy_accepted\": correct/accepted if discrete_accepted else None"
+        }
+      ],
+      "case_tests": "@pytest.mark.parametrize('error_name',['ReadError','ConnectTimeout','RemoteProtocolError'])\n@pytest.mark.parametrize('asynchronous',[False,True])\nasync def test_transport_records(error_name,asynchronous):\n    error_type=getattr(httpx,error_name)\n    original=error_type('observed failure')\n    def handler(request): raise original\n    if asynchronous:\n        async with httpx.AsyncClient(transport=httpx.MockTransport(handler),trust_env=False) as client:\n            request=client.build_request('POST','http://case.invalid/records',content=b'input')\n            with pytest.raises(error_type) as caught: await client.send(request)\n    else:\n        with httpx.Client(transport=httpx.MockTransport(handler),trust_env=False) as client:\n            request=client.build_request('POST','http://case.invalid/records',content=b'input')\n            with pytest.raises(error_type) as caught: client.send(request)\n    assert caught.value.request is request\n    assert caught.value is original\n    assert str(caught.value)=='observed failure'\n\nfrom decilist import Decilist,Policy\nfrom decilist.contracts import Choose,Predict,Score\nfrom decilist.providers import FunctionProvider\nfrom decilist.evaluation import Case,evaluate\n@pytest.mark.parametrize('score_count',[1,2,3])\nasync def test_metrics_records(score_count):\n    def probabilities(q):\n        return {'a':.8,'b':.2} if q.kind=='choose' else {'false':.2,'true':.8} if q.kind=='predict' else {'0':.2,'1':.8}\n    rows=[Case('choice',Choose(state='s',instructions='i',options={'a':'A','b':'B'}),'a'),Case('predicate',Predict(state='s',instructions='i'),False)]\n    rows += [Case('score'+str(i),Score(state='s',instructions='i',levels=['low','high']),.8) for i in range(score_count)]\n    observed=await evaluate(Decilist([FunctionProvider(probabilities)],Policy(min_confidence=.7)),rows)\n    metrics=observed['metrics']\n    assert metrics['classification_accepted']==2 and metrics['accepted']==2+score_count\n    assert metrics['accuracy_accepted']==.5 and metrics['accuracy_all']==.5\n    assert metrics['score_accepted']==score_count and metrics['score_coverage']==1 and metrics['score_mae']==pytest.approx(0)\n    assert metrics['coverage']==1 and len(observed['results'])==len(rows)\n",
+      "regression_tests": "@pytest.mark.parametrize('method',['GET','POST','DELETE'])\ndef test_transport_invariants(method):\n    seen=[]\n    def handler(request): seen.append(request); return httpx.Response(200,text='ok')\n    with httpx.Client(transport=httpx.MockTransport(handler),trust_env=False) as client:\n        request=client.build_request(method,'http://case.invalid/success')\n        response=client.send(request)\n    assert response.request is request and seen==[request] and response.text=='ok'\n\nfrom decilist import Decilist,Policy\nfrom decilist.contracts import Choose,Predict,Score\nfrom decilist.providers import FunctionProvider\nfrom decilist.evaluation import Case,evaluate\n@pytest.mark.parametrize('kind',['choose','predict','score'])\nasync def test_metrics_invariants(kind):\n    q=Choose(state='s',instructions='i',options={'a':'A','b':'B'}) if kind=='choose' else Predict(state='s',instructions='i') if kind=='predict' else Score(state='s',instructions='i',levels=['low','high'])\n    expected='a' if kind=='choose' else True if kind=='predict' else 1.0\n    raw={'a':1.0,'b':0.0} if kind=='choose' else {'false':0.0,'true':1.0} if kind=='predict' else {'0':0.0,'1':1.0}\n    metrics=(await evaluate(Decilist([FunctionProvider(lambda _:raw)],Policy(min_confidence=.7)),[Case('single',q,expected)]))['metrics']\n    assert metrics['coverage']==1 and metrics['abstention_rate']==0\n    assert metrics['accuracy_accepted']==(None if kind=='score' else 1)\n    assert metrics['score_mae']==(0 if kind=='score' else None)\n",
+      "evidence_mode": "full",
+      "expected_check_count": 15,
+      "investigation_surface": [
+        [
+          "vendor/httpx/_exceptions.py",
+          [
+            "RequestError.__init__",
+            "request_context",
+            "HTTPError.request"
+          ]
+        ],
+        [
+          "vendor/httpx/_client.py",
+          [
+            "Client._send_single_request",
+            "AsyncClient._send_single_request",
+            "Client.send"
+          ]
+        ],
+        [
+          "packages/python/src/decilist/evaluation.py",
+          [
+            "evaluate",
+            "validate_cases",
+            "summarize"
+          ]
+        ],
+        [
+          "packages/python/src/decilist/engine.py",
+          [
+            "Decilist.decide"
+          ]
+        ],
+        [
+          "packages/python/src/decilist/contracts.py",
+          [
+            "validate_decision",
+            "value_from"
+          ]
+        ]
+      ],
+      "repair_invariants": [
+        "A propagated RequestError retains both its original identity and originating Request object in sync and async dispatch; successful response/request association remains unchanged.",
+        "Mixed-task reports keep overall acceptance, classification accuracy, score coverage and score error in their own populations; homogeneous datasets retain their existing metrics."
+      ],
+      "minimal_repair_invariants": [
+        "A propagated RequestError retains both its original identity and originating Request object in sync and async dispatch; successful response/request association remains unchanged.",
+        "Mixed-task reports keep overall acceptance, classification accuracy, score coverage and score error in their own populations; homogeneous datasets retain their existing metrics."
+      ],
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Explain the violated public contract using actual protected observations and the production call chain.",
+      "root_cause_discriminating_facts": [
+        "Independent request-provenance and mixed-task-accounting failures require both repairs",
+        "Both independent development regressions require repair while all protected reproduction and invariant tests stay unchanged; either partial repair leaves an observed failure."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 5,
+        "minimum_relevant_callable_transitions": 12,
+        "human_difficulty_established": false
+      },
+      "control_components": [
+        "d01",
+        "d02"
+      ]
+    }
+  ]
+}

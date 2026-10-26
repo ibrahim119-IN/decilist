@@ -149,7 +149,7 @@ npm test
 python -m benchmarks.run --output reports/local/workflow.json
 ```
 
-[CI for the model compatibility implementation](https://github.com/ibrahim119-IN/decilist/actions/runs/40228553717) passed on Windows and Ubuntu. Native GPU inference was separately verified on the Windows presentation machine. First-use human usability remains unmeasured.
+[CI for V5 and portable fixture evidence](https://github.com/ibrahim119-IN/decilist/actions/runs/40373453349) passed on Windows and Ubuntu, including the full test suite, package build and Python/TypeScript HTTP integrations. Native GPU inference was separately verified on the Windows presentation machine. First-use human usability remains unmeasured.
 
 The original 12-case smoke suite checks wiring. Its perfect rule score follows from rules implementing its labels; it is **not** model-quality evidence. [Initial measured report](reports/baseline-2026-10-25.json).
 
