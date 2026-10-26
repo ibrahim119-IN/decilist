@@ -2,7 +2,7 @@
 
 V4 reproduces an explicitly selected test failure, gathers runtime and source context, asks a local coding model for a hypothesis and a small source intervention, and tests that intervention in a disposable copy. No Playground session or new project setup is required.
 
-V4 is experimental. A passing intervention supports the hypothesis under the selected tests; it does not prove a complete causal explanation or production correctness. Quality and developer-time evaluation are still pending; this guide makes no improvement claim.
+V4 is experimental. A passing intervention supports the hypothesis under the selected tests; it does not prove a complete causal explanation or production correctness. The [retained V4 evaluation](triage-v4-results.md) found no protected repairs on six fresh evaluation defects and slower assisted agent repairs on four reserved defects. Human developer-time benefit remains unmeasured; this guide makes no improvement claim.
 
 ## 1. Prepare the environment and model identity
 

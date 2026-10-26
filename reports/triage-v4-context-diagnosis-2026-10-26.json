@@ -1,0 +1,423 @@
+{
+  "schema_version": 1,
+  "frozen_commit": "91d4eed",
+  "task_mode": "read_only_retrospective_analysis",
+  "scope": "Substantive diagnosis of retained evaluation e02/e03/e05/e06; common source hashes across evaluation rows identify mutations. No reserved or trial artifacts read.",
+  "inputs": [
+    {
+      "path": "[EXTERNAL]/triage-v4-evaluation-private.json",
+      "path_original_sha256": "e616e66abb7998d6057cd2f6d72b8defd772a2576b0b0d61b26a43acb60bc6f3",
+      "sha256": "2e9684ef12a442b770a4da16a7e7b156456c484b187f89137fff4fbd9fded696"
+    },
+    {
+      "path": "[EXTERNAL]/triage-v4-evaluation-contexts-2026-10-26.json",
+      "path_original_sha256": "ba66517feffb56511f936ce7eedfe5371b5cf4f4190d09a9ed58da40f4588748",
+      "sha256": "6568d3849a8445b13eca51b50d27a92b9a74b6e76d2a38df81595d48152109aa"
+    }
+  ],
+  "method": [
+    "Read retained evaluation trace/context/test/source artifacts.",
+    "Identify changed functions by AST/source diff against other evaluation cases with the common source hash; no repair catalog consulted.",
+    "Replay frozen pure ranking utilities against retained traces to obtain candidate rank/score/depth and verify retrievability; do not rerun project code."
+  ],
+  "cases": [
+    {
+      "case_id": "e02",
+      "target_symbol": "BaseClient._redirect_stream",
+      "target_path": "vendor/httpx/_client.py",
+      "source_span": [
+        573,
+        582
+      ],
+      "source_chars": 325,
+      "rank": 28,
+      "score": 44,
+      "distance": 7,
+      "eligible_functions": 78,
+      "cause": "semantic_rank_and_first_24_candidate_cutoff",
+      "direct_observation": "Function metadata, executed lines 579/582 and three observed call edges survive; no chronological events for this function survive the first-2000 event prefix.",
+      "source_fault": "The method-change predicate is reversed, retaining the original entity when redirected POST becomes GET.",
+      "retrieved_before_budget": true,
+      "initial_24": false,
+      "byte_pruned": false,
+      "details": [
+        "The complete included _build_redirect_request calls _redirect_stream, but selected-body call-graph closure is not enforced.",
+        "Current query gives stream=0 and content=6; redirect-stream semantics are not lexically equivalent to the observed request.content failure.",
+        "A 325-character helper loses to wrappers and generic request/headers methods."
+      ],
+      "evidence": {
+        "case_directory": "[EXTERNAL]/e02-1",
+        "case_directory_original_sha256": "67cc0a000bf979b83ee9ec5e92bfaf3c20d4c9e69a3d20b81239fd743c905ad2",
+        "trace_path": "[EXTERNAL]/trace.json",
+        "trace_path_original_sha256": "c2583830c5d3a1598f54a916012e6afda0c0fe35200bd7c951edc1155e9b791a",
+        "trace_sha256": "de3cc40624cb906d45f109eaee9147644c53572eb552c3d2ac4e0cb5bbfe1742",
+        "context_path": "[EXTERNAL]/context.json",
+        "context_path_original_sha256": "5af60ac3d2ec323646345be9a822a2b560555706612f0fd9cafb99a33ba5e491",
+        "context_sha256": "b19caead613706a599fe8e69a3aeed13155a543f59a54fb39153fa60c3cc8b66",
+        "source_path": "[EXTERNAL]/_client.py",
+        "source_path_original_sha256": "a5740006bb059f69232c2cb92fff79069ab47123dcdd56799fcb1063441f1bf0",
+        "source_sha256": "06e15f58136a155f461e3a8729bc4c209fcd622fa3490a663837f7ff03d40376",
+        "test_path": "[EXTERNAL]/test_case.py",
+        "test_path_original_sha256": "47b06e1263c9103962de9c7458daac03a5a1adf4fe4b1d068e6f08e9232d19bd"
+      },
+      "trace": {
+        "function_count": 121,
+        "function_cap": 128,
+        "edge_count": 175,
+        "events_retained": 2000,
+        "events_dropped": 7768,
+        "truncation_reasons": [
+          "event_limit"
+        ],
+        "target_recorded": true,
+        "target_executed_lines": [
+          579,
+          582
+        ]
+      },
+      "context": {
+        "serialized_chars": 23081,
+        "function_count": 7,
+        "source_retrieval_failures": [],
+        "target_in_model_context": false,
+        "complete_failing_test": true,
+        "truncation_reasons": [
+          "call_depth_limit",
+          "context_char_limit",
+          "context_event_limit",
+          "function_limit",
+          "input_trace_truncated",
+          "module_context_limit",
+          "repeated_failure_text_omitted"
+        ]
+      }
+    },
+    {
+      "case_id": "e03",
+      "target_symbol": "encode_multipart_data",
+      "target_path": "vendor/httpx/_content.py",
+      "source_span": [
+        152,
+        157
+      ],
+      "source_chars": 278,
+      "rank": 20,
+      "score": 62,
+      "distance": 6,
+      "eligible_functions": 79,
+      "cause": "serialized_context_budget_pruning",
+      "direct_observation": "All three failing parameterizations executed lines 155/156/157; five chronological events (sequence 700..894) and caller/callee edges survive.",
+      "source_fault": "The observed encoding helper passes boundary=None instead of its boundary argument.",
+      "retrieved_before_budget": true,
+      "initial_24": true,
+      "byte_pruned": true,
+      "details": [
+        "The actual small faulty helper is explicitly listed in omitted_functions; no retrieval errors occurred.",
+        "Included MultipartStream.get_headers has this helper as an observed caller. A bounded connected slice would expose that bridge.",
+        "Larger source bodies above it survive while this 278-character body is dropped by rank-tail packing. Function-table saturation also occurred, but did not erase this target."
+      ],
+      "evidence": {
+        "case_directory": "[EXTERNAL]/e03-1",
+        "case_directory_original_sha256": "2a2ff4760f1979fd037f00b429d6ffa15e951bc3d8d5bf2030735755e3236085",
+        "trace_path": "[EXTERNAL]/trace.json",
+        "trace_path_original_sha256": "1c505400f8f7e9844e12301d2bb4d0b146b2f0c7088c4dfc5ce19b12dbfba302",
+        "trace_sha256": "c7b96905802b36fb11b60be202e03f5115ef211b2f4f644f8e570c510788e1c7",
+        "context_path": "[EXTERNAL]/context.json",
+        "context_path_original_sha256": "fb1a30545420ee771b082cd86b1cdef3a9ab9530a39832b583588a48d9867947",
+        "context_sha256": "690bb79dc16114946aef2de860702ea553a2f1ed3225c9461aabc12f35465add",
+        "source_path": "[EXTERNAL]/_content.py",
+        "source_path_original_sha256": "5a460002601129f00a12a9187e0744ab8203986fffa420d0b251181f2338419d",
+        "source_sha256": "d2c915c4fd05c5de59e626a00b486d80c92ff30d5af4f0ca4c5ec602d37e5d30",
+        "test_path": "[EXTERNAL]/test_case.py",
+        "test_path_original_sha256": "b43a0d19f09ef8873b9d479e74bc046410d16b6d86c072338c477102cc95de2a"
+      },
+      "trace": {
+        "function_count": 128,
+        "function_cap": 128,
+        "edge_count": 168,
+        "events_retained": 2000,
+        "events_dropped": 4441,
+        "truncation_reasons": [
+          "event_limit",
+          "function_limit"
+        ],
+        "target_recorded": true,
+        "target_executed_lines": [
+          155,
+          156,
+          157
+        ]
+      },
+      "context": {
+        "serialized_chars": 23345,
+        "function_count": 8,
+        "source_retrieval_failures": [],
+        "target_in_model_context": false,
+        "complete_failing_test": true,
+        "truncation_reasons": [
+          "call_depth_limit",
+          "context_char_limit",
+          "context_event_limit",
+          "function_limit",
+          "input_trace_truncated",
+          "module_context_limit",
+          "repeated_failure_text_omitted"
+        ]
+      }
+    },
+    {
+      "case_id": "e05",
+      "target_symbol": "Request._prepare",
+      "target_path": "vendor/httpx/_models.py",
+      "source_span": [
+        441,
+        460
+      ],
+      "source_chars": 889,
+      "rank": 11,
+      "score": 47,
+      "distance": 5,
+      "eligible_functions": 67,
+      "cause": "serialized_context_budget_pruning_and_failure_anchor_dilution",
+      "direct_observation": "All three failing parameterizations executed the preparation predicate and header writes; fourteen chronological events (sequence 716..928) survive.",
+      "source_fault": "The condition checks content-length instead of transfer-encoding when an explicit Content-Length is already supplied.",
+      "retrieved_before_budget": true,
+      "initial_24": true,
+      "byte_pruned": true,
+      "details": [
+        "The target is explicitly listed in omitted_functions. Trace function capacity was not exhausted.",
+        "The failure is a negative membership assertion about transfer-encoding, but the current query has transfer=0 and encoding=0: string literals in Compare/In are ignored.",
+        "Generic content/header accessors and response decoding functions outrank the request-header invariant enforcement body."
+      ],
+      "evidence": {
+        "case_directory": "[EXTERNAL]/e05-1",
+        "case_directory_original_sha256": "5b486f36caf03bdffdbc389603600b03a29003951553759a3244c4b27b4fe727",
+        "trace_path": "[EXTERNAL]/trace.json",
+        "trace_path_original_sha256": "d86e672ded6dc42babc9f2e9f40e552698484cb3a3ccac6ecbd241b701e448c1",
+        "trace_sha256": "8a52880a9346271b541e7c5cdcf221d18cf19616e17168350c8d8a0cdc274aec",
+        "context_path": "[EXTERNAL]/context.json",
+        "context_path_original_sha256": "7a2c5445b8f9bd9aba5a307a25d30a3d5ab963e92ce2e536e26eea64a2736746",
+        "context_sha256": "a5c279b87a51da00299d82c1f0ecae663a79c40228883ce4e42b85291658893d",
+        "source_path": "[EXTERNAL]/_models.py",
+        "source_path_original_sha256": "fa8b4a20e883b668ca7b19f79fe3a2796981d8900727b671b7895a1f5183717b",
+        "source_sha256": "5d4ef2ed499e1ce8ed254a874b9761f5f00bab66d44fa5c03983243d706f9e97",
+        "test_path": "[EXTERNAL]/test_case.py",
+        "test_path_original_sha256": "1c9f28d6fc808709eded125388f89cc1dc50492f1e5923f2dee12291f00a83b9"
+      },
+      "trace": {
+        "function_count": 112,
+        "function_cap": 128,
+        "edge_count": 145,
+        "events_retained": 2000,
+        "events_dropped": 4299,
+        "truncation_reasons": [
+          "event_limit"
+        ],
+        "target_recorded": true,
+        "target_executed_lines": [
+          442,
+          444,
+          446,
+          448,
+          450,
+          451,
+          452,
+          455,
+          456,
+          457,
+          460
+        ]
+      },
+      "context": {
+        "serialized_chars": 22140,
+        "function_count": 8,
+        "source_retrieval_failures": [],
+        "target_in_model_context": false,
+        "complete_failing_test": true,
+        "truncation_reasons": [
+          "call_depth_limit",
+          "context_char_limit",
+          "context_event_limit",
+          "function_limit",
+          "input_trace_truncated",
+          "module_context_limit",
+          "repeated_failure_text_omitted"
+        ]
+      }
+    },
+    {
+      "case_id": "e06",
+      "target_symbol": "validate_decision",
+      "target_path": "packages/python/src/decilist/contracts.py",
+      "source_span": [
+        126,
+        143
+      ],
+      "source_chars": null,
+      "rank": null,
+      "score": null,
+      "distance": null,
+      "eligible_functions": 75,
+      "cause": "trace_function_budget_loss_with_additional_context_ranking_loss",
+      "direct_observation": "validate_decision, validate_probabilities and value_from are absent from the capped 128-function trace. Client.decide is recorded, reaches line 79 (the direct validate_decision call), and the test reports DID NOT RAISE. Validator execution is a strong source-plus-control-flow inference, not a retained call observation.",
+      "source_fault": "The semantic validator permits numeric 0.0/1.0 to compare equal to boolean values without requiring the expected value type.",
+      "retrieved_before_budget": false,
+      "initial_24": false,
+      "byte_pruned": false,
+      "secondary_target": {
+        "symbol": "Client.decide",
+        "source_chars": 669,
+        "rank": 10,
+        "score": 85,
+        "distance": 2,
+        "byte_pruned": true
+      },
+      "details": [
+        "The recorder caches a newly seen code object as None and refuses it permanently once 128 functions are admitted. Early transport/runtime setup consumes that table.",
+        "Client.decide would at least expose the validator call, but it is also explicitly byte-pruned from context.",
+        "The query weights URL/base/client setup at url=10,base=6,client=7 versus confidence=3; value is excluded as a noise word.",
+        "The missing target cannot be repaired by better ranking alone. Runtime metadata must first retain late semantic functions or explicitly report incomplete coverage."
+      ],
+      "evidence": {
+        "case_directory": "[EXTERNAL]/e06-1",
+        "case_directory_original_sha256": "35ddcd519bf8d144f6b8123e8c659e6ed1c88029be9f3956de9e3c130691ddc4",
+        "trace_path": "[EXTERNAL]/trace.json",
+        "trace_path_original_sha256": "14e68beb83a1803bf6dd1ed39714c237cf58069c7f24ba7e15c75293ea7519b0",
+        "trace_sha256": "e4d9f285c89a8fec78dcf600ed6f7baf3eae6a0a323b99d848b9038bf8e640b2",
+        "context_path": "[EXTERNAL]/context.json",
+        "context_path_original_sha256": "614b14a02f42a8cb523baeb4e162937d2620b59dc5259c3e9718c087e7e4cf44",
+        "context_sha256": "8c0af36c62366e25b7629fd10abd077e7f3d9398f22aecf885b8557b685b0a86",
+        "source_path": "[EXTERNAL]/contracts.py",
+        "source_path_original_sha256": "71388102f1f0c5f5eb9fa167708f00b5f2d66f5628e90868102f3c208496f010",
+        "source_sha256": "0b379557bf521838551709f1151df9c0f34dcb2f7e61ff6bdead00815b61433d",
+        "test_path": "[EXTERNAL]/test_case.py",
+        "test_path_original_sha256": "2a955faf28d5aa95ea52da1cb66c8d27a7e47aa594cab7a59e540207f76e84b0"
+      },
+      "trace": {
+        "function_count": 128,
+        "function_cap": 128,
+        "edge_count": 179,
+        "events_retained": 2000,
+        "events_dropped": 10093,
+        "truncation_reasons": [
+          "event_limit",
+          "function_limit"
+        ],
+        "target_recorded": false,
+        "target_executed_lines": []
+      },
+      "context": {
+        "serialized_chars": 19852,
+        "function_count": 7,
+        "source_retrieval_failures": [],
+        "target_in_model_context": false,
+        "complete_failing_test": true,
+        "truncation_reasons": [
+          "call_depth_limit",
+          "context_char_limit",
+          "context_event_limit",
+          "function_limit",
+          "input_trace_truncated",
+          "module_context_limit",
+          "repeated_failure_text_omitted"
+        ]
+      }
+    }
+  ],
+  "proposal": {
+    "smallest_context_increment": {
+      "change": "Replace first-24 lexical selection plus tail dropping with failure-anchored, serialized-byte-aware packing of a bounded observed call-graph slice. Reserve the full failing test, then a small number of observed caller/callee neighbors for high-priority diagnostic functions before filling by marginal relevance per serialized byte.",
+      "scope": "Only previously observed function IDs and recorded edges; no target catalog, mutation labels, test edits or guessed execution.",
+      "small_additions": [
+        "Give failed assertion/pytest.raises nodes higher query weight than client/transport setup.",
+        "Include bounded string field literals in comparisons/membership and raises(match=...), while excluding prose/docstrings and retaining existing secret guards.",
+        "Budget the actual JSON row cost, including source_numbered and reference metadata; avoid letting a large wrapper exclude multiple short connected helpers.",
+        "Keep the complete unnumbered source as canonical; render numbered source separately or omit duplicate numbered copies from the model projection if that projection can remain explicitly grounded."
+      ]
+    },
+    "separate_trace_increment": {
+      "change": "Expand the shared, strictly bounded function-admission/parser cap consistently (for example 128 to 256) or introduce a deterministic late-function reserve. Keep the 512k output cap and value-free tracing. Add admitted/dropped function and late-event coverage metadata.",
+      "why_separate": "e06 has no retained validator identity, so source ranking cannot select it without inventing execution. The context validator also hard-caps functions at128 and must agree with any recorder cap change.",
+      "caveat": "A larger first-seen cap only delays saturation; a fair prefix-plus-late reserve is the stronger generic design. No improvement has been measured in this read-only task."
+    },
+    "not_recommended": [
+      "Hardcoding any of the four target symbols or benchmark case IDs.",
+      "Selecting mutation locations or catalog repair labels.",
+      "Claiming source presence proves the model will generate a valid repair.",
+      "Treating a missing runtime function as proof it did not execute."
+    ]
+  },
+  "acceptance_cases_not_executed": [
+    {
+      "name": "small_observed_sibling_helper",
+      "setup": "A high-ranked request builder calls several observed helpers; one 300-character helper controls a returned stream but its name does not match the failing content attribute. More than24 observed candidates exist.",
+      "check": "Under24k, retain the complete failing test and this observed small neighbor without using an oracle target name; keep explicit bounds and provenance."
+    },
+    {
+      "name": "small_observed_parent_bridge",
+      "setup": "A selected serialization/header helper is called by a short adapter that mistakenly replaces an argument with a literal; generic wrappers add enough metadata/source to exceed24k.",
+      "check": "Retain the adapter through bounded observed graph adjacency and marginal-byte packing, rather than discarding it behind larger wrappers."
+    },
+    {
+      "name": "negative_field_invariant",
+      "setup": "A failed assertion says a field is absent; the relevant observed body uses string comparisons/membership to suppress defaults. Positive content checks and many generic field accessors also execute.",
+      "check": "The negative field literal contributes to the failure query, and the complete invariant body survives the budget. Ordinary setup tokens cannot monopolize source slots."
+    },
+    {
+      "name": "late_semantic_validator",
+      "setup": "A successful mocked transport initializes more than128 distinct project/vendor functions before a semantic validator receives a response. The failure expects a ValueError from a type invariant.",
+      "check": "Within a documented hard trace cap, retain the late validator identity, executed lines and observed incoming edge; then retain the complete validator source and failing test. If capacity is exhausted, expose incomplete coverage explicitly rather than silently treating it as unexecuted."
+    },
+    {
+      "name": "privacy_integrity_and_bounds",
+      "setup": "Repeat the above with credentials in dynamic values, symlink escapes, repeated parameterizations and oversized bodies.",
+      "check": "No locals/arguments/returns/env values are recorded; existing redaction/edit guards and root confinement remain; context<=24k, deterministic selection, truncation and dropped coverage counts are explicit."
+    }
+  ],
+  "limitations": [
+    "No implementation or counterfactual tests/model calls were performed. Acceptance cases are proposed, not passing results.",
+    "e06 validator execution is inferred from a direct call on an executed return line plus DID NOT RAISE; the missing call is not present in retained metadata.",
+    "Context omissions do not by themselves establish why each model completion failed schema/grounding validation. The measured frozen0/6 result remains unchanged.",
+    "These evaluation cases have now been inspected for diagnosis and cannot serve as unseen evaluation evidence for a tuned successor."
+  ],
+  "code_mechanisms": [
+    {
+      "path": "packages/python/src/decilist/triage_trace_v4.py",
+      "lines": [
+        23,
+        135,
+        141,
+        161
+      ],
+      "finding": "128-function permanent first-seen admission; chronological events stop after first2000."
+    },
+    {
+      "path": "packages/python/src/decilist/triage_context_v4.py",
+      "lines": [
+        53,
+        55,
+        185,
+        311,
+        326,
+        327,
+        354,
+        357,
+        465
+      ],
+      "finding": "Query ignores Compare string literals; entire-test plumbing contributes; serialized source is duplicated; initial24 are selected before budget-tail deletion."
+    }
+  ],
+  "frozen_source_integrity": {
+    "packages/python/src/decilist/triage_context_v4.py": {
+      "actual_sha256": "b85a9dc1310f401f63e3a4b0f784f0f6c0d78741f47a1b5d64265de438e49b47",
+      "frozen_sha256": "b85a9dc1310f401f63e3a4b0f784f0f6c0d78741f47a1b5d64265de438e49b47",
+      "matches": true
+    },
+    "packages/python/src/decilist/triage_trace_v4.py": {
+      "actual_sha256": "38fc3de29050a1b4b7e43142cb0ccf8aeed4b8f0b96894ab1f1a4ee303358e18",
+      "frozen_sha256": "38fc3de29050a1b4b7e43142cb0ccf8aeed4b8f0b96894ab1f1a4ee303358e18",
+      "matches": true
+    }
+  },
+  "root_observed_checks": "Root rehashed every cited source/trace/context file, verified target omissions and trace counts, and inspected the diagnosis; no project tests or model calls were repeated."
+}

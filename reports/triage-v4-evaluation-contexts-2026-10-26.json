@@ -1,0 +1,2186 @@
+{
+  "schema_version": 1,
+  "candidate_manifest_sha256": "39a5f90f2005b05d16f18ae7c83ac160353776fd1ec0dec0779b3977df9d578c",
+  "private_report_sha256": "2e9684ef12a442b770a4da16a7e7b156456c484b187f89137fff4fbd9fded696",
+  "note": "Actual observed model contexts. Public path/credential heuristics may alter strings; original byte hashes identify the retained private evidence.",
+  "rows": [
+    {
+      "case_id": "e01",
+      "repetition": 1,
+      "state": "unverified",
+      "context": {
+        "call_graph": [
+          {
+            "callee": "vendor/httpx/_client.py:340:BaseClient.build_request",
+            "caller": ".triage/test_case.py:11:test_request_records",
+            "count": 3,
+            "line": 20
+          },
+          {
+            "callee": "vendor/httpx/_transports/mock.py:19:MockTransport.handle_request",
+            "caller": "vendor/httpx/_client.py:1001:Client._send_single_request",
+            "count": 3,
+            "line": 1014
+          },
+          {
+            "callee": "vendor/httpx/_config.py:132:Timeout.as_dict",
+            "caller": "vendor/httpx/_client.py:340:BaseClient.build_request",
+            "count": 3,
+            "line": 377
+          }
+        ],
+        "edit_allowlist": [
+          {
+            "end_line": 591,
+            "evidence_id": "source:vendor/httpx/_client.py:584:BaseClient._set_timeout",
+            "function_id": "vendor/httpx/_client.py:584:BaseClient._set_timeout",
+            "path": "vendor/httpx/_client.py",
+            "start_line": 584
+          },
+          {
+            "end_line": 138,
+            "evidence_id": "source:vendor/httpx/_config.py:132:Timeout.as_dict",
+            "function_id": "vendor/httpx/_config.py:132:Timeout.as_dict",
+            "path": "vendor/httpx/_config.py",
+            "start_line": 132
+          },
+          {
+            "end_line": 389,
+            "evidence_id": "source:vendor/httpx/_client.py:340:BaseClient.build_request",
+            "function_id": "vendor/httpx/_client.py:340:BaseClient.build_request",
+            "path": "vendor/httpx/_client.py",
+            "start_line": 340
+          },
+          {
+            "end_line": 27,
+            "evidence_id": "source:vendor/httpx/_transports/mock.py:19:MockTransport.handle_request",
+            "function_id": "vendor/httpx/_transports/mock.py:19:MockTransport.handle_request",
+            "path": "vendor/httpx/_transports/mock.py",
+            "start_line": 19
+          },
+          {
+            "end_line": 1034,
+            "evidence_id": "source:vendor/httpx/_client.py:1001:Client._send_single_request",
+            "function_id": "vendor/httpx/_client.py:1001:Client._send_single_request",
+            "path": "vendor/httpx/_client.py",
+            "start_line": 1001
+          }
+        ],
+        "events": [],
+        "evidence_ids": [
+          "source:.triage/test_case.py:11:test_request_records",
+          "source:vendor/httpx/_client.py:584:BaseClient._set_timeout",
+          "source:vendor/httpx/_config.py:132:Timeout.as_dict",
+          "source:vendor/httpx/_client.py:340:BaseClient.build_request",
+          "source:vendor/httpx/_transports/mock.py:19:MockTransport.handle_request",
+          "source:vendor/httpx/_client.py:457:BaseClient._build_request_auth",
+          "source:vendor/httpx/_client.py:1001:Client._send_single_request",
+          "failure:1",
+          "failure:2",
+          "failure:3"
+        ],
+        "failures": [
+          {
+            "evidence_id": "failure:1",
+            "exception_type": "AssertionError",
+            "failure_text_captured": true,
+            "longrepr": "seconds = None\n\n    @pytest.mark.parametrize(\"seconds\",[None,.125,2.5])\n    def test_request_records(seconds):\n        explicit={\"connect\":seconds,\"read\":seconds,\"write\":seconds,\"pool\":seconds}\n        extensions={\"timeout\":explicit,\"trace-tag\":\"retained\"}\n        seen=[]\n        def handle(request):\n            seen.append(dict(request.extensions))\n            return httpx.Response(200)\n        with httpx.Client(transport=httpx.MockTransport(handle),timeout=9,trust_env=False) as client:\n            request=client.build_request(\"GET\",\"https://example.test/route\",timeout=.75,extensions=extensions)\n            client.send(request)\n>       assert seen[0][\"timeout\"] == explicit\nE       AssertionError: assert {'connect': 0... 'pool': 0.75} == {'connect': N... 'pool': None}\nE         \nE         Differing items:\nE         {'connect': 0.75} != {'connect': None}\nE         {'pool': 0.75} != {'pool': None}\nE         {'write': 0.75} != {'write': None}\nE         {'read': 0.75} != {'read': None}\nE         Use -v to get more diff\n\n.triage\\test_case.py:22: AssertionError",
+            "longrepr_original_sha256": "a4d9d6b8a21e1568abb00fd267636c74ddb420e5030be09884a0f4b59f6d8ff3",
+            "nodeid": ".triage/test_case.py::test_request_records[None]",
+            "phase": "call",
+            "traceback": [
+              {
+                "line": 22,
+                "path": ".triage/test_case.py",
+                "symbol": "test_request_records"
+              }
+            ]
+          },
+          {
+            "evidence_id": "failure:2",
+            "exception_type": "AssertionError",
+            "failure_text_captured": true,
+            "longrepr": "",
+            "longrepr_omitted_by_character_limit": true,
+            "nodeid": ".triage/test_case.py::test_request_records[0.125]",
+            "phase": "call",
+            "traceback": [
+              {
+                "line": 22,
+                "path": ".triage/test_case.py",
+                "symbol": "test_request_records"
+              }
+            ]
+          },
+          {
+            "evidence_id": "failure:3",
+            "exception_type": "AssertionError",
+            "failure_text_captured": true,
+            "longrepr": "",
+            "longrepr_omitted_by_character_limit": true,
+            "nodeid": ".triage/test_case.py::test_request_records[2.5]",
+            "phase": "call",
+            "traceback": [
+              {
+                "line": 22,
+                "path": ".triage/test_case.py",
+                "symbol": "test_request_records"
+              }
+            ]
+          }
+        ],
+        "functions": [
+          {
+            "complete": true,
+            "editable": false,
+            "end_line": 24,
+            "evidence_id": "source:.triage/test_case.py:11:test_request_records",
+            "executed_lines": [
+              13,
+              14,
+              15,
+              16,
+              19,
+              20,
+              21,
+              22
+            ],
+            "guard_reasons": [
+              "test_or_fixture_source"
+            ],
+            "id": ".triage/test_case.py:11:test_request_records",
+            "path": ".triage/test_case.py",
+            "roles": [
+              "test"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "@pytest.mark.parametrize(\"seconds\",[None,.125,2.5])\ndef test_request_records(seconds):\n    explicit={\"connect\":seconds,\"read\":seconds,\"write\":seconds,\"pool\":seconds}\n    extensions={\"timeout\":explicit,\"trace-tag\":\"retained\"}\n    seen=[]\n    def handle(request):\n        seen.append(dict(request.extensions))\n        return httpx.Response(200)\n    with httpx.Client(transport=httpx.MockTransport(handle),timeout=9,trust_env=False) as client:\n        request=client.build_request(\"GET\",\"https://example.test/route\",timeout=.75,extensions=extensions)\n        client.send(request)\n    assert seen[0][\"timeout\"] == explicit\n    assert seen[0][\"trace-tag\"] == \"retained\"\n    assert extensions == {\"timeout\":explicit,\"trace-tag\":\"retained\"}\n",
+            "source_original_sha256": "d07df82b9310d0fd738c42fcf0b46f60dc926c7669c1e320b7470bd0e8d247ab",
+            "source_numbered": "11: @pytest.mark.parametrize(\"seconds\",[None,.125,2.5])\n12: def test_request_records(seconds):\n13:     explicit={\"connect\":seconds,\"read\":seconds,\"write\":seconds,\"pool\":seconds}\n14:     extensions={\"timeout\":explicit,\"trace-tag\":\"retained\"}\n15:     seen=[]\n16:     def handle(request):\n17:         seen.append(dict(request.extensions))\n18:         return httpx.Response(200)\n19:     with httpx.Client(transport=httpx.MockTransport(handle),timeout=9,trust_env=False) as client:\n20:         request=client.build_request(\"GET\",\"https://example.test/route\",timeout=.75,extensions=extensions)\n21:         client.send(request)\n22:     assert seen[0][\"timeout\"] == explicit\n23:     assert seen[0][\"trace-tag\"] == \"retained\"\n24:     assert extensions == {\"timeout\":explicit,\"trace-tag\":\"retained\"}",
+            "source_numbered_original_sha256": "ddba41dc7ed8c6015dd6ee38977ebe27b27bbb7418aed04031b00e9e30182187",
+            "start_line": 11,
+            "symbol": "test_request_records",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[0.125]",
+              ".triage/test_case.py::test_request_records[2.5]",
+              ".triage/test_case.py::test_request_records[None]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 591,
+            "evidence_id": "source:vendor/httpx/_client.py:584:BaseClient._set_timeout",
+            "executed_lines": [
+              585
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_client.py:584:BaseClient._set_timeout",
+            "path": "vendor/httpx/_client.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    def _set_timeout(self, request: Request) -> None:\n        if \"timeout\" not in request.extensions:\n            timeout = (\n                self.timeout\n                if isinstance(self.timeout, UseClientDefault)\n                else Timeout(self.timeout)\n            )\n            request.extensions = dict(**request.extensions, timeout=timeout.as_dict())\n",
+            "source_numbered": "584:     def _set_timeout(self, request: Request) -> None:\n585:         if \"timeout\" not in request.extensions:\n586:             timeout = (\n587:                 self.timeout\n588:                 if isinstance(self.timeout, UseClientDefault)\n589:                 else Timeout(self.timeout)\n590:             )\n591:             request.extensions = dict(**request.extensions, timeout=timeout.as_dict())",
+            "start_line": 584,
+            "symbol": "BaseClient._set_timeout",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[0.125]",
+              ".triage/test_case.py::test_request_records[2.5]",
+              ".triage/test_case.py::test_request_records[None]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 138,
+            "evidence_id": "source:vendor/httpx/_config.py:132:Timeout.as_dict",
+            "executed_lines": [
+              133,
+              134,
+              135,
+              136,
+              137
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_config.py:132:Timeout.as_dict",
+            "path": "vendor/httpx/_config.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    def as_dict(self) -> dict[str, float | None]:\n        return {\n            \"connect\": self.connect,\n            \"read\": self.read,\n            \"write\": self.write,\n            \"pool\": self.pool,\n        }\n",
+            "source_numbered": "132:     def as_dict(self) -> dict[str, float | None]:\n133:         return {\n134:             \"connect\": self.connect,\n135:             \"read\": self.read,\n136:             \"write\": self.write,\n137:             \"pool\": self.pool,\n138:         }",
+            "start_line": 132,
+            "symbol": "Timeout.as_dict",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[0.125]",
+              ".triage/test_case.py::test_request_records[2.5]",
+              ".triage/test_case.py::test_request_records[None]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 389,
+            "evidence_id": "source:vendor/httpx/_client.py:340:BaseClient.build_request",
+            "executed_lines": [
+              366,
+              367,
+              368,
+              369,
+              370,
+              371,
+              372,
+              374,
+              375,
+              377,
+              378,
+              379,
+              380,
+              381,
+              382,
+              383,
+              384,
+              385,
+              386,
+              387,
+              388
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_client.py:340:BaseClient.build_request",
+            "path": "vendor/httpx/_client.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    def build_request(\n        self,\n        method: str,\n        url: URL | str,\n        *,\n        content: RequestContent | None = None,\n        data: RequestData | None = None,\n        files: RequestFiles | None = None,\n        json: typing.Any | None = None,\n        params: QueryParamTypes | None = None,\n        headers: HeaderTypes | None = None,\n        cookies: CookieTypes | None = None,\n        timeout: TimeoutTypes | UseClientDefault = USE_CLIENT_DEFAULT,\n        extensions: RequestExtensions | None = None,\n    ) -> Request:\n        \"\"\"\n        Build and return a request instance.\n\n        * The `params`, `headers` and `cookies` arguments\n        are merged with any values set on the client.\n        * The `url` argument is merged with any `base_url` set on the client.\n\n        See also: [Request instances][0]\n\n        [0]: [EXTERNAL]/#request-instances\n        \"\"\"\n        url = self._merge_url(url)\n        headers = self._merge_headers(headers)\n        cookies = self._merge_cookies(cookies)\n        params = self._merge_queryparams(params)\n        extensions = {} if extensions is None else {key: value for key, value in extensions.items() if key != \"timeout\"}\n        if \"timeout\" not in extensions:\n            timeout = (\n                self.timeout\n                if isinstance(timeout, UseClientDefault)\n                else Timeout(timeout)\n            )\n            extensions = dict(**extensions, timeout=timeout.as_dict())\n        return Request(\n            method,\n            url,\n            content=content,\n            data=data,\n            files=files,\n            json=json,\n            params=params,\n            headers=headers,\n            cookies=cookies,\n            extensions=extensions,\n        )\n",
+            "source_numbered": "340:     def build_request(\n341:         self,\n342:         method: str,\n343:         url: URL | str,\n344:         *,\n345:         content: RequestContent | None = None,\n346:         data: RequestData | None = None,\n347:         files: RequestFiles | None = None,\n348:         json: typing.Any | None = None,\n349:         params: QueryParamTypes | None = None,\n350:         headers: HeaderTypes | None = None,\n351:         cookies: CookieTypes | None = None,\n352:         timeout: TimeoutTypes | UseClientDefault = USE_CLIENT_DEFAULT,\n353:         extensions: RequestExtensions | None = None,\n354:     ) -> Request:\n355:         \"\"\"\n356:         Build and return a request instance.\n357: \n358:         * The `params`, `headers` and `cookies` arguments\n359:         are merged with any values set on the client.\n360:         * The `url` argument is merged with any `base_url` set on the client.\n361: \n362:         See also: [Request instances][0]\n363: \n364:         [0]: [EXTERNAL]/#request-instances\n365:         \"\"\"\n366:         url = self._merge_url(url)\n367:         headers = self._merge_headers(headers)\n368:         cookies = self._merge_cookies(cookies)\n369:         params = self._merge_queryparams(params)\n370:         extensions = {} if extensions is None else {key: value for key, value in extensions.items() if key != \"timeout\"}\n371:         if \"timeout\" not in extensions:\n372:             timeout = (\n373:                 self.timeout\n374:                 if isinstance(timeout, UseClientDefault)\n375:                 else Timeout(timeout)\n376:             )\n377:             extensions = dict(**extensions, timeout=timeout.as_dict())\n378:         return Request(\n379:             method,\n380:             url,\n381:             content=content,\n382:             data=data,\n383:             files=files,\n384:             json=json,\n385:             params=params,\n386:             headers=headers,\n387:             cookies=cookies,\n388:             extensions=extensions,\n389:         )",
+            "start_line": 340,
+            "symbol": "BaseClient.build_request",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[0.125]",
+              ".triage/test_case.py::test_request_records[2.5]",
+              ".triage/test_case.py::test_request_records[None]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 27,
+            "evidence_id": "source:vendor/httpx/_transports/mock.py:19:MockTransport.handle_request",
+            "executed_lines": [
+              23,
+              24,
+              25,
+              27
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_transports/mock.py:19:MockTransport.handle_request",
+            "path": "vendor/httpx/_transports/mock.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    def handle_request(\n        self,\n        request: Request,\n    ) -> Response:\n        request.read()\n        response = self.handler(request)\n        if not isinstance(response, Response):  # pragma: no cover\n            raise TypeError(\"Cannot use an async handler in a sync Client\")\n        return response\n",
+            "source_numbered": "19:     def handle_request(\n20:         self,\n21:         request: Request,\n22:     ) -> Response:\n23:         request.read()\n24:         response = self.handler(request)\n25:         if not isinstance(response, Response):  # pragma: no cover\n26:             raise TypeError(\"Cannot use an async handler in a sync Client\")\n27:         return response",
+            "start_line": 19,
+            "symbol": "MockTransport.handle_request",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[0.125]",
+              ".triage/test_case.py::test_request_records[2.5]",
+              ".triage/test_case.py::test_request_records[None]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": false,
+            "end_line": 473,
+            "evidence_id": "source:vendor/httpx/_client.py:457:BaseClient._build_request_auth",
+            "executed_lines": [
+              462,
+              463,
+              466,
+              469,
+              470,
+              473
+            ],
+            "guard_reasons": [
+              "source_redacted"
+            ],
+            "id": "vendor/httpx/_client.py:457:BaseClient._build_request_auth",
+            "path": "vendor/httpx/_client.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    def _build_request_auth(\n        self,\n        request: Request,\n        auth: AuthTypes | UseClientDefault | None = USE_CLIENT_DEFAULT,\n    ) -> Auth:\n        auth = (\n            self._auth if isinstance(auth, UseClientDefault) else self._build_auth(auth)\n        )\n\n        if auth is not None:\n            return auth\n\n        username, password = [REDACTED], request.url.password\n        if username or password:\n            [REDACTED] BasicAuth(username=username, password=[REDACTED]\n\n        return Auth()\n",
+            "source_numbered": "457:     def _build_request_auth(\n458:         self,\n459:         request: Request,\n460:         auth: AuthTypes | UseClientDefault | None = USE_CLIENT_DEFAULT,\n461:     ) -> Auth:\n462:         auth = (\n463:             self._auth if isinstance(auth, UseClientDefault) else self._build_auth(auth)\n464:         )\n465: \n466:         if auth is not None:\n467:             return auth\n468: \n469:         username, password = [REDACTED], request.url.password\n470:         if username or password:\n[REDACTED]             [REDACTED] BasicAuth(username=username, password=[REDACTED]\n472: \n473:         return Auth()",
+            "start_line": 457,
+            "symbol": "BaseClient._build_request_auth",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[0.125]",
+              ".triage/test_case.py::test_request_records[2.5]",
+              ".triage/test_case.py::test_request_records[None]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 1034,
+            "evidence_id": "source:vendor/httpx/_client.py:1001:Client._send_single_request",
+            "executed_lines": [
+              1005,
+              1006,
+              1008,
+              1013,
+              1014,
+              1016,
+              1018,
+              1019,
+              1020,
+              1022,
+              1023,
+              1025,
+              1026,
+              1027,
+              1028,
+              1029,
+              1030,
+              1031,
+              1034
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_client.py:1001:Client._send_single_request",
+            "path": "vendor/httpx/_client.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    def _send_single_request(self, request: Request) -> Response:\n        \"\"\"\n        Sends a single request, without handling any redirections.\n        \"\"\"\n        transport = self._transport_for_url(request.url)\n        start = time.perf_counter()\n\n        if not isinstance(request.stream, SyncByteStream):\n            raise RuntimeError(\n                \"Attempted to send an async request with a sync Client instance.\"\n            )\n\n        with request_context(request=request):\n            response = transport.handle_request(request)\n\n        assert isinstance(response.stream, SyncByteStream)\n\n        response.request = request\n        response.stream = BoundSyncStream(\n            response.stream, response=response, start=start\n        )\n        self.cookies.extract_cookies(response)\n        response.default_encoding = self._default_encoding\n\n        logger.info(\n            'HTTP Request: %s %s \"%s %d %s\"',\n            request.method,\n            request.url,\n            response.http_version,\n            response.status_code,\n            response.reason_phrase,\n        )\n\n        return response\n",
+            "source_numbered": "1001:     def _send_single_request(self, request: Request) -> Response:\n1002:         \"\"\"\n1003:         Sends a single request, without handling any redirections.\n1004:         \"\"\"\n1005:         transport = self._transport_for_url(request.url)\n1006:         start = time.perf_counter()\n1007: \n1008:         if not isinstance(request.stream, SyncByteStream):\n1009:             raise RuntimeError(\n1010:                 \"Attempted to send an async request with a sync Client instance.\"\n1011:             )\n1012: \n1013:         with request_context(request=request):\n1014:             response = transport.handle_request(request)\n1015: \n1016:         assert isinstance(response.stream, SyncByteStream)\n1017: \n1018:         response.request = request\n1019:         response.stream = BoundSyncStream(\n1020:             response.stream, response=response, start=start\n1021:         )\n1022:         self.cookies.extract_cookies(response)\n1023:         response.default_encoding = self._default_encoding\n1024: \n1025:         logger.info(\n1026:             'HTTP Request: %s %s \"%s %d %s\"',\n1027:             request.method,\n1028:             request.url,\n1029:             response.http_version,\n1030:             response.status_code,\n1031:             response.reason_phrase,\n1032:         )\n1033: \n1034:         return response",
+            "start_line": 1001,
+            "symbol": "Client._send_single_request",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[0.125]",
+              ".triage/test_case.py::test_request_records[2.5]",
+              ".triage/test_case.py::test_request_records[None]"
+            ]
+          }
+        ],
+        "kind": "runtime_python_context",
+        "limits": {
+          "max_chars": 24000,
+          "max_depth": 4,
+          "max_events": 128,
+          "max_files": 32,
+          "max_functions": 24,
+          "max_input_chars": 600000,
+          "max_missing": 32,
+          "max_module_chars": 2400,
+          "max_source_bytes": 256000,
+          "semantic_depth_extension": 4
+        },
+        "missing": [],
+        "module_context": [],
+        "note": "Only runtime-observed project functions and call edges select source. Actual failing-test AST data accesses and callback/keyword identifiers rank observed bodies; relevant deeper helpers get at most four extra call hops. Whole AST bodies include test setup; omissions are explicit. Source and opt-in failure-text redaction are heuristic. Observed execution supports reachability, not a causal diagnosis. Event order is observation order; async scheduling can disconnect call edges. No project imports, repository scans, benchmark labels or model calls.",
+        "redaction_count": 17,
+        "schema_version": 4,
+        "truncation": {
+          "omitted_events": 316,
+          "omitted_functions": [
+            "vendor/httpx/_config.py:86:Timeout.__init__",
+            "vendor/httpx/_client.py:329:BaseClient.params",
+            "vendor/httpx/_client.py:318:BaseClient.cookies",
+            "vendor/httpx/_client.py:298:BaseClient.headers",
+            "vendor/httpx/_client.py:234:BaseClient._enforce_trailing_slash",
+            "vendor/httpx/_client.py:445:BaseClient._build_auth",
+            "vendor/httpx/_client.py:305:BaseClient.headers",
+            "vendor/httpx/_models.py:468:Request.read",
+            "vendor/httpx/_client.py:964:Client._send_handling_redirects",
+            "vendor/httpx/_client.py:930:Client._send_handling_auth",
+            "vendor/httpx/_models.py:619:Response.reason_phrase",
+            "vendor/httpx/_client.py:718:Client._init_transport",
+            "vendor/httpx/_models.py:610:Response.http_version",
+            "vendor/httpx/_models.py:595:Response.request",
+            "vendor/httpx/_models.py:606:Response.request",
+            "vendor/httpx/_client.py:760:Client._transport_for_url",
+            "vendor/httpx/_client.py:879:Client.send"
+          ],
+          "reasons": [
+            "call_depth_limit",
+            "context_char_limit",
+            "context_event_limit",
+            "function_limit",
+            "input_trace_truncated",
+            "module_context_limit",
+            "repeated_failure_text_omitted"
+          ],
+          "truncated": true
+        }
+      },
+      "original_context_file_sha256": "1524f2301fdf327f1009338db6745519c1eee4f5d4c80a922c8f267b556c5233"
+    },
+    {
+      "case_id": "e02",
+      "repetition": 1,
+      "state": "unverified",
+      "context": {
+        "call_graph": [
+          {
+            "callee": "vendor/httpx/_client.py:494:BaseClient._redirect_method",
+            "caller": "vendor/httpx/_client.py:475:BaseClient._build_redirect_request",
+            "count": 3,
+            "line": 480
+          },
+          {
+            "callee": "vendor/httpx/_client.py:546:BaseClient._redirect_headers",
+            "caller": "vendor/httpx/_client.py:475:BaseClient._build_redirect_request",
+            "count": 3,
+            "line": 482
+          }
+        ],
+        "edit_allowlist": [
+          {
+            "end_line": 792,
+            "evidence_id": "source:vendor/httpx/_models.py:771:Response.has_redirect_location",
+            "function_id": "vendor/httpx/_models.py:771:Response.has_redirect_location",
+            "path": "vendor/httpx/_models.py",
+            "start_line": 771
+          },
+          {
+            "end_line": 492,
+            "evidence_id": "source:vendor/httpx/_client.py:475:BaseClient._build_redirect_request",
+            "function_id": "vendor/httpx/_client.py:475:BaseClient._build_redirect_request",
+            "path": "vendor/httpx/_client.py",
+            "start_line": 475
+          },
+          {
+            "end_line": 515,
+            "evidence_id": "source:vendor/httpx/_client.py:494:BaseClient._redirect_method",
+            "function_id": "vendor/httpx/_client.py:494:BaseClient._redirect_method",
+            "path": "vendor/httpx/_client.py",
+            "start_line": 494
+          },
+          {
+            "end_line": 1034,
+            "evidence_id": "source:vendor/httpx/_client.py:1001:Client._send_single_request",
+            "function_id": "vendor/httpx/_client.py:1001:Client._send_single_request",
+            "path": "vendor/httpx/_client.py",
+            "start_line": 1001
+          },
+          {
+            "end_line": 571,
+            "evidence_id": "source:vendor/httpx/_client.py:546:BaseClient._redirect_headers",
+            "function_id": "vendor/httpx/_client.py:546:BaseClient._redirect_headers",
+            "path": "vendor/httpx/_client.py",
+            "start_line": 546
+          },
+          {
+            "end_line": 303,
+            "evidence_id": "source:vendor/httpx/_client.py:298:BaseClient.headers",
+            "function_id": "vendor/httpx/_client.py:298:BaseClient.headers",
+            "path": "vendor/httpx/_client.py",
+            "start_line": 298
+          }
+        ],
+        "events": [],
+        "evidence_ids": [
+          "source:.triage/test_case.py:11:test_request_records",
+          "source:vendor/httpx/_models.py:771:Response.has_redirect_location",
+          "source:vendor/httpx/_client.py:475:BaseClient._build_redirect_request",
+          "source:vendor/httpx/_client.py:494:BaseClient._redirect_method",
+          "source:vendor/httpx/_client.py:1001:Client._send_single_request",
+          "source:vendor/httpx/_client.py:546:BaseClient._redirect_headers",
+          "source:vendor/httpx/_client.py:298:BaseClient.headers",
+          "failure:1",
+          "failure:2",
+          "failure:3"
+        ],
+        "failures": [
+          {
+            "evidence_id": "failure:1",
+            "exception_type": "AssertionError",
+            "failure_text_captured": true,
+            "longrepr": "status = 301\n\n    @pytest.mark.parametrize(\"status\",[301,302,303])\n    def test_request_records(status):\n        seen=[]\n        def handle(request):\n            seen.append((request.method,request.content,dict(request.headers)))\n            return httpx.Response(status,headers={\"location\":\"[EXTERNAL]/result\"}) if len(seen)==1 else httpx.Response(200)\n        with httpx.Client(transport=httpx.MockTransport(handle),follow_redirects=True,trust_env=False) as client:\n            response=client.post(\"https://example.test/submit\",content=b\"entity\")\n        assert response.status_code == 200 and len(response.history)==1\n        assert seen[0][0:2] == (\"POST\",b\"entity\")\n>       assert seen[1][0:2] == (\"GET\",b\"\")\nE       AssertionError: assert ('GET', b'entity') == ('GET', b'')\nE         \nE         At index 1 diff: b'entity' != b''\nE         Use -v to get more diff\n\n.triage\\test_case.py:21: AssertionError",
+            "longrepr_original_sha256": "2126a5868c278e3b90f8f15e4877458c93a194e646b20c2844be88e154b3caea",
+            "nodeid": ".triage/test_case.py::test_request_records[301]",
+            "phase": "call",
+            "traceback": [
+              {
+                "line": 21,
+                "path": ".triage/test_case.py",
+                "symbol": "test_request_records"
+              }
+            ]
+          },
+          {
+            "evidence_id": "failure:2",
+            "exception_type": "AssertionError",
+            "failure_text_captured": true,
+            "longrepr": "",
+            "longrepr_omitted_by_character_limit": true,
+            "nodeid": ".triage/test_case.py::test_request_records[302]",
+            "phase": "call",
+            "traceback": [
+              {
+                "line": 21,
+                "path": ".triage/test_case.py",
+                "symbol": "test_request_records"
+              }
+            ]
+          },
+          {
+            "evidence_id": "failure:3",
+            "exception_type": "AssertionError",
+            "failure_text_captured": true,
+            "longrepr": "",
+            "longrepr_omitted_by_character_limit": true,
+            "nodeid": ".triage/test_case.py::test_request_records[303]",
+            "phase": "call",
+            "traceback": [
+              {
+                "line": 21,
+                "path": ".triage/test_case.py",
+                "symbol": "test_request_records"
+              }
+            ]
+          }
+        ],
+        "functions": [
+          {
+            "complete": true,
+            "editable": false,
+            "end_line": 22,
+            "evidence_id": "source:.triage/test_case.py:11:test_request_records",
+            "executed_lines": [
+              13,
+              14,
+              17,
+              18,
+              19,
+              20,
+              21
+            ],
+            "guard_reasons": [
+              "test_or_fixture_source"
+            ],
+            "id": ".triage/test_case.py:11:test_request_records",
+            "path": ".triage/test_case.py",
+            "roles": [
+              "test"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "@pytest.mark.parametrize(\"status\",[301,302,303])\ndef test_request_records(status):\n    seen=[]\n    def handle(request):\n        seen.append((request.method,request.content,dict(request.headers)))\n        return httpx.Response(status,headers={\"location\":\"[EXTERNAL]/result\"}) if len(seen)==1 else httpx.Response(200)\n    with httpx.Client(transport=httpx.MockTransport(handle),follow_redirects=True,trust_env=False) as client:\n        response=client.post(\"https://example.test/submit\",content=b\"entity\")\n    assert response.status_code == 200 and len(response.history)==1\n    assert seen[0][0:2] == (\"POST\",b\"entity\")\n    assert seen[1][0:2] == (\"GET\",b\"\")\n    assert \"content-length\" not in seen[1][2] and \"transfer-encoding\" not in seen[1][2]\n",
+            "source_original_sha256": "1b74385e95f78337e13e3a98a7c6d834ab94e1fe63f832286400ffbe7180b56f",
+            "source_numbered": "11: @pytest.mark.parametrize(\"status\",[301,302,303])\n12: def test_request_records(status):\n13:     seen=[]\n14:     def handle(request):\n15:         seen.append((request.method,request.content,dict(request.headers)))\n16:         return httpx.Response(status,headers={\"location\":\"[EXTERNAL]/result\"}) if len(seen)==1 else httpx.Response(200)\n17:     with httpx.Client(transport=httpx.MockTransport(handle),follow_redirects=True,trust_env=False) as client:\n18:         response=client.post(\"https://example.test/submit\",content=b\"entity\")\n19:     assert response.status_code == 200 and len(response.history)==1\n20:     assert seen[0][0:2] == (\"POST\",b\"entity\")\n21:     assert seen[1][0:2] == (\"GET\",b\"\")\n22:     assert \"content-length\" not in seen[1][2] and \"transfer-encoding\" not in seen[1][2]",
+            "source_numbered_original_sha256": "c76e63520bac340591a554278f5804c5e49d4224c47d0d3bef44b6a4b7966907",
+            "start_line": 11,
+            "symbol": "test_request_records",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[301]",
+              ".triage/test_case.py::test_request_records[302]",
+              ".triage/test_case.py::test_request_records[303]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 792,
+            "evidence_id": "source:vendor/httpx/_models.py:771:Response.has_redirect_location",
+            "executed_lines": [
+              777,
+              778,
+              779,
+              781,
+              783,
+              785,
+              787,
+              789,
+              791
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_models.py:771:Response.has_redirect_location",
+            "path": "vendor/httpx/_models.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    @property\n    def has_redirect_location(self) -> bool:\n        \"\"\"\n        Returns True for 3xx responses with a properly formed URL redirection,\n        `False` otherwise.\n        \"\"\"\n        return (\n            self.status_code\n            in (\n                # 301 (Cacheable redirect. Method may change to GET.)\n                codes.MOVED_PERMANENTLY,\n                # 302 (Uncacheable redirect. Method may change to GET.)\n                codes.FOUND,\n                # 303 (Client should make a GET or HEAD request.)\n                codes.SEE_OTHER,\n                # 307 (Equiv. 302, but retain method)\n                codes.TEMPORARY_REDIRECT,\n                # 308 (Equiv. 301, but retain method)\n                codes.PERMANENT_REDIRECT,\n            )\n            and \"Location\" in self.headers\n        )\n",
+            "source_numbered": "771:     @property\n772:     def has_redirect_location(self) -> bool:\n773:         \"\"\"\n774:         Returns True for 3xx responses with a properly formed URL redirection,\n775:         `False` otherwise.\n776:         \"\"\"\n777:         return (\n778:             self.status_code\n779:             in (\n780:                 # 301 (Cacheable redirect. Method may change to GET.)\n781:                 codes.MOVED_PERMANENTLY,\n782:                 # 302 (Uncacheable redirect. Method may change to GET.)\n783:                 codes.FOUND,\n784:                 # 303 (Client should make a GET or HEAD request.)\n785:                 codes.SEE_OTHER,\n786:                 # 307 (Equiv. 302, but retain method)\n787:                 codes.TEMPORARY_REDIRECT,\n788:                 # 308 (Equiv. 301, but retain method)\n789:                 codes.PERMANENT_REDIRECT,\n790:             )\n791:             and \"Location\" in self.headers\n792:         )",
+            "start_line": 771,
+            "symbol": "Response.has_redirect_location",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[301]",
+              ".triage/test_case.py::test_request_records[302]",
+              ".triage/test_case.py::test_request_records[303]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 492,
+            "evidence_id": "source:vendor/httpx/_client.py:475:BaseClient._build_redirect_request",
+            "executed_lines": [
+              480,
+              481,
+              482,
+              483,
+              484,
+              485,
+              486,
+              487,
+              488,
+              489,
+              490,
+              491
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_client.py:475:BaseClient._build_redirect_request",
+            "path": "vendor/httpx/_client.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    def _build_redirect_request(self, request: Request, response: Response) -> Request:\n        \"\"\"\n        Given a request and a redirect response, return a new request that\n        should be used to effect the redirect.\n        \"\"\"\n        method = self._redirect_method(request, response)\n        url = self._redirect_url(request, response)\n        headers = self._redirect_headers(request, url, method)\n        stream = self._redirect_stream(request, method)\n        cookies = Cookies(self.cookies)\n        return Request(\n            method=method,\n            url=url,\n            headers=headers,\n            cookies=cookies,\n            stream=stream,\n            extensions=request.extensions,\n        )\n",
+            "source_numbered": "475:     def _build_redirect_request(self, request: Request, response: Response) -> Request:\n476:         \"\"\"\n477:         Given a request and a redirect response, return a new request that\n478:         should be used to effect the redirect.\n479:         \"\"\"\n480:         method = self._redirect_method(request, response)\n481:         url = self._redirect_url(request, response)\n482:         headers = self._redirect_headers(request, url, method)\n483:         stream = self._redirect_stream(request, method)\n484:         cookies = Cookies(self.cookies)\n485:         return Request(\n486:             method=method,\n487:             url=url,\n488:             headers=headers,\n489:             cookies=cookies,\n490:             stream=stream,\n491:             extensions=request.extensions,\n492:         )",
+            "start_line": 475,
+            "symbol": "BaseClient._build_redirect_request",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[301]",
+              ".triage/test_case.py::test_request_records[302]",
+              ".triage/test_case.py::test_request_records[303]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 515,
+            "evidence_id": "source:vendor/httpx/_client.py:494:BaseClient._redirect_method",
+            "executed_lines": [
+              499,
+              502,
+              503,
+              507,
+              508,
+              512,
+              513,
+              515
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_client.py:494:BaseClient._redirect_method",
+            "path": "vendor/httpx/_client.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    def _redirect_method(self, request: Request, response: Response) -> str:\n        \"\"\"\n        When being redirected we may want to change the method of the request\n        based on certain specs or browser behavior.\n        \"\"\"\n        method = request.method\n\n        # https://tools.ietf.org/html/rfc7231#section-6.4.4\n        if response.status_code == codes.SEE_OTHER and method != \"HEAD\":\n            method = \"GET\"\n\n        # Do what the browsers do, despite standards...\n        # Turn 302s into GETs.\n        if response.status_code == codes.FOUND and method != \"HEAD\":\n            method = \"GET\"\n\n        # If a POST is responded to with a 301, turn it into a GET.\n        # This bizarre behaviour is explained in 'requests' issue 1704.\n        if response.status_code == codes.MOVED_PERMANENTLY and method == \"POST\":\n            method = \"GET\"\n\n        return method\n",
+            "source_original_sha256": "e975e2d26ab47541fca407e8b75039d0a8349dd42fcf4fcea2ff13a6923cae11",
+            "source_numbered": "494:     def _redirect_method(self, request: Request, response: Response) -> str:\n495:         \"\"\"\n496:         When being redirected we may want to change the method of the request\n497:         based on certain specs or browser behavior.\n498:         \"\"\"\n499:         method = request.method\n500: \n501:         # https://tools.ietf.org/html/rfc7231#section-6.4.4\n502:         if response.status_code == codes.SEE_OTHER and method != \"HEAD\":\n503:             method = \"GET\"\n504: \n505:         # Do what the browsers do, despite standards...\n506:         # Turn 302s into GETs.\n507:         if response.status_code == codes.FOUND and method != \"HEAD\":\n508:             method = \"GET\"\n509: \n510:         # If a POST is responded to with a 301, turn it into a GET.\n511:         # This bizarre behaviour is explained in 'requests' issue 1704.\n512:         if response.status_code == codes.MOVED_PERMANENTLY and method == \"POST\":\n513:             method = \"GET\"\n514: \n515:         return method",
+            "source_numbered_original_sha256": "a1440a6f0018171f3deb58bf670d6523cd74cfad9ec246da34ce1b8695640210",
+            "start_line": 494,
+            "symbol": "BaseClient._redirect_method",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[301]",
+              ".triage/test_case.py::test_request_records[302]",
+              ".triage/test_case.py::test_request_records[303]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 1034,
+            "evidence_id": "source:vendor/httpx/_client.py:1001:Client._send_single_request",
+            "executed_lines": [
+              1005,
+              1006,
+              1008,
+              1013,
+              1014,
+              1016,
+              1018,
+              1019,
+              1020,
+              1022,
+              1023,
+              1025,
+              1026,
+              1027,
+              1028,
+              1029,
+              1030,
+              1031,
+              1034
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_client.py:1001:Client._send_single_request",
+            "path": "vendor/httpx/_client.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    def _send_single_request(self, request: Request) -> Response:\n        \"\"\"\n        Sends a single request, without handling any redirections.\n        \"\"\"\n        transport = self._transport_for_url(request.url)\n        start = time.perf_counter()\n\n        if not isinstance(request.stream, SyncByteStream):\n            raise RuntimeError(\n                \"Attempted to send an async request with a sync Client instance.\"\n            )\n\n        with request_context(request=request):\n            response = transport.handle_request(request)\n\n        assert isinstance(response.stream, SyncByteStream)\n\n        response.request = request\n        response.stream = BoundSyncStream(\n            response.stream, response=response, start=start\n        )\n        self.cookies.extract_cookies(response)\n        response.default_encoding = self._default_encoding\n\n        logger.info(\n            'HTTP Request: %s %s \"%s %d %s\"',\n            request.method,\n            request.url,\n            response.http_version,\n            response.status_code,\n            response.reason_phrase,\n        )\n\n        return response\n",
+            "source_numbered": "1001:     def _send_single_request(self, request: Request) -> Response:\n1002:         \"\"\"\n1003:         Sends a single request, without handling any redirections.\n1004:         \"\"\"\n1005:         transport = self._transport_for_url(request.url)\n1006:         start = time.perf_counter()\n1007: \n1008:         if not isinstance(request.stream, SyncByteStream):\n1009:             raise RuntimeError(\n1010:                 \"Attempted to send an async request with a sync Client instance.\"\n1011:             )\n1012: \n1013:         with request_context(request=request):\n1014:             response = transport.handle_request(request)\n1015: \n1016:         assert isinstance(response.stream, SyncByteStream)\n1017: \n1018:         response.request = request\n1019:         response.stream = BoundSyncStream(\n1020:             response.stream, response=response, start=start\n1021:         )\n1022:         self.cookies.extract_cookies(response)\n1023:         response.default_encoding = self._default_encoding\n1024: \n1025:         logger.info(\n1026:             'HTTP Request: %s %s \"%s %d %s\"',\n1027:             request.method,\n1028:             request.url,\n1029:             response.http_version,\n1030:             response.status_code,\n1031:             response.reason_phrase,\n1032:         )\n1033: \n1034:         return response",
+            "start_line": 1001,
+            "symbol": "Client._send_single_request",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[301]",
+              ".triage/test_case.py::test_request_records[302]",
+              ".triage/test_case.py::test_request_records[303]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 571,
+            "evidence_id": "source:vendor/httpx/_client.py:546:BaseClient._redirect_headers",
+            "executed_lines": [
+              550,
+              552,
+              561,
+              564,
+              565,
+              569,
+              571
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_client.py:546:BaseClient._redirect_headers",
+            "path": "vendor/httpx/_client.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    def _redirect_headers(self, request: Request, url: URL, method: str) -> Headers:\n        \"\"\"\n        Return the headers that should be used for the redirect request.\n        \"\"\"\n        headers = Headers(request.headers)\n\n        if not _same_origin(url, request.url):\n            if not _is_https_redirect(request.url, url):\n                # Strip Authorization headers when responses are redirected\n                # away from the origin. (Except for direct HTTP to HTTPS redirects.)\n                headers.pop(\"Authorization\", None)\n\n            # Update the Host header.\n            headers[\"Host\"] = url.netloc.decode(\"ascii\")\n\n        if method != request.method and method == \"GET\":\n            # If we've switch to a 'GET' request, then strip any headers which\n            # are only relevant to the request body.\n            headers.pop(\"Content-Length\", None)\n            headers.pop(\"Transfer-Encoding\", None)\n\n        # We should use the client cookie store to determine any cookie header,\n        # rather than whatever was on the original outgoing request.\n        headers.pop(\"Cookie\", None)\n\n        return headers\n",
+            "source_numbered": "546:     def _redirect_headers(self, request: Request, url: URL, method: str) -> Headers:\n547:         \"\"\"\n548:         Return the headers that should be used for the redirect request.\n549:         \"\"\"\n550:         headers = Headers(request.headers)\n551: \n552:         if not _same_origin(url, request.url):\n553:             if not _is_https_redirect(request.url, url):\n554:                 # Strip Authorization headers when responses are redirected\n555:                 # away from the origin. (Except for direct HTTP to HTTPS redirects.)\n556:                 headers.pop(\"Authorization\", None)\n557: \n558:             # Update the Host header.\n559:             headers[\"Host\"] = url.netloc.decode(\"ascii\")\n560: \n561:         if method != request.method and method == \"GET\":\n562:             # If we've switch to a 'GET' request, then strip any headers which\n563:             # are only relevant to the request body.\n564:             headers.pop(\"Content-Length\", None)\n565:             headers.pop(\"Transfer-Encoding\", None)\n566: \n567:         # We should use the client cookie store to determine any cookie header,\n568:         # rather than whatever was on the original outgoing request.\n569:         headers.pop(\"Cookie\", None)\n570: \n571:         return headers",
+            "start_line": 546,
+            "symbol": "BaseClient._redirect_headers",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[301]",
+              ".triage/test_case.py::test_request_records[302]",
+              ".triage/test_case.py::test_request_records[303]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 303,
+            "evidence_id": "source:vendor/httpx/_client.py:298:BaseClient.headers",
+            "executed_lines": [
+              303
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_client.py:298:BaseClient.headers",
+            "path": "vendor/httpx/_client.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    @property\n    def headers(self) -> Headers:\n        \"\"\"\n        HTTP headers to include when sending requests.\n        \"\"\"\n        return self._headers\n",
+            "source_numbered": "298:     @property\n299:     def headers(self) -> Headers:\n300:         \"\"\"\n301:         HTTP headers to include when sending requests.\n302:         \"\"\"\n303:         return self._headers",
+            "start_line": 298,
+            "symbol": "BaseClient.headers",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[301]",
+              ".triage/test_case.py::test_request_records[302]",
+              ".triage/test_case.py::test_request_records[303]"
+            ]
+          }
+        ],
+        "kind": "runtime_python_context",
+        "limits": {
+          "max_chars": 24000,
+          "max_depth": 4,
+          "max_events": 128,
+          "max_files": 32,
+          "max_functions": 24,
+          "max_input_chars": 600000,
+          "max_missing": 32,
+          "max_module_chars": 2400,
+          "max_source_bytes": 256000,
+          "semantic_depth_extension": 4
+        },
+        "missing": [],
+        "module_context": [],
+        "note": "Only runtime-observed project functions and call edges select source. Actual failing-test AST data accesses and callback/keyword identifiers rank observed bodies; relevant deeper helpers get at most four extra call hops. Whole AST bodies include test setup; omissions are explicit. Source and opt-in failure-text redaction are heuristic. Observed execution supports reachability, not a causal diagnosis. Event order is observation order; async scheduling can disconnect call edges. No project imports, repository scans, benchmark labels or model calls.",
+        "redaction_count": 17,
+        "schema_version": 4,
+        "truncation": {
+          "omitted_events": 227,
+          "omitted_functions": [
+            "vendor/httpx/_client.py:930:Client._send_handling_auth",
+            "vendor/httpx/_client.py:340:BaseClient.build_request",
+            "vendor/httpx/_client.py:1123:Client.post",
+            "vendor/httpx/_models.py:441:Request._prepare",
+            "vendor/httpx/_models.py:876:Response.read",
+            "vendor/httpx/_client.py:517:BaseClient._redirect_url",
+            "vendor/httpx/_models.py:595:Response.request",
+            "vendor/httpx/_models.py:274:Headers.update",
+            "vendor/httpx/_client.py:771:Client.request",
+            "vendor/httpx/_models.py:619:Response.reason_phrase",
+            "vendor/httpx/_models.py:606:Response.request",
+            "vendor/httpx/_models.py:1270:Cookies._CookieCompatResponse.info",
+            "vendor/httpx/_transports/mock.py:19:MockTransport.handle_request",
+            "vendor/httpx/_client.py:964:Client._send_handling_redirects",
+            "vendor/httpx/_models.py:699:Response._get_content_decoder",
+            "vendor/httpx/_client.py:424:BaseClient._merge_headers",
+            "vendor/httpx/_client.py:305:BaseClient.headers"
+          ],
+          "reasons": [
+            "call_depth_limit",
+            "context_char_limit",
+            "context_event_limit",
+            "function_limit",
+            "input_trace_truncated",
+            "module_context_limit",
+            "repeated_failure_text_omitted"
+          ],
+          "truncated": true
+        }
+      },
+      "original_context_file_sha256": "b19caead613706a599fe8e69a3aeed13155a543f59a54fb39153fa60c3cc8b66"
+    },
+    {
+      "case_id": "e03",
+      "repetition": 1,
+      "state": "unverified",
+      "context": {
+        "call_graph": [
+          {
+            "callee": "vendor/httpx/_models.py:462:Request.content",
+            "caller": ".triage/test_case.py:11:test_request_records",
+            "count": 3,
+            "line": 21
+          },
+          {
+            "callee": "vendor/httpx/_multipart.py:265:MultipartStream.get_content_length",
+            "caller": "vendor/httpx/_multipart.py:287:MultipartStream.get_headers",
+            "count": 3,
+            "line": 288
+          }
+        ],
+        "edit_allowlist": [
+          {
+            "end_line": 466,
+            "evidence_id": "source:vendor/httpx/_models.py:462:Request.content",
+            "function_id": "vendor/httpx/_models.py:462:Request.content",
+            "path": "vendor/httpx/_models.py",
+            "start_line": 462
+          },
+          {
+            "end_line": 67,
+            "evidence_id": "source:vendor/httpx/_multipart.py:56:get_multipart_boundary_from_content_type",
+            "function_id": "vendor/httpx/_multipart.py:56:get_multipart_boundary_from_content_type",
+            "path": "vendor/httpx/_multipart.py",
+            "start_line": 56
+          },
+          {
+            "end_line": 283,
+            "evidence_id": "source:vendor/httpx/_multipart.py:265:MultipartStream.get_content_length",
+            "function_id": "vendor/httpx/_multipart.py:265:MultipartStream.get_content_length",
+            "path": "vendor/httpx/_multipart.py",
+            "start_line": 265
+          },
+          {
+            "end_line": 292,
+            "evidence_id": "source:vendor/httpx/_multipart.py:287:MultipartStream.get_headers",
+            "function_id": "vendor/httpx/_multipart.py:287:MultipartStream.get_headers",
+            "path": "vendor/httpx/_multipart.py",
+            "start_line": 287
+          },
+          {
+            "end_line": 27,
+            "evidence_id": "source:vendor/httpx/_transports/mock.py:19:MockTransport.handle_request",
+            "function_id": "vendor/httpx/_transports/mock.py:19:MockTransport.handle_request",
+            "path": "vendor/httpx/_transports/mock.py",
+            "start_line": 19
+          },
+          {
+            "end_line": 608,
+            "evidence_id": "source:vendor/httpx/_models.py:606:Response.request",
+            "function_id": "vendor/httpx/_models.py:606:Response.request",
+            "path": "vendor/httpx/_models.py",
+            "start_line": 606
+          },
+          {
+            "end_line": 389,
+            "evidence_id": "source:vendor/httpx/_client.py:340:BaseClient.build_request",
+            "function_id": "vendor/httpx/_client.py:340:BaseClient.build_request",
+            "path": "vendor/httpx/_client.py",
+            "start_line": 340
+          }
+        ],
+        "events": [],
+        "evidence_ids": [
+          "source:.triage/test_case.py:11:test_request_records",
+          "source:vendor/httpx/_models.py:462:Request.content",
+          "source:vendor/httpx/_multipart.py:56:get_multipart_boundary_from_content_type",
+          "source:vendor/httpx/_multipart.py:265:MultipartStream.get_content_length",
+          "source:vendor/httpx/_multipart.py:287:MultipartStream.get_headers",
+          "source:vendor/httpx/_transports/mock.py:19:MockTransport.handle_request",
+          "source:vendor/httpx/_models.py:606:Response.request",
+          "source:vendor/httpx/_client.py:340:BaseClient.build_request",
+          "failure:1",
+          "failure:2",
+          "failure:3"
+        ],
+        "failures": [
+          {
+            "evidence_id": "failure:1",
+            "exception_type": "AssertionError",
+            "failure_text_captured": true,
+            "longrepr": "boundary = 'alpha-one', quoted = False\n\n    @pytest.mark.parametrize(\"boundary,quoted\",[(\"alpha-one\",False),(\"beta-two\",True),(\"gamma-333\",False)])\n    def test_request_records(boundary,quoted):\n        captured=[]\n        def handle(request):\n            captured.append(request)\n            return httpx.Response(200)\n        token='[REDACTED]'+boundary+'\"' if quoted else boundary\n        with httpx.Client(transport=httpx.MockTransport(handle),trust_env=False) as client:\n            client.post(\"https://example.test/upload\",headers={\"content-type\":\"multipart/form-data; boundary=\"+token},data={\"tag\":[\"one\",\"two\"]},files={\"file\":(\"data.txt\",b\"body\",\"text/plain\")})\n        request=captured[0]\n>       assert request.content.startswith(b\"--\"+boundary.encode()+b\"\\r\\n\")\nE       assert False\nE        +  where False = <built-in method startswith of bytes object at 0x0000020D8AB734B0>(((b'--' + b'alpha-one') + b'\\r\\n'))\nE        +    where <built-in method startswith of bytes object at 0x0000020D8AB734B0> = b'--6d24c1f195acc348614939d6dd5d1ac4\\r\\nContent-Disposition: form-data; name=\"tag\"\\r\\n\\r\\none\\r\\n--6d24c1f195acc348614...; name=\"file\"; filename=\"data.txt\"\\r\\nContent-Type: text/plain\\r\\n\\r\\nbody\\r\\n--6d24c1f195acc348614939d6dd5d1ac4--\\r\\n'.startswith\nE        +      where b'--6d24c1f195acc348614939d6dd5d1ac4\\r\\nContent-Disposition: form-data; name=\"tag\"\\r\\n\\r\\none\\r\\n--6d24c1f195acc348614...; name=\"file\"; filename=\"data.txt\"\\r\\nContent-Type: text/plain\\r\\n\\r\\nbody\\r\\n--6d24c1f195acc348614939d6dd5d1ac4--\\r\\n' = <Request('POST', 'https://example.test/upload')>.content\nE        +    and   b'alpha-one' = <built-in method encode of str object at 0x0000020D89DF5770>()\nE        +      where <built-in method encode of str object at 0x0000020D89DF5770> = 'alpha-one'.encode\n\n.triage\\test_case.py:21: AssertionError",
+            "longrepr_original_sha256": "473afc27487ea3a1c05a8f4d630555e89738a47b859c9564dfcde3ac88739d6c",
+            "nodeid": ".triage/test_case.py::test_request_records[alpha-one-False]",
+            "phase": "call",
+            "traceback": [
+              {
+                "line": 21,
+                "path": ".triage/test_case.py",
+                "symbol": "test_request_records"
+              }
+            ]
+          },
+          {
+            "evidence_id": "failure:2",
+            "exception_type": "AssertionError",
+            "failure_text_captured": true,
+            "longrepr": "",
+            "longrepr_omitted_by_character_limit": true,
+            "nodeid": ".triage/test_case.py::test_request_records[beta-two-True]",
+            "phase": "call",
+            "traceback": [
+              {
+                "line": 21,
+                "path": ".triage/test_case.py",
+                "symbol": "test_request_records"
+              }
+            ]
+          },
+          {
+            "evidence_id": "failure:3",
+            "exception_type": "AssertionError",
+            "failure_text_captured": true,
+            "longrepr": "",
+            "longrepr_omitted_by_character_limit": true,
+            "nodeid": ".triage/test_case.py::test_request_records[gamma-333-False]",
+            "phase": "call",
+            "traceback": [
+              {
+                "line": 21,
+                "path": ".triage/test_case.py",
+                "symbol": "test_request_records"
+              }
+            ]
+          }
+        ],
+        "functions": [
+          {
+            "complete": true,
+            "editable": false,
+            "end_line": 25,
+            "evidence_id": "source:.triage/test_case.py:11:test_request_records",
+            "executed_lines": [
+              13,
+              14,
+              17,
+              18,
+              19,
+              20,
+              21
+            ],
+            "guard_reasons": [
+              "test_or_fixture_source",
+              "source_redacted"
+            ],
+            "id": ".triage/test_case.py:11:test_request_records",
+            "path": ".triage/test_case.py",
+            "roles": [
+              "test"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "@pytest.mark.parametrize(\"boundary,quoted\",[(\"alpha-one\",False),(\"beta-two\",True),(\"gamma-333\",False)])\ndef test_request_records(boundary,quoted):\n    captured=[]\n    def handle(request):\n        captured.append(request)\n        return httpx.Response(200)\n    token='[REDACTED]'+boundary+'\"' if quoted else boundary\n    with httpx.Client(transport=httpx.MockTransport(handle),trust_env=False) as client:\n        client.post(\"https://example.test/upload\",headers={\"content-type\":\"multipart/form-data; boundary=\"+token},data={\"tag\":[\"one\",\"two\"]},files={\"file\":(\"data.txt\",b\"body\",\"text/plain\")})\n    request=captured[0]\n    assert request.content.startswith(b\"--\"+boundary.encode()+b\"\\r\\n\")\n    assert request.content.endswith(b\"--\"+boundary.encode()+b\"--\\r\\n\")\n    assert request.content.count(b'name=\"tag\"') == 2\n    assert b'filename=\"data.txt\"' in request.content and b\"body\" in request.content\n    assert int(request.headers[\"content-length\"]) == len(request.content)\n",
+            "source_original_sha256": "59f26050ddc3531d9d845094f6b421169933215d7f66e6743a148da2924a372b",
+            "source_numbered": "11: @pytest.mark.parametrize(\"boundary,quoted\",[(\"alpha-one\",False),(\"beta-two\",True),(\"gamma-333\",False)])\n12: def test_request_records(boundary,quoted):\n13:     captured=[]\n14:     def handle(request):\n15:         captured.append(request)\n16:         return httpx.Response(200)\n17:     token='[REDACTED]'+boundary+'\"' if quoted else boundary\n18:     with httpx.Client(transport=httpx.MockTransport(handle),trust_env=False) as client:\n19:         client.post(\"https://example.test/upload\",headers={\"content-type\":\"multipart/form-data; boundary=\"+token},data={\"tag\":[\"one\",\"two\"]},files={\"file\":(\"data.txt\",b\"body\",\"text/plain\")})\n20:     request=captured[0]\n21:     assert request.content.startswith(b\"--\"+boundary.encode()+b\"\\r\\n\")\n22:     assert request.content.endswith(b\"--\"+boundary.encode()+b\"--\\r\\n\")\n23:     assert request.content.count(b'name=\"tag\"') == 2\n24:     assert b'filename=\"data.txt\"' in request.content and b\"body\" in request.content\n25:     assert int(request.headers[\"content-length\"]) == len(request.content)",
+            "source_numbered_original_sha256": "9cf329d8fc217df02286a4d8f232eb71e329b1e7f3a25e0820382583d62d0f16",
+            "start_line": 11,
+            "symbol": "test_request_records",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[alpha-one-False]",
+              ".triage/test_case.py::test_request_records[beta-two-True]",
+              ".triage/test_case.py::test_request_records[gamma-333-False]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 466,
+            "evidence_id": "source:vendor/httpx/_models.py:462:Request.content",
+            "executed_lines": [
+              464,
+              466
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_models.py:462:Request.content",
+            "path": "vendor/httpx/_models.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    @property\n    def content(self) -> bytes:\n        if not hasattr(self, \"_content\"):\n            raise RequestNotRead()\n        return self._content\n",
+            "source_numbered": "462:     @property\n463:     def content(self) -> bytes:\n464:         if not hasattr(self, \"_content\"):\n465:             raise RequestNotRead()\n466:         return self._content",
+            "start_line": 462,
+            "symbol": "Request.content",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[alpha-one-False]",
+              ".triage/test_case.py::test_request_records[beta-two-True]",
+              ".triage/test_case.py::test_request_records[gamma-333-False]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 67,
+            "evidence_id": "source:vendor/httpx/_multipart.py:56:get_multipart_boundary_from_content_type",
+            "executed_lines": [
+              59,
+              63,
+              64,
+              65,
+              66
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_multipart.py:56:get_multipart_boundary_from_content_type",
+            "path": "vendor/httpx/_multipart.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "def get_multipart_boundary_from_content_type(\n    content_type: bytes | None,\n) -> bytes | None:\n    if not content_type or not content_type.startswith(b\"multipart/form-data\"):\n        return None\n    # parse boundary according to\n    # https://www.rfc-editor.org/rfc/rfc2046#section-5.1.1\n    if b\";\" in content_type:\n        for section in content_type.split(b\";\"):\n            if section.strip().lower().startswith(b\"boundary=\"):\n                return section.strip()[len(b\"boundary=\") :].strip(b'\"')\n    return None\n",
+            "source_original_sha256": "7bffb5d0bee71697d8a9cba05a697573c9c786f586bf9cd3c46ecb9f124ee67d",
+            "source_numbered": "56: def get_multipart_boundary_from_content_type(\n57:     content_type: bytes | None,\n58: ) -> bytes | None:\n59:     if not content_type or not content_type.startswith(b\"multipart/form-data\"):\n60:         return None\n61:     # parse boundary according to\n62:     # https://www.rfc-editor.org/rfc/rfc2046#section-5.1.1\n63:     if b\";\" in content_type:\n64:         for section in content_type.split(b\";\"):\n65:             if section.strip().lower().startswith(b\"boundary=\"):\n66:                 return section.strip()[len(b\"boundary=\") :].strip(b'\"')\n67:     return None",
+            "source_numbered_original_sha256": "73cb094768daf4e755c7bdaba1756e9761b5d7e193dc4fabb3da27d4552f8653",
+            "start_line": 56,
+            "symbol": "get_multipart_boundary_from_content_type",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[alpha-one-False]",
+              ".triage/test_case.py::test_request_records[beta-two-True]",
+              ".triage/test_case.py::test_request_records[gamma-333-False]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 283,
+            "evidence_id": "source:vendor/httpx/_multipart.py:265:MultipartStream.get_content_length",
+            "executed_lines": [
+              270,
+              271,
+              273,
+              274,
+              275,
+              278,
+              279,
+              280,
+              282,
+              283
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_multipart.py:265:MultipartStream.get_content_length",
+            "path": "vendor/httpx/_multipart.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    def get_content_length(self) -> int | None:\n        \"\"\"\n        Return the length of the multipart encoded content, or `None` if\n        any of the files have a length that cannot be determined upfront.\n        \"\"\"\n        boundary_length = len(self.boundary)\n        length = 0\n\n        for field in self.fields:\n            field_length = field.get_length()\n            if field_length is None:\n                return None\n\n            length += 2 + boundary_length + 2  # b\"--{boundary}\\r\\n\"\n            length += field_length\n            length += 2  # b\"\\r\\n\"\n\n        length += 2 + boundary_length + 4  # b\"--{boundary}--\\r\\n\"\n        return length\n",
+            "source_numbered": "265:     def get_content_length(self) -> int | None:\n266:         \"\"\"\n267:         Return the length of the multipart encoded content, or `None` if\n268:         any of the files have a length that cannot be determined upfront.\n269:         \"\"\"\n270:         boundary_length = len(self.boundary)\n271:         length = 0\n272: \n273:         for field in self.fields:\n274:             field_length = field.get_length()\n275:             if field_length is None:\n276:                 return None\n277: \n278:             length += 2 + boundary_length + 2  # b\"--{boundary}\\r\\n\"\n279:             length += field_length\n280:             length += 2  # b\"\\r\\n\"\n281: \n282:         length += 2 + boundary_length + 4  # b\"--{boundary}--\\r\\n\"\n283:         return length",
+            "start_line": 265,
+            "symbol": "MultipartStream.get_content_length",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[alpha-one-False]",
+              ".triage/test_case.py::test_request_records[beta-two-True]",
+              ".triage/test_case.py::test_request_records[gamma-333-False]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 292,
+            "evidence_id": "source:vendor/httpx/_multipart.py:287:MultipartStream.get_headers",
+            "executed_lines": [
+              288,
+              289,
+              290,
+              292
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_multipart.py:287:MultipartStream.get_headers",
+            "path": "vendor/httpx/_multipart.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    def get_headers(self) -> dict[str, str]:\n        content_length = self.get_content_length()\n        content_type = self.content_type\n        if content_length is None:\n            return {\"Transfer-Encoding\": \"chunked\", \"Content-Type\": content_type}\n        return {\"Content-Length\": str(content_length), \"Content-Type\": content_type}\n",
+            "source_numbered": "287:     def get_headers(self) -> dict[str, str]:\n288:         content_length = self.get_content_length()\n289:         content_type = self.content_type\n290:         if content_length is None:\n291:             return {\"Transfer-Encoding\": \"chunked\", \"Content-Type\": content_type}\n292:         return {\"Content-Length\": str(content_length), \"Content-Type\": content_type}",
+            "start_line": 287,
+            "symbol": "MultipartStream.get_headers",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[alpha-one-False]",
+              ".triage/test_case.py::test_request_records[beta-two-True]",
+              ".triage/test_case.py::test_request_records[gamma-333-False]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 27,
+            "evidence_id": "source:vendor/httpx/_transports/mock.py:19:MockTransport.handle_request",
+            "executed_lines": [
+              23,
+              24,
+              25,
+              27
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_transports/mock.py:19:MockTransport.handle_request",
+            "path": "vendor/httpx/_transports/mock.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    def handle_request(\n        self,\n        request: Request,\n    ) -> Response:\n        request.read()\n        response = self.handler(request)\n        if not isinstance(response, Response):  # pragma: no cover\n            raise TypeError(\"Cannot use an async handler in a sync Client\")\n        return response\n",
+            "source_numbered": "19:     def handle_request(\n20:         self,\n21:         request: Request,\n22:     ) -> Response:\n23:         request.read()\n24:         response = self.handler(request)\n25:         if not isinstance(response, Response):  # pragma: no cover\n26:             raise TypeError(\"Cannot use an async handler in a sync Client\")\n27:         return response",
+            "start_line": 19,
+            "symbol": "MockTransport.handle_request",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[alpha-one-False]",
+              ".triage/test_case.py::test_request_records[beta-two-True]",
+              ".triage/test_case.py::test_request_records[gamma-333-False]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 608,
+            "evidence_id": "source:vendor/httpx/_models.py:606:Response.request",
+            "executed_lines": [
+              608
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_models.py:606:Response.request",
+            "path": "vendor/httpx/_models.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    @request.setter\n    def request(self, value: Request) -> None:\n        self._request = value\n",
+            "source_numbered": "606:     @request.setter\n607:     def request(self, value: Request) -> None:\n608:         self._request = value",
+            "start_line": 606,
+            "symbol": "Response.request",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[alpha-one-False]",
+              ".triage/test_case.py::test_request_records[beta-two-True]",
+              ".triage/test_case.py::test_request_records[gamma-333-False]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 389,
+            "evidence_id": "source:vendor/httpx/_client.py:340:BaseClient.build_request",
+            "executed_lines": [
+              366,
+              367,
+              368,
+              369,
+              370,
+              371,
+              372,
+              373,
+              374,
+              377,
+              378,
+              379,
+              380,
+              381,
+              382,
+              383,
+              384,
+              385,
+              386,
+              387,
+              388
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_client.py:340:BaseClient.build_request",
+            "path": "vendor/httpx/_client.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    def build_request(\n        self,\n        method: str,\n        url: URL | str,\n        *,\n        content: RequestContent | None = None,\n        data: RequestData | None = None,\n        files: RequestFiles | None = None,\n        json: typing.Any | None = None,\n        params: QueryParamTypes | None = None,\n        headers: HeaderTypes | None = None,\n        cookies: CookieTypes | None = None,\n        timeout: TimeoutTypes | UseClientDefault = USE_CLIENT_DEFAULT,\n        extensions: RequestExtensions | None = None,\n    ) -> Request:\n        \"\"\"\n        Build and return a request instance.\n\n        * The `params`, `headers` and `cookies` arguments\n        are merged with any values set on the client.\n        * The `url` argument is merged with any `base_url` set on the client.\n\n        See also: [Request instances][0]\n\n        [0]: [EXTERNAL]/#request-instances\n        \"\"\"\n        url = self._merge_url(url)\n        headers = self._merge_headers(headers)\n        cookies = self._merge_cookies(cookies)\n        params = self._merge_queryparams(params)\n        extensions = {} if extensions is None else extensions\n        if \"timeout\" not in extensions:\n            timeout = (\n                self.timeout\n                if isinstance(timeout, UseClientDefault)\n                else Timeout(timeout)\n            )\n            extensions = dict(**extensions, timeout=timeout.as_dict())\n        return Request(\n            method,\n            url,\n            content=content,\n            data=data,\n            files=files,\n            json=json,\n            params=params,\n            headers=headers,\n            cookies=cookies,\n            extensions=extensions,\n        )\n",
+            "source_numbered": "340:     def build_request(\n341:         self,\n342:         method: str,\n343:         url: URL | str,\n344:         *,\n345:         content: RequestContent | None = None,\n346:         data: RequestData | None = None,\n347:         files: RequestFiles | None = None,\n348:         json: typing.Any | None = None,\n349:         params: QueryParamTypes | None = None,\n350:         headers: HeaderTypes | None = None,\n351:         cookies: CookieTypes | None = None,\n352:         timeout: TimeoutTypes | UseClientDefault = USE_CLIENT_DEFAULT,\n353:         extensions: RequestExtensions | None = None,\n354:     ) -> Request:\n355:         \"\"\"\n356:         Build and return a request instance.\n357: \n358:         * The `params`, `headers` and `cookies` arguments\n359:         are merged with any values set on the client.\n360:         * The `url` argument is merged with any `base_url` set on the client.\n361: \n362:         See also: [Request instances][0]\n363: \n364:         [0]: [EXTERNAL]/#request-instances\n365:         \"\"\"\n366:         url = self._merge_url(url)\n367:         headers = self._merge_headers(headers)\n368:         cookies = self._merge_cookies(cookies)\n369:         params = self._merge_queryparams(params)\n370:         extensions = {} if extensions is None else extensions\n371:         if \"timeout\" not in extensions:\n372:             timeout = (\n373:                 self.timeout\n374:                 if isinstance(timeout, UseClientDefault)\n375:                 else Timeout(timeout)\n376:             )\n377:             extensions = dict(**extensions, timeout=timeout.as_dict())\n378:         return Request(\n379:             method,\n380:             url,\n381:             content=content,\n382:             data=data,\n383:             files=files,\n384:             json=json,\n385:             params=params,\n386:             headers=headers,\n387:             cookies=cookies,\n388:             extensions=extensions,\n389:         )",
+            "start_line": 340,
+            "symbol": "BaseClient.build_request",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[alpha-one-False]",
+              ".triage/test_case.py::test_request_records[beta-two-True]",
+              ".triage/test_case.py::test_request_records[gamma-333-False]"
+            ]
+          }
+        ],
+        "kind": "runtime_python_context",
+        "limits": {
+          "max_chars": 24000,
+          "max_depth": 4,
+          "max_events": 128,
+          "max_files": 32,
+          "max_functions": 24,
+          "max_input_chars": 600000,
+          "max_missing": 32,
+          "max_module_chars": 2400,
+          "max_source_bytes": 256000,
+          "semantic_depth_extension": 4
+        },
+        "missing": [],
+        "module_context": [],
+        "note": "Only runtime-observed project functions and call edges select source. Actual failing-test AST data accesses and callback/keyword identifiers rank observed bodies; relevant deeper helpers get at most four extra call hops. Whole AST bodies include test setup; omissions are explicit. Source and opt-in failure-text redaction are heuristic. Observed execution supports reachability, not a causal diagnosis. Event order is observation order; async scheduling can disconnect call edges. No project imports, repository scans, benchmark labels or model calls.",
+        "redaction_count": 18,
+        "schema_version": 4,
+        "truncation": {
+          "omitted_events": 545,
+          "omitted_functions": [
+            "vendor/httpx/_models.py:284:Headers.__getitem__",
+            "vendor/httpx/_models.py:876:Response.read",
+            "vendor/httpx/_models.py:274:Headers.update",
+            "vendor/httpx/_content.py:186:encode_request",
+            "vendor/httpx/_content.py:152:encode_multipart_data",
+            "vendor/httpx/_client.py:424:BaseClient._merge_headers",
+            "vendor/httpx/_client.py:1123:Client.post",
+            "vendor/httpx/_client.py:298:BaseClient.headers",
+            "vendor/httpx/_client.py:457:BaseClient._build_request_auth",
+            "vendor/httpx/_client.py:305:BaseClient.headers",
+            "vendor/httpx/_models.py:468:Request.read",
+            "vendor/httpx/_models.py:699:Response._get_content_decoder",
+            "vendor/httpx/_models.py:441:Request._prepare",
+            "vendor/httpx/_client.py:1001:Client._send_single_request",
+            "vendor/httpx/_models.py:595:Response.request",
+            "vendor/httpx/_client.py:771:Client.request"
+          ],
+          "reasons": [
+            "call_depth_limit",
+            "context_char_limit",
+            "context_event_limit",
+            "function_limit",
+            "input_trace_truncated",
+            "module_context_limit",
+            "repeated_failure_text_omitted"
+          ],
+          "truncated": true
+        }
+      },
+      "original_context_file_sha256": "690bb79dc16114946aef2de860702ea553a2f1ed3225c9461aabc12f35465add"
+    },
+    {
+      "case_id": "e04",
+      "repetition": 1,
+      "state": "unverified",
+      "context": null,
+      "original_context_file_sha256": null
+    },
+    {
+      "case_id": "e05",
+      "repetition": 1,
+      "state": "unverified",
+      "context": {
+        "call_graph": [
+          {
+            "callee": "vendor/httpx/_models.py:274:Headers.update",
+            "caller": "vendor/httpx/_client.py:305:BaseClient.headers",
+            "count": 3,
+            "line": 315
+          },
+          {
+            "callee": "vendor/httpx/_client.py:298:BaseClient.headers",
+            "caller": "vendor/httpx/_client.py:424:BaseClient._merge_headers",
+            "count": 3,
+            "line": 429
+          },
+          {
+            "callee": "vendor/httpx/_models.py:274:Headers.update",
+            "caller": "vendor/httpx/_client.py:424:BaseClient._merge_headers",
+            "count": 3,
+            "line": 430
+          }
+        ],
+        "edit_allowlist": [
+          {
+            "end_line": 133,
+            "evidence_id": "source:vendor/httpx/_content.py:107:encode_content",
+            "function_id": "vendor/httpx/_content.py:107:encode_content",
+            "path": "vendor/httpx/_content.py",
+            "start_line": 107
+          },
+          {
+            "end_line": 303,
+            "evidence_id": "source:vendor/httpx/_client.py:298:BaseClient.headers",
+            "function_id": "vendor/httpx/_client.py:298:BaseClient.headers",
+            "path": "vendor/httpx/_client.py",
+            "start_line": 298
+          },
+          {
+            "end_line": 722,
+            "evidence_id": "source:vendor/httpx/_models.py:699:Response._get_content_decoder",
+            "function_id": "vendor/httpx/_models.py:699:Response._get_content_decoder",
+            "path": "vendor/httpx/_models.py",
+            "start_line": 699
+          },
+          {
+            "end_line": 316,
+            "evidence_id": "source:vendor/httpx/_client.py:305:BaseClient.headers",
+            "function_id": "vendor/httpx/_client.py:305:BaseClient.headers",
+            "path": "vendor/httpx/_client.py",
+            "start_line": 305
+          },
+          {
+            "end_line": 67,
+            "evidence_id": "source:vendor/httpx/_multipart.py:56:get_multipart_boundary_from_content_type",
+            "function_id": "vendor/httpx/_multipart.py:56:get_multipart_boundary_from_content_type",
+            "path": "vendor/httpx/_multipart.py",
+            "start_line": 56
+          },
+          {
+            "end_line": 431,
+            "evidence_id": "source:vendor/httpx/_client.py:424:BaseClient._merge_headers",
+            "function_id": "vendor/httpx/_client.py:424:BaseClient._merge_headers",
+            "path": "vendor/httpx/_client.py",
+            "start_line": 424
+          },
+          {
+            "end_line": 279,
+            "evidence_id": "source:vendor/httpx/_models.py:274:Headers.update",
+            "function_id": "vendor/httpx/_models.py:274:Headers.update",
+            "path": "vendor/httpx/_models.py",
+            "start_line": 274
+          }
+        ],
+        "events": [],
+        "evidence_ids": [
+          "source:.triage/test_case.py:11:test_request_records",
+          "source:vendor/httpx/_content.py:107:encode_content",
+          "source:vendor/httpx/_client.py:298:BaseClient.headers",
+          "source:vendor/httpx/_models.py:699:Response._get_content_decoder",
+          "source:vendor/httpx/_client.py:305:BaseClient.headers",
+          "source:vendor/httpx/_multipart.py:56:get_multipart_boundary_from_content_type",
+          "source:vendor/httpx/_client.py:424:BaseClient._merge_headers",
+          "source:vendor/httpx/_models.py:274:Headers.update",
+          "failure:1",
+          "failure:2",
+          "failure:3"
+        ],
+        "failures": [
+          {
+            "evidence_id": "failure:1",
+            "exception_type": "AssertionError",
+            "failure_text_captured": true,
+            "longrepr": "name = 'Content-Length', parts = [b'one', b'two']\n\n    @pytest.mark.parametrize(\"name,parts\",[(\"Content-Length\",[b\"one\",b\"two\"]),(\"content-length\",[b\"abc\"]),(\"CONTENT-LENGTH\",[b\"\",b\"z\"])])\n    def test_request_records(name,parts):\n        body=b\"\".join(parts)\n        seen=[]\n        def handle(request):\n            seen.append((dict(request.headers),request.content))\n            return httpx.Response(200)\n        with httpx.Client(transport=httpx.MockTransport(handle),trust_env=False) as client:\n            client.post(\"https://example.test/submit\",content=(part for part in parts),headers={name:str(len(body))})\n        assert seen[0][1] == body\n        assert seen[0][0][\"content-length\"] == str(len(body))\n>       assert \"transfer-encoding\" not in seen[0][0]\nE       AssertionError: assert 'transfer-encoding' not in {'host': 'example.test', 'accept': '*[EXTERNAL]/*', 'accept-encoding': 'gzip, deflate', 'connection': 'keep-alive', ...}\n\n.triage\\test_case.py:22: AssertionError",
+            "longrepr_original_sha256": "897984edc25fec10e0845c1b009df3a5d2582507b1c8f8dd46d8d46d387a2d02",
+            "nodeid": ".triage/test_case.py::test_request_records[Content-Length-parts0]",
+            "phase": "call",
+            "traceback": [
+              {
+                "line": 22,
+                "path": ".triage/test_case.py",
+                "symbol": "test_request_records"
+              }
+            ]
+          },
+          {
+            "evidence_id": "failure:2",
+            "exception_type": "AssertionError",
+            "failure_text_captured": true,
+            "longrepr": "",
+            "longrepr_omitted_by_character_limit": true,
+            "nodeid": ".triage/test_case.py::test_request_records[content-length-parts1]",
+            "phase": "call",
+            "traceback": [
+              {
+                "line": 22,
+                "path": ".triage/test_case.py",
+                "symbol": "test_request_records"
+              }
+            ]
+          },
+          {
+            "evidence_id": "failure:3",
+            "exception_type": "AssertionError",
+            "failure_text_captured": true,
+            "longrepr": "",
+            "longrepr_omitted_by_character_limit": true,
+            "nodeid": ".triage/test_case.py::test_request_records[CONTENT-LENGTH-parts2]",
+            "phase": "call",
+            "traceback": [
+              {
+                "line": 22,
+                "path": ".triage/test_case.py",
+                "symbol": "test_request_records"
+              }
+            ]
+          }
+        ],
+        "functions": [
+          {
+            "complete": true,
+            "editable": false,
+            "end_line": 22,
+            "evidence_id": "source:.triage/test_case.py:11:test_request_records",
+            "executed_lines": [
+              13,
+              14,
+              15,
+              18,
+              19,
+              20,
+              21,
+              22
+            ],
+            "guard_reasons": [
+              "test_or_fixture_source"
+            ],
+            "id": ".triage/test_case.py:11:test_request_records",
+            "path": ".triage/test_case.py",
+            "roles": [
+              "test"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "@pytest.mark.parametrize(\"name,parts\",[(\"Content-Length\",[b\"one\",b\"two\"]),(\"content-length\",[b\"abc\"]),(\"CONTENT-LENGTH\",[b\"\",b\"z\"])])\ndef test_request_records(name,parts):\n    body=b\"\".join(parts)\n    seen=[]\n    def handle(request):\n        seen.append((dict(request.headers),request.content))\n        return httpx.Response(200)\n    with httpx.Client(transport=httpx.MockTransport(handle),trust_env=False) as client:\n        client.post(\"https://example.test/submit\",content=(part for part in parts),headers={name:str(len(body))})\n    assert seen[0][1] == body\n    assert seen[0][0][\"content-length\"] == str(len(body))\n    assert \"transfer-encoding\" not in seen[0][0]\n",
+            "source_original_sha256": "f7ab9c2e6592c544d272d93e18b75b28c59ea7818dfd35bb2f7852ee4947f53b",
+            "source_numbered": "11: @pytest.mark.parametrize(\"name,parts\",[(\"Content-Length\",[b\"one\",b\"two\"]),(\"content-length\",[b\"abc\"]),(\"CONTENT-LENGTH\",[b\"\",b\"z\"])])\n12: def test_request_records(name,parts):\n13:     body=b\"\".join(parts)\n14:     seen=[]\n15:     def handle(request):\n16:         seen.append((dict(request.headers),request.content))\n17:         return httpx.Response(200)\n18:     with httpx.Client(transport=httpx.MockTransport(handle),trust_env=False) as client:\n19:         client.post(\"https://example.test/submit\",content=(part for part in parts),headers={name:str(len(body))})\n20:     assert seen[0][1] == body\n21:     assert seen[0][0][\"content-length\"] == str(len(body))\n22:     assert \"transfer-encoding\" not in seen[0][0]",
+            "source_numbered_original_sha256": "eb11d1e12dd8963fb8e34ba6f4c9913c705cabc990a2398e60fe95c713add6da",
+            "start_line": 11,
+            "symbol": "test_request_records",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[CONTENT-LENGTH-parts2]",
+              ".triage/test_case.py::test_request_records[Content-Length-parts0]",
+              ".triage/test_case.py::test_request_records[content-length-parts1]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 133,
+            "evidence_id": "source:vendor/httpx/_content.py:107:encode_content",
+            "executed_lines": [
+              110,
+              116,
+              121,
+              123,
+              124,
+              127
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_content.py:107:encode_content",
+            "path": "vendor/httpx/_content.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "def encode_content(\n    content: str | bytes | Iterable[bytes] | AsyncIterable[bytes],\n) -> tuple[dict[str, str], SyncByteStream | AsyncByteStream]:\n    if isinstance(content, (bytes, str)):\n        body = content.encode(\"utf-8\") if isinstance(content, str) else content\n        content_length = len(body)\n        headers = {\"Content-Length\": str(content_length)} if body else {}\n        return headers, ByteStream(body)\n\n    elif isinstance(content, Iterable) and not isinstance(content, dict):\n        # `not isinstance(content, dict)` is a bit oddly specific, but it\n        # catches a case that's easy for users to make in error, and would\n        # otherwise pass through here, like any other bytes-iterable,\n        # because `dict` happens to be iterable. See issue #2491.\n        content_length_or_none = peek_filelike_length(content)\n\n        if content_length_or_none is None:\n            headers = {\"Transfer-Encoding\": \"chunked\"}\n        else:\n            headers = {\"Content-Length\": str(content_length_or_none)}\n        return headers, IteratorByteStream(content)  # type: ignore\n\n    elif isinstance(content, AsyncIterable):\n        headers = {\"Transfer-Encoding\": \"chunked\"}\n        return headers, AsyncIteratorByteStream(content)\n\n    raise TypeError(f\"Unexpected type for 'content', {type(content)!r}\")\n",
+            "source_numbered": "107: def encode_content(\n108:     content: str | bytes | Iterable[bytes] | AsyncIterable[bytes],\n109: ) -> tuple[dict[str, str], SyncByteStream | AsyncByteStream]:\n110:     if isinstance(content, (bytes, str)):\n111:         body = content.encode(\"utf-8\") if isinstance(content, str) else content\n112:         content_length = len(body)\n113:         headers = {\"Content-Length\": str(content_length)} if body else {}\n114:         return headers, ByteStream(body)\n115: \n116:     elif isinstance(content, Iterable) and not isinstance(content, dict):\n117:         # `not isinstance(content, dict)` is a bit oddly specific, but it\n118:         # catches a case that's easy for users to make in error, and would\n119:         # otherwise pass through here, like any other bytes-iterable,\n120:         # because `dict` happens to be iterable. See issue #2491.\n121:         content_length_or_none = peek_filelike_length(content)\n122: \n123:         if content_length_or_none is None:\n124:             headers = {\"Transfer-Encoding\": \"chunked\"}\n125:         else:\n126:             headers = {\"Content-Length\": str(content_length_or_none)}\n127:         return headers, IteratorByteStream(content)  # type: ignore\n128: \n129:     elif isinstance(content, AsyncIterable):\n130:         headers = {\"Transfer-Encoding\": \"chunked\"}\n131:         return headers, AsyncIteratorByteStream(content)\n132: \n133:     raise TypeError(f\"Unexpected type for 'content', {type(content)!r}\")",
+            "start_line": 107,
+            "symbol": "encode_content",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[CONTENT-LENGTH-parts2]",
+              ".triage/test_case.py::test_request_records[Content-Length-parts0]",
+              ".triage/test_case.py::test_request_records[content-length-parts1]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 303,
+            "evidence_id": "source:vendor/httpx/_client.py:298:BaseClient.headers",
+            "executed_lines": [
+              303
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_client.py:298:BaseClient.headers",
+            "path": "vendor/httpx/_client.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    @property\n    def headers(self) -> Headers:\n        \"\"\"\n        HTTP headers to include when sending requests.\n        \"\"\"\n        return self._headers\n",
+            "source_numbered": "298:     @property\n299:     def headers(self) -> Headers:\n300:         \"\"\"\n301:         HTTP headers to include when sending requests.\n302:         \"\"\"\n303:         return self._headers",
+            "start_line": 298,
+            "symbol": "BaseClient.headers",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[CONTENT-LENGTH-parts2]",
+              ".triage/test_case.py::test_request_records[Content-Length-parts0]",
+              ".triage/test_case.py::test_request_records[content-length-parts1]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 722,
+            "evidence_id": "source:vendor/httpx/_models.py:699:Response._get_content_decoder",
+            "executed_lines": [
+              704,
+              705,
+              706,
+              707,
+              715,
+              717,
+              720,
+              722
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_models.py:699:Response._get_content_decoder",
+            "path": "vendor/httpx/_models.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    def _get_content_decoder(self) -> ContentDecoder:\n        \"\"\"\n        Returns a decoder instance which can be used to decode the raw byte\n        content, depending on the Content-Encoding used in the response.\n        \"\"\"\n        if not hasattr(self, \"_decoder\"):\n            decoders: list[ContentDecoder] = []\n            values = self.headers.get_list(\"content-encoding\", split_commas=True)\n            for value in values:\n                value = value.strip().lower()\n                try:\n                    decoder_cls = SUPPORTED_DECODERS[value]\n                    decoders.append(decoder_cls())\n                except KeyError:\n                    continue\n\n            if len(decoders) == 1:\n                self._decoder = decoders[0]\n            elif len(decoders) > 1:\n                self._decoder = MultiDecoder(children=decoders)\n            else:\n                self._decoder = IdentityDecoder()\n\n        return self._decoder\n",
+            "source_numbered": "699:     def _get_content_decoder(self) -> ContentDecoder:\n700:         \"\"\"\n701:         Returns a decoder instance which can be used to decode the raw byte\n702:         content, depending on the Content-Encoding used in the response.\n703:         \"\"\"\n704:         if not hasattr(self, \"_decoder\"):\n705:             decoders: list[ContentDecoder] = []\n706:             values = self.headers.get_list(\"content-encoding\", split_commas=True)\n707:             for value in values:\n708:                 value = value.strip().lower()\n709:                 try:\n710:                     decoder_cls = SUPPORTED_DECODERS[value]\n711:                     decoders.append(decoder_cls())\n712:                 except KeyError:\n713:                     continue\n714: \n715:             if len(decoders) == 1:\n716:                 self._decoder = decoders[0]\n717:             elif len(decoders) > 1:\n718:                 self._decoder = MultiDecoder(children=decoders)\n719:             else:\n720:                 self._decoder = IdentityDecoder()\n721: \n722:         return self._decoder",
+            "start_line": 699,
+            "symbol": "Response._get_content_decoder",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[CONTENT-LENGTH-parts2]",
+              ".triage/test_case.py::test_request_records[Content-Length-parts0]",
+              ".triage/test_case.py::test_request_records[content-length-parts1]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 316,
+            "evidence_id": "source:vendor/httpx/_client.py:305:BaseClient.headers",
+            "executed_lines": [
+              307,
+              308,
+              309,
+              310,
+              311,
+              312,
+              315,
+              316
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_client.py:305:BaseClient.headers",
+            "path": "vendor/httpx/_client.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    @headers.setter\n    def headers(self, headers: HeaderTypes) -> None:\n        client_headers = Headers(\n            {\n                b\"Accept\": b\"*[EXTERNAL]/*\",\n                b\"Accept-Encoding\": ACCEPT_ENCODING.encode(\"ascii\"),\n                b\"Connection\": b\"keep-alive\",\n                b\"User-Agent\": USER_AGENT.encode(\"ascii\"),\n            }\n        )\n        client_headers.update(headers)\n        self._headers = client_headers\n",
+            "source_numbered": "305:     @headers.setter\n306:     def headers(self, headers: HeaderTypes) -> None:\n307:         client_headers = Headers(\n308:             {\n309:                 b\"Accept\": b\"*[EXTERNAL]/*\",\n310:                 b\"Accept-Encoding\": ACCEPT_ENCODING.encode(\"ascii\"),\n311:                 b\"Connection\": b\"keep-alive\",\n312:                 b\"User-Agent\": USER_AGENT.encode(\"ascii\"),\n313:             }\n314:         )\n315:         client_headers.update(headers)\n316:         self._headers = client_headers",
+            "start_line": 305,
+            "symbol": "BaseClient.headers",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[CONTENT-LENGTH-parts2]",
+              ".triage/test_case.py::test_request_records[Content-Length-parts0]",
+              ".triage/test_case.py::test_request_records[content-length-parts1]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 67,
+            "evidence_id": "source:vendor/httpx/_multipart.py:56:get_multipart_boundary_from_content_type",
+            "executed_lines": [
+              59,
+              60
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_multipart.py:56:get_multipart_boundary_from_content_type",
+            "path": "vendor/httpx/_multipart.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "def get_multipart_boundary_from_content_type(\n    content_type: bytes | None,\n) -> bytes | None:\n    if not content_type or not content_type.startswith(b\"multipart/form-data\"):\n        return None\n    # parse boundary according to\n    # https://www.rfc-editor.org/rfc/rfc2046#section-5.1.1\n    if b\";\" in content_type:\n        for section in content_type.split(b\";\"):\n            if section.strip().lower().startswith(b\"boundary=\"):\n                return section.strip()[len(b\"boundary=\") :].strip(b'\"')\n    return None\n",
+            "source_original_sha256": "7bffb5d0bee71697d8a9cba05a697573c9c786f586bf9cd3c46ecb9f124ee67d",
+            "source_numbered": "56: def get_multipart_boundary_from_content_type(\n57:     content_type: bytes | None,\n58: ) -> bytes | None:\n59:     if not content_type or not content_type.startswith(b\"multipart/form-data\"):\n60:         return None\n61:     # parse boundary according to\n62:     # https://www.rfc-editor.org/rfc/rfc2046#section-5.1.1\n63:     if b\";\" in content_type:\n64:         for section in content_type.split(b\";\"):\n65:             if section.strip().lower().startswith(b\"boundary=\"):\n66:                 return section.strip()[len(b\"boundary=\") :].strip(b'\"')\n67:     return None",
+            "source_numbered_original_sha256": "73cb094768daf4e755c7bdaba1756e9761b5d7e193dc4fabb3da27d4552f8653",
+            "start_line": 56,
+            "symbol": "get_multipart_boundary_from_content_type",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[CONTENT-LENGTH-parts2]",
+              ".triage/test_case.py::test_request_records[Content-Length-parts0]",
+              ".triage/test_case.py::test_request_records[content-length-parts1]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 431,
+            "evidence_id": "source:vendor/httpx/_client.py:424:BaseClient._merge_headers",
+            "executed_lines": [
+              429,
+              430,
+              431
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_client.py:424:BaseClient._merge_headers",
+            "path": "vendor/httpx/_client.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    def _merge_headers(self, headers: HeaderTypes | None = None) -> HeaderTypes | None:\n        \"\"\"\n        Merge a headers argument together with any headers on the client,\n        to create the headers used for the outgoing request.\n        \"\"\"\n        merged_headers = Headers(self.headers)\n        merged_headers.update(headers)\n        return merged_headers\n",
+            "source_numbered": "424:     def _merge_headers(self, headers: HeaderTypes | None = None) -> HeaderTypes | None:\n425:         \"\"\"\n426:         Merge a headers argument together with any headers on the client,\n427:         to create the headers used for the outgoing request.\n428:         \"\"\"\n429:         merged_headers = Headers(self.headers)\n430:         merged_headers.update(headers)\n431:         return merged_headers",
+            "start_line": 424,
+            "symbol": "BaseClient._merge_headers",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[CONTENT-LENGTH-parts2]",
+              ".triage/test_case.py::test_request_records[Content-Length-parts0]",
+              ".triage/test_case.py::test_request_records[content-length-parts1]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 279,
+            "evidence_id": "source:vendor/httpx/_models.py:274:Headers.update",
+            "executed_lines": [
+              275,
+              276,
+              277,
+              279
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_models.py:274:Headers.update",
+            "path": "vendor/httpx/_models.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    def update(self, headers: HeaderTypes | None = None) -> None:  # type: ignore\n        headers = Headers(headers)\n        for key in headers.keys():\n            if key in self:\n                self.pop(key)\n        self._list.extend(headers._list)\n",
+            "source_numbered": "274:     def update(self, headers: HeaderTypes | None = None) -> None:  # type: ignore\n275:         headers = Headers(headers)\n276:         for key in headers.keys():\n277:             if key in self:\n278:                 self.pop(key)\n279:         self._list.extend(headers._list)",
+            "start_line": 274,
+            "symbol": "Headers.update",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[CONTENT-LENGTH-parts2]",
+              ".triage/test_case.py::test_request_records[Content-Length-parts0]",
+              ".triage/test_case.py::test_request_records[content-length-parts1]"
+            ]
+          }
+        ],
+        "kind": "runtime_python_context",
+        "limits": {
+          "max_chars": 24000,
+          "max_depth": 4,
+          "max_events": 128,
+          "max_files": 32,
+          "max_functions": 24,
+          "max_input_chars": 600000,
+          "max_missing": 32,
+          "max_module_chars": 2400,
+          "max_source_bytes": 256000,
+          "semantic_depth_extension": 4
+        },
+        "missing": [],
+        "module_context": [],
+        "note": "Only runtime-observed project functions and call edges select source. Actual failing-test AST data accesses and callback/keyword identifiers rank observed bodies; relevant deeper helpers get at most four extra call hops. Whole AST bodies include test setup; omissions are explicit. Source and opt-in failure-text redaction are heuristic. Observed execution supports reachability, not a causal diagnosis. Event order is observation order; async scheduling can disconnect call edges. No project imports, repository scans, benchmark labels or model calls.",
+        "redaction_count": 17,
+        "schema_version": 4,
+        "truncation": {
+          "omitted_events": 854,
+          "omitted_functions": [
+            "vendor/httpx/_models.py:242:Headers.get",
+            "vendor/httpx/_models.py:195:Headers.raw",
+            "vendor/httpx/_models.py:67:_normalize_header_key",
+            "vendor/httpx/_client.py:718:Client._init_transport",
+            "vendor/httpx/_client.py:1001:Client._send_single_request",
+            "vendor/httpx/_models.py:202:Headers.keys",
+            "vendor/httpx/_client.py:760:Client._transport_for_url",
+            "vendor/httpx/_models.py:468:Request.read",
+            "vendor/httpx/_transports/mock.py:19:MockTransport.handle_request",
+            "vendor/httpx/_models.py:346:Headers.__contains__",
+            "vendor/httpx/_client.py:771:Client.request",
+            "vendor/httpx/_models.py:876:Response.read",
+            "vendor/httpx/_models.py:284:Headers.__getitem__",
+            "vendor/httpx/_models.py:441:Request._prepare",
+            "vendor/httpx/_client.py:1123:Client.post",
+            "vendor/httpx/_client.py:340:BaseClient.build_request"
+          ],
+          "reasons": [
+            "call_depth_limit",
+            "context_char_limit",
+            "context_event_limit",
+            "function_limit",
+            "input_trace_truncated",
+            "module_context_limit",
+            "repeated_failure_text_omitted"
+          ],
+          "truncated": true
+        }
+      },
+      "original_context_file_sha256": "a5c279b87a51da00299d82c1f0ecae663a79c40228883ce4e42b85291658893d"
+    },
+    {
+      "case_id": "e06",
+      "repetition": 1,
+      "state": "unverified",
+      "context": {
+        "call_graph": [
+          {
+            "callee": "vendor/httpx/_client.py:287:BaseClient.base_url",
+            "caller": "vendor/httpx/_client.py:391:BaseClient._merge_url",
+            "count": 6,
+            "line": 409
+          },
+          {
+            "callee": "vendor/httpx/_client.py:287:BaseClient.base_url",
+            "caller": "vendor/httpx/_client.py:391:BaseClient._merge_url",
+            "count": 6,
+            "line": 410
+          }
+        ],
+        "edit_allowlist": [
+          {
+            "end_line": 292,
+            "evidence_id": "source:vendor/httpx/_client.py:287:BaseClient.base_url",
+            "function_id": "vendor/httpx/_client.py:287:BaseClient.base_url",
+            "path": "vendor/httpx/_client.py",
+            "start_line": 287
+          },
+          {
+            "end_line": 411,
+            "evidence_id": "source:vendor/httpx/_client.py:391:BaseClient._merge_url",
+            "function_id": "vendor/httpx/_client.py:391:BaseClient._merge_url",
+            "path": "vendor/httpx/_client.py",
+            "start_line": 391
+          },
+          {
+            "end_line": 61,
+            "evidence_id": "source:packages/python/src/decilist/runtime.py:57:validate_base_url",
+            "function_id": "packages/python/src/decilist/runtime.py:57:validate_base_url",
+            "path": "packages/python/src/decilist/runtime.py",
+            "start_line": 57
+          },
+          {
+            "end_line": 1749,
+            "evidence_id": "source:vendor/httpx/_client.py:1717:AsyncClient._send_single_request",
+            "function_id": "vendor/httpx/_client.py:1717:AsyncClient._send_single_request",
+            "path": "vendor/httpx/_client.py",
+            "start_line": 1717
+          },
+          {
+            "end_line": 237,
+            "evidence_id": "source:vendor/httpx/_client.py:234:BaseClient._enforce_trailing_slash",
+            "function_id": "vendor/httpx/_client.py:234:BaseClient._enforce_trailing_slash",
+            "path": "vendor/httpx/_client.py",
+            "start_line": 234
+          }
+        ],
+        "events": [],
+        "evidence_ids": [
+          "source:.triage/test_case.py:13:test_response_records",
+          "source:vendor/httpx/_client.py:287:BaseClient.base_url",
+          "source:vendor/httpx/_client.py:391:BaseClient._merge_url",
+          "source:packages/python/src/decilist/runtime.py:57:validate_base_url",
+          "source:vendor/httpx/_client.py:1717:AsyncClient._send_single_request",
+          "source:vendor/httpx/_client.py:457:BaseClient._build_request_auth",
+          "source:vendor/httpx/_client.py:234:BaseClient._enforce_trailing_slash",
+          "failure:1",
+          "failure:2",
+          "failure:3"
+        ],
+        "failures": [
+          {
+            "evidence_id": "failure:1",
+            "exception_type": "Failed",
+            "failure_text_captured": true,
+            "longrepr": "probability = 1.0, value = 1.0\n\n    @pytest.mark.parametrize(\"probability,value\",[(1.0,1.0),(0.0,0.0),(.9,1.0)])\n    async def test_response_records(probability,value):\n        def handle(request):\n            if request.url.path==\"[EXTERNAL]/health\": return httpx.Response(200,json=HEALTH)\n            return httpx.Response(200,json={\"schema_version\":\"1\",\"request_id\":\"fixture\",\"kind\":\"predict\",\"status\":\"accepted\",\"value\":value,\"probabilities\":{\"false\":1-probability,\"true\":probability},\"confidence\":max(probability,1-probability),\"provider\":\"fixture\",\"model\":\"fixture\",\"latency_ms\":0,\"attempts\":[]})\n        async with Client() as client:\n            await client._http.aclose()\n            client._http=httpx.AsyncClient(transport=httpx.MockTransport(handle),base_url=client.base_url)\n>           with pytest.raises(ValueError,match=\"value/confidence\"):\nE           Failed: DID NOT RAISE ValueError\n\n.triage\\test_case.py:21: Failed",
+            "nodeid": ".triage/test_case.py::test_response_records[1.0-1.0]",
+            "phase": "call",
+            "traceback": [
+              {
+                "line": 21,
+                "path": ".triage/test_case.py",
+                "symbol": "test_response_records"
+              }
+            ]
+          },
+          {
+            "evidence_id": "failure:2",
+            "exception_type": "Failed",
+            "failure_text_captured": true,
+            "longrepr": "",
+            "longrepr_omitted_by_character_limit": true,
+            "nodeid": ".triage/test_case.py::test_response_records[0.0-0.0]",
+            "phase": "call",
+            "traceback": [
+              {
+                "line": 21,
+                "path": ".triage/test_case.py",
+                "symbol": "test_response_records"
+              }
+            ]
+          },
+          {
+            "evidence_id": "failure:3",
+            "exception_type": "Failed",
+            "failure_text_captured": true,
+            "longrepr": "",
+            "longrepr_omitted_by_character_limit": true,
+            "nodeid": ".triage/test_case.py::test_response_records[0.9-1.0]",
+            "phase": "call",
+            "traceback": [
+              {
+                "line": 21,
+                "path": ".triage/test_case.py",
+                "symbol": "test_response_records"
+              }
+            ]
+          }
+        ],
+        "functions": [
+          {
+            "complete": true,
+            "editable": false,
+            "end_line": 22,
+            "evidence_id": "source:.triage/test_case.py:13:test_response_records",
+            "executed_lines": [
+              15,
+              18,
+              19,
+              20,
+              21,
+              22
+            ],
+            "guard_reasons": [
+              "test_or_fixture_source"
+            ],
+            "id": ".triage/test_case.py:13:test_response_records",
+            "path": ".triage/test_case.py",
+            "roles": [
+              "test"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "@pytest.mark.parametrize(\"probability,value\",[(1.0,1.0),(0.0,0.0),(.9,1.0)])\nasync def test_response_records(probability,value):\n    def handle(request):\n        if request.url.path==\"[EXTERNAL]/health\": return httpx.Response(200,json=HEALTH)\n        return httpx.Response(200,json={\"schema_version\":\"1\",\"request_id\":\"fixture\",\"kind\":\"predict\",\"status\":\"accepted\",\"value\":value,\"probabilities\":{\"false\":1-probability,\"true\":probability},\"confidence\":max(probability,1-probability),\"provider\":\"fixture\",\"model\":\"fixture\",\"latency_ms\":0,\"attempts\":[]})\n    async with Client() as client:\n        await client._http.aclose()\n        client._http=httpx.AsyncClient(transport=httpx.MockTransport(handle),base_url=client.base_url)\n        with pytest.raises(ValueError,match=\"value/confidence\"):\n            await client.predict(\"observed\",\"Predict\")\n",
+            "source_numbered": "13: @pytest.mark.parametrize(\"probability,value\",[(1.0,1.0),(0.0,0.0),(.9,1.0)])\n14: async def test_response_records(probability,value):\n15:     def handle(request):\n16:         if request.url.path==\"[EXTERNAL]/health\": return httpx.Response(200,json=HEALTH)\n17:         return httpx.Response(200,json={\"schema_version\":\"1\",\"request_id\":\"fixture\",\"kind\":\"predict\",\"status\":\"accepted\",\"value\":value,\"probabilities\":{\"false\":1-probability,\"true\":probability},\"confidence\":max(probability,1-probability),\"provider\":\"fixture\",\"model\":\"fixture\",\"latency_ms\":0,\"attempts\":[]})\n18:     async with Client() as client:\n19:         await client._http.aclose()\n20:         client._http=httpx.AsyncClient(transport=httpx.MockTransport(handle),base_url=client.base_url)\n21:         with pytest.raises(ValueError,match=\"value/confidence\"):\n22:             await client.predict(\"observed\",\"Predict\")",
+            "start_line": 13,
+            "symbol": "test_response_records",
+            "test_ids": [
+              ".triage/test_case.py::test_response_records[0.0-0.0]",
+              ".triage/test_case.py::test_response_records[0.9-1.0]",
+              ".triage/test_case.py::test_response_records[1.0-1.0]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 292,
+            "evidence_id": "source:vendor/httpx/_client.py:287:BaseClient.base_url",
+            "executed_lines": [
+              292
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_client.py:287:BaseClient.base_url",
+            "path": "vendor/httpx/_client.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    @property\n    def base_url(self) -> URL:\n        \"\"\"\n        Base URL to use when sending requests with relative URLs.\n        \"\"\"\n        return self._base_url\n",
+            "source_numbered": "287:     @property\n288:     def base_url(self) -> URL:\n289:         \"\"\"\n290:         Base URL to use when sending requests with relative URLs.\n291:         \"\"\"\n292:         return self._base_url",
+            "start_line": 287,
+            "symbol": "BaseClient.base_url",
+            "test_ids": [
+              ".triage/test_case.py::test_response_records[0.0-0.0]",
+              ".triage/test_case.py::test_response_records[0.9-1.0]",
+              ".triage/test_case.py::test_response_records[1.0-1.0]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 411,
+            "evidence_id": "source:vendor/httpx/_client.py:391:BaseClient._merge_url",
+            "executed_lines": [
+              396,
+              397,
+              409,
+              410
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_client.py:391:BaseClient._merge_url",
+            "path": "vendor/httpx/_client.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    def _merge_url(self, url: URL | str) -> URL:\n        \"\"\"\n        Merge a URL argument together with any 'base_url' on the client,\n        to create the URL used for the outgoing request.\n        \"\"\"\n        merge_url = URL(url)\n        if merge_url.is_relative_url:\n            # To merge URLs we always append to the base URL. To get this\n            # behaviour correct we always ensure the base URL ends in a '[EXTERNAL]/'\n            # separator, and strip any leading '[EXTERNAL]/' from the merge URL.\n            #\n            # So, eg...\n            #\n            # >>> client = Client(base_url=\"https://www.example.com/subpath\")\n            # >>> client.base_url\n            # URL('https://www.example.com/subpath/')\n            # >>> client.build_request(\"GET\", \"[EXTERNAL]/path\").url\n            # URL('https://www.example.com/subpath/path')\n            merge_raw_path = self.base_url.raw_path + merge_url.raw_path.lstrip(b\"[EXTERNAL]/\")\n            return self.base_url.copy_with(raw_path=merge_raw_path)\n        return merge_url\n",
+            "source_original_sha256": "3b00320150ee361237413617d769cef89c5754cc88cba49f0193858203adeb71",
+            "source_numbered": "391:     def _merge_url(self, url: URL | str) -> URL:\n392:         \"\"\"\n393:         Merge a URL argument together with any 'base_url' on the client,\n394:         to create the URL used for the outgoing request.\n395:         \"\"\"\n396:         merge_url = URL(url)\n397:         if merge_url.is_relative_url:\n398:             # To merge URLs we always append to the base URL. To get this\n399:             # behaviour correct we always ensure the base URL ends in a '[EXTERNAL]/'\n400:             # separator, and strip any leading '[EXTERNAL]/' from the merge URL.\n401:             #\n402:             # So, eg...\n403:             #\n404:             # >>> client = Client(base_url=\"https://www.example.com/subpath\")\n405:             # >>> client.base_url\n406:             # URL('https://www.example.com/subpath/')\n407:             # >>> client.build_request(\"GET\", \"[EXTERNAL]/path\").url\n408:             # URL('https://www.example.com/subpath/path')\n409:             merge_raw_path = self.base_url.raw_path + merge_url.raw_path.lstrip(b\"[EXTERNAL]/\")\n410:             return self.base_url.copy_with(raw_path=merge_raw_path)\n411:         return merge_url",
+            "source_numbered_original_sha256": "fd991b36d2910d0c1f80c0cfce8bf4b51d53ea9a6f89e0c2aaa42c80667dee81",
+            "start_line": 391,
+            "symbol": "BaseClient._merge_url",
+            "test_ids": [
+              ".triage/test_case.py::test_response_records[0.0-0.0]",
+              ".triage/test_case.py::test_response_records[0.9-1.0]",
+              ".triage/test_case.py::test_response_records[1.0-1.0]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 61,
+            "evidence_id": "source:packages/python/src/decilist/runtime.py:57:validate_base_url",
+            "executed_lines": [
+              58,
+              59,
+              61
+            ],
+            "guard_reasons": [],
+            "id": "packages/python/src/decilist/runtime.py:57:validate_base_url",
+            "path": "packages/python/src/decilist/runtime.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "def validate_base_url(base_url: str) -> str:\n    url = httpx.URL(base_url)\n    if url.scheme not in (\"http\", \"https\") or not url.host or url.username or url.password or url.query or url.fragment or url.path not in (\"\", \"[EXTERNAL]/\"):\n        raise ValueError(\"base_url must be an HTTP(S) origin without credentials, path, query, or fragment\")\n    return str(url).rstrip(\"[EXTERNAL]/\")\n",
+            "source_numbered": "57: def validate_base_url(base_url: str) -> str:\n58:     url = httpx.URL(base_url)\n59:     if url.scheme not in (\"http\", \"https\") or not url.host or url.username or url.password or url.query or url.fragment or url.path not in (\"\", \"[EXTERNAL]/\"):\n60:         raise ValueError(\"base_url must be an HTTP(S) origin without credentials, path, query, or fragment\")\n61:     return str(url).rstrip(\"[EXTERNAL]/\")",
+            "start_line": 57,
+            "symbol": "validate_base_url",
+            "test_ids": [
+              ".triage/test_case.py::test_response_records[0.0-0.0]",
+              ".triage/test_case.py::test_response_records[0.9-1.0]",
+              ".triage/test_case.py::test_response_records[1.0-1.0]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 1749,
+            "evidence_id": "source:vendor/httpx/_client.py:1717:AsyncClient._send_single_request",
+            "executed_lines": [
+              1721,
+              1722,
+              1724,
+              1729,
+              1730,
+              1732,
+              1733,
+              1734,
+              1735,
+              1737,
+              1738,
+              1740,
+              1741,
+              1742,
+              1743,
+              1744,
+              1745,
+              1746,
+              1749
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_client.py:1717:AsyncClient._send_single_request",
+            "path": "vendor/httpx/_client.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    async def _send_single_request(self, request: Request) -> Response:\n        \"\"\"\n        Sends a single request, without handling any redirections.\n        \"\"\"\n        transport = self._transport_for_url(request.url)\n        start = time.perf_counter()\n\n        if not isinstance(request.stream, AsyncByteStream):\n            raise RuntimeError(\n                \"Attempted to send an sync request with an AsyncClient instance.\"\n            )\n\n        with request_context(request=request):\n            response = await transport.handle_async_request(request)\n\n        assert isinstance(response.stream, AsyncByteStream)\n        response.request = request\n        response.stream = BoundAsyncStream(\n            response.stream, response=response, start=start\n        )\n        self.cookies.extract_cookies(response)\n        response.default_encoding = self._default_encoding\n\n        logger.info(\n            'HTTP Request: %s %s \"%s %d %s\"',\n            request.method,\n            request.url,\n            response.http_version,\n            response.status_code,\n            response.reason_phrase,\n        )\n\n        return response\n",
+            "source_numbered": "1717:     async def _send_single_request(self, request: Request) -> Response:\n1718:         \"\"\"\n1719:         Sends a single request, without handling any redirections.\n1720:         \"\"\"\n1721:         transport = self._transport_for_url(request.url)\n1722:         start = time.perf_counter()\n1723: \n1724:         if not isinstance(request.stream, AsyncByteStream):\n1725:             raise RuntimeError(\n1726:                 \"Attempted to send an sync request with an AsyncClient instance.\"\n1727:             )\n1728: \n1729:         with request_context(request=request):\n1730:             response = await transport.handle_async_request(request)\n1731: \n1732:         assert isinstance(response.stream, AsyncByteStream)\n1733:         response.request = request\n1734:         response.stream = BoundAsyncStream(\n1735:             response.stream, response=response, start=start\n1736:         )\n1737:         self.cookies.extract_cookies(response)\n1738:         response.default_encoding = self._default_encoding\n1739: \n1740:         logger.info(\n1741:             'HTTP Request: %s %s \"%s %d %s\"',\n1742:             request.method,\n1743:             request.url,\n1744:             response.http_version,\n1745:             response.status_code,\n1746:             response.reason_phrase,\n1747:         )\n1748: \n1749:         return response",
+            "start_line": 1717,
+            "symbol": "AsyncClient._send_single_request",
+            "test_ids": [
+              ".triage/test_case.py::test_response_records[0.0-0.0]",
+              ".triage/test_case.py::test_response_records[0.9-1.0]",
+              ".triage/test_case.py::test_response_records[1.0-1.0]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": false,
+            "end_line": 473,
+            "evidence_id": "source:vendor/httpx/_client.py:457:BaseClient._build_request_auth",
+            "executed_lines": [
+              462,
+              463,
+              466,
+              469,
+              470,
+              473
+            ],
+            "guard_reasons": [
+              "source_redacted"
+            ],
+            "id": "vendor/httpx/_client.py:457:BaseClient._build_request_auth",
+            "path": "vendor/httpx/_client.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    def _build_request_auth(\n        self,\n        request: Request,\n        auth: AuthTypes | UseClientDefault | None = USE_CLIENT_DEFAULT,\n    ) -> Auth:\n        auth = (\n            self._auth if isinstance(auth, UseClientDefault) else self._build_auth(auth)\n        )\n\n        if auth is not None:\n            return auth\n\n        username, password = [REDACTED], request.url.password\n        if username or password:\n            [REDACTED] BasicAuth(username=username, password=[REDACTED]\n\n        return Auth()\n",
+            "source_numbered": "457:     def _build_request_auth(\n458:         self,\n459:         request: Request,\n460:         auth: AuthTypes | UseClientDefault | None = USE_CLIENT_DEFAULT,\n461:     ) -> Auth:\n462:         auth = (\n463:             self._auth if isinstance(auth, UseClientDefault) else self._build_auth(auth)\n464:         )\n465: \n466:         if auth is not None:\n467:             return auth\n468: \n469:         username, password = [REDACTED], request.url.password\n470:         if username or password:\n[REDACTED]             [REDACTED] BasicAuth(username=username, password=[REDACTED]\n472: \n473:         return Auth()",
+            "start_line": 457,
+            "symbol": "BaseClient._build_request_auth",
+            "test_ids": [
+              ".triage/test_case.py::test_response_records[0.0-0.0]",
+              ".triage/test_case.py::test_response_records[0.9-1.0]",
+              ".triage/test_case.py::test_response_records[1.0-1.0]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 237,
+            "evidence_id": "source:vendor/httpx/_client.py:234:BaseClient._enforce_trailing_slash",
+            "executed_lines": [
+              235,
+              236
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_client.py:234:BaseClient._enforce_trailing_slash",
+            "path": "vendor/httpx/_client.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    def _enforce_trailing_slash(self, url: URL) -> URL:\n        if url.raw_path.endswith(b\"[EXTERNAL]/\"):\n            return url\n        return url.copy_with(raw_path=url.raw_path + b\"[EXTERNAL]/\")\n",
+            "source_numbered": "234:     def _enforce_trailing_slash(self, url: URL) -> URL:\n235:         if url.raw_path.endswith(b\"[EXTERNAL]/\"):\n236:             return url\n237:         return url.copy_with(raw_path=url.raw_path + b\"[EXTERNAL]/\")",
+            "start_line": 234,
+            "symbol": "BaseClient._enforce_trailing_slash",
+            "test_ids": [
+              ".triage/test_case.py::test_response_records[0.0-0.0]",
+              ".triage/test_case.py::test_response_records[0.9-1.0]",
+              ".triage/test_case.py::test_response_records[1.0-1.0]"
+            ]
+          }
+        ],
+        "kind": "runtime_python_context",
+        "limits": {
+          "max_chars": 24000,
+          "max_depth": 4,
+          "max_events": 128,
+          "max_files": 32,
+          "max_functions": 24,
+          "max_input_chars": 600000,
+          "max_missing": 32,
+          "max_module_chars": 2400,
+          "max_source_bytes": 256000,
+          "semantic_depth_extension": 4
+        },
+        "missing": [],
+        "module_context": [],
+        "note": "Only runtime-observed project functions and call edges select source. Actual failing-test AST data accesses and callback/keyword identifiers rank observed bodies; relevant deeper helpers get at most four extra call hops. Whole AST bodies include test setup; omissions are explicit. Source and opt-in failure-text redaction are heuristic. Observed execution supports reachability, not a causal diagnosis. Event order is observation order; async scheduling can disconnect call edges. No project imports, repository scans, benchmark labels or model calls.",
+        "redaction_count": 17,
+        "schema_version": 4,
+        "truncation": {
+          "omitted_events": 204,
+          "omitted_functions": [
+            "vendor/httpx/_client.py:433:BaseClient._merge_queryparams",
+            "vendor/httpx/_client.py:1485:AsyncClient.request",
+            "vendor/httpx/_client.py:413:BaseClient._merge_cookies",
+            "vendor/httpx/_client.py:445:BaseClient._build_auth",
+            "vendor/httpx/_client.py:1432:AsyncClient._init_transport",
+            "vendor/httpx/_client.py:424:BaseClient._merge_headers",
+            "vendor/httpx/_client.py:584:BaseClient._set_timeout",
+            "vendor/httpx/_client.py:329:BaseClient.params",
+            "vendor/httpx/_client.py:318:BaseClient.cookies",
+            "vendor/httpx/_client.py:298:BaseClient.headers",
+            "vendor/httpx/_client.py:253:BaseClient.timeout",
+            "vendor/httpx/_urls.py:282:URL.raw_path",
+            "vendor/httpx/_client.py:305:BaseClient.headers",
+            "vendor/httpx/_urls.py:244:URL.path",
+            "packages/python/src/decilist/client.py:69:Client.decide",
+            "vendor/httpx/_urls.py:319:URL.is_relative_url",
+            "vendor/httpx/_client.py:340:BaseClient.build_request"
+          ],
+          "reasons": [
+            "call_depth_limit",
+            "context_char_limit",
+            "context_event_limit",
+            "function_limit",
+            "input_trace_truncated",
+            "module_context_limit",
+            "repeated_failure_text_omitted"
+          ],
+          "truncated": true
+        }
+      },
+      "original_context_file_sha256": "8c0af36c62366e25b7629fd10abd077e7f3d9398f22aecf885b8557b685b0a86"
+    }
+  ]
+}

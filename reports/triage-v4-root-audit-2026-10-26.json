@@ -1,0 +1,239 @@
+{
+  "schema_version": 1,
+  "rows": [
+    {
+      "slot": 1,
+      "case_id": "r01",
+      "treatment": "normal_tools",
+      "root_confirmed": true,
+      "changed_files": [
+        {
+          "path": "vendor/httpx/_content.py",
+          "before_sha256": "5bab04699e14fe09a76310d2a8a31731585e51e91d0f7b2b375581c3c22b0983",
+          "after_sha256": "2c61b3ac94d1dcebcde0c6f519554d2d7917247fbaa0a97002db4ef69e70ff28",
+          "before_crlf_lines": 0,
+          "after_crlf_lines": 0,
+          "normalized_line_diff": [
+            "--- initial/vendor/httpx/_content.py",
+            "+++ terminal/vendor/httpx/_content.py",
+            "@@ -206,7 +206,7 @@",
+            "         warnings.warn(message, DeprecationWarning, stacklevel=2)",
+            "         return encode_content(data)",
+            " ",
+            "-    if content:",
+            "+    if content is not None:",
+            "         return encode_content(content)",
+            "     elif files:",
+            "         return encode_multipart_data(data or {}, files, boundary)"
+          ]
+        }
+      ]
+    },
+    {
+      "slot": 2,
+      "case_id": "r02",
+      "treatment": "verified_assistant",
+      "root_confirmed": true,
+      "changed_files": [
+        {
+          "path": "vendor/httpx/_client.py",
+          "before_sha256": "b455160c2da9c6f88baaa1def04f265f8e5b4bab750b226b29b92171896dbdde",
+          "after_sha256": "c43f941baefe58c91e96d00039e1868fe719d91453026d7db1647194563bff8d",
+          "before_crlf_lines": 0,
+          "after_crlf_lines": 0,
+          "normalized_line_diff": [
+            "--- initial/vendor/httpx/_client.py",
+            "+++ terminal/vendor/httpx/_client.py",
+            "@@ -566,7 +566,7 @@",
+            " ",
+            "         # We should use the client cookie store to determine any cookie header,",
+            "         # rather than whatever was on the original outgoing request.",
+            "-        headers.get(\"Cookie\", None)",
+            "+        headers.pop(\"Cookie\", None)",
+            " ",
+            "         return headers",
+            " "
+          ]
+        }
+      ]
+    },
+    {
+      "slot": 3,
+      "case_id": "r03",
+      "treatment": "normal_tools",
+      "root_confirmed": true,
+      "changed_files": [
+        {
+          "path": "vendor/httpx/_models.py",
+          "before_sha256": "d68ab3ef64870d44c4331147810d3902865df7290627479c377138bd28afc6fb",
+          "after_sha256": "e3ffc6bb2bf580bc6e6428708a6f247d036220e709f5a72b785392babbd97e6b",
+          "before_crlf_lines": 0,
+          "after_crlf_lines": 0,
+          "normalized_line_diff": [
+            "--- initial/vendor/httpx/_models.py",
+            "+++ terminal/vendor/httpx/_models.py",
+            "@@ -476,7 +476,7 @@",
+            "                 # If a streaming request has been read entirely into memory, then",
+            "                 # we can replace the stream with a raw bytes implementation,",
+            "                 # to ensure that any non-replayable streams can still be used.",
+            "-                self.stream = self.stream",
+            "+                self.stream = ByteStream(self._content)",
+            "         return self._content",
+            " ",
+            "     async def aread(self) -> bytes:"
+          ]
+        }
+      ]
+    },
+    {
+      "slot": 4,
+      "case_id": "r04",
+      "treatment": "verified_assistant",
+      "root_confirmed": true,
+      "changed_files": [
+        {
+          "path": "vendor/httpx/_multipart.py",
+          "before_sha256": "b2a6c2cc020645f5969bc781a982fe15ca17d6aec0006c6000c2c281d2398ac9",
+          "after_sha256": "18062ba313918279ca9585e8a2c5b51a60576815535be088c306bb8402823739",
+          "before_crlf_lines": 0,
+          "after_crlf_lines": 300,
+          "normalized_line_diff": [
+            "--- initial/vendor/httpx/_multipart.py",
+            "+++ terminal/vendor/httpx/_multipart.py",
+            "@@ -207,7 +207,7 @@",
+            " ",
+            "         if hasattr(self.file, \"seek\"):",
+            "             try:",
+            "-                self.file.seek(self.file.tell())",
+            "+                self.file.seek(0)",
+            "             except io.UnsupportedOperation:",
+            "                 pass",
+            " "
+          ]
+        }
+      ]
+    },
+    {
+      "slot": 5,
+      "case_id": "r01",
+      "treatment": "verified_assistant",
+      "root_confirmed": true,
+      "changed_files": [
+        {
+          "path": "vendor/httpx/_content.py",
+          "before_sha256": "5bab04699e14fe09a76310d2a8a31731585e51e91d0f7b2b375581c3c22b0983",
+          "after_sha256": "c52ee6d7a5d05256e2a7209087d08cee952b1c962befdec7d85890ad0f32e984",
+          "before_crlf_lines": 0,
+          "after_crlf_lines": 240,
+          "normalized_line_diff": [
+            "--- initial/vendor/httpx/_content.py",
+            "+++ terminal/vendor/httpx/_content.py",
+            "@@ -206,7 +206,7 @@",
+            "         warnings.warn(message, DeprecationWarning, stacklevel=2)",
+            "         return encode_content(data)",
+            " ",
+            "-    if content:",
+            "+    if content is not None:",
+            "         return encode_content(content)",
+            "     elif files:",
+            "         return encode_multipart_data(data or {}, files, boundary)"
+          ]
+        }
+      ]
+    },
+    {
+      "slot": 6,
+      "case_id": "r02",
+      "treatment": "normal_tools",
+      "root_confirmed": true,
+      "changed_files": [
+        {
+          "path": "vendor/httpx/_client.py",
+          "before_sha256": "b455160c2da9c6f88baaa1def04f265f8e5b4bab750b226b29b92171896dbdde",
+          "after_sha256": "c43f941baefe58c91e96d00039e1868fe719d91453026d7db1647194563bff8d",
+          "before_crlf_lines": 0,
+          "after_crlf_lines": 0,
+          "normalized_line_diff": [
+            "--- initial/vendor/httpx/_client.py",
+            "+++ terminal/vendor/httpx/_client.py",
+            "@@ -566,7 +566,7 @@",
+            " ",
+            "         # We should use the client cookie store to determine any cookie header,",
+            "         # rather than whatever was on the original outgoing request.",
+            "-        headers.get(\"Cookie\", None)",
+            "+        headers.pop(\"Cookie\", None)",
+            " ",
+            "         return headers",
+            " "
+          ]
+        }
+      ]
+    },
+    {
+      "slot": 7,
+      "case_id": "r03",
+      "treatment": "verified_assistant",
+      "root_confirmed": true,
+      "changed_files": [
+        {
+          "path": "vendor/httpx/_models.py",
+          "before_sha256": "d68ab3ef64870d44c4331147810d3902865df7290627479c377138bd28afc6fb",
+          "after_sha256": "e3ffc6bb2bf580bc6e6428708a6f247d036220e709f5a72b785392babbd97e6b",
+          "before_crlf_lines": 0,
+          "after_crlf_lines": 0,
+          "normalized_line_diff": [
+            "--- initial/vendor/httpx/_models.py",
+            "+++ terminal/vendor/httpx/_models.py",
+            "@@ -476,7 +476,7 @@",
+            "                 # If a streaming request has been read entirely into memory, then",
+            "                 # we can replace the stream with a raw bytes implementation,",
+            "                 # to ensure that any non-replayable streams can still be used.",
+            "-                self.stream = self.stream",
+            "+                self.stream = ByteStream(self._content)",
+            "         return self._content",
+            " ",
+            "     async def aread(self) -> bytes:"
+          ]
+        }
+      ]
+    },
+    {
+      "slot": 8,
+      "case_id": "r04",
+      "treatment": "normal_tools",
+      "root_confirmed": true,
+      "changed_files": [
+        {
+          "path": "vendor/httpx/_multipart.py",
+          "before_sha256": "b2a6c2cc020645f5969bc781a982fe15ca17d6aec0006c6000c2c281d2398ac9",
+          "after_sha256": "18062ba313918279ca9585e8a2c5b51a60576815535be088c306bb8402823739",
+          "before_crlf_lines": 0,
+          "after_crlf_lines": 300,
+          "normalized_line_diff": [
+            "--- initial/vendor/httpx/_multipart.py",
+            "+++ terminal/vendor/httpx/_multipart.py",
+            "@@ -207,7 +207,7 @@",
+            " ",
+            "         if hasattr(self.file, \"seek\"):",
+            "             try:",
+            "-                self.file.seek(self.file.tell())",
+            "+                self.file.seek(0)",
+            "             except io.UnsupportedOperation:",
+            "                 pass",
+            " "
+          ]
+        }
+      ]
+    }
+  ],
+  "formatter_deviation": {
+    "reproduced_without_model_or_tests": true,
+    "type": "KeyError",
+    "message": "'explanation'",
+    "slot": 7,
+    "cause": "Participant prompt directly passed a guarded bridge report to the product formatter, which requires explanation. The trial CLI supplies that default, but the experiment prompt did not.",
+    "timing_policy": "Retained original assigned-arm elapsed time; no retry or subtraction.",
+    "limitation": "This timed comparison includes an experiment integration error; it cannot isolate model latency or production CLI performance."
+  },
+  "note": "Normalized line diffs are an additional review view. All original bytes, byte hashes, original reports, and trial times are retained."
+}

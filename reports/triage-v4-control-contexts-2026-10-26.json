@@ -1,0 +1,470 @@
+{
+  "schema_version": 1,
+  "candidate_manifest_sha256": "39a5f90f2005b05d16f18ae7c83ac160353776fd1ec0dec0779b3977df9d578c",
+  "private_report_sha256": "e633972e1268289d611fbaf5dd857d9f7297464cba57311374bf68bc042ed05e",
+  "note": "Actual observed model contexts. Public path/credential heuristics may alter strings; original byte hashes identify the retained private evidence.",
+  "rows": [
+    {
+      "case_id": "c01",
+      "repetition": 1,
+      "state": "unverified",
+      "context": null,
+      "original_context_file_sha256": null
+    },
+    {
+      "case_id": "c02",
+      "repetition": 1,
+      "state": "unverified",
+      "context": {
+        "call_graph": [
+          {
+            "callee": "vendor/httpx/_models.py:274:Headers.update",
+            "caller": "vendor/httpx/_client.py:305:BaseClient.headers",
+            "count": 3,
+            "line": 315
+          },
+          {
+            "callee": "vendor/httpx/_client.py:298:BaseClient.headers",
+            "caller": "vendor/httpx/_client.py:424:BaseClient._merge_headers",
+            "count": 6,
+            "line": 430
+          },
+          {
+            "callee": "vendor/httpx/_models.py:274:Headers.update",
+            "caller": "vendor/httpx/_client.py:424:BaseClient._merge_headers",
+            "count": 6,
+            "line": 430
+          },
+          {
+            "callee": "vendor/httpx/_models.py:284:Headers.__getitem__",
+            "caller": "vendor/httpx/_models.py:274:Headers.update",
+            "count": 3,
+            "line": 278
+          }
+        ],
+        "edit_allowlist": [
+          {
+            "end_line": 303,
+            "evidence_id": "source:vendor/httpx/_client.py:298:BaseClient.headers",
+            "function_id": "vendor/httpx/_client.py:298:BaseClient.headers",
+            "path": "vendor/httpx/_client.py",
+            "start_line": 298
+          },
+          {
+            "end_line": 316,
+            "evidence_id": "source:vendor/httpx/_client.py:305:BaseClient.headers",
+            "function_id": "vendor/httpx/_client.py:305:BaseClient.headers",
+            "path": "vendor/httpx/_client.py",
+            "start_line": 305
+          },
+          {
+            "end_line": 431,
+            "evidence_id": "source:vendor/httpx/_client.py:424:BaseClient._merge_headers",
+            "function_id": "vendor/httpx/_client.py:424:BaseClient._merge_headers",
+            "path": "vendor/httpx/_client.py",
+            "start_line": 424
+          },
+          {
+            "end_line": 279,
+            "evidence_id": "source:vendor/httpx/_models.py:274:Headers.update",
+            "function_id": "vendor/httpx/_models.py:274:Headers.update",
+            "path": "vendor/httpx/_models.py",
+            "start_line": 274
+          },
+          {
+            "end_line": 302,
+            "evidence_id": "source:vendor/httpx/_models.py:284:Headers.__getitem__",
+            "function_id": "vendor/httpx/_models.py:284:Headers.__getitem__",
+            "path": "vendor/httpx/_models.py",
+            "start_line": 284
+          }
+        ],
+        "events": [],
+        "evidence_ids": [
+          "source:.triage/test_case.py:11:test_request_records",
+          "source:.triage/test_case.py:25:test_second_provider_records",
+          "source:vendor/httpx/_client.py:298:BaseClient.headers",
+          "source:vendor/httpx/_client.py:305:BaseClient.headers",
+          "source:vendor/httpx/_client.py:424:BaseClient._merge_headers",
+          "source:vendor/httpx/_models.py:274:Headers.update",
+          "source:vendor/httpx/_models.py:284:Headers.__getitem__",
+          "failure:1",
+          "failure:2",
+          "failure:3",
+          "failure:4",
+          "failure:5"
+        ],
+        "failures": [
+          {
+            "evidence_id": "failure:1",
+            "exception_type": "AssertionError",
+            "failure_text_captured": true,
+            "longrepr": "name = 'X-Mode', override = 'one'\n\n    @pytest.mark.parametrize(\"name,override\", [(\"X-Mode\",\"one\"),(\"x-MODE\",\"two\"),(\"X-mode\",\"three\")])\n    def test_request_records(name, override):\n        seen=[]\n        def handle(request):\n            seen.append((request.headers[\"x-mode\"],request.headers[\"x-keep\"],request.content))\n            return httpx.Response(200,json={\"ok\":True})\n        with httpx.Client(transport=httpx.MockTransport(handle),headers={\"x-mode\":\"default\",\"x-keep\":\"yes\"},trust_env=False) as client:\n            client.post(\"https://example.test/submit\",headers={name:override},json={\"value\":override})\n            client.get(\"https://example.test/after\")\n>           assert seen[0] == (override,\"yes\",json.dumps({\"value\":override},separators=(\",\",\":\")).encode())\nE           assert ('default', '...alue\":\"one\"}') == ('one', 'yes'...alue\":\"one\"}')\nE             \nE             At index 0 diff: 'default' != 'one'\nE             Use -v to get more diff\n\n.triage\\test_case.py:20: AssertionError",
+            "longrepr_original_sha256": "34863ee371cad76715fc70e5946383daa04a1ea46dc736bef97cfce50abc60ee",
+            "nodeid": ".triage/test_case.py::test_request_records[X-Mode-one]",
+            "phase": "call",
+            "traceback": [
+              {
+                "line": 20,
+                "path": ".triage/test_case.py",
+                "symbol": "test_request_records"
+              }
+            ]
+          },
+          {
+            "evidence_id": "failure:2",
+            "exception_type": "AssertionError",
+            "failure_text_captured": true,
+            "longrepr": "",
+            "longrepr_omitted_by_character_limit": true,
+            "nodeid": ".triage/test_case.py::test_request_records[x-MODE-two]",
+            "phase": "call",
+            "traceback": [
+              {
+                "line": 20,
+                "path": ".triage/test_case.py",
+                "symbol": "test_request_records"
+              }
+            ]
+          },
+          {
+            "evidence_id": "failure:3",
+            "exception_type": "AssertionError",
+            "failure_text_captured": true,
+            "longrepr": "",
+            "longrepr_omitted_by_character_limit": true,
+            "nodeid": ".triage/test_case.py::test_request_records[X-mode-three]",
+            "phase": "call",
+            "traceback": [
+              {
+                "line": 20,
+                "path": ".triage/test_case.py",
+                "symbol": "test_request_records"
+              }
+            ]
+          },
+          {
+            "evidence_id": "failure:4",
+            "exception_type": "AssertionError",
+            "failure_text_captured": true,
+            "longrepr": "mode = 'elapsed', expected = 'timeout'\n\n    @pytest.mark.parametrize(\"mode,expected\",[(\"elapsed\",\"timeout\"),(\"native\",\"timeout\"),(\"failure\",\"error\")])\n    async def test_second_provider_records(mode,expected):\n        calls=[]\n        class First:\n            name,model,locality=\"primary\",\"fixture\",\"local\"\n            async def infer(self,question):\n                calls.append(\"primary\")\n                if mode == \"elapsed\": await asyncio.sleep(60)\n                if mode == \"native\": raise TimeoutError(\"provider deadline\")\n                raise ValueError(\"provider failed\")\n        def recover(question):\n            calls.append(\"fallback\")\n            return {\"a\":0,\"b\":1}\n        engine=Decilist([First(),FunctionProvider(recover,name=\"fallback\")],policy=Policy(timeout_ms=10))\n        result=await engine.decide(Choose(state=\"observed\",instructions=\"Select\",options={\"a\":\"A\",\"b\":\"B\"}))\n        assert result.value == \"b\" and result.provider == \"fallback\"\n        assert calls == [\"primary\",\"fallback\"]\n>       assert [(a.provider,a.outcome) for a in result.attempts] == [(\"primary\",expected),(\"fallback\",\"accepted\")]\nE       AssertionError: assert [('primary', ..., 'accepted')] == [('primary', ..., 'accepted')]\nE         \nE         At index 0 diff: ('primary', 'error') != ('primary', 'timeout')\nE         Use -v to get more diff\n\n.triage\\test_case.py:42: AssertionError",
+            "nodeid": ".triage/test_case.py::test_second_provider_records[elapsed-timeout]",
+            "phase": "call",
+            "traceback": [
+              {
+                "line": 42,
+                "path": ".triage/test_case.py",
+                "symbol": "test_second_provider_records"
+              }
+            ]
+          },
+          {
+            "evidence_id": "failure:5",
+            "exception_type": "AssertionError",
+            "failure_text_captured": true,
+            "longrepr": "mode = 'native', expected = 'timeout'\n\n    @pytest.mark.parametrize(\"mode,expected\",[(\"elapsed\",\"timeout\"),(\"native\",\"timeout\"),(\"failure\",\"error\")])\n    async def test_second_provider_records(mode,expected):\n        calls=[]\n        class First:\n            name,model,locality=\"primary\",\"fixture\",\"local\"\n            async def infer(self,question):\n                calls.append(\"primary\")\n                if mode == \"elapsed\": await asyncio.sleep(60)\n                if mode == \"native\": raise TimeoutError(\"provider deadline\")\n                raise ValueError(\"provider failed\")\n        def recover(question):\n            calls.append(\"fallback\")\n            return {\"a\":0,\"b\":1}\n        engine=Decilist([First(),FunctionProvider(recover,name=\"fallback\")],policy=Policy(timeout_ms=10))\n        result=await engine.decide(Choose(state=\"observed\",instructions=\"Select\",options={\"a\":\"A\",\"b\":\"B\"}))\n        assert result.value == \"b\" and result.provider == \"fallback\"\n        assert calls == [\"primary\",\"fallback\"]\n>       assert [(a.provider,a.outcome) for a in result.attempts] == [(\"primary\",expected),(\"fallback\",\"accepted\")]\nE       AssertionError: assert [('primary', ..., 'accepted')] == [('primary', ..., 'accepted')]\nE         \nE         At index 0 diff: ('primary', 'error') != ('primary', 'timeout')\nE         Use -v to get more diff\n\n.triage\\test_case.py:42: AssertionError",
+            "nodeid": ".triage/test_case.py::test_second_provider_records[native-timeout]",
+            "phase": "call",
+            "traceback": [
+              {
+                "line": 42,
+                "path": ".triage/test_case.py",
+                "symbol": "test_second_provider_records"
+              }
+            ]
+          }
+        ],
+        "functions": [
+          {
+            "complete": true,
+            "editable": false,
+            "end_line": 22,
+            "evidence_id": "source:.triage/test_case.py:11:test_request_records",
+            "executed_lines": [
+              13,
+              14,
+              17,
+              18,
+              19,
+              20
+            ],
+            "guard_reasons": [
+              "test_or_fixture_source"
+            ],
+            "id": ".triage/test_case.py:11:test_request_records",
+            "path": ".triage/test_case.py",
+            "roles": [
+              "test"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "@pytest.mark.parametrize(\"name,override\", [(\"X-Mode\",\"one\"),(\"x-MODE\",\"two\"),(\"X-mode\",\"three\")])\ndef test_request_records(name, override):\n    seen=[]\n    def handle(request):\n        seen.append((request.headers[\"x-mode\"],request.headers[\"x-keep\"],request.content))\n        return httpx.Response(200,json={\"ok\":True})\n    with httpx.Client(transport=httpx.MockTransport(handle),headers={\"x-mode\":\"default\",\"x-keep\":\"yes\"},trust_env=False) as client:\n        client.post(\"https://example.test/submit\",headers={name:override},json={\"value\":override})\n        client.get(\"https://example.test/after\")\n        assert seen[0] == (override,\"yes\",json.dumps({\"value\":override},separators=(\",\",\":\")).encode())\n        assert seen[1] == (\"default\",\"yes\",b\"\")\n        assert client.headers[\"x-mode\"] == \"default\"\n",
+            "source_original_sha256": "28eb7bf0e15772bc0e31bcbca82e7b846f14a143a2eaf56e34a4265cfa0c7277",
+            "source_numbered": "11: @pytest.mark.parametrize(\"name,override\", [(\"X-Mode\",\"one\"),(\"x-MODE\",\"two\"),(\"X-mode\",\"three\")])\n12: def test_request_records(name, override):\n13:     seen=[]\n14:     def handle(request):\n15:         seen.append((request.headers[\"x-mode\"],request.headers[\"x-keep\"],request.content))\n16:         return httpx.Response(200,json={\"ok\":True})\n17:     with httpx.Client(transport=httpx.MockTransport(handle),headers={\"x-mode\":\"default\",\"x-keep\":\"yes\"},trust_env=False) as client:\n18:         client.post(\"https://example.test/submit\",headers={name:override},json={\"value\":override})\n19:         client.get(\"https://example.test/after\")\n20:         assert seen[0] == (override,\"yes\",json.dumps({\"value\":override},separators=(\",\",\":\")).encode())\n21:         assert seen[1] == (\"default\",\"yes\",b\"\")\n22:         assert client.headers[\"x-mode\"] == \"default\"",
+            "source_numbered_original_sha256": "dfab89973db4318f380c939316247aea82c0f0b87a611c88833719da8bdb68b7",
+            "start_line": 11,
+            "symbol": "test_request_records",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[X-Mode-one]",
+              ".triage/test_case.py::test_request_records[X-mode-three]",
+              ".triage/test_case.py::test_request_records[x-MODE-two]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": false,
+            "end_line": 43,
+            "evidence_id": "source:.triage/test_case.py:25:test_second_provider_records",
+            "executed_lines": [
+              27,
+              28,
+              35,
+              38,
+              39,
+              40,
+              41,
+              42,
+              43
+            ],
+            "guard_reasons": [
+              "test_or_fixture_source"
+            ],
+            "id": ".triage/test_case.py:25:test_second_provider_records",
+            "path": ".triage/test_case.py",
+            "roles": [
+              "test"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "@pytest.mark.parametrize(\"mode,expected\",[(\"elapsed\",\"timeout\"),(\"native\",\"timeout\"),(\"failure\",\"error\")])\nasync def test_second_provider_records(mode,expected):\n    calls=[]\n    class First:\n        name,model,locality=\"primary\",\"fixture\",\"local\"\n        async def infer(self,question):\n            calls.append(\"primary\")\n            if mode == \"elapsed\": await asyncio.sleep(60)\n            if mode == \"native\": raise TimeoutError(\"provider deadline\")\n            raise ValueError(\"provider failed\")\n    def recover(question):\n        calls.append(\"fallback\")\n        return {\"a\":0,\"b\":1}\n    engine=Decilist([First(),FunctionProvider(recover,name=\"fallback\")],policy=Policy(timeout_ms=10))\n    result=await engine.decide(Choose(state=\"observed\",instructions=\"Select\",options={\"a\":\"A\",\"b\":\"B\"}))\n    assert result.value == \"b\" and result.provider == \"fallback\"\n    assert calls == [\"primary\",\"fallback\"]\n    assert [(a.provider,a.outcome) for a in result.attempts] == [(\"primary\",expected),(\"fallback\",\"accepted\")]\n    assert json.loads(result.model_dump_json())[\"attempts\"][0][\"outcome\"] == expected\n",
+            "source_numbered": "25: @pytest.mark.parametrize(\"mode,expected\",[(\"elapsed\",\"timeout\"),(\"native\",\"timeout\"),(\"failure\",\"error\")])\n26: async def test_second_provider_records(mode,expected):\n27:     calls=[]\n28:     class First:\n29:         name,model,locality=\"primary\",\"fixture\",\"local\"\n30:         async def infer(self,question):\n31:             calls.append(\"primary\")\n32:             if mode == \"elapsed\": await asyncio.sleep(60)\n33:             if mode == \"native\": raise TimeoutError(\"provider deadline\")\n34:             raise ValueError(\"provider failed\")\n35:     def recover(question):\n36:         calls.append(\"fallback\")\n37:         return {\"a\":0,\"b\":1}\n38:     engine=Decilist([First(),FunctionProvider(recover,name=\"fallback\")],policy=Policy(timeout_ms=10))\n39:     result=await engine.decide(Choose(state=\"observed\",instructions=\"Select\",options={\"a\":\"A\",\"b\":\"B\"}))\n40:     assert result.value == \"b\" and result.provider == \"fallback\"\n41:     assert calls == [\"primary\",\"fallback\"]\n42:     assert [(a.provider,a.outcome) for a in result.attempts] == [(\"primary\",expected),(\"fallback\",\"accepted\")]\n43:     assert json.loads(result.model_dump_json())[\"attempts\"][0][\"outcome\"] == expected",
+            "start_line": 25,
+            "symbol": "test_second_provider_records",
+            "test_ids": [
+              ".triage/test_case.py::test_second_provider_records[elapsed-timeout]",
+              ".triage/test_case.py::test_second_provider_records[failure-error]",
+              ".triage/test_case.py::test_second_provider_records[native-timeout]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 303,
+            "evidence_id": "source:vendor/httpx/_client.py:298:BaseClient.headers",
+            "executed_lines": [
+              303
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_client.py:298:BaseClient.headers",
+            "path": "vendor/httpx/_client.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    @property\n    def headers(self) -> Headers:\n        \"\"\"\n        HTTP headers to include when sending requests.\n        \"\"\"\n        return self._headers\n",
+            "source_numbered": "298:     @property\n299:     def headers(self) -> Headers:\n300:         \"\"\"\n301:         HTTP headers to include when sending requests.\n302:         \"\"\"\n303:         return self._headers",
+            "start_line": 298,
+            "symbol": "BaseClient.headers",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[X-Mode-one]",
+              ".triage/test_case.py::test_request_records[X-mode-three]",
+              ".triage/test_case.py::test_request_records[x-MODE-two]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 316,
+            "evidence_id": "source:vendor/httpx/_client.py:305:BaseClient.headers",
+            "executed_lines": [
+              307,
+              308,
+              309,
+              310,
+              311,
+              312,
+              315,
+              316
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_client.py:305:BaseClient.headers",
+            "path": "vendor/httpx/_client.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    @headers.setter\n    def headers(self, headers: HeaderTypes) -> None:\n        client_headers = Headers(\n            {\n                b\"Accept\": b\"*[EXTERNAL]/*\",\n                b\"Accept-Encoding\": ACCEPT_ENCODING.encode(\"ascii\"),\n                b\"Connection\": b\"keep-alive\",\n                b\"User-Agent\": USER_AGENT.encode(\"ascii\"),\n            }\n        )\n        client_headers.update(headers)\n        self._headers = client_headers\n",
+            "source_numbered": "305:     @headers.setter\n306:     def headers(self, headers: HeaderTypes) -> None:\n307:         client_headers = Headers(\n308:             {\n309:                 b\"Accept\": b\"*[EXTERNAL]/*\",\n310:                 b\"Accept-Encoding\": ACCEPT_ENCODING.encode(\"ascii\"),\n311:                 b\"Connection\": b\"keep-alive\",\n312:                 b\"User-Agent\": USER_AGENT.encode(\"ascii\"),\n313:             }\n314:         )\n315:         client_headers.update(headers)\n316:         self._headers = client_headers",
+            "start_line": 305,
+            "symbol": "BaseClient.headers",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[X-Mode-one]",
+              ".triage/test_case.py::test_request_records[X-mode-three]",
+              ".triage/test_case.py::test_request_records[x-MODE-two]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 431,
+            "evidence_id": "source:vendor/httpx/_client.py:424:BaseClient._merge_headers",
+            "executed_lines": [
+              429,
+              430,
+              431
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_client.py:424:BaseClient._merge_headers",
+            "path": "vendor/httpx/_client.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    def _merge_headers(self, headers: HeaderTypes | None = None) -> HeaderTypes | None:\n        \"\"\"\n        Merge a headers argument together with any headers on the client,\n        to create the headers used for the outgoing request.\n        \"\"\"\n        merged_headers = Headers(headers)\n        merged_headers.update(self.headers)\n        return merged_headers\n",
+            "source_numbered": "424:     def _merge_headers(self, headers: HeaderTypes | None = None) -> HeaderTypes | None:\n425:         \"\"\"\n426:         Merge a headers argument together with any headers on the client,\n427:         to create the headers used for the outgoing request.\n428:         \"\"\"\n429:         merged_headers = Headers(headers)\n430:         merged_headers.update(self.headers)\n431:         return merged_headers",
+            "start_line": 424,
+            "symbol": "BaseClient._merge_headers",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[X-Mode-one]",
+              ".triage/test_case.py::test_request_records[X-mode-three]",
+              ".triage/test_case.py::test_request_records[x-MODE-two]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 279,
+            "evidence_id": "source:vendor/httpx/_models.py:274:Headers.update",
+            "executed_lines": [
+              275,
+              276,
+              277,
+              278,
+              279
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_models.py:274:Headers.update",
+            "path": "vendor/httpx/_models.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    def update(self, headers: HeaderTypes | None = None) -> None:  # type: ignore\n        headers = Headers(headers)\n        for key in headers.keys():\n            if key in self:\n                self.pop(key)\n        self._list.extend(headers._list)\n",
+            "source_numbered": "274:     def update(self, headers: HeaderTypes | None = None) -> None:  # type: ignore\n275:         headers = Headers(headers)\n276:         for key in headers.keys():\n277:             if key in self:\n278:                 self.pop(key)\n279:         self._list.extend(headers._list)",
+            "start_line": 274,
+            "symbol": "Headers.update",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[X-Mode-one]",
+              ".triage/test_case.py::test_request_records[X-mode-three]",
+              ".triage/test_case.py::test_request_records[x-MODE-two]"
+            ]
+          },
+          {
+            "complete": true,
+            "editable": true,
+            "end_line": 302,
+            "evidence_id": "source:vendor/httpx/_models.py:284:Headers.__getitem__",
+            "executed_lines": [
+              291,
+              293,
+              294,
+              295,
+              296,
+              299,
+              300,
+              302
+            ],
+            "guard_reasons": [],
+            "id": "vendor/httpx/_models.py:284:Headers.__getitem__",
+            "path": "vendor/httpx/_models.py",
+            "roles": [
+              "implementation"
+            ],
+            "runtime_phases": [
+              "call"
+            ],
+            "source": "    def __getitem__(self, key: str) -> str:\n        \"\"\"\n        Return a single header value.\n\n        If there are multiple headers with the same key, then we concatenate\n        them with commas. See: https://tools.ietf.org/html/rfc7230#section-3.2.2\n        \"\"\"\n        normalized_key = key.lower().encode(self.encoding)\n\n        items = [\n            header_value.decode(self.encoding)\n            for _, header_key, header_value in self._list\n            if header_key == normalized_key\n        ]\n\n        if items:\n            return \", \".join(items)\n\n        raise KeyError(key)\n",
+            "source_original_sha256": "7c220df74e99968a848c1bf3b88f363f98a351dc779857f61f8482d90dbf686d",
+            "source_numbered": "284:     def __getitem__(self, key: str) -> str:\n285:         \"\"\"\n286:         Return a single header value.\n287: \n288:         If there are multiple headers with the same key, then we concatenate\n289:         them with commas. See: https://tools.ietf.org/html/rfc7230#section-3.2.2\n290:         \"\"\"\n291:         normalized_key = key.lower().encode(self.encoding)\n292: \n293:         items = [\n294:             header_value.decode(self.encoding)\n295:             for _, header_key, header_value in self._list\n296:             if header_key == normalized_key\n297:         ]\n298: \n299:         if items:\n300:             return \", \".join(items)\n301: \n302:         raise KeyError(key)",
+            "source_numbered_original_sha256": "3534226763e8334387dcd9cbd506a34aab58340ca9a8a5214c63c35f5c019964",
+            "start_line": 284,
+            "symbol": "Headers.__getitem__",
+            "test_ids": [
+              ".triage/test_case.py::test_request_records[X-Mode-one]",
+              ".triage/test_case.py::test_request_records[X-mode-three]",
+              ".triage/test_case.py::test_request_records[x-MODE-two]"
+            ]
+          }
+        ],
+        "kind": "runtime_python_context",
+        "limits": {
+          "max_chars": 24000,
+          "max_depth": 4,
+          "max_events": 128,
+          "max_files": 32,
+          "max_functions": 24,
+          "max_input_chars": 600000,
+          "max_missing": 32,
+          "max_module_chars": 2400,
+          "max_source_bytes": 256000,
+          "semantic_depth_extension": 4
+        },
+        "missing": [
+          {
+            "function_id": ".triage/test_case.py:28:test_second_provider_records.<locals>.First",
+            "path": ".triage/test_case.py",
+            "reason": "runtime_function_not_in_ast"
+          }
+        ],
+        "module_context": [],
+        "note": "Only runtime-observed project functions and call edges select source. Actual failing-test AST data accesses and callback/keyword identifiers rank observed bodies; relevant deeper helpers get at most four extra call hops. Whole AST bodies include test setup; omissions are explicit. Source and opt-in failure-text redaction are heuristic. Observed execution supports reachability, not a causal diagnosis. Event order is observation order; async scheduling can disconnect call edges. No project imports, repository scans, benchmark labels or model calls.",
+        "redaction_count": 17,
+        "schema_version": 4,
+        "truncation": {
+          "omitted_events": 749,
+          "omitted_functions": [
+            "vendor/httpx/_client.py:1036:Client.get",
+            "vendor/httpx/_models.py:699:Response._get_content_decoder",
+            "vendor/httpx/_client.py:253:BaseClient.timeout",
+            "packages/python/src/decilist/providers.py:18:FunctionProvider.infer",
+            "vendor/httpx/_models.py:328:Headers.__delitem__",
+            "vendor/httpx/_models.py:74:_normalize_header_value",
+            "vendor/httpx/_models.py:242:Headers.get",
+            "vendor/httpx/_models.py:195:Headers.raw",
+            "vendor/httpx/_models.py:67:_normalize_header_key",
+            "vendor/httpx/_models.py:202:Headers.keys",
+            "vendor/httpx/_client.py:771:Client.request",
+            "vendor/httpx/_models.py:252:Headers.get_list",
+            "vendor/httpx/_client.py:1123:Client.post",
+            "vendor/httpx/_client.py:340:BaseClient.build_request",
+            "vendor/httpx/_models.py:346:Headers.__contains__",
+            "vendor/httpx/_content.py:176:encode_json",
+            "packages/python/src/decilist/engine.py:27:Decilist.decide"
+          ],
+          "reasons": [
+            "call_depth_limit",
+            "context_char_limit",
+            "context_event_limit",
+            "function_limit",
+            "input_trace_truncated",
+            "module_context_limit",
+            "repeated_failure_text_omitted",
+            "source_unavailable"
+          ],
+          "truncated": true
+        }
+      },
+      "original_context_file_sha256": "f8764098b8ca01d6f8729953bb60f67f42e247bc094f121f1228354a514ad366"
+    }
+  ]
+}
