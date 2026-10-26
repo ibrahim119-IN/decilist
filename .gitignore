@@ -10,7 +10,9 @@ __pycache__/
 .env.*
 !.env.example
 *.safetensors
+*.gguf
 *.bin
 .cache/
+/work/
 reports/local/
 *.log

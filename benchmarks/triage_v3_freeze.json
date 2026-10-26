@@ -1,0 +1,673 @@
+{
+  "schema_version": 1,
+  "suite": "testtriage-structured-v3",
+  "frozen_at_utc": "2026-10-26T00:38:48.976823+00:00",
+  "frozen_before_model_outputs": true,
+  "base_revision": "34d0ce4459ad4b46143f8bb3d0cb4f6e45f277af",
+  "files_sha256": {
+    "benchmarks/triage_v3_cases.json": "dc81fc905b370baec8aec2627ec4b7ee98a99b775ed950c0cac0aa37318bf318",
+    "benchmarks/triage_v3_lab.py": "1f32d57b8560da7b8e184ac9cb16a3806a5dd0cbd93a705abfa5d71ca272fe80",
+    "tests/test_triage_v3_lab.py": "26b3391661213dd7f7e59cad65baee62bc8cba5b509138f20dda361926746bdf"
+  },
+  "case_test_sha256": {
+    "h01": "fe42a5aa7d89efc38d2174d856858518d0d549e51d482f4dd0986f0db862d9d9",
+    "h02": "bbc1d789e8adb9955893df5af3236ad8f389f827c61b1d2cc8c2a1b658308a56",
+    "h03": "1358750ce483840afc7f43414c4b2d39bf2552f13741db0bce38f541f004346f",
+    "h04": "fa4b3b52504f4c23ba1530a7997ba8851fca9aa57e8ed7841a16fe1c2005502b",
+    "h05": "a8c687efbbb28119d50f4753d5de39512e4433e08c44a26f579453d0dff2ebf8",
+    "h06": "4e67eae3924fa23806be390ed5f33c9f3ec2956c2eee651e7354b5a28d521bf2",
+    "h07": "de341db741ea22c1696df6838d5ca56c1f88a0819b1af11072dbe866933a45f1",
+    "h08": "135e05375c85337488c61390a6b7a7c9868fdb6e2cc275b151392529f4882cc8",
+    "r01": "c8534182e6ce4c0ae3ed09eba8fa14448783f483ee6f7f65616453af6de32ebe",
+    "r02": "5584cac9fee34ef2e2b78e09ebe8999cd9572356aa4a5a75eb0121684809944b",
+    "c01": "bbc1d789e8adb9955893df5af3236ad8f389f827c61b1d2cc8c2a1b658308a56",
+    "c02": "136ef2654b976033b033240110d937866c5ab2376f94f6702ab1cc85bd9b6e56"
+  },
+  "baseline_files_sha256": {
+    "packages/python/src/decilist/__init__.py": "5c8169b352357ffb6ba41d403325b98487da1412bd5ab9f6ba2a8498d38dff24",
+    "packages/python/src/decilist/__main__.py": "307299fda7b77d22c64cb51430ec75e5f59d78e9c948786afb3b2544fe45e4b7",
+    "packages/python/src/decilist/cli.py": "6f6c3e998c03891b7ab3591b9901e13242695c63d8bab0857c05cd79c5323860",
+    "packages/python/src/decilist/client.py": "51fd84355f4093eeaa3b1a2eca8e9931af4c59872d5c7a119a6bd4f1d55742e0",
+    "packages/python/src/decilist/contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8",
+    "packages/python/src/decilist/demo.py": "84e002f263fa1feb9bcbe77ba89c40f770b282ec752f2eaf83be4948723412b4",
+    "packages/python/src/decilist/engine.py": "9d9281477b8327874c733fe26e0f89bd14c5ff754a6c6cbddaf1542a93381db4",
+    "packages/python/src/decilist/evaluation.py": "a1be17b931fbf504e830c379a7144b2e71239d276224371446918af6aaa6335b",
+    "packages/python/src/decilist/providers.py": "1d6e208f70930e190f752bbe0ef3096c646066e8ff469629927d081b7f756ea3",
+    "packages/python/src/decilist/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "packages/python/src/decilist/runtime.py": "7f8b1ec6d0bda03584167b6e0f6b4259c322477ea2a0957f55ed99d9f39ed59e",
+    "packages/python/src/decilist/server.py": "6b6ac14c2661fd4fa67f020061daa9ce0a5fb38ed52f34913e93a5e327474e4d",
+    "packages/python/src/decilist/static/app.js": "75e0af6212eb99e5035a490822017c834e7440df36fb4b260f182826473706d7",
+    "packages/python/src/decilist/static/demo.html": "6ef3136106a61a8ef234c387b89a6683f5806794613c992723ff17a0abab401a",
+    "packages/python/src/decilist/static/demo.js": "c325c44b8e33e2b6592f9746a7506ef7a83ca2007cae47f8a38430cf0815b6be",
+    "packages/python/src/decilist/static/index.html": "549ce77205981fa199b7ce4c956fa0e251a56f733607f241f082d07f6e6840af",
+    "packages/python/src/decilist/static/style.css": "b672a75dd772123d943304f43b3e7ad96c91aa7043592be9b7bf83d0d6be72cd",
+    "packages/python/src/decilist/triage.py": "c246194e22da66967c88b1911a169944fc7c66f7049146cdd70435ca4c832e6f",
+    "packages/python/src/decilist/triage_assistant.py": "feae88f9e73c867af1e783e956008fd064ed8370dea32eaaee31c360941e5962",
+    "packages/python/src/decilist/triage_context.py": "ab6853369a4ec67f978e57e17da56dd77f78c5f2e73480ac8d0bc8d6c7a555c7",
+    "packages/python/src/decilist/triage_evidence.py": "50067926f906660380999595b207a5c7bd2082e4cd66f52f44cea24f8c2eef58",
+    "packages/python/src/decilist/triage_inspect.py": "bf104ad0eaa4ee3dd176599c7903099f9fc01d6938a165e526f39a1c86b0b751",
+    "packages/python/src/decilist/web.py": "a24caf6d9f7da73abec438b821df9ad7a2429c3775af3dcf420fb21b1d49f3ae",
+    "vendor/httpx/__init__.py": "0ac6997bac998f4ac783adf6d8058a587193315afdb718047c3e4fdff46bcfad",
+    "vendor/httpx/__version__.py": "2e853261e3974e2786cee3ffeb850bd30c5db718eebbf41b3af13b34e83e22a5",
+    "vendor/httpx/_api.py": "aff660b388c8a5c3c92ea2b975b6d26b2aa8fe254c2856b164277ea0e1f12c4b",
+    "vendor/httpx/_auth.py": "62bdd0c1a5122b5eeb198c7eee3f85762705233cf863d14557ed45e3eed15d7e",
+    "vendor/httpx/_client.py": "c43f941baefe58c91e96d00039e1868fe719d91453026d7db1647194563bff8d",
+    "vendor/httpx/_config.py": "a4fa7653ec2271f70ab05f8a6111352d876dddee84446788a1767c1a3a372d67",
+    "vendor/httpx/_content.py": "2c61b3ac94d1dcebcde0c6f519554d2d7917247fbaa0a97002db4ef69e70ff28",
+    "vendor/httpx/_decoders.py": "a74757f08d0d1077b1b37506a784ac66eb62321b17aeb5a5ebe1a7a956f488a3",
+    "vendor/httpx/_exceptions.py": "6f15bb7f1ce054c01d3536f04f4567ab4e202435b5fe023f1858903ee3328cbd",
+    "vendor/httpx/_main.py": "0a0f4631a6e24d3fecc1a0df5202118ad4b0c4b44c4b05033a6ecb7521aa940e",
+    "vendor/httpx/_models.py": "e3ffc6bb2bf580bc6e6428708a6f247d036220e709f5a72b785392babbd97e6b",
+    "vendor/httpx/_multipart.py": "28e1c465997aa28860f663da2b2caedf8e6aab5ac92e0df94d41b7600cd70776",
+    "vendor/httpx/_status_codes.py": "0d89fedae7c180c797cb9b3cc77fd307bc2302e00031ec136a43eb9b9ad712c7",
+    "vendor/httpx/_transports/__init__.py": "19b52805200ea7bcfe97ef63e5884c851dc3308727e8554b863d3bd8edcd9e7a",
+    "vendor/httpx/_transports/asgi.py": "1d17e20d830fb78c101f6805807660e1cfa2dec6e5a3a6cbe464ea7044fec73f",
+    "vendor/httpx/_transports/base.py": "9194bf54c6d58987c5e7bd29a205022756ee973fb26df2f9d4faacf7292d79b5",
+    "vendor/httpx/_transports/default.py": "03379a454c95c0271c4f2c8d25ec437f49f57457f3cf2769748420bf0ecf2e79",
+    "vendor/httpx/_transports/mock.py": "3d3a34779ebb4484d7c46ae48ba90deffebbc300317f088c0dcb972626428c4a",
+    "vendor/httpx/_transports/wsgi.py": "35c3d7dd76a9fc4c0215958efce692c9036e227098c7540c35b3bc1807a2ea36",
+    "vendor/httpx/_types.py": "272878d4642aec039ebfc20e58a0c083bcc26ef1c07ee7e65b983f3e24ed12b6",
+    "vendor/httpx/_urlparse.py": "640987e3b38d7e4c6bae3f8f3d88467a21e36fa0232824be00d58837838bfca6",
+    "vendor/httpx/_urls.py": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd",
+    "vendor/httpx/_utils.py": "fd355ea802afc4990a1ddcfb74579be2cd0b66a41781e1645d281f88704aff5a",
+    "vendor/httpx/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "vendor/LICENSE.httpx.md": "4ec59d544f12b5f539a3a716fd321ac58ccd8030b465221f2c880200cdf28d8d"
+  },
+  "reserved_trial_ids": [
+    "r01",
+    "r02"
+  ],
+  "machine_ground_truth": {
+    "h01": {
+      "role": "regression",
+      "split": "dev",
+      "acceptable_routes": [
+        "runtime_lifecycle",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Inspect the per-request policy selection and the configured client policy across the three-call sequence.",
+      "inspection_targets": [
+        {
+          "path": "packages/python/src/decilist/client.py",
+          "symbols": [
+            "Client.decide"
+          ],
+          "required_observation": "Inspect the per-request policy selection and the configured client policy across the three-call sequence."
+        }
+      ],
+      "root_cause_discriminating_facts": [
+        "All responses validate and the first call uses the configured policy.",
+        "Only an explicit per-call override occurs between two default-policy calls.",
+        "The final default call inherits the middle override while transport and response values remain valid."
+      ],
+      "minimal_repair_invariants": [
+        "A per-call policy affects only that request.",
+        "The configured default policy remains unchanged after an override.",
+        "Sequential request bodies retain default/override/default settings."
+      ]
+    },
+    "h02": {
+      "role": "regression",
+      "split": "evaluation",
+      "acceptable_routes": [
+        "runtime_lifecycle"
+      ],
+      "targeted_inspection_assertion": "Inspect how a transport failure changes the readiness cache before a later request.",
+      "inspection_targets": [
+        {
+          "path": "packages/python/src/decilist/client.py",
+          "symbols": [
+            "Client.decide"
+          ],
+          "required_observation": "Inspect how a transport failure changes the readiness cache before a later request."
+        }
+      ],
+      "root_cause_discriminating_facts": [
+        "The client was initially ready and a later POST has an observed ConnectError.",
+        "The next POST succeeds when a health probe precedes it.",
+        "The failed POST does not invalidate the cached ready state in the mutant."
+      ],
+      "minimal_repair_invariants": [
+        "A transport failure invalidates cached readiness.",
+        "The following decision rechecks health before POST.",
+        "Failure messages and valid response validation remain intact."
+      ]
+    },
+    "h03": {
+      "role": "regression",
+      "split": "evaluation",
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "targeted_inspection_assertion": "Inspect the relationship between caller cancellation, worker-task completion, and the provider lock release callback.",
+      "inspection_targets": [
+        {
+          "path": "packages/python/src/decilist/providers.py",
+          "symbols": [
+            "LiquidLocalProvider.infer"
+          ],
+          "required_observation": "Inspect the relationship between caller cancellation, worker-task completion, and the provider lock release callback."
+        }
+      ],
+      "root_cause_discriminating_facts": [
+        "The observer is cancelled while its native-style worker is still blocked.",
+        "Cancellation does not stop the CPU thread used by the fixture.",
+        "A follow-up request overlaps that worker only after the task/lock lifetime changes."
+      ],
+      "minimal_repair_invariants": [
+        "Caller cancellation propagates promptly.",
+        "A native worker retains its serialization lock until actual completion.",
+        "No GPU/model dependency is needed by these controlled thread-lifetime checks."
+      ]
+    },
+    "h04": {
+      "role": "regression",
+      "split": "evaluation",
+      "acceptable_routes": [
+        "decision_policy",
+        "contract_validation"
+      ],
+      "targeted_inspection_assertion": "Inspect request-local attempt-list ownership across sequential fallback and primary-success decisions.",
+      "inspection_targets": [
+        {
+          "path": "packages/python/src/decilist/engine.py",
+          "symbols": [
+            "Decilist.decide"
+          ],
+          "required_observation": "Inspect request-local attempt-list ownership across sequential fallback and primary-success decisions."
+        }
+      ],
+      "root_cause_discriminating_facts": [
+        "Selected values are valid in all three calls.",
+        "The provider order differs by request and is known from controlled inputs.",
+        "Later decision attempt traces contain outcomes belonging to previous requests."
+      ],
+      "minimal_repair_invariants": [
+        "Each decision contains only its own provider attempts in order.",
+        "Prior returned decisions remain stable when the engine is reused.",
+        "Fallback decisions and primary success retain their original values/status."
+      ]
+    },
+    "h05": {
+      "role": "regression",
+      "split": "dev",
+      "acceptable_routes": [
+        "application_logic"
+      ],
+      "targeted_inspection_assertion": "Inspect query override precedence across URL.copy_merge_params, QueryParams.merge, and the later add operation.",
+      "inspection_targets": [
+        {
+          "path": "vendor/httpx/_urls.py",
+          "symbols": [
+            "QueryParams.merge"
+          ],
+          "required_observation": "Inspect query override precedence across URL.copy_merge_params, QueryParams.merge, and the later add operation."
+        }
+      ],
+      "root_cause_discriminating_facts": [
+        "The public URL wrapper supplies overriding values for an existing repeated key.",
+        "Appending a later value is visible, but the overwritten values come from the original URL.",
+        "The original URL must remain unchanged."
+      ],
+      "minimal_repair_invariants": [
+        "New merge values replace the old list for a colliding key.",
+        "Later additions preserve the merged list order.",
+        "Other keys and the original URL stay unchanged."
+      ]
+    },
+    "h06": {
+      "role": "regression",
+      "split": "evaluation",
+      "acceptable_routes": [
+        "application_logic"
+      ],
+      "targeted_inspection_assertion": "Inspect ownership of the dictionary shared by the parent query parameters and two independently created results.",
+      "inspection_targets": [
+        {
+          "path": "vendor/httpx/_urls.py",
+          "symbols": [
+            "QueryParams.add"
+          ],
+          "required_observation": "Inspect ownership of the dictionary shared by the parent query parameters and two independently created results."
+        }
+      ],
+      "root_cause_discriminating_facts": [
+        "Two result objects are created from the same parent in sequence.",
+        "Each new result should contain only its own appended value.",
+        "A later branch changes the parent and an earlier branch despite no direct writes to them."
+      ],
+      "minimal_repair_invariants": [
+        "QueryParams.add returns an independent mapping.",
+        "The parent and earlier results remain unchanged after a later add.",
+        "Repeated-value ordering and URL serialization remain correct."
+      ]
+    },
+    "h07": {
+      "role": "regression",
+      "split": "evaluation",
+      "acceptable_routes": [
+        "application_logic"
+      ],
+      "targeted_inspection_assertion": "Inspect how the empty QueryParams result is represented when copy_remove_param calls copy_with and reconstructs the URL.",
+      "inspection_targets": [
+        {
+          "path": "vendor/httpx/_urls.py",
+          "symbols": [
+            "URL.__init__"
+          ],
+          "required_observation": "Inspect how the empty QueryParams result is represented when copy_remove_param calls copy_with and reconstructs the URL."
+        }
+      ],
+      "root_cause_discriminating_facts": [
+        "The final parameter has been removed and query bytes are empty.",
+        "The serialized/raw request target still records an empty query delimiter.",
+        "This distinguishes query presence from its empty byte value across reconstruction."
+      ],
+      "minimal_repair_invariants": [
+        "Removing the last parameter produces the canonical no-query URL.",
+        "Raw request targets omit an empty trailing delimiter.",
+        "Path escaping, normalized ports, and the original URL remain correct."
+      ]
+    },
+    "h08": {
+      "role": "regression",
+      "split": "evaluation",
+      "acceptable_routes": [
+        "application_logic"
+      ],
+      "targeted_inspection_assertion": "Inspect valid percent-escape handling in the shared quote helper reached through URL reconstruction and raw-path copying.",
+      "inspection_targets": [
+        {
+          "path": "vendor/httpx/_urlparse.py",
+          "symbols": [
+            "quote"
+          ],
+          "required_observation": "Inspect valid percent-escape handling in the shared quote helper reached through URL reconstruction and raw-path copying."
+        }
+      ],
+      "root_cause_discriminating_facts": [
+        "Inputs contain valid escapes, including an encoded reserved separator.",
+        "Reconstructing or copying a URL introduces additional percent escaping.",
+        "Plain Unicode/spaces still need encoding, so bypassing all quoting is not a valid repair."
+      ],
+      "minimal_repair_invariants": [
+        "Valid percent-escape triplets are preserved rather than double encoded.",
+        "URL string/reconstruction and raw-path copying are idempotent.",
+        "Unescaped Unicode/spaces continue to be encoded normally."
+      ]
+    },
+    "c01": {
+      "role": "insufficient_control",
+      "split": "controls",
+      "acceptable_routes": [
+        "manual_review"
+      ],
+      "targeted_inspection_assertion": "Collect the missing observation details or separate independent failure groups before ranking one implementation target.",
+      "inspection_targets": [],
+      "root_cause_discriminating_facts": [
+        "The retained evidence is incomplete."
+      ],
+      "minimal_repair_invariants": [
+        "Retain the original test assertions and inspect the full independent failure evidence."
+      ]
+    },
+    "c02": {
+      "role": "mixed_control",
+      "split": "controls",
+      "acceptable_routes": [
+        "manual_review"
+      ],
+      "targeted_inspection_assertion": "Collect the missing observation details or separate independent failure groups before ranking one implementation target.",
+      "inspection_targets": [],
+      "root_cause_discriminating_facts": [
+        "Two independent implementation boundaries fail in the same observed test run."
+      ],
+      "minimal_repair_invariants": [
+        "Retain the original test assertions and inspect the full independent failure evidence."
+      ]
+    }
+  },
+  "private_ranking_oracles": {
+    "h01": {
+      "inspection_candidates": [
+        {
+          "kind": "inspect",
+          "path": "packages/python/src/decilist/client.py",
+          "symbol": "Client.decide",
+          "objective": "Inspect the observed state transition and relevant invariant at this boundary.",
+          "id": "A"
+        },
+        {
+          "kind": "inspect",
+          "path": "packages/python/src/decilist/client.py",
+          "symbol": "Client.ready",
+          "objective": "Inspect this public consumer or adjacent boundary against the observed failure.",
+          "id": "B"
+        },
+        {
+          "kind": "inspect",
+          "path": "packages/python/src/decilist/contracts.py",
+          "symbol": "DecisionRequest",
+          "objective": "Inspect this neighboring conversion or validation step.",
+          "id": "C"
+        },
+        {
+          "kind": "review",
+          "path": null,
+          "symbol": null,
+          "objective": "Collect more evidence before selecting a specific implementation boundary.",
+          "id": "D"
+        }
+      ],
+      "acceptable_candidate_ids": [
+        "A"
+      ],
+      "candidate_correct_position": 1
+    },
+    "h02": {
+      "inspection_candidates": [
+        {
+          "kind": "inspect",
+          "path": "packages/python/src/decilist/client.py",
+          "symbol": "Client.ready",
+          "objective": "Inspect this public consumer or adjacent boundary against the observed failure.",
+          "id": "A"
+        },
+        {
+          "kind": "inspect",
+          "path": "packages/python/src/decilist/client.py",
+          "symbol": "Client.decide",
+          "objective": "Inspect the observed state transition and relevant invariant at this boundary.",
+          "id": "B"
+        },
+        {
+          "kind": "inspect",
+          "path": "packages/python/src/decilist/runtime.py",
+          "symbol": "validate_runtime_health",
+          "objective": "Inspect this neighboring conversion or validation step.",
+          "id": "C"
+        },
+        {
+          "kind": "review",
+          "path": null,
+          "symbol": null,
+          "objective": "Collect more evidence before selecting a specific implementation boundary.",
+          "id": "D"
+        }
+      ],
+      "acceptable_candidate_ids": [
+        "B"
+      ],
+      "candidate_correct_position": 2
+    },
+    "h03": {
+      "inspection_candidates": [
+        {
+          "kind": "inspect",
+          "path": "packages/python/src/decilist/providers.py",
+          "symbol": "LiquidLocalProvider._infer_sync",
+          "objective": "Inspect this public consumer or adjacent boundary against the observed failure.",
+          "id": "A"
+        },
+        {
+          "kind": "inspect",
+          "path": "packages/python/src/decilist/engine.py",
+          "symbol": "Decilist.decide",
+          "objective": "Inspect this neighboring conversion or validation step.",
+          "id": "B"
+        },
+        {
+          "kind": "inspect",
+          "path": "packages/python/src/decilist/providers.py",
+          "symbol": "LiquidLocalProvider.infer",
+          "objective": "Inspect the observed state transition and relevant invariant at this boundary.",
+          "id": "C"
+        },
+        {
+          "kind": "review",
+          "path": null,
+          "symbol": null,
+          "objective": "Collect more evidence before selecting a specific implementation boundary.",
+          "id": "D"
+        }
+      ],
+      "acceptable_candidate_ids": [
+        "C"
+      ],
+      "candidate_correct_position": 3
+    },
+    "h04": {
+      "inspection_candidates": [
+        {
+          "kind": "inspect",
+          "path": "packages/python/src/decilist/contracts.py",
+          "symbol": "Decision",
+          "objective": "Inspect this public consumer or adjacent boundary against the observed failure.",
+          "id": "A"
+        },
+        {
+          "kind": "inspect",
+          "path": "packages/python/src/decilist/engine.py",
+          "symbol": "Provider",
+          "objective": "Inspect this neighboring conversion or validation step.",
+          "id": "B"
+        },
+        {
+          "kind": "review",
+          "path": null,
+          "symbol": null,
+          "objective": "Collect more evidence before selecting a specific implementation boundary.",
+          "id": "C"
+        },
+        {
+          "kind": "inspect",
+          "path": "packages/python/src/decilist/engine.py",
+          "symbol": "Decilist.decide",
+          "objective": "Inspect the observed state transition and relevant invariant at this boundary.",
+          "id": "D"
+        }
+      ],
+      "acceptable_candidate_ids": [
+        "D"
+      ],
+      "candidate_correct_position": 4
+    },
+    "h05": {
+      "inspection_candidates": [
+        {
+          "kind": "inspect",
+          "path": "vendor/httpx/_urls.py",
+          "symbol": "QueryParams.merge",
+          "objective": "Inspect the observed state transition and relevant invariant at this boundary.",
+          "id": "A"
+        },
+        {
+          "kind": "inspect",
+          "path": "vendor/httpx/_urls.py",
+          "symbol": "URL.copy_merge_params",
+          "objective": "Inspect this public consumer or adjacent boundary against the observed failure.",
+          "id": "B"
+        },
+        {
+          "kind": "inspect",
+          "path": "vendor/httpx/_urls.py",
+          "symbol": "QueryParams.get_list",
+          "objective": "Inspect this neighboring conversion or validation step.",
+          "id": "C"
+        },
+        {
+          "kind": "review",
+          "path": null,
+          "symbol": null,
+          "objective": "Collect more evidence before selecting a specific implementation boundary.",
+          "id": "D"
+        }
+      ],
+      "acceptable_candidate_ids": [
+        "A"
+      ],
+      "candidate_correct_position": 1
+    },
+    "h06": {
+      "inspection_candidates": [
+        {
+          "kind": "inspect",
+          "path": "vendor/httpx/_urls.py",
+          "symbol": "QueryParams.get_list",
+          "objective": "Inspect this public consumer or adjacent boundary against the observed failure.",
+          "id": "A"
+        },
+        {
+          "kind": "inspect",
+          "path": "vendor/httpx/_urls.py",
+          "symbol": "QueryParams.add",
+          "objective": "Inspect the observed state transition and relevant invariant at this boundary.",
+          "id": "B"
+        },
+        {
+          "kind": "inspect",
+          "path": "vendor/httpx/_urls.py",
+          "symbol": "URL.__init__",
+          "objective": "Inspect this neighboring conversion or validation step.",
+          "id": "C"
+        },
+        {
+          "kind": "review",
+          "path": null,
+          "symbol": null,
+          "objective": "Collect more evidence before selecting a specific implementation boundary.",
+          "id": "D"
+        }
+      ],
+      "acceptable_candidate_ids": [
+        "B"
+      ],
+      "candidate_correct_position": 2
+    },
+    "h07": {
+      "inspection_candidates": [
+        {
+          "kind": "inspect",
+          "path": "vendor/httpx/_urls.py",
+          "symbol": "QueryParams.remove",
+          "objective": "Inspect this public consumer or adjacent boundary against the observed failure.",
+          "id": "A"
+        },
+        {
+          "kind": "inspect",
+          "path": "vendor/httpx/_urls.py",
+          "symbol": "URL.raw_path",
+          "objective": "Inspect this neighboring conversion or validation step.",
+          "id": "B"
+        },
+        {
+          "kind": "inspect",
+          "path": "vendor/httpx/_urls.py",
+          "symbol": "URL.__init__",
+          "objective": "Inspect the observed state transition and relevant invariant at this boundary.",
+          "id": "C"
+        },
+        {
+          "kind": "review",
+          "path": null,
+          "symbol": null,
+          "objective": "Collect more evidence before selecting a specific implementation boundary.",
+          "id": "D"
+        }
+      ],
+      "acceptable_candidate_ids": [
+        "C"
+      ],
+      "candidate_correct_position": 3
+    },
+    "h08": {
+      "inspection_candidates": [
+        {
+          "kind": "inspect",
+          "path": "vendor/httpx/_urls.py",
+          "symbol": "URL.raw_path",
+          "objective": "Inspect this public consumer or adjacent boundary against the observed failure.",
+          "id": "A"
+        },
+        {
+          "kind": "inspect",
+          "path": "vendor/httpx/_urlparse.py",
+          "symbol": "percent_encoded",
+          "objective": "Inspect this neighboring conversion or validation step.",
+          "id": "B"
+        },
+        {
+          "kind": "review",
+          "path": null,
+          "symbol": null,
+          "objective": "Collect more evidence before selecting a specific implementation boundary.",
+          "id": "C"
+        },
+        {
+          "kind": "inspect",
+          "path": "vendor/httpx/_urlparse.py",
+          "symbol": "quote",
+          "objective": "Inspect the observed state transition and relevant invariant at this boundary.",
+          "id": "D"
+        }
+      ],
+      "acceptable_candidate_ids": [
+        "D"
+      ],
+      "candidate_correct_position": 4
+    }
+  },
+  "external_project": {
+    "version": "0.28.1",
+    "repository": "https://github.com/encode/httpx",
+    "revision": "26d48e0634e6ee9cdc0533996db289ce4b430177",
+    "tag": "0.28.1",
+    "verified_via": "GitHub connector verified pinned tag, LICENSE.md and _urls.py; additionally verified _urlparse.py at the pinned commit on 2026-10-26. Installed mutable modules and license match their upstream Git-blob hashes. Other installed source files are SHA-256 pinned.",
+    "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_urls.py",
+    "urls_git_blob_sha": "147a8fa333acaf31618d37ba2896e3a5bf5e4d02",
+    "urls_sha256": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd",
+    "license": "BSD-3-Clause",
+    "license_source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/LICENSE.md",
+    "license_sha256": "4ec59d544f12b5f539a3a716fd321ac58ccd8030b465221f2c880200cdf28d8d",
+    "installed_source_sha256": {
+      "vendor/httpx/__init__.py": "0ac6997bac998f4ac783adf6d8058a587193315afdb718047c3e4fdff46bcfad",
+      "vendor/httpx/__version__.py": "2e853261e3974e2786cee3ffeb850bd30c5db718eebbf41b3af13b34e83e22a5",
+      "vendor/httpx/_api.py": "aff660b388c8a5c3c92ea2b975b6d26b2aa8fe254c2856b164277ea0e1f12c4b",
+      "vendor/httpx/_auth.py": "62bdd0c1a5122b5eeb198c7eee3f85762705233cf863d14557ed45e3eed15d7e",
+      "vendor/httpx/_client.py": "c43f941baefe58c91e96d00039e1868fe719d91453026d7db1647194563bff8d",
+      "vendor/httpx/_config.py": "a4fa7653ec2271f70ab05f8a6111352d876dddee84446788a1767c1a3a372d67",
+      "vendor/httpx/_content.py": "2c61b3ac94d1dcebcde0c6f519554d2d7917247fbaa0a97002db4ef69e70ff28",
+      "vendor/httpx/_decoders.py": "a74757f08d0d1077b1b37506a784ac66eb62321b17aeb5a5ebe1a7a956f488a3",
+      "vendor/httpx/_exceptions.py": "6f15bb7f1ce054c01d3536f04f4567ab4e202435b5fe023f1858903ee3328cbd",
+      "vendor/httpx/_main.py": "0a0f4631a6e24d3fecc1a0df5202118ad4b0c4b44c4b05033a6ecb7521aa940e",
+      "vendor/httpx/_models.py": "e3ffc6bb2bf580bc6e6428708a6f247d036220e709f5a72b785392babbd97e6b",
+      "vendor/httpx/_multipart.py": "28e1c465997aa28860f663da2b2caedf8e6aab5ac92e0df94d41b7600cd70776",
+      "vendor/httpx/_status_codes.py": "0d89fedae7c180c797cb9b3cc77fd307bc2302e00031ec136a43eb9b9ad712c7",
+      "vendor/httpx/_transports/__init__.py": "19b52805200ea7bcfe97ef63e5884c851dc3308727e8554b863d3bd8edcd9e7a",
+      "vendor/httpx/_transports/asgi.py": "1d17e20d830fb78c101f6805807660e1cfa2dec6e5a3a6cbe464ea7044fec73f",
+      "vendor/httpx/_transports/base.py": "9194bf54c6d58987c5e7bd29a205022756ee973fb26df2f9d4faacf7292d79b5",
+      "vendor/httpx/_transports/default.py": "03379a454c95c0271c4f2c8d25ec437f49f57457f3cf2769748420bf0ecf2e79",
+      "vendor/httpx/_transports/mock.py": "3d3a34779ebb4484d7c46ae48ba90deffebbc300317f088c0dcb972626428c4a",
+      "vendor/httpx/_transports/wsgi.py": "35c3d7dd76a9fc4c0215958efce692c9036e227098c7540c35b3bc1807a2ea36",
+      "vendor/httpx/_types.py": "272878d4642aec039ebfc20e58a0c083bcc26ef1c07ee7e65b983f3e24ed12b6",
+      "vendor/httpx/_urlparse.py": "640987e3b38d7e4c6bae3f8f3d88467a21e36fa0232824be00d58837838bfca6",
+      "vendor/httpx/_urls.py": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd",
+      "vendor/httpx/_utils.py": "fd355ea802afc4990a1ddcfb74579be2cd0b66a41781e1645d281f88704aff5a",
+      "vendor/httpx/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "verified_modules": {
+      "vendor/httpx/_urls.py": {
+        "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_urls.py",
+        "git_blob_sha": "147a8fa333acaf31618d37ba2896e3a5bf5e4d02",
+        "sha256": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd"
+      },
+      "vendor/httpx/_urlparse.py": {
+        "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_urlparse.py",
+        "git_blob_sha": "bf190fd560ee4fc8a11af371a15fc5f1dc284d34",
+        "sha256": "640987e3b38d7e4c6bae3f8f3d88467a21e36fa0232824be00d58837838bfca6"
+      }
+    }
+  },
+  "candidate_contract_scope": "Corpus and evaluator-only oracles only. No model prompt/design/output is frozen or consulted by this artifact."
+}

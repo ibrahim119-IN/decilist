@@ -9,6 +9,9 @@ Decilist's original code is Apache-2.0. Dependencies and optional model artifact
 | Zod, TypeScript, Node.js types | MIT / Apache-2.0 upstream licenses | Dependency declarations and npm lockfile |
 | LiquidAI/d1-3B weights and vendor code | [LFM Open License v1.0](https://huggingface.co/LiquidAI/d1-3B/blob/main/LICENSE), pinned revision in adapter | No |
 | Transformers, PyTorch, torchvision, Pillow | Separate upstream licenses; optional runtime | No |
+| Qwen3-Coder-30B-A3B-Instruct and ggml-org GGUF conversion | Apache-2.0 as declared by the [model publisher](https://huggingface.co/Qwen/Qwen3-Coder-30B-A3B-Instruct) and [conversion publisher](https://huggingface.co/ggml-org/Qwen3-Coder-30B-A3B-Instruct-GGUF); pinned artifact in the explicit setup helper | No weights |
+| llama.cpp b11889 | [MIT](https://github.com/ggml-org/llama.cpp/blob/d854d98bae598388ecea1ed84396587e5edc326d/LICENSE); pinned official Windows binary downloaded separately | No binaries |
+| Optional CUDA runtime DLLs | Separate upstream CUDA runtime terms; not covered by Decilist's Apache-2.0 license | No DLLs |
 | OpenAI Decisions | Hosted service terms; future opt-in integration | No implementation, key, or model artifacts |
 
 The Liquid license includes commercial-use conditions tied to annual revenue and redistribution/notice obligations. Its Section 5 and defined threshold must be checked for the intended entity and use. Do not describe the model weights as Apache-2.0 or claim unrestricted commercial rights. No weights or copied vendor implementation are redistributed here. The model can be downloaded directly from the vendor only after its terms and executable model code have been reviewed.
