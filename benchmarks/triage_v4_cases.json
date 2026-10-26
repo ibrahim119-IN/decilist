@@ -1,0 +1,1313 @@
+{
+  "suite": "testtriage-repair-v4",
+  "version": 4,
+  "base_revision": "1c2e0ff46cca171c717b098b97c0cf768088beef",
+  "purpose": "New executable source-level repair cases for later time-to-verified-repair measurement. Cross-function structure is a design descriptor, not established human hardness; no guaranteed speedup or assistant benefit is claimed.",
+  "authorship": "Codex-authored fixture candidates and protected tests; no external model, independent review agent, V4 assistant output or trial participant consulted during corpus construction.",
+  "oracle_policy": "Private mutations, pinned reference restoration, mechanism labels and investigation/repair invariants are evaluator-only. Participant manifests and model evidence contain only neutral test selectors/broad production roots or observed logs/source, never these metadata.",
+  "candidate_retention_policy": "Every proof attempt is retained with its exact catalog and lab snapshot, including ineffective seeds or baseline/test mistakes. Final executable status does not erase earlier failed candidates.",
+  "split_policy": "Two development cases, six sealed evaluation cases, four separately reserved timed-repair cases, two controls. Reserved cases never enter machine evaluation or prompt selection.",
+  "difficulty_policy": "Several production functions/files and protected neighboring checks provide opportunities for investigation. Structural complexity does not establish human difficulty or equal difficulty between trials.",
+  "projects": {
+    "decilist": {
+      "revision": "1c2e0ff46cca171c717b098b97c0cf768088beef",
+      "source": "pinned Git tree in this repository",
+      "license": "Apache-2.0",
+      "license_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    "httpx": {
+      "version": "0.28.1",
+      "repository": "https://github.com/encode/httpx",
+      "revision": "26d48e0634e6ee9cdc0533996db289ce4b430177",
+      "tag": "0.28.1",
+      "verified_via": "Pinned HTTPX 0.28.1 GitHub commit and BSD-3-Clause license verified previously; _client.py, _models.py, _content.py, _decoders.py, _multipart.py Git blobs additionally fetched through the GitHub connector on 2026-10-26 and compared to installed source. Every copied source file is SHA-256 pinned.",
+      "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_urls.py",
+      "urls_git_blob_sha": "147a8fa333acaf31618d37ba2896e3a5bf5e4d02",
+      "urls_sha256": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd",
+      "license": "BSD-3-Clause",
+      "license_source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/LICENSE.md",
+      "license_sha256": "4ec59d544f12b5f539a3a716fd321ac58ccd8030b465221f2c880200cdf28d8d",
+      "license_text": "Copyright © 2019, [Encode OSS Ltd](https://www.encode.io/).\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n\n* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\n\n* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\n* Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n",
+      "installed_source_sha256": {
+        "vendor/httpx/__init__.py": "0ac6997bac998f4ac783adf6d8058a587193315afdb718047c3e4fdff46bcfad",
+        "vendor/httpx/__version__.py": "2e853261e3974e2786cee3ffeb850bd30c5db718eebbf41b3af13b34e83e22a5",
+        "vendor/httpx/_api.py": "aff660b388c8a5c3c92ea2b975b6d26b2aa8fe254c2856b164277ea0e1f12c4b",
+        "vendor/httpx/_auth.py": "62bdd0c1a5122b5eeb198c7eee3f85762705233cf863d14557ed45e3eed15d7e",
+        "vendor/httpx/_client.py": "c43f941baefe58c91e96d00039e1868fe719d91453026d7db1647194563bff8d",
+        "vendor/httpx/_config.py": "a4fa7653ec2271f70ab05f8a6111352d876dddee84446788a1767c1a3a372d67",
+        "vendor/httpx/_content.py": "2c61b3ac94d1dcebcde0c6f519554d2d7917247fbaa0a97002db4ef69e70ff28",
+        "vendor/httpx/_decoders.py": "a74757f08d0d1077b1b37506a784ac66eb62321b17aeb5a5ebe1a7a956f488a3",
+        "vendor/httpx/_exceptions.py": "6f15bb7f1ce054c01d3536f04f4567ab4e202435b5fe023f1858903ee3328cbd",
+        "vendor/httpx/_main.py": "0a0f4631a6e24d3fecc1a0df5202118ad4b0c4b44c4b05033a6ecb7521aa940e",
+        "vendor/httpx/_models.py": "e3ffc6bb2bf580bc6e6428708a6f247d036220e709f5a72b785392babbd97e6b",
+        "vendor/httpx/_multipart.py": "28e1c465997aa28860f663da2b2caedf8e6aab5ac92e0df94d41b7600cd70776",
+        "vendor/httpx/_status_codes.py": "0d89fedae7c180c797cb9b3cc77fd307bc2302e00031ec136a43eb9b9ad712c7",
+        "vendor/httpx/_transports/__init__.py": "19b52805200ea7bcfe97ef63e5884c851dc3308727e8554b863d3bd8edcd9e7a",
+        "vendor/httpx/_transports/asgi.py": "1d17e20d830fb78c101f6805807660e1cfa2dec6e5a3a6cbe464ea7044fec73f",
+        "vendor/httpx/_transports/base.py": "9194bf54c6d58987c5e7bd29a205022756ee973fb26df2f9d4faacf7292d79b5",
+        "vendor/httpx/_transports/default.py": "03379a454c95c0271c4f2c8d25ec437f49f57457f3cf2769748420bf0ecf2e79",
+        "vendor/httpx/_transports/mock.py": "3d3a34779ebb4484d7c46ae48ba90deffebbc300317f088c0dcb972626428c4a",
+        "vendor/httpx/_transports/wsgi.py": "35c3d7dd76a9fc4c0215958efce692c9036e227098c7540c35b3bc1807a2ea36",
+        "vendor/httpx/_types.py": "272878d4642aec039ebfc20e58a0c083bcc26ef1c07ee7e65b983f3e24ed12b6",
+        "vendor/httpx/_urlparse.py": "640987e3b38d7e4c6bae3f8f3d88467a21e36fa0232824be00d58837838bfca6",
+        "vendor/httpx/_urls.py": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd",
+        "vendor/httpx/_utils.py": "fd355ea802afc4990a1ddcfb74579be2cd0b66a41781e1645d281f88704aff5a",
+        "vendor/httpx/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "verified_modules": {
+        "vendor/httpx/_urls.py": {
+          "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_urls.py",
+          "git_blob_sha": "147a8fa333acaf31618d37ba2896e3a5bf5e4d02",
+          "sha256": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd"
+        },
+        "vendor/httpx/_urlparse.py": {
+          "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_urlparse.py",
+          "git_blob_sha": "bf190fd560ee4fc8a11af371a15fc5f1dc284d34",
+          "sha256": "640987e3b38d7e4c6bae3f8f3d88467a21e36fa0232824be00d58837838bfca6"
+        },
+        "vendor/httpx/_client.py": {
+          "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_client.py",
+          "git_blob_sha": "2249231f8c3b912c731ff160344d3672e2f11738",
+          "sha256": "c43f941baefe58c91e96d00039e1868fe719d91453026d7db1647194563bff8d"
+        },
+        "vendor/httpx/_models.py": {
+          "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_models.py",
+          "git_blob_sha": "67d74bf86bfc80e22d9a4a3153572845accd9039",
+          "sha256": "e3ffc6bb2bf580bc6e6428708a6f247d036220e709f5a72b785392babbd97e6b"
+        },
+        "vendor/httpx/_content.py": {
+          "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_content.py",
+          "git_blob_sha": "6f479a0885f723b7395843d41164a87041820776",
+          "sha256": "2c61b3ac94d1dcebcde0c6f519554d2d7917247fbaa0a97002db4ef69e70ff28"
+        },
+        "vendor/httpx/_decoders.py": {
+          "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_decoders.py",
+          "git_blob_sha": "899dfada878e1181fca6d3c75a79526a076abb9e",
+          "sha256": "a74757f08d0d1077b1b37506a784ac66eb62321b17aeb5a5ebe1a7a956f488a3"
+        },
+        "vendor/httpx/_multipart.py": {
+          "source_url": "https://github.com/encode/httpx/blob/26d48e0634e6ee9cdc0533996db289ce4b430177/httpx/_multipart.py",
+          "git_blob_sha": "b4761af9b2cf384de5189269927d781a700dbe46",
+          "sha256": "28e1c465997aa28860f663da2b2caedf8e6aab5ac92e0df94d41b7600cd70776"
+        }
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "d01",
+      "split": "development",
+      "role": "regression",
+      "project": "httpx",
+      "provenance": "fresh_seeded_regression",
+      "private_mechanism": "Request header override order must survive build/send without altering client defaults",
+      "evidence_mode": "full",
+      "case_tests": "\n@pytest.mark.parametrize(\"name,override\", [(\"X-Mode\",\"one\"),(\"x-MODE\",\"two\"),(\"X-mode\",\"three\")])\ndef test_request_records(name, override):\n    seen=[]\n    def handle(request):\n        seen.append((request.headers[\"x-mode\"],request.headers[\"x-keep\"],request.content))\n        return httpx.Response(200,json={\"ok\":True})\n    with httpx.Client(transport=httpx.MockTransport(handle),headers={\"x-mode\":\"default\",\"x-keep\":\"yes\"},trust_env=False) as client:\n        client.post(\"https://example.test/submit\",headers={name:override},json={\"value\":override})\n        client.get(\"https://example.test/after\")\n        assert seen[0] == (override,\"yes\",json.dumps({\"value\":override},separators=(\",\",\":\")).encode())\n        assert seen[1] == (\"default\",\"yes\",b\"\")\n        assert client.headers[\"x-mode\"] == \"default\"\n",
+      "regression_tests": "\n@pytest.mark.parametrize(\"payload\", [None,{\"a\":1},{\"b\":False}])\ndef test_neighboring_request_records(payload):\n    with httpx.Client(headers={\"x-keep\":\"base\"},trust_env=False) as client:\n        request=client.build_request(\"POST\",\"https://example.test/submit\",headers={\"x-added\":\"request\"},json=payload)\n        assert request.headers[\"x-keep\"] == \"base\"\n        assert request.headers[\"x-added\"] == \"request\"\n        assert \"x-added\" not in client.headers\n        if payload is not None:\n            assert request.headers[\"content-type\"] == \"application/json\"\n            assert int(request.headers[\"content-length\"]) == len(request.content)\n",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_client.py",
+          "old": "        merged_headers = Headers(self.headers)\n        merged_headers.update(headers)\n        return merged_headers",
+          "new": "        merged_headers = Headers(headers)\n        merged_headers.update(self.headers)\n        return merged_headers"
+        }
+      ],
+      "investigation_surface": [
+        [
+          "vendor/httpx/_client.py",
+          [
+            "BaseClient.build_request",
+            "BaseClient._merge_headers",
+            "Client.request",
+            "Client.send"
+          ]
+        ],
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Headers.update",
+            "Request.__init__",
+            "Request._prepare"
+          ]
+        ]
+      ],
+      "inspection_targets": [
+        {
+          "path": "vendor/httpx/_client.py",
+          "symbols": [
+            "BaseClient.build_request",
+            "BaseClient._merge_headers",
+            "Client.request",
+            "Client.send"
+          ]
+        },
+        {
+          "path": "vendor/httpx/_models.py",
+          "symbols": [
+            "Headers.update",
+            "Request.__init__",
+            "Request._prepare"
+          ]
+        }
+      ],
+      "targeted_inspection_assertion": "Identify the violated interaction invariant from the protected public-API observations and production call chain.",
+      "acceptable_routes": [
+        "application_logic"
+      ],
+      "root_cause_discriminating_facts": [
+        "Request header override order must survive build/send without altering client defaults",
+        "Per-request headers override matching default names case-insensitively, while unrelated defaults and later requests retain the client values."
+      ],
+      "repair_invariants": [
+        "Per-request headers override matching default names case-insensitively, while unrelated defaults and later requests retain the client values."
+      ],
+      "minimal_repair_invariants": [
+        "Per-request headers override matching default names case-insensitively, while unrelated defaults and later requests retain the client values."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 2,
+        "minimum_relevant_callable_transitions": 7,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "d02",
+      "split": "development",
+      "role": "regression",
+      "project": "decilist",
+      "provenance": "fresh_seeded_regression",
+      "private_mechanism": "Timeout outcomes remain distinct from provider errors while fallback still executes",
+      "evidence_mode": "full",
+      "case_tests": "\nfrom decilist import Decilist, FunctionProvider, Policy, Choose\n@pytest.mark.parametrize(\"mode,expected\",[(\"elapsed\",\"timeout\"),(\"native\",\"timeout\"),(\"failure\",\"error\")])\nasync def test_provider_records(mode,expected):\n    calls=[]\n    class First:\n        name,model,locality=\"primary\",\"fixture\",\"local\"\n        async def infer(self,question):\n            calls.append(\"primary\")\n            if mode == \"elapsed\": await asyncio.sleep(60)\n            if mode == \"native\": raise TimeoutError(\"provider deadline\")\n            raise ValueError(\"provider failed\")\n    def recover(question):\n        calls.append(\"fallback\")\n        return {\"a\":0,\"b\":1}\n    engine=Decilist([First(),FunctionProvider(recover,name=\"fallback\")],policy=Policy(timeout_ms=10))\n    result=await engine.decide(Choose(state=\"observed\",instructions=\"Select\",options={\"a\":\"A\",\"b\":\"B\"}))\n    assert result.value == \"b\" and result.provider == \"fallback\"\n    assert calls == [\"primary\",\"fallback\"]\n    assert [(a.provider,a.outcome) for a in result.attempts] == [(\"primary\",expected),(\"fallback\",\"accepted\")]\n    assert json.loads(result.model_dump_json())[\"attempts\"][0][\"outcome\"] == expected\n",
+      "regression_tests": "\nfrom decilist import Decilist, FunctionProvider, Policy\n@pytest.mark.parametrize(\"raw,expected\",[({\"a\":.5,\"b\":.5},\"low_confidence\"),({\"a\":.1,\"b\":.1},\"invalid_output\"),({\"a\":True,\"b\":False},\"invalid_output\")])\nasync def test_neighboring_provider_records(raw,expected):\n    engine=Decilist([FunctionProvider(lambda _:raw,name=\"first\"),FunctionProvider(lambda _:{\"a\":1,\"b\":0},name=\"second\")])\n    result=await engine.choose(\"observed\",\"Select\",{\"a\":\"A\",\"b\":\"B\"})\n    assert result.value == \"a\"\n    assert [a.outcome for a in result.attempts] == [expected,\"accepted\"]\n    strict=await engine.choose(\"observed\",\"Select\",{\"a\":\"A\",\"b\":\"B\"},policy=Policy(min_confidence=1.0))\n    assert strict.status == \"accepted\" and strict.confidence == 1\n",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "packages/python/src/decilist/engine.py",
+          "old": "            except TimeoutError:\n                outcome = \"timeout\"",
+          "new": "            except TimeoutError:\n                outcome = \"error\""
+        }
+      ],
+      "investigation_surface": [
+        [
+          "packages/python/src/decilist/engine.py",
+          [
+            "Decilist.decide",
+            "Decilist.choose"
+          ]
+        ],
+        [
+          "packages/python/src/decilist/providers.py",
+          [
+            "FunctionProvider.infer"
+          ]
+        ],
+        [
+          "packages/python/src/decilist/contracts.py",
+          [
+            "Policy",
+            "Attempt",
+            "Decision"
+          ]
+        ]
+      ],
+      "inspection_targets": [
+        {
+          "path": "packages/python/src/decilist/engine.py",
+          "symbols": [
+            "Decilist.decide",
+            "Decilist.choose"
+          ]
+        },
+        {
+          "path": "packages/python/src/decilist/providers.py",
+          "symbols": [
+            "FunctionProvider.infer"
+          ]
+        },
+        {
+          "path": "packages/python/src/decilist/contracts.py",
+          "symbols": [
+            "Policy",
+            "Attempt",
+            "Decision"
+          ]
+        }
+      ],
+      "targeted_inspection_assertion": "Identify the violated interaction invariant from the protected public-API observations and production call chain.",
+      "acceptable_routes": [
+        "decision_policy"
+      ],
+      "root_cause_discriminating_facts": [
+        "Timeout outcomes remain distinct from provider errors while fallback still executes",
+        "Both an elapsed wait_for deadline and a native TimeoutError produce timeout, a different provider exception produces error, and later providers still run."
+      ],
+      "repair_invariants": [
+        "Both an elapsed wait_for deadline and a native TimeoutError produce timeout, a different provider exception produces error, and later providers still run."
+      ],
+      "minimal_repair_invariants": [
+        "Both an elapsed wait_for deadline and a native TimeoutError produce timeout, a different provider exception produces error, and later providers still run."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 3,
+        "minimum_relevant_callable_transitions": 6,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "e01",
+      "split": "evaluation",
+      "role": "regression",
+      "project": "httpx",
+      "provenance": "fresh_seeded_regression",
+      "private_mechanism": "An explicit transport timeout extension takes precedence over request/client timeout defaults",
+      "evidence_mode": "full",
+      "case_tests": "\n@pytest.mark.parametrize(\"seconds\",[None,.125,2.5])\ndef test_request_records(seconds):\n    explicit={\"connect\":seconds,\"read\":seconds,\"write\":seconds,\"pool\":seconds}\n    extensions={\"timeout\":explicit,\"trace-tag\":\"retained\"}\n    seen=[]\n    def handle(request):\n        seen.append(dict(request.extensions))\n        return httpx.Response(200)\n    with httpx.Client(transport=httpx.MockTransport(handle),timeout=9,trust_env=False) as client:\n        request=client.build_request(\"GET\",\"https://example.test/route\",timeout=.75,extensions=extensions)\n        client.send(request)\n    assert seen[0][\"timeout\"] == explicit\n    assert seen[0][\"trace-tag\"] == \"retained\"\n    assert extensions == {\"timeout\":explicit,\"trace-tag\":\"retained\"}\n",
+      "regression_tests": "\n@pytest.mark.parametrize(\"mode\",[\"client\",\"disabled\",\"directional\"])\ndef test_neighboring_request_records(mode):\n    with httpx.Client(timeout=4,trust_env=False) as client:\n        kwargs={} if mode==\"client\" else {\"timeout\":None if mode==\"disabled\" else httpx.Timeout(2,connect=.25)}\n        request=client.build_request(\"GET\",\"https://example.test/route\",extensions={\"other\":True},**kwargs)\n        expected={\"connect\":4,\"read\":4,\"write\":4,\"pool\":4} if mode==\"client\" else {\"connect\":None,\"read\":None,\"write\":None,\"pool\":None} if mode==\"disabled\" else {\"connect\":.25,\"read\":2,\"write\":2,\"pool\":2}\n        assert request.extensions[\"timeout\"] == expected\n        assert request.extensions[\"other\"] is True\n",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_client.py",
+          "old": "        extensions = {} if extensions is None else extensions\n        if \"timeout\" not in extensions:",
+          "new": "        extensions = {} if extensions is None else {key: value for key, value in extensions.items() if key != \"timeout\"}\n        if \"timeout\" not in extensions:"
+        }
+      ],
+      "investigation_surface": [
+        [
+          "vendor/httpx/_client.py",
+          [
+            "BaseClient.build_request",
+            "BaseClient._set_timeout",
+            "Client.send"
+          ]
+        ],
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Request.__init__"
+          ]
+        ],
+        [
+          "vendor/httpx/_config.py",
+          [
+            "Timeout.__init__",
+            "Timeout.as_dict"
+          ]
+        ]
+      ],
+      "inspection_targets": [
+        {
+          "path": "vendor/httpx/_client.py",
+          "symbols": [
+            "BaseClient.build_request",
+            "BaseClient._set_timeout",
+            "Client.send"
+          ]
+        },
+        {
+          "path": "vendor/httpx/_models.py",
+          "symbols": [
+            "Request.__init__"
+          ]
+        },
+        {
+          "path": "vendor/httpx/_config.py",
+          "symbols": [
+            "Timeout.__init__",
+            "Timeout.as_dict"
+          ]
+        }
+      ],
+      "targeted_inspection_assertion": "Identify the violated interaction invariant from the protected public-API observations and production call chain.",
+      "acceptable_routes": [
+        "application_logic"
+      ],
+      "root_cause_discriminating_facts": [
+        "An explicit transport timeout extension takes precedence over request/client timeout defaults",
+        "Transport timeout extensions supplied explicitly must survive request building and sending; omitted, None, and directional timeout arguments remain distinct."
+      ],
+      "repair_invariants": [
+        "Transport timeout extensions supplied explicitly must survive request building and sending; omitted, None, and directional timeout arguments remain distinct."
+      ],
+      "minimal_repair_invariants": [
+        "Transport timeout extensions supplied explicitly must survive request building and sending; omitted, None, and directional timeout arguments remain distinct."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 3,
+        "minimum_relevant_callable_transitions": 6,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "e02",
+      "split": "evaluation",
+      "role": "regression",
+      "project": "httpx",
+      "provenance": "fresh_seeded_regression",
+      "private_mechanism": "Method-changing redirects discard the outgoing entity stream",
+      "evidence_mode": "full",
+      "case_tests": "\n@pytest.mark.parametrize(\"status\",[301,302,303])\ndef test_request_records(status):\n    seen=[]\n    def handle(request):\n        seen.append((request.method,request.content,dict(request.headers)))\n        return httpx.Response(status,headers={\"location\":\"/result\"}) if len(seen)==1 else httpx.Response(200)\n    with httpx.Client(transport=httpx.MockTransport(handle),follow_redirects=True,trust_env=False) as client:\n        response=client.post(\"https://example.test/submit\",content=b\"entity\")\n    assert response.status_code == 200 and len(response.history)==1\n    assert seen[0][0:2] == (\"POST\",b\"entity\")\n    assert seen[1][0:2] == (\"GET\",b\"\")\n    assert \"content-length\" not in seen[1][2] and \"transfer-encoding\" not in seen[1][2]\n",
+      "regression_tests": "\n@pytest.mark.parametrize(\"status,method\",[(307,\"POST\"),(308,\"POST\"),(303,\"HEAD\")])\ndef test_neighboring_request_records(status,method):\n    seen=[]\n    def handle(request):\n        seen.append((request.method,request.content))\n        return httpx.Response(status,headers={\"location\":\"/result\"}) if len(seen)==1 else httpx.Response(200)\n    with httpx.Client(transport=httpx.MockTransport(handle),follow_redirects=True,trust_env=False) as client:\n        client.request(method,\"https://example.test/submit\",content=b\"preserved\")\n    assert seen == [(method,b\"preserved\"),(method,b\"preserved\")]\n",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_client.py",
+          "old": "        if method != request.method and method == \"GET\":\n            return None\n\n        return request.stream",
+          "new": "        if request.method == \"GET\" and method != \"GET\":\n            return None\n\n        return request.stream"
+        }
+      ],
+      "investigation_surface": [
+        [
+          "vendor/httpx/_client.py",
+          [
+            "BaseClient._build_redirect_request",
+            "BaseClient._redirect_method",
+            "BaseClient._redirect_headers",
+            "BaseClient._redirect_stream"
+          ]
+        ],
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Request.__init__",
+            "Request.read"
+          ]
+        ]
+      ],
+      "inspection_targets": [
+        {
+          "path": "vendor/httpx/_client.py",
+          "symbols": [
+            "BaseClient._build_redirect_request",
+            "BaseClient._redirect_method",
+            "BaseClient._redirect_headers",
+            "BaseClient._redirect_stream"
+          ]
+        },
+        {
+          "path": "vendor/httpx/_models.py",
+          "symbols": [
+            "Request.__init__",
+            "Request.read"
+          ]
+        }
+      ],
+      "targeted_inspection_assertion": "Identify the violated interaction invariant from the protected public-API observations and production call chain.",
+      "acceptable_routes": [
+        "application_logic"
+      ],
+      "root_cause_discriminating_facts": [
+        "Method-changing redirects discard the outgoing entity stream",
+        "A POST changed to GET loses both body and framing headers; preserving 307/308 methods and HEAD handling must retain their entities."
+      ],
+      "repair_invariants": [
+        "A POST changed to GET loses both body and framing headers; preserving 307/308 methods and HEAD handling must retain their entities."
+      ],
+      "minimal_repair_invariants": [
+        "A POST changed to GET loses both body and framing headers; preserving 307/308 methods and HEAD handling must retain their entities."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 2,
+        "minimum_relevant_callable_transitions": 6,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "e03",
+      "split": "evaluation",
+      "role": "regression",
+      "project": "httpx",
+      "provenance": "fresh_seeded_regression",
+      "private_mechanism": "Multipart boundary extraction must agree with the serialized entity",
+      "evidence_mode": "full",
+      "case_tests": "\n@pytest.mark.parametrize(\"boundary,quoted\",[(\"alpha-one\",False),(\"beta-two\",True),(\"gamma-333\",False)])\ndef test_request_records(boundary,quoted):\n    captured=[]\n    def handle(request):\n        captured.append(request)\n        return httpx.Response(200)\n    token='\"'+boundary+'\"' if quoted else boundary\n    with httpx.Client(transport=httpx.MockTransport(handle),trust_env=False) as client:\n        client.post(\"https://example.test/upload\",headers={\"content-type\":\"multipart/form-data; boundary=\"+token},data={\"tag\":[\"one\",\"two\"]},files={\"file\":(\"data.txt\",b\"body\",\"text/plain\")})\n    request=captured[0]\n    assert request.content.startswith(b\"--\"+boundary.encode()+b\"\\r\\n\")\n    assert request.content.endswith(b\"--\"+boundary.encode()+b\"--\\r\\n\")\n    assert request.content.count(b'name=\"tag\"') == 2\n    assert b'filename=\"data.txt\"' in request.content and b\"body\" in request.content\n    assert int(request.headers[\"content-length\"]) == len(request.content)\n",
+      "regression_tests": "\n@pytest.mark.parametrize(\"file\",[b\"simple\",b\"\",b\"a\\r\\nb\"])\ndef test_neighboring_request_records(file):\n    request=httpx.Request(\"POST\",\"https://example.test/upload\",files={\"file\":(\"data.bin\",file,\"application/custom\",{\"X-Part\":\"kept\"})})\n    body=request.read()\n    boundary=request.headers[\"content-type\"].split(\"boundary=\",1)[1].encode()\n    assert body.startswith(b\"--\"+boundary+b\"\\r\\n\") and body.endswith(b\"--\"+boundary+b\"--\\r\\n\")\n    assert b\"Content-Type: application/custom\" in body and b\"X-Part: kept\" in body\n    assert int(request.headers[\"content-length\"]) == len(body)\n",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_content.py",
+          "old": "    multipart = MultipartStream(data=data, files=files, boundary=boundary)",
+          "new": "    multipart = MultipartStream(data=data, files=files, boundary=None)"
+        }
+      ],
+      "investigation_surface": [
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Request.__init__",
+            "Request.read"
+          ]
+        ],
+        [
+          "vendor/httpx/_content.py",
+          [
+            "encode_request",
+            "encode_multipart_data"
+          ]
+        ],
+        [
+          "vendor/httpx/_multipart.py",
+          [
+            "get_multipart_boundary_from_content_type",
+            "MultipartStream.__init__",
+            "MultipartStream.iter_chunks"
+          ]
+        ]
+      ],
+      "inspection_targets": [
+        {
+          "path": "vendor/httpx/_models.py",
+          "symbols": [
+            "Request.__init__",
+            "Request.read"
+          ]
+        },
+        {
+          "path": "vendor/httpx/_content.py",
+          "symbols": [
+            "encode_request",
+            "encode_multipart_data"
+          ]
+        },
+        {
+          "path": "vendor/httpx/_multipart.py",
+          "symbols": [
+            "get_multipart_boundary_from_content_type",
+            "MultipartStream.__init__",
+            "MultipartStream.iter_chunks"
+          ]
+        }
+      ],
+      "targeted_inspection_assertion": "Identify the violated interaction invariant from the protected public-API observations and production call chain.",
+      "acceptable_routes": [
+        "application_logic"
+      ],
+      "root_cause_discriminating_facts": [
+        "Multipart boundary extraction must agree with the serialized entity",
+        "An explicit multipart boundary, including a quoted one, must control body delimiters and content length while automatic boundaries and per-part metadata continue working."
+      ],
+      "repair_invariants": [
+        "An explicit multipart boundary, including a quoted one, must control body delimiters and content length while automatic boundaries and per-part metadata continue working."
+      ],
+      "minimal_repair_invariants": [
+        "An explicit multipart boundary, including a quoted one, must control body delimiters and content length while automatic boundaries and per-part metadata continue working."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 3,
+        "minimum_relevant_callable_transitions": 7,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "e04",
+      "split": "evaluation",
+      "role": "regression",
+      "project": "httpx",
+      "provenance": "fresh_seeded_regression",
+      "private_mechanism": "Stacked content encodings decode in reverse application order",
+      "evidence_mode": "full",
+      "case_tests": "\nimport gzip\nimport zlib\n@pytest.mark.parametrize(\"encodings\",[(\"gzip\",\"deflate\"),(\"deflate\",\"gzip\"),(\"gzip\",\"deflate\",\"gzip\")])\ndef test_response_records(encodings):\n    text=\"café line\\n\"*7\n    wire=text.encode()\n    for encoding in encodings:\n        wire=gzip.compress(wire,mtime=0) if encoding==\"gzip\" else zlib.compress(wire)\n    class Chunks(httpx.SyncByteStream):\n        def __iter__(self):\n            for offset in range(0,len(wire),5): yield wire[offset:offset+5]\n    def handle(request):\n        return httpx.Response(200,headers={\"content-encoding\":\", \".join(encodings),\"content-type\":\"text/plain; charset=utf-8\"},stream=Chunks())\n    with httpx.Client(transport=httpx.MockTransport(handle),trust_env=False) as client:\n        with client.stream(\"GET\",\"https://example.test/result\") as response:\n            assert \"\".join(response.iter_text(chunk_size=3)) == text\n            assert response.num_bytes_downloaded == len(wire)\n",
+      "regression_tests": "\nimport gzip\nimport zlib\n@pytest.mark.parametrize(\"encoding\",[\"identity\",\"gzip\",\"deflate\"])\ndef test_neighboring_response_records(encoding):\n    raw=b'{\"ok\":true}'\n    wire=gzip.compress(raw,mtime=0) if encoding==\"gzip\" else zlib.compress(raw) if encoding==\"deflate\" else raw\n    response=httpx.Response(200,headers={\"content-encoding\":encoding},content=wire)\n    assert response.content == raw and response.json() == {\"ok\":True}\n",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_decoders.py",
+          "old": "        self.children = list(reversed(children))",
+          "new": "        self.children = list(children)"
+        }
+      ],
+      "investigation_surface": [
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Response._get_content_decoder",
+            "Response.iter_bytes",
+            "Response.iter_text"
+          ]
+        ],
+        [
+          "vendor/httpx/_decoders.py",
+          [
+            "MultiDecoder.__init__",
+            "MultiDecoder.decode",
+            "MultiDecoder.flush",
+            "TextDecoder"
+          ]
+        ]
+      ],
+      "inspection_targets": [
+        {
+          "path": "vendor/httpx/_models.py",
+          "symbols": [
+            "Response._get_content_decoder",
+            "Response.iter_bytes",
+            "Response.iter_text"
+          ]
+        },
+        {
+          "path": "vendor/httpx/_decoders.py",
+          "symbols": [
+            "MultiDecoder.__init__",
+            "MultiDecoder.decode",
+            "MultiDecoder.flush",
+            "TextDecoder"
+          ]
+        }
+      ],
+      "targeted_inspection_assertion": "Identify the violated interaction invariant from the protected public-API observations and production call chain.",
+      "acceptable_routes": [
+        "application_logic"
+      ],
+      "root_cause_discriminating_facts": [
+        "Stacked content encodings decode in reverse application order",
+        "The last encoding applied is the first decoded, including chunked text reads; single encodings and identity remain valid."
+      ],
+      "repair_invariants": [
+        "The last encoding applied is the first decoded, including chunked text reads; single encodings and identity remain valid."
+      ],
+      "minimal_repair_invariants": [
+        "The last encoding applied is the first decoded, including chunked text reads; single encodings and identity remain valid."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 2,
+        "minimum_relevant_callable_transitions": 7,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "e05",
+      "split": "evaluation",
+      "role": "regression",
+      "project": "httpx",
+      "provenance": "fresh_seeded_regression",
+      "private_mechanism": "Explicit content length suppresses generated chunked transfer framing",
+      "evidence_mode": "full",
+      "case_tests": "\n@pytest.mark.parametrize(\"name,parts\",[(\"Content-Length\",[b\"one\",b\"two\"]),(\"content-length\",[b\"abc\"]),(\"CONTENT-LENGTH\",[b\"\",b\"z\"])])\ndef test_request_records(name,parts):\n    body=b\"\".join(parts)\n    seen=[]\n    def handle(request):\n        seen.append((dict(request.headers),request.content))\n        return httpx.Response(200)\n    with httpx.Client(transport=httpx.MockTransport(handle),trust_env=False) as client:\n        client.post(\"https://example.test/submit\",content=(part for part in parts),headers={name:str(len(body))})\n    assert seen[0][1] == body\n    assert seen[0][0][\"content-length\"] == str(len(body))\n    assert \"transfer-encoding\" not in seen[0][0]\n",
+      "regression_tests": "\n@pytest.mark.parametrize(\"mode\",[\"generated\",\"bytes\",\"manual\"])\ndef test_neighboring_request_records(mode):\n    content=(part for part in [b\"ab\",b\"c\"]) if mode!=\"bytes\" else b\"abc\"\n    headers={\"Transfer-Encoding\":\"chunked\"} if mode==\"manual\" else None\n    request=httpx.Request(\"POST\",\"https://example.test/submit\",content=content,headers=headers)\n    assert request.read() == b\"abc\"\n    if mode==\"bytes\":\n        assert request.headers[\"content-length\"] == \"3\" and \"transfer-encoding\" not in request.headers\n    else:\n        assert request.headers[\"transfer-encoding\"] == \"chunked\" and \"content-length\" not in request.headers\n",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_models.py",
+          "old": "            if key.lower() == \"transfer-encoding\" and \"Content-Length\" in self.headers:\n                continue",
+          "new": "            if key.lower() == \"content-length\" and \"Content-Length\" in self.headers:\n                continue"
+        }
+      ],
+      "investigation_surface": [
+        [
+          "vendor/httpx/_client.py",
+          [
+            "BaseClient.build_request",
+            "Client.request"
+          ]
+        ],
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Request.__init__",
+            "Request._prepare",
+            "Request.read"
+          ]
+        ],
+        [
+          "vendor/httpx/_content.py",
+          [
+            "encode_content",
+            "IteratorByteStream"
+          ]
+        ]
+      ],
+      "inspection_targets": [
+        {
+          "path": "vendor/httpx/_client.py",
+          "symbols": [
+            "BaseClient.build_request",
+            "Client.request"
+          ]
+        },
+        {
+          "path": "vendor/httpx/_models.py",
+          "symbols": [
+            "Request.__init__",
+            "Request._prepare",
+            "Request.read"
+          ]
+        },
+        {
+          "path": "vendor/httpx/_content.py",
+          "symbols": [
+            "encode_content",
+            "IteratorByteStream"
+          ]
+        }
+      ],
+      "targeted_inspection_assertion": "Identify the violated interaction invariant from the protected public-API observations and production call chain.",
+      "acceptable_routes": [
+        "application_logic"
+      ],
+      "root_cause_discriminating_facts": [
+        "Explicit content length suppresses generated chunked transfer framing",
+        "A caller supplied content length for iterable uploads must prevent automatic Transfer-Encoding; ordinary iterable and byte uploads keep their own framing rules."
+      ],
+      "repair_invariants": [
+        "A caller supplied content length for iterable uploads must prevent automatic Transfer-Encoding; ordinary iterable and byte uploads keep their own framing rules."
+      ],
+      "minimal_repair_invariants": [
+        "A caller supplied content length for iterable uploads must prevent automatic Transfer-Encoding; ordinary iterable and byte uploads keep their own framing rules."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 3,
+        "minimum_relevant_callable_transitions": 7,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "e06",
+      "split": "evaluation",
+      "role": "regression",
+      "project": "decilist",
+      "provenance": "fresh_seeded_regression",
+      "private_mechanism": "Semantic response validation preserves the distinction between boolean predictions and numeric JSON values",
+      "evidence_mode": "full",
+      "case_tests": "\nfrom decilist import Client\nHEALTH={\"service\":\"decilist\",\"schema_version\":\"1\",\"runtime_version\":\"0.1.0a1\",\"ready\":True,\"status\":\"ok\",\"provider\":\"demo\"}\n@pytest.mark.parametrize(\"probability,value\",[(1.0,1.0),(0.0,0.0),(.9,1.0)])\nasync def test_response_records(probability,value):\n    def handle(request):\n        if request.url.path==\"/health\": return httpx.Response(200,json=HEALTH)\n        return httpx.Response(200,json={\"schema_version\":\"1\",\"request_id\":\"fixture\",\"kind\":\"predict\",\"status\":\"accepted\",\"value\":value,\"probabilities\":{\"false\":1-probability,\"true\":probability},\"confidence\":max(probability,1-probability),\"provider\":\"fixture\",\"model\":\"fixture\",\"latency_ms\":0,\"attempts\":[]})\n    async with Client() as client:\n        await client._http.aclose()\n        client._http=httpx.AsyncClient(transport=httpx.MockTransport(handle),base_url=client.base_url)\n        with pytest.raises(ValueError,match=\"value/confidence\"):\n            await client.predict(\"observed\",\"Predict\")\n",
+      "regression_tests": "\nfrom decilist import Decision, Predict, Score, Choose\nfrom decilist.contracts import validate_decision\n@pytest.mark.parametrize(\"probability\",[0.0,1.0,.8])\ndef test_neighboring_response_records(probability):\n    result=Decision(request_id=\"fixture\",kind=\"predict\",status=\"accepted\",value=probability>=.5,probabilities={\"false\":1-probability,\"true\":probability},confidence=max(probability,1-probability),provider=\"fixture\",model=\"fixture\",latency_ms=0,attempts=[])\n    assert validate_decision(Predict(state=\"Observed\",instructions=\"Predict\"),result).value is (probability>=.5)\n    score=Decision(request_id=\"fixture\",kind=\"score\",status=\"accepted\",value=.75,probabilities={\"0\":.25,\"1\":.75},confidence=.75,provider=\"fixture\",model=\"fixture\",latency_ms=0,attempts=[])\n    assert validate_decision(Score(state=\"Observed\",instructions=\"Score\",levels=[\"low\",\"high\"]),score).value == .75\n",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "packages/python/src/decilist/contracts.py",
+          "old": "        valid_value = type(result.value) is type(expected) and result.value == expected",
+          "new": "        valid_value = result.value == expected"
+        }
+      ],
+      "investigation_surface": [
+        [
+          "packages/python/src/decilist/client.py",
+          [
+            "Client.decide",
+            "Client.predict"
+          ]
+        ],
+        [
+          "packages/python/src/decilist/contracts.py",
+          [
+            "Decision",
+            "validate_decision",
+            "value_from",
+            "validate_probabilities"
+          ]
+        ]
+      ],
+      "inspection_targets": [
+        {
+          "path": "packages/python/src/decilist/client.py",
+          "symbols": [
+            "Client.decide",
+            "Client.predict"
+          ]
+        },
+        {
+          "path": "packages/python/src/decilist/contracts.py",
+          "symbols": [
+            "Decision",
+            "validate_decision",
+            "value_from",
+            "validate_probabilities"
+          ]
+        }
+      ],
+      "targeted_inspection_assertion": "Identify the violated interaction invariant from the protected public-API observations and production call chain.",
+      "acceptable_routes": [
+        "contract_validation"
+      ],
+      "root_cause_discriminating_facts": [
+        "Semantic response validation preserves the distinction between boolean predictions and numeric JSON values",
+        "A numeric 0/1 response cannot masquerade as a boolean prediction through Python equality, while valid booleans and floating score expectations remain accepted."
+      ],
+      "repair_invariants": [
+        "A numeric 0/1 response cannot masquerade as a boolean prediction through Python equality, while valid booleans and floating score expectations remain accepted."
+      ],
+      "minimal_repair_invariants": [
+        "A numeric 0/1 response cannot masquerade as a boolean prediction through Python equality, while valid booleans and floating score expectations remain accepted."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 2,
+        "minimum_relevant_callable_transitions": 6,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "r01",
+      "split": "reserved",
+      "role": "trial_regression",
+      "project": "httpx",
+      "provenance": "fresh_seeded_regression",
+      "private_mechanism": "An explicitly empty raw request body outranks populated alternative body arguments",
+      "evidence_mode": "full",
+      "case_tests": "\n@pytest.mark.parametrize(\"content,aux\",[(b\"\",\"json\"),(\"\",\"data\"),(b\"\",\"files\")])\ndef test_request_records(content,aux):\n    seen=[]\n    def handle(request):\n        seen.append((request.content,dict(request.headers)))\n        return httpx.Response(200)\n    kwargs={\"json\":{\"other\":True}} if aux==\"json\" else {\"data\":{\"other\":\"value\"}} if aux==\"data\" else {\"files\":{\"file\":(\"a.txt\",b\"other\")}}\n    with httpx.Client(transport=httpx.MockTransport(handle),trust_env=False) as client:\n        client.post(\"https://example.test/submit\",content=content,**kwargs)\n    assert seen[0][0] == b\"\" and seen[0][1][\"content-length\"] == \"0\"\n    assert \"content-type\" not in seen[0][1]\n",
+      "regression_tests": "\n@pytest.mark.parametrize(\"mode\",[\"content\",\"data\",\"json\"])\ndef test_neighboring_request_records(mode):\n    kwargs={\"content\":b\"raw\",\"data\":{\"a\":\"b\"},\"json\":{\"a\":1}} if mode==\"content\" else {\"data\":{\"a\":\"b\"},\"json\":{\"a\":1}} if mode==\"data\" else {\"json\":False}\n    request=httpx.Request(\"POST\",\"https://example.test/submit\",**kwargs)\n    assert request.content == (b\"raw\" if mode==\"content\" else b\"a=b\" if mode==\"data\" else b\"false\")\n",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_content.py",
+          "old": "    if content is not None:\n        return encode_content(content)\n    elif files:",
+          "new": "    if content:\n        return encode_content(content)\n    elif files:"
+        }
+      ],
+      "investigation_surface": [
+        [
+          "vendor/httpx/_client.py",
+          [
+            "BaseClient.build_request",
+            "Client.post"
+          ]
+        ],
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Request.__init__",
+            "Request._prepare"
+          ]
+        ],
+        [
+          "vendor/httpx/_content.py",
+          [
+            "encode_request",
+            "encode_content",
+            "encode_json",
+            "encode_multipart_data"
+          ]
+        ]
+      ],
+      "inspection_targets": [
+        {
+          "path": "vendor/httpx/_client.py",
+          "symbols": [
+            "BaseClient.build_request",
+            "Client.post"
+          ]
+        },
+        {
+          "path": "vendor/httpx/_models.py",
+          "symbols": [
+            "Request.__init__",
+            "Request._prepare"
+          ]
+        },
+        {
+          "path": "vendor/httpx/_content.py",
+          "symbols": [
+            "encode_request",
+            "encode_content",
+            "encode_json",
+            "encode_multipart_data"
+          ]
+        }
+      ],
+      "targeted_inspection_assertion": "Identify the violated interaction invariant from the protected public-API observations and production call chain.",
+      "acceptable_routes": [
+        "application_logic"
+      ],
+      "root_cause_discriminating_facts": [
+        "An explicitly empty raw request body outranks populated alternative body arguments",
+        "Presence of content, including empty bytes/text, outranks data/files/json; nonempty raw content, form, and false JSON payloads retain the original selection order."
+      ],
+      "repair_invariants": [
+        "Presence of content, including empty bytes/text, outranks data/files/json; nonempty raw content, form, and false JSON payloads retain the original selection order."
+      ],
+      "minimal_repair_invariants": [
+        "Presence of content, including empty bytes/text, outranks data/files/json; nonempty raw content, form, and false JSON payloads retain the original selection order."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 3,
+        "minimum_relevant_callable_transitions": 8,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "r02",
+      "split": "reserved",
+      "role": "trial_regression",
+      "project": "httpx",
+      "provenance": "fresh_seeded_regression",
+      "private_mechanism": "A redirected request must rebuild cookies after response extraction",
+      "evidence_mode": "full",
+      "case_tests": "\n@pytest.mark.parametrize(\"token\",[\"one\",\"two\",\"three\"])\ndef test_request_records(token):\n    seen=[]\n    def handle(request):\n        seen.append(request.headers.get(\"cookie\"))\n        return httpx.Response(302,headers={\"location\":\"/result\",\"set-cookie\":\"sid=\"+token+\"; Path=/\"}) if len(seen)==1 else httpx.Response(200)\n    with httpx.Client(transport=httpx.MockTransport(handle),follow_redirects=True,trust_env=False) as client:\n        client.get(\"https://example.test/start\",headers={\"cookie\":\"sid=outdated; old=gone\"})\n        assert client.cookies.get(\"sid\") == token\n    assert seen == [\"sid=outdated; old=gone\",\"sid=\"+token]\n",
+      "regression_tests": "\n@pytest.mark.parametrize(\"path\",[\"/allowed/a\",\"/allowed/b\",\"/outside\"])\ndef test_neighboring_request_records(path):\n    seen=[]\n    def handle(request):\n        seen.append(request.headers.get(\"cookie\"))\n        return httpx.Response(200)\n    cookies=httpx.Cookies()\n    cookies.set(\"scoped\",\"yes\",domain=\"example.test\",path=\"/allowed\")\n    with httpx.Client(transport=httpx.MockTransport(handle),cookies=cookies,trust_env=False) as client:\n        client.get(\"https://example.test\"+path)\n        client.get(\"https://other.test/allowed/a\")\n    assert seen == [\"scoped=yes\" if path.startswith(\"/allowed/\") else None,None]\n",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_client.py",
+          "old": "        headers.pop(\"Cookie\", None)\n\n        return headers",
+          "new": "        headers.get(\"Cookie\", None)\n\n        return headers"
+        }
+      ],
+      "investigation_surface": [
+        [
+          "vendor/httpx/_client.py",
+          [
+            "BaseClient._build_redirect_request",
+            "BaseClient._redirect_headers",
+            "Client._send_single_request"
+          ]
+        ],
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Cookies.extract_cookies",
+            "Cookies.set_cookie_header",
+            "Request.__init__"
+          ]
+        ]
+      ],
+      "inspection_targets": [
+        {
+          "path": "vendor/httpx/_client.py",
+          "symbols": [
+            "BaseClient._build_redirect_request",
+            "BaseClient._redirect_headers",
+            "Client._send_single_request"
+          ]
+        },
+        {
+          "path": "vendor/httpx/_models.py",
+          "symbols": [
+            "Cookies.extract_cookies",
+            "Cookies.set_cookie_header",
+            "Request.__init__"
+          ]
+        }
+      ],
+      "targeted_inspection_assertion": "Identify the violated interaction invariant from the protected public-API observations and production call chain.",
+      "acceptable_routes": [
+        "application_logic"
+      ],
+      "root_cause_discriminating_facts": [
+        "A redirected request must rebuild cookies after response extraction",
+        "A stale Cookie request header must not override cookies just accepted from the redirect response; normal domain/path cookie filtering remains intact."
+      ],
+      "repair_invariants": [
+        "A stale Cookie request header must not override cookies just accepted from the redirect response; normal domain/path cookie filtering remains intact."
+      ],
+      "minimal_repair_invariants": [
+        "A stale Cookie request header must not override cookies just accepted from the redirect response; normal domain/path cookie filtering remains intact."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 2,
+        "minimum_relevant_callable_transitions": 6,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "r03",
+      "split": "reserved",
+      "role": "trial_regression",
+      "project": "httpx",
+      "provenance": "fresh_seeded_regression",
+      "private_mechanism": "Reading an iterable upload must leave a replayable entity for preserving redirects",
+      "evidence_mode": "full",
+      "case_tests": "\n@pytest.mark.parametrize(\"statuses\",[(307,),(308,),(307,308)])\ndef test_request_records(statuses):\n    seen=[]\n    def handle(request):\n        seen.append(request.content)\n        return httpx.Response(statuses[len(seen)-1],headers={\"location\":\"/step/\"+str(len(seen))}) if len(seen)<=len(statuses) else httpx.Response(200)\n    with httpx.Client(transport=httpx.MockTransport(handle),follow_redirects=True,trust_env=False) as client:\n        request=client.build_request(\"POST\",\"https://example.test/start\",content=(part for part in [b\"first\",b\"second\"]))\n        assert request.read() == b\"firstsecond\"\n        response=client.send(request)\n    assert response.status_code == 200\n    assert seen == [b\"firstsecond\"]*(len(statuses)+1)\n",
+      "regression_tests": "\n@pytest.mark.parametrize(\"mode\",[\"bytes\",\"json\",\"single\"])\ndef test_neighboring_request_records(mode):\n    seen=[]\n    def handle(request):\n        seen.append(request.content)\n        return httpx.Response(307,headers={\"location\":\"/done\"}) if len(seen)==1 and mode!=\"single\" else httpx.Response(200)\n    with httpx.Client(transport=httpx.MockTransport(handle),follow_redirects=True,trust_env=False) as client:\n        kwargs={\"json\":{\"a\":1}} if mode==\"json\" else {\"content\":b\"abc\" if mode==\"bytes\" else (part for part in [b\"a\",b\"bc\"])}\n        response=client.post(\"https://example.test/start\",**kwargs)\n    expected=b'{\"a\":1}' if mode==\"json\" else b\"abc\"\n    assert seen == [expected]*(1 if mode==\"single\" else 2)\n    assert response.status_code == 200\n",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_models.py",
+          "old": "            self._content = b\"\".join(self.stream)\n            if not isinstance(self.stream, ByteStream):\n                # If a streaming request has been read entirely into memory, then\n                # we can replace the stream with a raw bytes implementation,\n                # to ensure that any non-replayable streams can still be used.\n                self.stream = ByteStream(self._content)",
+          "new": "            self._content = b\"\".join(self.stream)\n            if not isinstance(self.stream, ByteStream):\n                # If a streaming request has been read entirely into memory, then\n                # we can replace the stream with a raw bytes implementation,\n                # to ensure that any non-replayable streams can still be used.\n                self.stream = self.stream"
+        }
+      ],
+      "investigation_surface": [
+        [
+          "vendor/httpx/_client.py",
+          [
+            "BaseClient._redirect_stream",
+            "Client.send"
+          ]
+        ],
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Request.read",
+            "Request.__init__"
+          ]
+        ],
+        [
+          "vendor/httpx/_content.py",
+          [
+            "IteratorByteStream.__iter__",
+            "ByteStream"
+          ]
+        ]
+      ],
+      "inspection_targets": [
+        {
+          "path": "vendor/httpx/_client.py",
+          "symbols": [
+            "BaseClient._redirect_stream",
+            "Client.send"
+          ]
+        },
+        {
+          "path": "vendor/httpx/_models.py",
+          "symbols": [
+            "Request.read",
+            "Request.__init__"
+          ]
+        },
+        {
+          "path": "vendor/httpx/_content.py",
+          "symbols": [
+            "IteratorByteStream.__iter__",
+            "ByteStream"
+          ]
+        }
+      ],
+      "targeted_inspection_assertion": "Identify the violated interaction invariant from the protected public-API observations and production call chain.",
+      "acceptable_routes": [
+        "application_logic"
+      ],
+      "root_cause_discriminating_facts": [
+        "Reading an iterable upload must leave a replayable entity for preserving redirects",
+        "After reading an iterable request, preserved redirects must replay identical bytes; direct single sends and already replayable byte/JSON bodies remain valid."
+      ],
+      "repair_invariants": [
+        "After reading an iterable request, preserved redirects must replay identical bytes; direct single sends and already replayable byte/JSON bodies remain valid."
+      ],
+      "minimal_repair_invariants": [
+        "After reading an iterable request, preserved redirects must replay identical bytes; direct single sends and already replayable byte/JSON bodies remain valid."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 3,
+        "minimum_relevant_callable_transitions": 6,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "r04",
+      "split": "reserved",
+      "role": "trial_regression",
+      "project": "httpx",
+      "provenance": "fresh_seeded_regression",
+      "private_mechanism": "Multipart file serialization rewinds seekable files consistently with its advertised length",
+      "evidence_mode": "full",
+      "case_tests": "\nimport io\n@pytest.mark.parametrize(\"offset\",[1,3,5])\ndef test_request_records(offset):\n    file=io.BytesIO(b\"complete-payload\")\n    file.seek(offset)\n    seen=[]\n    def handle(request):\n        seen.append((request.content,dict(request.headers)))\n        return httpx.Response(200)\n    with httpx.Client(transport=httpx.MockTransport(handle),trust_env=False) as client:\n        for index in range(2):\n            client.post(\"https://example.test/upload\",files={\"file\":(\"data.bin\",file)},data={\"index\":str(index)})\n    assert len(seen)==2\n    for body,headers in seen:\n        assert b\"complete-payload\" in body\n        assert int(headers[\"content-length\"]) == len(body)\n    assert not file.closed\n",
+      "regression_tests": "\n@pytest.mark.parametrize(\"value\",[b\"bytes\",\"text\",b\"\"])\ndef test_neighboring_request_records(value):\n    request=httpx.Request(\"POST\",\"https://example.test/upload\",files={\"file\":(\"data.txt\",value)})\n    body=request.read()\n    assert (value.encode() if isinstance(value,str) else value) in body\n    assert int(request.headers[\"content-length\"]) == len(body)\n    assert b'filename=\"data.txt\"' in body\n",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_multipart.py",
+          "old": "                self.file.seek(0)",
+          "new": "                self.file.seek(self.file.tell())"
+        }
+      ],
+      "investigation_surface": [
+        [
+          "vendor/httpx/_multipart.py",
+          [
+            "FileField.get_length",
+            "FileField.render_data",
+            "MultipartStream.get_content_length",
+            "MultipartStream.iter_chunks"
+          ]
+        ],
+        [
+          "vendor/httpx/_utils.py",
+          [
+            "peek_filelike_length"
+          ]
+        ],
+        [
+          "vendor/httpx/_content.py",
+          [
+            "encode_multipart_data"
+          ]
+        ],
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Request.read"
+          ]
+        ]
+      ],
+      "inspection_targets": [
+        {
+          "path": "vendor/httpx/_multipart.py",
+          "symbols": [
+            "FileField.get_length",
+            "FileField.render_data",
+            "MultipartStream.get_content_length",
+            "MultipartStream.iter_chunks"
+          ]
+        },
+        {
+          "path": "vendor/httpx/_utils.py",
+          "symbols": [
+            "peek_filelike_length"
+          ]
+        },
+        {
+          "path": "vendor/httpx/_content.py",
+          "symbols": [
+            "encode_multipart_data"
+          ]
+        },
+        {
+          "path": "vendor/httpx/_models.py",
+          "symbols": [
+            "Request.read"
+          ]
+        }
+      ],
+      "targeted_inspection_assertion": "Identify the violated interaction invariant from the protected public-API observations and production call chain.",
+      "acceptable_routes": [
+        "application_logic"
+      ],
+      "root_cause_discriminating_facts": [
+        "Multipart file serialization rewinds seekable files consistently with its advertised length",
+        "File serialization starts at zero for each use, so bytes match the measured full file length; string and raw byte file parts remain valid."
+      ],
+      "repair_invariants": [
+        "File serialization starts at zero for each use, so bytes match the measured full file length; string and raw byte file parts remain valid."
+      ],
+      "minimal_repair_invariants": [
+        "File serialization starts at zero for each use, so bytes match the measured full file length; string and raw byte file parts remain valid."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 4,
+        "minimum_relevant_callable_transitions": 7,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "c01",
+      "split": "controls",
+      "role": "control",
+      "project": "httpx",
+      "provenance": "fresh_seeded_regression",
+      "private_mechanism": "Insufficient retained evidence control on an actual executable header regression",
+      "evidence_mode": "missing",
+      "case_tests": "\n@pytest.mark.parametrize(\"name,override\", [(\"X-Mode\",\"one\"),(\"x-MODE\",\"two\"),(\"X-mode\",\"three\")])\ndef test_request_records(name, override):\n    seen=[]\n    def handle(request):\n        seen.append((request.headers[\"x-mode\"],request.headers[\"x-keep\"],request.content))\n        return httpx.Response(200,json={\"ok\":True})\n    with httpx.Client(transport=httpx.MockTransport(handle),headers={\"x-mode\":\"default\",\"x-keep\":\"yes\"},trust_env=False) as client:\n        client.post(\"https://example.test/submit\",headers={name:override},json={\"value\":override})\n        client.get(\"https://example.test/after\")\n        assert seen[0] == (override,\"yes\",json.dumps({\"value\":override},separators=(\",\",\":\")).encode())\n        assert seen[1] == (\"default\",\"yes\",b\"\")\n        assert client.headers[\"x-mode\"] == \"default\"\n",
+      "regression_tests": "\n@pytest.mark.parametrize(\"payload\", [None,{\"a\":1},{\"b\":False}])\ndef test_neighboring_request_records(payload):\n    with httpx.Client(headers={\"x-keep\":\"base\"},trust_env=False) as client:\n        request=client.build_request(\"POST\",\"https://example.test/submit\",headers={\"x-added\":\"request\"},json=payload)\n        assert request.headers[\"x-keep\"] == \"base\"\n        assert request.headers[\"x-added\"] == \"request\"\n        assert \"x-added\" not in client.headers\n        if payload is not None:\n            assert request.headers[\"content-type\"] == \"application/json\"\n            assert int(request.headers[\"content-length\"]) == len(request.content)\n",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_client.py",
+          "old": "        merged_headers = Headers(self.headers)\n        merged_headers.update(headers)\n        return merged_headers",
+          "new": "        merged_headers = Headers(headers)\n        merged_headers.update(self.headers)\n        return merged_headers"
+        }
+      ],
+      "investigation_surface": [
+        [
+          "vendor/httpx/_client.py",
+          [
+            "BaseClient.build_request",
+            "BaseClient._merge_headers",
+            "Client.request",
+            "Client.send"
+          ]
+        ],
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Headers.update",
+            "Request.__init__",
+            "Request._prepare"
+          ]
+        ]
+      ],
+      "inspection_targets": [
+        {
+          "path": "vendor/httpx/_client.py",
+          "symbols": [
+            "BaseClient.build_request",
+            "BaseClient._merge_headers",
+            "Client.request",
+            "Client.send"
+          ]
+        },
+        {
+          "path": "vendor/httpx/_models.py",
+          "symbols": [
+            "Headers.update",
+            "Request.__init__",
+            "Request._prepare"
+          ]
+        }
+      ],
+      "targeted_inspection_assertion": "Identify the violated interaction invariant from the protected public-API observations and production call chain.",
+      "acceptable_routes": [
+        "application_logic"
+      ],
+      "root_cause_discriminating_facts": [
+        "Request header override order must survive build/send without altering client defaults",
+        "Per-request headers override matching default names case-insensitively, while unrelated defaults and later requests retain the client values."
+      ],
+      "repair_invariants": [
+        "Per-request headers override matching default names case-insensitively, while unrelated defaults and later requests retain the client values."
+      ],
+      "minimal_repair_invariants": [
+        "Per-request headers override matching default names case-insensitively, while unrelated defaults and later requests retain the client values."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 2,
+        "minimum_relevant_callable_transitions": 7,
+        "human_difficulty_established": false
+      }
+    },
+    {
+      "id": "c02",
+      "split": "controls",
+      "role": "control",
+      "project": "mixed",
+      "provenance": "fresh_seeded_regression",
+      "private_mechanism": "Two independent observed failures requiring separate production repairs",
+      "evidence_mode": "full",
+      "case_tests": "\n@pytest.mark.parametrize(\"name,override\", [(\"X-Mode\",\"one\"),(\"x-MODE\",\"two\"),(\"X-mode\",\"three\")])\ndef test_request_records(name, override):\n    seen=[]\n    def handle(request):\n        seen.append((request.headers[\"x-mode\"],request.headers[\"x-keep\"],request.content))\n        return httpx.Response(200,json={\"ok\":True})\n    with httpx.Client(transport=httpx.MockTransport(handle),headers={\"x-mode\":\"default\",\"x-keep\":\"yes\"},trust_env=False) as client:\n        client.post(\"https://example.test/submit\",headers={name:override},json={\"value\":override})\n        client.get(\"https://example.test/after\")\n        assert seen[0] == (override,\"yes\",json.dumps({\"value\":override},separators=(\",\",\":\")).encode())\n        assert seen[1] == (\"default\",\"yes\",b\"\")\n        assert client.headers[\"x-mode\"] == \"default\"\n\nfrom decilist import Decilist, FunctionProvider, Policy, Choose\n@pytest.mark.parametrize(\"mode,expected\",[(\"elapsed\",\"timeout\"),(\"native\",\"timeout\"),(\"failure\",\"error\")])\nasync def test_second_provider_records(mode,expected):\n    calls=[]\n    class First:\n        name,model,locality=\"primary\",\"fixture\",\"local\"\n        async def infer(self,question):\n            calls.append(\"primary\")\n            if mode == \"elapsed\": await asyncio.sleep(60)\n            if mode == \"native\": raise TimeoutError(\"provider deadline\")\n            raise ValueError(\"provider failed\")\n    def recover(question):\n        calls.append(\"fallback\")\n        return {\"a\":0,\"b\":1}\n    engine=Decilist([First(),FunctionProvider(recover,name=\"fallback\")],policy=Policy(timeout_ms=10))\n    result=await engine.decide(Choose(state=\"observed\",instructions=\"Select\",options={\"a\":\"A\",\"b\":\"B\"}))\n    assert result.value == \"b\" and result.provider == \"fallback\"\n    assert calls == [\"primary\",\"fallback\"]\n    assert [(a.provider,a.outcome) for a in result.attempts] == [(\"primary\",expected),(\"fallback\",\"accepted\")]\n    assert json.loads(result.model_dump_json())[\"attempts\"][0][\"outcome\"] == expected\n",
+      "regression_tests": "\n@pytest.mark.parametrize(\"payload\", [None,{\"a\":1},{\"b\":False}])\ndef test_neighboring_request_records(payload):\n    with httpx.Client(headers={\"x-keep\":\"base\"},trust_env=False) as client:\n        request=client.build_request(\"POST\",\"https://example.test/submit\",headers={\"x-added\":\"request\"},json=payload)\n        assert request.headers[\"x-keep\"] == \"base\"\n        assert request.headers[\"x-added\"] == \"request\"\n        assert \"x-added\" not in client.headers\n        if payload is not None:\n            assert request.headers[\"content-type\"] == \"application/json\"\n            assert int(request.headers[\"content-length\"]) == len(request.content)\n\nfrom decilist import Decilist, FunctionProvider, Policy\n@pytest.mark.parametrize(\"raw,expected\",[({\"a\":.5,\"b\":.5},\"low_confidence\"),({\"a\":.1,\"b\":.1},\"invalid_output\"),({\"a\":True,\"b\":False},\"invalid_output\")])\nasync def test_second_neighboring_provider_records(raw,expected):\n    engine=Decilist([FunctionProvider(lambda _:raw,name=\"first\"),FunctionProvider(lambda _:{\"a\":1,\"b\":0},name=\"second\")])\n    result=await engine.choose(\"observed\",\"Select\",{\"a\":\"A\",\"b\":\"B\"})\n    assert result.value == \"a\"\n    assert [a.outcome for a in result.attempts] == [expected,\"accepted\"]\n    strict=await engine.choose(\"observed\",\"Select\",{\"a\":\"A\",\"b\":\"B\"},policy=Policy(min_confidence=1.0))\n    assert strict.status == \"accepted\" and strict.confidence == 1\n",
+      "mutations": [
+        {
+          "kind": "replace",
+          "path": "vendor/httpx/_client.py",
+          "old": "        merged_headers = Headers(self.headers)\n        merged_headers.update(headers)\n        return merged_headers",
+          "new": "        merged_headers = Headers(headers)\n        merged_headers.update(self.headers)\n        return merged_headers"
+        },
+        {
+          "kind": "replace",
+          "path": "packages/python/src/decilist/engine.py",
+          "old": "            except TimeoutError:\n                outcome = \"timeout\"",
+          "new": "            except TimeoutError:\n                outcome = \"error\""
+        }
+      ],
+      "investigation_surface": [
+        [
+          "vendor/httpx/_client.py",
+          [
+            "BaseClient.build_request",
+            "BaseClient._merge_headers",
+            "Client.request",
+            "Client.send"
+          ]
+        ],
+        [
+          "vendor/httpx/_models.py",
+          [
+            "Headers.update",
+            "Request.__init__",
+            "Request._prepare"
+          ]
+        ],
+        [
+          "packages/python/src/decilist/engine.py",
+          [
+            "Decilist.decide",
+            "Decilist.choose"
+          ]
+        ],
+        [
+          "packages/python/src/decilist/providers.py",
+          [
+            "FunctionProvider.infer"
+          ]
+        ],
+        [
+          "packages/python/src/decilist/contracts.py",
+          [
+            "Policy",
+            "Attempt",
+            "Decision"
+          ]
+        ]
+      ],
+      "inspection_targets": [
+        {
+          "path": "vendor/httpx/_client.py",
+          "symbols": [
+            "BaseClient.build_request",
+            "BaseClient._merge_headers",
+            "Client.request",
+            "Client.send"
+          ]
+        },
+        {
+          "path": "vendor/httpx/_models.py",
+          "symbols": [
+            "Headers.update",
+            "Request.__init__",
+            "Request._prepare"
+          ]
+        },
+        {
+          "path": "packages/python/src/decilist/engine.py",
+          "symbols": [
+            "Decilist.decide",
+            "Decilist.choose"
+          ]
+        },
+        {
+          "path": "packages/python/src/decilist/providers.py",
+          "symbols": [
+            "FunctionProvider.infer"
+          ]
+        },
+        {
+          "path": "packages/python/src/decilist/contracts.py",
+          "symbols": [
+            "Policy",
+            "Attempt",
+            "Decision"
+          ]
+        }
+      ],
+      "targeted_inspection_assertion": "Identify the violated interaction invariant from the protected public-API observations and production call chain.",
+      "acceptable_routes": [
+        "application_logic",
+        "decision_policy"
+      ],
+      "root_cause_discriminating_facts": [
+        "Request header override order must survive build/send without altering client defaults",
+        "Per-request headers override matching default names case-insensitively, while unrelated defaults and later requests retain the client values.",
+        "Timeout outcomes remain distinct from provider errors while fallback still executes",
+        "Both an elapsed wait_for deadline and a native TimeoutError produce timeout, a different provider exception produces error, and later providers still run."
+      ],
+      "repair_invariants": [
+        "Per-request headers override matching default names case-insensitively, while unrelated defaults and later requests retain the client values.",
+        "Both an elapsed wait_for deadline and a native TimeoutError produce timeout, a different provider exception produces error, and later providers still run."
+      ],
+      "minimal_repair_invariants": [
+        "Per-request headers override matching default names case-insensitively, while unrelated defaults and later requests retain the client values.",
+        "Both an elapsed wait_for deadline and a native TimeoutError produce timeout, a different provider exception produces error, and later providers still run."
+      ],
+      "structural_indicators": {
+        "multiple_protected_parameterized_tests": true,
+        "separate_adjacent_regression_file": true,
+        "minimum_relevant_files": 2,
+        "minimum_relevant_callable_transitions": 7,
+        "human_difficulty_established": false
+      }
+    }
+  ]
+}

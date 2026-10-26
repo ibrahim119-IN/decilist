@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "phase": "development_only",
+  "heldout_quality_calls": 0,
+  "observations": [
+    {
+      "run": 1,
+      "report": "triage-v4-development-01-2026-10-26.json",
+      "report_sha256": "8a8a0c25cdf0a570ac2cfe64197362a7af5da19374e7120d19cc21c8b9488200",
+      "source_stable": true,
+      "outcomes": [
+        {
+          "case_id": "d01",
+          "state": "unverified",
+          "reason": "candidate_did_not_pass_unchanged_tests",
+          "seconds": 27.46051219999208
+        },
+        {
+          "case_id": "d02",
+          "state": "unverified",
+          "reason": "model_did_not_supply_a_valid_hypothesis",
+          "seconds": 2.005490599985933
+        }
+      ]
+    },
+    {
+      "run": 2,
+      "report": "triage-v4-development-02-2026-10-26.json",
+      "report_sha256": "fb561a30cf3587d5cb428e0c8e63716f37dfa440ec0cf316b9477240ff995c94",
+      "summary": {
+        "unique_regressions": 2,
+        "observations": 2,
+        "first_observation_attempt_counts": {
+          "generation_helper_attempted": 0,
+          "model_request_attempted": 0,
+          "generated_output_retained": 0,
+          "structurally_valid_hypothesis": 0,
+          "patched_disposable_copy": 0,
+          "target_tests_all_passed": 0,
+          "regression_tests_all_passed": 0,
+          "rejected_or_error": 0
+        },
+        "errors": 0,
+        "workflow_supported": 0,
+        "root_protected_repairs": 0,
+        "first_observation_median_ms": 1201.123099999677,
+        "states": {
+          "unverified": 2
+        },
+        "controls": [],
+        "human_time_saved": null,
+        "complete_causal_correctness": null
+      },
+      "note": "Pre-inference bridge parent-directory error. The original summary undercounted errors; preserved unchanged."
+    },
+    {
+      "run": 3,
+      "report": "triage-v4-development-03-2026-10-26.json",
+      "report_sha256": "6c93f42f17fb02047b83cf1f722fa0f164a0e7c567bea8c7bc5b0456f30d374a",
+      "source_stable": true,
+      "outcomes": [
+        {
+          "case_id": "d01",
+          "state": "unverified",
+          "reason": "candidate_did_not_pass_unchanged_tests",
+          "seconds": 28.189409899991006
+        },
+        {
+          "case_id": "d02",
+          "state": "hypothesis_supported_by_tests",
+          "reason": "failing_and_existing_regression_tests_passed",
+          "seconds": 10.804423800000222
+        }
+      ]
+    },
+    {
+      "run": 4,
+      "report": "triage-v4-development-04-2026-10-26.json",
+      "report_sha256": "d4c65061cbc7d5bfea793e316ffd26999014737b30e7b3c36a5eceaf5ad47794",
+      "summary": {
+        "unique_regressions": 2,
+        "observations": 2,
+        "first_observation_attempt_counts": {
+          "generation_helper_attempted": 3,
+          "model_request_attempted": 3,
+          "generated_output_retained": 3,
+          "structurally_valid_hypothesis": 2,
+          "patched_disposable_copy": 2,
+          "target_tests_all_passed": 1,
+          "regression_tests_all_passed": 2,
+          "rejected_or_error": 2
+        },
+        "errors": 1,
+        "measurement_errors": 0,
+        "workflow_errors": 1,
+        "workflow_supported": 1,
+        "root_protected_repairs": 1,
+        "first_observation_median_ms": 18264.855100002023,
+        "states": {
+          "unverified": 1,
+          "hypothesis_supported_by_tests": 1
+        },
+        "controls": [],
+        "human_time_saved": null,
+        "complete_causal_correctness": null
+      },
+      "note": "First full measurement bridge run after directory/error-accounting fixes. Concurrent unit tests ran; latency is not isolated."
+    }
+  ],
+  "human_time_saved": null,
+  "development_workflow_source": {
+    "path": "provenance/triage_v4.workflow.1.py.txt",
+    "sha256": "8ba14f854eb6df50181ca3fcb3e157e4db6614f17785afc51fb1d3b69bd022b4",
+    "note": "Exact pre-instrumentation workflow used by retained development observations. Stage wall timing instrumentation was added before held-out freeze; hypothesis and intervention behavior were unchanged."
+  },
+  "initial_generator_source": {
+    "path": "provenance/triage_hypothesis_v4.initial.1.py.txt",
+    "sha256": "65f6b44db1b75fe796d544094cd54274db85aef34d55c551d24e6d654257f780",
+    "exact_match_to_first_run": true,
+    "recovered_from_recorded_edits": true
+  },
+  "context_probe": {
+    "before_model_calls": true,
+    "problem": "24 KiB packing removed function bodies and omitted a deeper executed merge helper.",
+    "repair": "Generic failing-test relevance ranking, deeper executed hops and whole-row dropping preserve complete useful bodies.",
+    "raw_evidence_retained_locally": true
+  }
+}

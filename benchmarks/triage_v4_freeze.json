@@ -1,0 +1,148 @@
+{
+  "suite": "testtriage-repair-v4",
+  "schema_version": 4,
+  "created_utc": "2026-10-26T04:42:39.217114+00:00",
+  "base_revision": "1c2e0ff46cca171c717b098b97c0cf768088beef",
+  "development_ids": [
+    "d01",
+    "d02"
+  ],
+  "evaluation_ids": [
+    "e01",
+    "e02",
+    "e03",
+    "e04",
+    "e05",
+    "e06"
+  ],
+  "reserved_trial_ids": [
+    "r01",
+    "r02",
+    "r03",
+    "r04"
+  ],
+  "control_ids": [
+    "c01",
+    "c02"
+  ],
+  "allowed_production_roots": [
+    "packages/python/src/decilist/",
+    "vendor/httpx/"
+  ],
+  "files_sha256": {
+    "benchmarks/triage_v4_lab.py": "196711b9c21d30b878233647256864348b424a42de3533e50569822510457ad4",
+    "benchmarks/triage_v4_cases.json": "3e2c868693cde100f634b1b4a137e69f8701c7c3e6bafdea8e5f1378f5e79719",
+    "tests/test_triage_v4_lab.py": "0db67c044339fd59662f462f080c22cedc95c4608375e79e6412eac1e98d7ca6"
+  },
+  "base_source_sha256": {
+    "packages/python/src/decilist/__init__.py": "5c8169b352357ffb6ba41d403325b98487da1412bd5ab9f6ba2a8498d38dff24",
+    "packages/python/src/decilist/__main__.py": "307299fda7b77d22c64cb51430ec75e5f59d78e9c948786afb3b2544fe45e4b7",
+    "packages/python/src/decilist/cli.py": "6f6c3e998c03891b7ab3591b9901e13242695c63d8bab0857c05cd79c5323860",
+    "packages/python/src/decilist/client.py": "51fd84355f4093eeaa3b1a2eca8e9931af4c59872d5c7a119a6bd4f1d55742e0",
+    "packages/python/src/decilist/contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8",
+    "packages/python/src/decilist/demo.py": "84e002f263fa1feb9bcbe77ba89c40f770b282ec752f2eaf83be4948723412b4",
+    "packages/python/src/decilist/engine.py": "9d9281477b8327874c733fe26e0f89bd14c5ff754a6c6cbddaf1542a93381db4",
+    "packages/python/src/decilist/evaluation.py": "a1be17b931fbf504e830c379a7144b2e71239d276224371446918af6aaa6335b",
+    "packages/python/src/decilist/llama_cpp.py": "c63b8098d2ad1f346189a75e05e4f7fba899ddad57867ff33307dbde4b8546eb",
+    "packages/python/src/decilist/providers.py": "1d6e208f70930e190f752bbe0ef3096c646066e8ff469629927d081b7f756ea3",
+    "packages/python/src/decilist/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "packages/python/src/decilist/runtime.py": "7f8b1ec6d0bda03584167b6e0f6b4259c322477ea2a0957f55ed99d9f39ed59e",
+    "packages/python/src/decilist/server.py": "6b6ac14c2661fd4fa67f020061daa9ce0a5fb38ed52f34913e93a5e327474e4d",
+    "packages/python/src/decilist/static/app.js": "75e0af6212eb99e5035a490822017c834e7440df36fb4b260f182826473706d7",
+    "packages/python/src/decilist/static/demo.html": "6ef3136106a61a8ef234c387b89a6683f5806794613c992723ff17a0abab401a",
+    "packages/python/src/decilist/static/demo.js": "c325c44b8e33e2b6592f9746a7506ef7a83ca2007cae47f8a38430cf0815b6be",
+    "packages/python/src/decilist/static/index.html": "549ce77205981fa199b7ce4c956fa0e251a56f733607f241f082d07f6e6840af",
+    "packages/python/src/decilist/static/style.css": "b672a75dd772123d943304f43b3e7ad96c91aa7043592be9b7bf83d0d6be72cd",
+    "packages/python/src/decilist/triage.py": "c246194e22da66967c88b1911a169944fc7c66f7049146cdd70435ca4c832e6f",
+    "packages/python/src/decilist/triage_actions.py": "84cf16be3b8c83e7a59e26de438eda78579c59b2a7508d5349c56d33f9283bc2",
+    "packages/python/src/decilist/triage_assistant.py": "feae88f9e73c867af1e783e956008fd064ed8370dea32eaaee31c360941e5962",
+    "packages/python/src/decilist/triage_context.py": "ab6853369a4ec67f978e57e17da56dd77f78c5f2e73480ac8d0bc8d6c7a555c7",
+    "packages/python/src/decilist/triage_context_v3.py": "6e528c85a5960411b6345e6bf1a38643e7b24b573eb73e71b0bab6145c27b9c6",
+    "packages/python/src/decilist/triage_diagnostic.py": "2214ba74dce604d672f6099d184ee1092b8b6377483d14252080505f0f86e9f6",
+    "packages/python/src/decilist/triage_evidence.py": "50067926f906660380999595b207a5c7bd2082e4cd66f52f44cea24f8c2eef58",
+    "packages/python/src/decilist/triage_inspect.py": "bf104ad0eaa4ee3dd176599c7903099f9fc01d6938a165e526f39a1c86b0b751",
+    "packages/python/src/decilist/triage_v3.py": "49468e11901f05bd5dbfff6b5ffb1f8e9064923839e6114529d4f69c988c43d2",
+    "packages/python/src/decilist/web.py": "a24caf6d9f7da73abec438b821df9ad7a2429c3775af3dcf420fb21b1d49f3ae",
+    "vendor/httpx/__init__.py": "0ac6997bac998f4ac783adf6d8058a587193315afdb718047c3e4fdff46bcfad",
+    "vendor/httpx/__version__.py": "2e853261e3974e2786cee3ffeb850bd30c5db718eebbf41b3af13b34e83e22a5",
+    "vendor/httpx/_api.py": "aff660b388c8a5c3c92ea2b975b6d26b2aa8fe254c2856b164277ea0e1f12c4b",
+    "vendor/httpx/_auth.py": "62bdd0c1a5122b5eeb198c7eee3f85762705233cf863d14557ed45e3eed15d7e",
+    "vendor/httpx/_client.py": "c43f941baefe58c91e96d00039e1868fe719d91453026d7db1647194563bff8d",
+    "vendor/httpx/_config.py": "a4fa7653ec2271f70ab05f8a6111352d876dddee84446788a1767c1a3a372d67",
+    "vendor/httpx/_content.py": "2c61b3ac94d1dcebcde0c6f519554d2d7917247fbaa0a97002db4ef69e70ff28",
+    "vendor/httpx/_decoders.py": "a74757f08d0d1077b1b37506a784ac66eb62321b17aeb5a5ebe1a7a956f488a3",
+    "vendor/httpx/_exceptions.py": "6f15bb7f1ce054c01d3536f04f4567ab4e202435b5fe023f1858903ee3328cbd",
+    "vendor/httpx/_main.py": "0a0f4631a6e24d3fecc1a0df5202118ad4b0c4b44c4b05033a6ecb7521aa940e",
+    "vendor/httpx/_models.py": "e3ffc6bb2bf580bc6e6428708a6f247d036220e709f5a72b785392babbd97e6b",
+    "vendor/httpx/_multipart.py": "28e1c465997aa28860f663da2b2caedf8e6aab5ac92e0df94d41b7600cd70776",
+    "vendor/httpx/_status_codes.py": "0d89fedae7c180c797cb9b3cc77fd307bc2302e00031ec136a43eb9b9ad712c7",
+    "vendor/httpx/_transports/__init__.py": "19b52805200ea7bcfe97ef63e5884c851dc3308727e8554b863d3bd8edcd9e7a",
+    "vendor/httpx/_transports/asgi.py": "1d17e20d830fb78c101f6805807660e1cfa2dec6e5a3a6cbe464ea7044fec73f",
+    "vendor/httpx/_transports/base.py": "9194bf54c6d58987c5e7bd29a205022756ee973fb26df2f9d4faacf7292d79b5",
+    "vendor/httpx/_transports/default.py": "03379a454c95c0271c4f2c8d25ec437f49f57457f3cf2769748420bf0ecf2e79",
+    "vendor/httpx/_transports/mock.py": "3d3a34779ebb4484d7c46ae48ba90deffebbc300317f088c0dcb972626428c4a",
+    "vendor/httpx/_transports/wsgi.py": "35c3d7dd76a9fc4c0215958efce692c9036e227098c7540c35b3bc1807a2ea36",
+    "vendor/httpx/_types.py": "272878d4642aec039ebfc20e58a0c083bcc26ef1c07ee7e65b983f3e24ed12b6",
+    "vendor/httpx/_urlparse.py": "640987e3b38d7e4c6bae3f8f3d88467a21e36fa0232824be00d58837838bfca6",
+    "vendor/httpx/_urls.py": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd",
+    "vendor/httpx/_utils.py": "fd355ea802afc4990a1ddcfb74579be2cd0b66a41781e1645d281f88704aff5a",
+    "vendor/httpx/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "vendor/LICENSE.httpx.md": "4ec59d544f12b5f539a3a716fd321ac58ccd8030b465221f2c880200cdf28d8d",
+    "LICENSE.decilist": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  },
+  "fixture_proof": {
+    "relative_directory": "attempt-03-all",
+    "proof_sha256": "fbc360a93f8c24b6419b6ef9522e2cabd0621f6b32b0d808cd7e2dfb109018cb",
+    "candidate_count": 14,
+    "verified_count": 14,
+    "all_verified": true,
+    "observed_sequence": "unchanged source pass -> seed fail -> reference restoration pass"
+  },
+  "candidate_attempt_history": [
+    {
+      "relative_directory": "attempt-01-dev",
+      "proof_sha256": "d4ddaeee81f4f12721fa07672e4ea133fc635de12b9ad3b94bdf688021b740f4",
+      "catalog_snapshot_sha256": "7c78e0a8b25e6bbcf8cc0259882ac94b8186cf5be1dcd4ecfd44c09f4efdaaf6",
+      "lab_snapshot_sha256": "196711b9c21d30b878233647256864348b424a42de3533e50569822510457ad4",
+      "candidate_count": 2,
+      "verified_count": 2,
+      "retained_failures": []
+    },
+    {
+      "relative_directory": "attempt-02-all",
+      "proof_sha256": "83846aef5271ecdc20ef095afbaf662b26fb5f22536b9dc450d3d0cfec5085ac",
+      "catalog_snapshot_sha256": "7c78e0a8b25e6bbcf8cc0259882ac94b8186cf5be1dcd4ecfd44c09f4efdaaf6",
+      "lab_snapshot_sha256": "196711b9c21d30b878233647256864348b424a42de3533e50569822510457ad4",
+      "candidate_count": 14,
+      "verified_count": 12,
+      "retained_failures": [
+        {
+          "case_id": "r01",
+          "candidate_status": "retained_candidate_failure",
+          "error_type": "ValueError",
+          "error": "candidate replacement must match once: r01"
+        },
+        {
+          "case_id": "r03",
+          "candidate_status": "retained_candidate_failure",
+          "error_type": "ValueError",
+          "error": "candidate replacement must match once: r03"
+        }
+      ]
+    },
+    {
+      "relative_directory": "attempt-03-all",
+      "proof_sha256": "fbc360a93f8c24b6419b6ef9522e2cabd0621f6b32b0d808cd7e2dfb109018cb",
+      "catalog_snapshot_sha256": "3e2c868693cde100f634b1b4a137e69f8701c7c3e6bafdea8e5f1378f5e79719",
+      "lab_snapshot_sha256": "196711b9c21d30b878233647256864348b424a42de3533e50569822510457ad4",
+      "candidate_count": 14,
+      "verified_count": 14,
+      "retained_failures": []
+    }
+  ],
+  "candidate_failure_policy": "Earlier preparation failures remain in hashed proof snapshots and outcomes; no candidate or ineffective seed is silently removed.",
+  "freeze_boundary": "Corpus construction consulted no V4 assistant output; fixture proof called no model. Tests, seeds, source snapshots and membership are frozen before later heldout evaluations and participant trials.",
+  "difficulty_and_effect_policy": "No observed human hardness, equal trial difficulty, model benefit, or repair-time improvement is inferred from structural design or fixture pass/fail proof.",
+  "oracle_isolation": "The catalog, freeze, fixture proof, mutations and reference restoration are evaluator-only and are absent from every participant tree/model input.",
+  "external_models_or_review_agents_used": false
+}
