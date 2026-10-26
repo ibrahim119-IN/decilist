@@ -1,0 +1,57 @@
+{
+  "suite": "triage-v3-root-verification",
+  "verified_at": "2026-10-26T02:30:50.856665+00:00",
+  "source_candidate_commit": "8aa74c9b2656ecd37e988eeb39aeed60ee5e9264",
+  "python_suite": {
+    "command": "python -m pytest -q",
+    "passed": 737,
+    "failed": 0,
+    "elapsed_seconds": 108.63
+  },
+  "frozen_source_hashes_verified": 25,
+  "actual_provider_smoke": {
+    "passed": 5,
+    "report": "reports/triage-v3-provider-smoke-2026-10-26.json"
+  },
+  "actual_python_typescript_http": {
+    "passed": 6,
+    "report": "reports/triage-v3-http-live-2026-10-26.json"
+  },
+  "repair_root_reverification": {
+    "runs_passed": 8,
+    "protected_tests_per_run": 3,
+    "report": "reports/triage-v3-agent-trials-2026-10-26.json"
+  },
+  "model_health_after_measurements": {
+    "liquid": {
+      "service": "decilist",
+      "schema_version": "1",
+      "runtime_version": "0.1.0a1",
+      "ready": true,
+      "status": "ok",
+      "provider": "liquid",
+      "local_only": true,
+      "providers": [
+        {
+          "name": "liquid-local",
+          "model": "LiquidAI/d1-3B",
+          "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+          "locality": "local"
+        }
+      ]
+    },
+    "qwen": {
+      "status": "ok"
+    }
+  },
+  "report_json_and_links_valid": true,
+  "unverified": [
+    "Human developer time savings",
+    "Production debugging usefulness",
+    "Other hardware/runtime configurations"
+  ],
+  "notes": [
+    "The untracked pre-existing examples/adaptive_results.py is excluded from this work.",
+    "The original V2 assistant and frozen V3 candidate remain unchanged."
+  ]
+}

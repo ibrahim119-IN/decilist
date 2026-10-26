@@ -1,0 +1,125 @@
+{
+  "suite": "triage-v3-exploratory-replay-assessment",
+  "assessed_at": "2026-10-26T02:29:03.545666+00:00",
+  "fresh_holdout": false,
+  "replay_report_sha256": "4cb9f920272cc4d06d41d751d6ac54736eecb9818b8d350cb2ef09974687a727",
+  "assessor": "Primary Codex engineer; not independent or blinded",
+  "rubric": "Same predeclared distinguishing-mechanism rubric in docs/triage-v3-experiment.md",
+  "counts": {
+    "unsupported_or_wrong": 5,
+    "specific_and_supported": 1
+  },
+  "rows": [
+    {
+      "case_id": "h02",
+      "assessment": "unsupported_or_wrong",
+      "reason": "Now notices ConnectError, but invents a retry mechanism and says two health checks and one decision are expected despite multiple visible POSTs. It still omits the stale _ready cache. Missing setup was not the only problem.",
+      "generated_diagnostic": {
+        "hypothesis": "The test expects two health checks and one decision request, but only one health check occurs because the second health check is skipped during retry logic after the connection error.",
+        "source_ids": [
+          "S1",
+          "S2",
+          "S3"
+        ],
+        "inspection": "The assertion at line 38 expects paths [-2:] to be ['[EXTERNAL]/health', '[EXTERNAL]/decisions'], implying two health checks and one decision. However, the mock transport raises a ConnectError on the second POST (line 27), which should trigger a retry. The retry mechanism in Client.ready() (line 34) may prevent a second health check from being issued before the decision request, causing the assertion to fail because only one health check is recorded in paths.",
+        "expected_observation": "If the hypothesis is correct, the paths list should contain only one health check URL before the decision request, confirming that the retry logic skips the second health check.",
+        "alternative": "An alternative explanation is that the test setup incorrectly configures the mock transport to not record the second health check, possibly due to an issue in how the transport handles the retry path or how the test tracks URL paths."
+      },
+      "only_test_excerpt_and_line_changed": true
+    },
+    {
+      "case_id": "h03",
+      "assessment": "unsupported_or_wrong",
+      "reason": "The complete test now shows caller cancellation and the continuing native worker. Output wrongly demands cancellation of the second task and blames the test, rather than early lock release from cancellation propagation.",
+      "generated_diagnostic": {
+        "hypothesis": "The test failure occurs because the second task is not properly cancelled before the assertion check, causing observed == 2 instead of 1.",
+        "source_ids": [
+          "S1",
+          "S2",
+          "S3"
+        ],
+        "inspection": "The test asserts that 'observed' equals 1 after cancelling the first task and creating a second, but the implementation shows that the second task may not be cancelled before the state check at line 44, leading to observed == 2. The assertion at line 49 checks 'observed == 1' which fails due to incorrect task cancellation logic in the test setup, not a problem with the provider's implementation in S2.",
+        "expected_observation": "If the second task is properly cancelled before the state check, 'observed' should be 1, supporting the hypothesis that the failure is due to improper cancellation. An alternative explanation is that the worker function in S1 does not correctly manage the active task count, but the test logic is correct, which would mean the assertion at line 49 is valid and the failure is due to a race condition in task management rather than cancellation.",
+        "alternative": "If the worker function does not correctly decrement the active count when a task is cancelled, then 'observed' could be 2 even with proper cancellation, indicating a race condition in the worker's state management rather than the test's cancellation logic."
+      },
+      "only_test_excerpt_and_line_changed": true
+    },
+    {
+      "case_id": "h04",
+      "assessment": "unsupported_or_wrong",
+      "reason": "The complete test shows the same parametrized provider names in construction and expected traces. Output invents incorrect provider names and misses cached mutable attempt-history ownership.",
+      "generated_diagnostic": {
+        "hypothesis": "The test failure occurs because the expected attempt traces do not match the actual traces due to incorrect provider names being used in the assertions.",
+        "source_ids": [
+          "S1",
+          "S2"
+        ],
+        "inspection": "The test uses parametrized names for providers but the assertion logic assumes specific outcomes based on the order and names. The actual traces are built from the provider names passed in the test, but the expected traces in the assertion may not align with the actual execution flow due to how the providers are invoked and how their outcomes are recorded in the attempt history. The assertion checks for exact matches of provider names and outcomes, but the actual execution may differ due to the order of provider evaluation or how the attempt history is updated during execution. The discrepancy",
+        "expected_observation": "If the provider names in the actual traces differ from those in the expected traces due to incorrect assumptions in the test logic, then the assertion will fail because the actual attempt history does not match the hardcoded expected values.",
+        "alternative": "An alternative explanation is that the test is failing due to a bug in the engine's attempt tracking mechanism where the attempt history is not correctly updated or retrieved during the decision process, leading to mismatched trace data."
+      },
+      "only_test_excerpt_and_line_changed": true
+    },
+    {
+      "case_id": "h06",
+      "assessment": "specific_and_supported",
+      "reason": "The inspection identifies parent and left sharing mutable state and explains that adding right changes left. This is the distinguishing cross-instance isolation mechanism supported by the visible backing-dictionary assignment. The opening sentence imprecisely says instead of returning a new instance, while its inspection correctly acknowledges that an instance is created. Its inspection reaches the field cap and its suggested observation is not a verified repair.",
+      "generated_diagnostic": {
+        "hypothesis": "The test failure occurs because QueryParams.add() modifies the original query parameters instead of returning a new instance, causing unexpected behavior in subsequent assertions.",
+        "source_ids": [
+          "S1",
+          "S2",
+          "S3"
+        ],
+        "inspection": "The test expects left.get_list(key) to return ['seed','older','left'] but gets ['seed','older','left','right'], indicating that the add() operation on parent affects the state of left. The implementation of QueryParams.add() in S3 shows it creates a new instance but the assertion on line 21 fails, suggesting the modification is not isolated as expected. The get_list() method in S2 returns self._dict.get(str(key), []), which should be consistent if add() properly isolates changes. The test failure on line 21 shows that left and parent share mutable state, contradicting the expected behavior of ",
+        "expected_observation": "If the hypothesis is correct, the assertion on line 21 should pass if QueryParams.add() correctly returns a new instance without modifying the original. If the assertion fails, it supports the hypothesis that the add() method mutates the original instance instead of creating a new one.",
+        "alternative": "An alternative explanation is that the test data setup is incorrect, where the initial parent query parameters are not correctly constructed to begin with, causing the subsequent add() operations to behave unexpectedly."
+      },
+      "only_test_excerpt_and_line_changed": true
+    },
+    {
+      "case_id": "h07",
+      "assessment": "unsupported_or_wrong",
+      "reason": "Still misses the absent versus empty query distinction. Claims copy_remove_param does not affect raw_path despite the visible path through copy_with; proposes treating the assertion as incorrect.",
+      "generated_diagnostic": {
+        "hypothesis": "URL.raw_path includes query string components even after query removal, causing assertion failures.",
+        "source_ids": [
+          "S2",
+          "S5",
+          "S6"
+        ],
+        "inspection": "The test expects raw_path to match after query removal, but raw_path includes '?' and query bytes per S2 implementation. The copy_remove_param call in S6 correctly removes params but doesn't affect raw_path encoding in S2.",
+        "expected_observation": "If raw_path excludes query components after copy_remove_param, assertions would pass; if it includes them, current failures are confirmed.",
+        "alternative": "The test assertions are incorrect and should not compare raw_path after query removal, since raw_path is defined to include query bytes."
+      },
+      "only_test_excerpt_and_line_changed": true
+    },
+    {
+      "case_id": "h08",
+      "assessment": "unsupported_or_wrong",
+      "reason": "Invents double decoding and says ASCII decode/re-encode changes %25 to %2F. Neither operation decodes URL percent escapes. Actual percent-escape preservation implementation is still missing.",
+      "generated_diagnostic": {
+        "hypothesis": "The URL class decodes raw_path bytes to ASCII before encoding them back, causing double decoding of percent-encoded sequences.",
+        "source_ids": [
+          "S1",
+          "S2",
+          "S3"
+        ],
+        "inspection": "The test passes raw_path as bytes to copy_with, but URL.__init__ decodes these bytes to ASCII (line 105) before re-encoding them as bytes in raw_path property (line 294-297). This causes double decoding of percent-encoded sequences like %25 which should remain as %25 but become %2F after decoding.",
+        "expected_observation": "If raw_path bytes are decoded to ASCII and re-encoded, then %25 should become %2F in the final raw_path, matching the assertion failure message.",
+        "alternative": "The URL class may have a bug in how it handles percent-encoded sequences in raw_path during copy_with operations, where it doesn't properly preserve the original encoding."
+      },
+      "only_test_excerpt_and_line_changed": true
+    }
+  ],
+  "preflight_failure": {
+    "before_any_model_request": true,
+    "reason": "Initial replay harness compared the public redacted candidate object with its unredacted manifest. Replaced that equality with exact recorded manifest SHA verification; raw compressed and decoded input trace hashes are also checked. Frozen assistant unchanged."
+  },
+  "interpretation": "Full test context made one shared-state diagnosis specific, but did not reliably repair the other failures. This is post-evaluation exploratory evidence, not new-case accuracy or proof of human benefit.",
+  "limitations": [
+    "One replay per already observed case; no fresh holdout claim.",
+    "The inspection in h06 is specific but awkward and field-capped; no repair was executed by that diagnostic.",
+    "Current prompt/model/decoder combination still invents mechanisms with visible counterevidence; parameter count alone is not isolated."
+  ]
+}

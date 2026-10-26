@@ -1,0 +1,1116 @@
+{
+  "suite": "triage-v3-primary-hypothesis-assessment",
+  "assessed_at": "2026-10-26T02:27:21.483271+00:00",
+  "primary_report_sha256": "04267ef6d3c73c7cb760248d4a8f0dbe0e3e2f808f66c2851091efe375f28a92",
+  "candidate_manifest_sha256": "0023f186e698de3690ae52fe79736976c7250fdf40f43fe67224286192a86d2c",
+  "rubric": "docs/triage-v3-experiment.md; declared before Qwen outputs",
+  "assessor": "Primary Codex engineer; not independent or blinded",
+  "unique_cases": 6,
+  "quality_repetition": 1,
+  "counts": {
+    "partial": 2,
+    "unsupported_or_wrong": 4
+  },
+  "specific_and_supported": 0,
+  "rows": [
+    {
+      "case_id": "h02",
+      "assessment": "partial",
+      "reason": "The output notices the missing health request but omits the distinguishing mechanism: ConnectError leaves the readiness cache true, so the next decision skips readiness. The earlier failed request and mock sequence were absent from the cropped test excerpt.",
+      "mutation_statement_visible_in_supplied_source": true,
+      "reference_target_match": true,
+      "generated_diagnostic": {
+        "hypothesis": "The test expects two specific paths in the order [EXTERNAL]/health and [EXTERNAL]/decisions, but the actual execution sequence shows only [EXTERNAL]/decisions, indicating the health check was skipped or failed.",
+        "source_ids": [
+          "S1",
+          "S2",
+          "S3"
+        ],
+        "inspection": "The assertion at line 38 in test_case.py checks that paths[-2:] equals ['[EXTERNAL]/health', '[EXTERNAL]/decisions'], but the actual paths list contains only ['[EXTERNAL]/decisions'], suggesting the health endpoint was not accessed or did not complete successfully before the decision endpoint call. The Client.choose method calls Client.decide which in turn calls Client.ready, but the ready method's behavior may have caused the health check to be bypassed or failed silently, leading to the missing path in the assertion. The test failure occurs because the expected sequence of HTTP calls is not ",
+        "expected_observation": "If the health endpoint call fails or is skipped, the paths list would not contain '[EXTERNAL]/health', supporting the hypothesis that the health check was not completed before the decision endpoint call.",
+        "alternative": "An alternative explanation is that the paths list is populated by a different mechanism than the HTTP calls, and the test assertion is incorrect about the expected order of paths, suggesting a flaw in the test's assumptions about how paths are recorded rather than a failure in the execution sequence."
+      },
+      "reference_catalog": [
+        {
+          "id": "S1",
+          "path": ".triage/test_case.py",
+          "line": 38,
+          "symbols": [],
+          "origins": [
+            "log_reference"
+          ],
+          "implementation_context": [],
+          "excerpt": "36 |         result = await client.choose(\"later\", \"Select\", {\"a\":\"A\",\"b\":\"B\"})\n37 |         assert result.value == \"a\"\n38 |         assert paths[-2:] == [\"[EXTERNAL]/health\", \"[EXTERNAL]/decisions\"]\n39 |         assert paths.count(\"[EXTERNAL]/health\") == 2"
+        },
+        {
+          "id": "S2",
+          "path": "packages/python/src/decilist/client.py",
+          "line": 81,
+          "symbols": [
+            "Client.choose"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "Client.choose",
+              "resolution": "static_python_call",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 38
+              },
+              "caller": {
+                "path": ".triage/test_case.py",
+                "line": 36,
+                "symbol": "test_recovery_sequence"
+              },
+              "import_chain": [
+                {
+                  "path": ".triage/test_case.py",
+                  "line": 16,
+                  "module": "decilist",
+                  "symbol": "Client"
+                },
+                {
+                  "path": "packages/python/src/decilist/__init__.py",
+                  "line": 1,
+                  "module": "decilist.client",
+                  "symbol": "Client"
+                }
+              ]
+            }
+          ],
+          "excerpt": "81 |     async def choose(self, state: str, instructions: str, options: dict[str, str], *, policy: Policy | None = None) -> Decision:\n82 |         return await self.decide(Choose(state=state, instructions=instructions, options=options), policy)"
+        },
+        {
+          "id": "S3",
+          "path": "packages/python/src/decilist/client.py",
+          "line": 69,
+          "symbols": [
+            "Client.decide"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "Client.decide",
+              "resolution": "static_python_call",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 38
+              },
+              "caller": {
+                "path": "packages/python/src/decilist/client.py",
+                "line": 82,
+                "symbol": "Client.choose"
+              },
+              "import_chain": []
+            }
+          ],
+          "excerpt": "69 |     async def decide(self, question: Question, policy: Policy | None = None) -> Decision:\n70 |         request = DecisionRequest(question=question, policy=policy or self.policy)\n71 |         if not self._ready:\n72 |             await self.ready()\n73 |         try:\n74 |             response = await self._http.post(\"[EXTERNAL]/decisions\", json=request.model_dump())\n75 |         except httpx.HTTPError as exc:\n76 |             self._ready = True\n77 |             raise RuntimeConnectionError(f\"The Decilist request failed at {self.base_url}. Check that the runtime is still running.\") from exc\n78 |         response.raise_for_status()\n79 |         return validate_decision(question, Decision.model_validate(response.json()))"
+        },
+        {
+          "id": "S4",
+          "path": "packages/python/src/decilist/client.py",
+          "line": 34,
+          "symbols": [
+            "Client.ready"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "Client.ready",
+              "resolution": "static_python_call",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 38
+              },
+              "caller": {
+                "path": "packages/python/src/decilist/client.py",
+                "line": 72,
+                "symbol": "Client.decide"
+              },
+              "import_chain": []
+            }
+          ],
+          "excerpt": "34 |     async def ready(self, *, wait_seconds: float = 0) -> dict:\n35 |         if not math.isfinite(wait_seconds) or wait_seconds < 0:\n36 |             raise ValueError(\"wait_seconds must be finite and nonnegative\")\n37 |         deadline = monotonic() + wait_seconds\n38 |         while True:\n39 |             try:\n40 |                 response = await self._http.get(\"[EXTERNAL]/health\", timeout=max(.01, min(1, deadline - monotonic())) if wait_seconds else 1)\n41 |                 if response.status_code == 503:\n42 |                     raise RuntimeConnectionError(\"The Decilist runtime is loading. Wait for it to become ready.\")\n43 |                 if response.status_code != 200:\n44 |                     raise RuntimeCompatibilityError(f\"The health endpoint returned HTTP {response.status_code}. Check the runtime URL.\")\n45 |                 try:\n46 |                     payload = response.json()\n47 |                 except ValueError as exc:\n48 |                     raise RuntimeCompatibilityError(\"The endpoint did not return Decilist health JSON. Check the runtime URL.\") from exc\n49 |                 health = validate_runtime_health(payload)\n50 |                 self._ready = True\n51 |                 return health\n52 |             except RuntimeCompatibilityError:\n53 |                 raise\n54 |             except (httpx.HTTPError, RuntimeConnectionError) as exc:\n55 |                 if monotonic() >= deadline:\n56 |                     raise RuntimeConnectionError(f\"Decilist is not ready at {self.base_url}. Start it with: decilist runtime start --provider demo\") from exc\n57 |                 await asyncio.sleep(min(.1, max(0, deadline - monotonic())))"
+        }
+      ],
+      "fields_at_schema_character_cap": [
+        "inspection"
+      ],
+      "native_stop_type": "eos"
+    },
+    {
+      "case_id": "h03",
+      "assessment": "unsupported_or_wrong",
+      "reason": "Blames an incorrect assertion without evidence. It does not identify cancellation propagating to the wrapper task while its native worker continues, causing the done callback to release the lock early. The caller cancellation and worker coordination are absent from the supplied test excerpt.",
+      "mutation_statement_visible_in_supplied_source": true,
+      "reference_target_match": true,
+      "generated_diagnostic": {
+        "hypothesis": "The test failure occurs because the observed value is 2 instead of 1 due to an incorrect assertion in test_followup_execution.",
+        "source_ids": [
+          "S1",
+          "S2",
+          "S3"
+        ],
+        "inspection": "The assertion 'assert observed == 1' at line 49 in S1 expects a value of 1 but the test environment shows 2, indicating a logic error in how 'observed' is computed or tracked during the test execution flow involving LiquidLocalProvider.infer from S2 and Choose contract validation from S3, which may affect the expected outcome of the test case execution path starting at line 35 in S3 and leading to line 49 in S1 where the assertion fails with 2 instead of 1 as expected by the test assertion at line 6 in the failing test log.",
+        "expected_observation": "If the test assertion fails because observed is 2 instead of 1, then the test execution path should show that the value of 'observed' was incremented or set to 2 during the execution of the test case, possibly due to an issue in the provider's inference logic or the way the test tracks the number of observed events.",
+        "alternative": "An alternative explanation is that the test setup or fixture initialization is incorrect, causing the test to run with an unexpected initial state, which leads to the assertion failure at line 49 in S1 where observed is 2 instead of 1."
+      },
+      "reference_catalog": [
+        {
+          "id": "S1",
+          "path": ".triage/test_case.py",
+          "line": 49,
+          "symbols": [],
+          "origins": [
+            "log_reference"
+          ],
+          "implementation_context": [],
+          "excerpt": "47 |         if second is not None: await asyncio.wait_for(second, 2)\n48 |         while provider._running: await asyncio.sleep(.005)\n49 |     assert observed == 1\n50 |     assert count == 2\n51 |     assert peak == 1"
+        },
+        {
+          "id": "S2",
+          "path": "packages/python/src/decilist/providers.py",
+          "line": 137,
+          "symbols": [
+            "LiquidLocalProvider.infer"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "LiquidLocalProvider.infer",
+              "resolution": "static_python_call",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 49
+              },
+              "caller": {
+                "path": ".triage/test_case.py",
+                "line": 42,
+                "symbol": "test_followup_execution"
+              },
+              "import_chain": [
+                {
+                  "path": ".triage/test_case.py",
+                  "line": 17,
+                  "module": "decilist",
+                  "symbol": "LiquidLocalProvider"
+                },
+                {
+                  "path": "packages/python/src/decilist/__init__.py",
+                  "line": 4,
+                  "module": "decilist.providers",
+                  "symbol": "LiquidLocalProvider"
+                }
+              ]
+            }
+          ],
+          "excerpt": "137 |     async def infer(self, question: Question) -> dict[str, float]:\n138 |         # Acquire before spawning. A timed-out native inference retains the lock until\n139 |         # it finishes, preventing overlapping GPU jobs or an unbounded worker queue.\n140 |         await self._lock.acquire()\n141 |         task = asyncio.create_task(asyncio.to_thread(self._infer_sync, question))\n142 |         self._running.add(task)\n143 |         def done(completed: asyncio.Task):\n144 |             self._lock.release()\n145 |             self._running.discard(completed)\n146 |             if not completed.cancelled():\n147 |                 completed.exception()\n148 |         task.add_done_callback(done)\n149 |         return await task"
+        },
+        {
+          "id": "S3",
+          "path": "packages/python/src/decilist/contracts.py",
+          "line": 33,
+          "symbols": [
+            "Choose"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "Choose",
+              "resolution": "static_python_call",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 49
+              },
+              "caller": {
+                "path": ".triage/test_case.py",
+                "line": 35,
+                "symbol": "test_followup_execution"
+              },
+              "import_chain": [
+                {
+                  "path": ".triage/test_case.py",
+                  "line": 17,
+                  "module": "decilist",
+                  "symbol": "Choose"
+                },
+                {
+                  "path": "packages/python/src/decilist/__init__.py",
+                  "line": 2,
+                  "module": "decilist.contracts",
+                  "symbol": "Choose"
+                }
+              ]
+            }
+          ],
+          "excerpt": "33 | class Choose(BaseQuestion):\n34 |     kind: Literal[\"choose\"] = \"choose\"\n35 |     options: dict[Label, Text] = Field(min_length=2, max_length=64)\n36 | \n37 |     @field_validator(\"options\")\n38 |     @classmethod\n39 |     def exact_keys(cls, options: dict[str, str]) -> dict[str, str]:\n40 |         if any(not key.strip() or key != key.strip() for key in options):\n41 |             raise ValueError(\"option keys must not have surrounding whitespace\")\n42 |         return {key: options[key] for key in _json_key_order(options)}"
+        }
+      ],
+      "fields_at_schema_character_cap": [],
+      "native_stop_type": "eos"
+    },
+    {
+      "case_id": "h04",
+      "assessment": "partial",
+      "reason": "Mentions mismatching provider outcomes and validation rather than the shared attempt-history list crossing request boundaries. The faulty cached-list lines are visible, but the test excerpt omits the three request states and provider setup. Relevant area without the distinguishing mechanism.",
+      "mutation_statement_visible_in_supplied_source": true,
+      "reference_target_match": true,
+      "generated_diagnostic": {
+        "hypothesis": "The test assertions fail because the actual traces do not match expected traces due to differing provider outcomes in the decision-making process.",
+        "source_ids": [
+          "S1",
+          "S2",
+          "S3"
+        ],
+        "inspection": "The assertion error messages show that the actual traces differ from expected traces, with the engine.py implementation showing how attempts are appended based on provider outcomes, and validate_probabilities raising ValueError which affects trace outcomes. The test expects specific outcomes like 'invalid_output' and 'accepted' but the actual execution may have resulted in different outcomes due to validation errors or other conditions in the decision process.",
+        "expected_observation": "If the actual traces contain different outcomes than expected, such as 'error' instead of 'accepted', it would support the hypothesis that validation errors or other conditions in the decision process caused the mismatch.",
+        "alternative": "An alternative explanation is that the test data or expected outcomes are incorrect, and the actual behavior of the system matches the expected behavior but the test assertions are misconfigured."
+      },
+      "reference_catalog": [
+        {
+          "id": "S1",
+          "path": ".triage/test_case.py",
+          "line": 29,
+          "symbols": [],
+          "origins": [
+            "log_reference"
+          ],
+          "implementation_context": [],
+          "excerpt": "27 |     assert [result.value for result in results] == [\"b\",\"a\",\"b\"]\n28 |     traces=[[(attempt.provider,attempt.outcome) for attempt in result.attempts] for result in results]\n29 |     assert traces == [[(names[0],\"invalid_output\"),(names[1],\"accepted\")],[(names[0],\"accepted\")],[(names[0],\"low_confidence\"),(names[1],\"accepted\")]]"
+        },
+        {
+          "id": "S2",
+          "path": "packages/python/src/decilist/engine.py",
+          "line": 27,
+          "symbols": [
+            "Decilist.decide"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "Decilist.decide",
+              "resolution": "static_python_call",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 29
+              },
+              "caller": {
+                "path": ".triage/test_case.py",
+                "line": 26,
+                "symbol": "test_observed_attempt_traces"
+              },
+              "import_chain": [
+                {
+                  "path": ".triage/test_case.py",
+                  "line": 16,
+                  "module": "decilist",
+                  "symbol": "Decilist"
+                },
+                {
+                  "path": "packages/python/src/decilist/__init__.py",
+                  "line": 3,
+                  "module": "decilist.engine",
+                  "symbol": "Decilist"
+                }
+              ]
+            }
+          ],
+          "excerpt": "27 |     async def decide(self, question: Question, policy: Policy | None = None) -> Decision:\n28 |         question = question_adapter.validate_python(question.model_dump())\n29 |         policy = Policy.model_validate((policy or self.policy).model_dump())\n30 |         started = perf_counter()\n31 |         attempts = getattr(self, \"_attempt_history\", [])\n32 |         self._attempt_history = attempts\n33 |         result = dict(request_id=str(uuid4()), kind=question.kind, attempts=attempts)\n34 |         for provider in self.providers:\n35 |             tick = perf_counter()\n36 |             if policy.local_only and provider.locality != \"local\":\n37 |                 attempts.append(Attempt(provider=provider.name, outcome=\"blocked\", latency_ms=0))\n38 |                 continue\n39 |             try:\n40 |                 raw = await asyncio.wait_for(provider.infer(question), policy.timeout_ms / 1000)\n41 |                 try:\n42 |                     probabilities = validate_probabilities(question, raw)\n43 |                 except ValueError:\n44 |                     outcome = \"invalid_output\"\n45 |                 else:\n46 |                     confidence = max(probabilities.values())\n47 |                     if confidence >= policy.min_confidence:\n48 |                         attempts.append(Attempt(provider=provider.name, outcome=\"accepted\", latency_ms=(perf_counter()-tick)*1000))\n49 |                         return Decision(**result, status=\"accepted\", value=value_from(question, probabilities),\n50 |                                         probabilities=probabilities, confidence=confidence, provider=provider.name,\n51 |                                         model=provider.model, latency_ms=(perf_counter()-started)*1000)\n52 |                     outcome = \"low_confidence\"\n53 |             except TimeoutError:\n54 |                 outcome = \"timeout\"\n55 |             except Exception:\n56 |                 # Deliberately omit provider exception text: it can contain inputs or credentials.\n57 |                 outcome = \"error\"\n58 |             attempts.append(Attempt(provider=provider.name, outcome=outcome, latency_ms=(perf_counter()-tick)*1000))\n59 |         return Decision(**result, status=\"abstained\", latency_ms=(perf_counter()-started)*1000)"
+        },
+        {
+          "id": "S3",
+          "path": "packages/python/src/decilist/contracts.py",
+          "line": 108,
+          "symbols": [
+            "validate_probabilities"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "validate_probabilities",
+              "resolution": "static_python_call",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 29
+              },
+              "caller": {
+                "path": "packages/python/src/decilist/engine.py",
+                "line": 42,
+                "symbol": "Decilist.decide"
+              },
+              "import_chain": [
+                {
+                  "path": "packages/python/src/decilist/engine.py",
+                  "line": 7,
+                  "module": "decilist.contracts",
+                  "symbol": "validate_probabilities"
+                }
+              ]
+            }
+          ],
+          "excerpt": "108 | def validate_probabilities(question: Question, raw: object) -> dict[str, float]:\n109 |     if not isinstance(raw, dict) or set(raw) != set(labels_for(question)):\n110 |         raise ValueError(\"provider must return exactly the requested labels\")\n111 |     if any(type(p) not in (int, float) or not math.isfinite(p) or not 0 <= p <= 1 for p in raw.values()):\n112 |         raise ValueError(\"probabilities must be finite numbers in [0,1]\")\n113 |     if not math.isclose(sum(raw.values()), 1.0, abs_tol=1e-5):\n114 |         raise ValueError(\"probabilities must sum to one\")\n115 |     return {label: float(raw[label]) for label in labels_for(question)}"
+        },
+        {
+          "id": "S4",
+          "path": "packages/python/src/decilist/contracts.py",
+          "line": 118,
+          "symbols": [
+            "value_from"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "value_from",
+              "resolution": "static_python_call",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 29
+              },
+              "caller": {
+                "path": "packages/python/src/decilist/engine.py",
+                "line": 49,
+                "symbol": "Decilist.decide"
+              },
+              "import_chain": [
+                {
+                  "path": "packages/python/src/decilist/engine.py",
+                  "line": 7,
+                  "module": "decilist.contracts",
+                  "symbol": "value_from"
+                }
+              ]
+            }
+          ],
+          "excerpt": "118 | def value_from(question: Question, probabilities: dict[str, float]) -> str | bool | float:\n119 |     if isinstance(question, Predict):\n120 |         return probabilities[\"true\"] >= 0.5\n121 |     if isinstance(question, Score):\n122 |         return sum(int(k) * p for k, p in probabilities.items())\n123 |     return max(probabilities, key=probabilities.__getitem__)"
+        },
+        {
+          "id": "S5",
+          "path": "packages/python/src/decilist/contracts.py",
+          "line": 99,
+          "symbols": [
+            "labels_for"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "labels_for",
+              "resolution": "static_python_call",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 29
+              },
+              "caller": {
+                "path": "packages/python/src/decilist/contracts.py",
+                "line": 109,
+                "symbol": "validate_probabilities"
+              },
+              "import_chain": []
+            }
+          ],
+          "excerpt": "99 | def labels_for(question: Question) -> list[str]:\n100 |     if isinstance(question, Choose):\n101 |         # Also cover model_copy/model_construct, which intentionally bypass Pydantic validators.\n102 |         return _json_key_order(question.options)\n103 |     if isinstance(question, Predict):\n104 |         return [\"false\", \"true\"]\n105 |     return [str(i) for i in range(len(question.levels))]"
+        },
+        {
+          "id": "S6",
+          "path": "packages/python/src/decilist/contracts.py",
+          "line": 33,
+          "symbols": [
+            "Choose"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "Choose",
+              "resolution": "static_python_call",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 29
+              },
+              "caller": {
+                "path": ".triage/test_case.py",
+                "line": 26,
+                "symbol": "test_observed_attempt_traces"
+              },
+              "import_chain": [
+                {
+                  "path": ".triage/test_case.py",
+                  "line": 16,
+                  "module": "decilist",
+                  "symbol": "Choose"
+                },
+                {
+                  "path": "packages/python/src/decilist/__init__.py",
+                  "line": 2,
+                  "module": "decilist.contracts",
+                  "symbol": "Choose"
+                }
+              ]
+            }
+          ],
+          "excerpt": "33 | class Choose(BaseQuestion):\n34 |     kind: Literal[\"choose\"] = \"choose\"\n35 |     options: dict[Label, Text] = Field(min_length=2, max_length=64)\n36 | \n37 |     @field_validator(\"options\")\n38 |     @classmethod\n39 |     def exact_keys(cls, options: dict[str, str]) -> dict[str, str]:\n40 |         if any(not key.strip() or key != key.strip() for key in options):\n41 |             raise ValueError(\"option keys must not have surrounding whitespace\")\n42 |         return {key: options[key] for key in _json_key_order(options)}"
+        }
+      ],
+      "fields_at_schema_character_cap": [],
+      "native_stop_type": "eos"
+    },
+    {
+      "case_id": "h06",
+      "assessment": "unsupported_or_wrong",
+      "reason": "Treats pytest abbreviated list rendering as evidence that older became old and invents string truncation. The actual mutation shares the backing dictionary between parent and derived instances. The additional right value and shared ownership are missed.",
+      "mutation_statement_visible_in_supplied_source": true,
+      "reference_target_match": true,
+      "generated_diagnostic": {
+        "hypothesis": "The test failure occurs because the 'left' branch assertion expects ['seed','older','left'] but gets ['seed','old','left'], indicating a missing 'e' in 'older' due to incorrect string handling in QueryParams.add.",
+        "source_ids": [
+          "S1",
+          "S2",
+          "S3"
+        ],
+        "inspection": "The assertion at S1 line 21 checks left.get_list(key) == ['seed','older','left'], but the actual result is ['seed','old','left'], suggesting that 'older' was truncated to 'old' during the add operation in S3, which calls get_list from S2. This implies that the string concatenation or value conversion in QueryParams.add is truncating the value.",
+        "expected_observation": "If the assertion fails due to truncation, then the actual result should show 'old' instead of 'older' in the list, which matches the observed AssertionError.",
+        "alternative": "An alternative explanation is that the test setup or fixture is incorrectly initializing the parent QueryParams object with a different value than expected, causing the get_list to return an inconsistent result."
+      },
+      "reference_catalog": [
+        {
+          "id": "S1",
+          "path": ".triage/test_case.py",
+          "line": 21,
+          "symbols": [],
+          "origins": [
+            "log_reference"
+          ],
+          "implementation_context": [],
+          "excerpt": "19 |     left = parent.add(key,\"left\")\n20 |     right = parent.add(key,\"right\")\n21 |     assert left.get_list(key) == [\"seed\",\"older\",\"left\"]\n22 |     assert right.get_list(key) == [\"seed\",\"older\",\"right\"]\n23 |     assert parent.get_list(key) == [\"seed\",\"older\"]"
+        },
+        {
+          "id": "S2",
+          "path": "vendor/httpx/_urls.py",
+          "line": 526,
+          "symbols": [
+            "QueryParams.get_list"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "QueryParams.get_list",
+              "resolution": "static_python_call",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 21
+              },
+              "caller": {
+                "path": ".triage/test_case.py",
+                "line": 21,
+                "symbol": "test_branch_results"
+              },
+              "import_chain": [
+                {
+                  "path": ".triage/test_case.py",
+                  "line": 7,
+                  "module": "httpx",
+                  "symbol": "<module>"
+                },
+                {
+                  "path": "vendor/httpx/__init__.py",
+                  "line": 12,
+                  "module": "httpx._urls",
+                  "symbol": "QueryParams"
+                }
+              ]
+            }
+          ],
+          "excerpt": "526 |     def get_list(self, key: str) -> list[str]:\n527 |         \"\"\"\n528 |         Get all values from the query param for a given key.\n529 | \n530 |         Usage:\n531 | \n532 |         q = httpx.QueryParams(\"a=123&a=456&b=789\")\n533 |         assert q.get_list(\"a\") == [\"123\", \"456\"]\n534 |         \"\"\"\n535 |         return list(self._dict.get(str(key), []))"
+        },
+        {
+          "id": "S3",
+          "path": "vendor/httpx/_urls.py",
+          "line": 552,
+          "symbols": [
+            "QueryParams.add"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "QueryParams.add",
+              "resolution": "static_python_call",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 21
+              },
+              "caller": {
+                "path": ".triage/test_case.py",
+                "line": 20,
+                "symbol": "test_branch_results"
+              },
+              "import_chain": [
+                {
+                  "path": ".triage/test_case.py",
+                  "line": 7,
+                  "module": "httpx",
+                  "symbol": "<module>"
+                },
+                {
+                  "path": "vendor/httpx/__init__.py",
+                  "line": 12,
+                  "module": "httpx._urls",
+                  "symbol": "QueryParams"
+                }
+              ]
+            }
+          ],
+          "excerpt": "552 |     def add(self, key: str, value: typing.Any = None) -> QueryParams:\n553 |         \"\"\"\n554 |         Return a new QueryParams instance, setting or appending the value of a key.\n555 | \n556 |         Usage:\n557 | \n558 |         q = httpx.QueryParams(\"a=123\")\n559 |         q = q.add(\"a\", \"456\")\n560 |         assert q == httpx.QueryParams(\"a=123&a=456\")\n561 |         \"\"\"\n562 |         q = QueryParams()\n563 |         q._dict = self._dict\n564 |         q._dict[str(key)] = q.get_list(key) + [primitive_value_to_str(value)]\n565 |         return q"
+        },
+        {
+          "id": "S4",
+          "path": "vendor/httpx/_urls.py",
+          "line": 274,
+          "symbols": [
+            "URL.params"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "URL.params",
+              "resolution": "static_python_property",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 21
+              },
+              "caller": {
+                "path": ".triage/test_case.py",
+                "line": 24,
+                "symbol": "test_branch_results"
+              },
+              "import_chain": [
+                {
+                  "path": ".triage/test_case.py",
+                  "line": 7,
+                  "module": "httpx",
+                  "symbol": "<module>"
+                },
+                {
+                  "path": "vendor/httpx/__init__.py",
+                  "line": 12,
+                  "module": "httpx._urls",
+                  "symbol": "URL"
+                }
+              ]
+            }
+          ],
+          "excerpt": "274 |     @property\n275 |     def params(self) -> QueryParams:\n276 |         \"\"\"\n277 |         The URL query parameters, neatly parsed and packaged into an immutable\n278 |         multidict representation.\n279 |         \"\"\"\n280 |         return QueryParams(self._uri_reference.query)"
+        },
+        {
+          "id": "S5",
+          "path": "vendor/httpx/_utils.py",
+          "line": 15,
+          "symbols": [
+            "primitive_value_to_str"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "primitive_value_to_str",
+              "resolution": "static_python_call",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 21
+              },
+              "caller": {
+                "path": "vendor/httpx/_urls.py",
+                "line": 564,
+                "symbol": "QueryParams.add"
+              },
+              "import_chain": [
+                {
+                  "path": "vendor/httpx/_urls.py",
+                  "line": 10,
+                  "module": "httpx._utils",
+                  "symbol": "primitive_value_to_str"
+                }
+              ]
+            }
+          ],
+          "excerpt": "15 | def primitive_value_to_str(value: PrimitiveData) -> str:\n16 |     \"\"\"\n17 |     Coerce a primitive data type into a string value.\n18 | \n19 |     Note that we prefer JSON-style 'true'[EXTERNAL]/'false' for boolean values here.\n20 |     \"\"\"\n21 |     if value is True:\n22 |         return \"true\"\n23 |     elif value is False:\n24 |         return \"false\"\n25 |     elif value is None:\n26 |         return \"\"\n27 |     return str(value)"
+        },
+        {
+          "id": "S6",
+          "path": "vendor/httpx/_urls.py",
+          "line": 425,
+          "symbols": [
+            "QueryParams.__init__"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "QueryParams.__init__",
+              "resolution": "static_python_call",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 21
+              },
+              "caller": {
+                "path": "vendor/httpx/_urls.py",
+                "line": 280,
+                "symbol": "URL.params"
+              },
+              "import_chain": []
+            }
+          ],
+          "excerpt": "425 |     def __init__(self, *args: QueryParamTypes | None, **kwargs: typing.Any) -> None:\n426 |         assert len(args) < 2, \"Too many arguments.\"\n427 |         assert not (args and kwargs), \"Cannot mix named and unnamed arguments.\"\n428 | \n429 |         value = args[0] if args else kwargs\n430 | \n431 |         if value is None or isinstance(value, (str, bytes)):\n432 |             value = value.decode(\"ascii\") if isinstance(value, bytes) else value\n433 |             self._dict = parse_qs(value, keep_blank_values=True)\n434 |         elif isinstance(value, QueryParams):\n435 |             self._dict = {k: list(v) for k, v in value._dict.items()}\n436 |         else:\n437 |             dict_value: dict[typing.Any, list[typing.Any]] = {}\n438 |             if isinstance(value, (list, tuple)):\n439 |                 # Convert list inputs like:\n440 |                 #     [(\"a\", \"123\"), (\"a\", \"456\"), (\"b\", \"789\")]\n441 |                 # To a dict representation, like:\n442 |                 #     {\"a\": [\"123\", \"456\"], \"b\": [\"789\"]}\n443 |                 for item in value:\n444 |                     dict_value.setdefault(item[0], []).append(item[1])\n445 |             else:\n446 |                 # Convert dict inputs like:\n447 |                 #    {\"a\": \"123\", \"b\": [\"456\", \"789\"]}\n448 |                 # To dict inputs where values are always lists, like:\n449 |                 #    {\"a\": [\"123\"], \"b\": [\"456\", \"789\"]}\n450 |                 dict_value = {\n451 |                     k: list(v) if isinstance(v, (list, tuple)) else [v]\n452 |                     for k, v in value.items()\n453 |                 }\n454 | \n455 |             # Ensure that keys and values are neatly coerced to strings.\n456 |             # We coerce values `True` and `False` to JSON-like \"true\" and \"false\"\n457 |             # representations, and coerce `None` values to the empty string.\n458 |             self._dict = {\n459 |                 str(k): [primitive_value_to_str(item) for item in v]\n460 |                 for k, v in dict_value.items()\n461 |             }"
+        }
+      ],
+      "fields_at_schema_character_cap": [],
+      "native_stop_type": "eos"
+    },
+    {
+      "case_id": "h07",
+      "assessment": "unsupported_or_wrong",
+      "reason": "Claims raw_path appends a question mark when query is None, contradicting its cited is-not-None branch. It misses empty-string versus absent-query normalization in URL.__init__, whose relevant target is absent from the packet.",
+      "mutation_statement_visible_in_supplied_source": false,
+      "reference_target_match": false,
+      "generated_diagnostic": {
+        "hypothesis": "The URL.raw_path property includes a trailing '?' when query is None, causing assertion failures.",
+        "source_ids": [
+          "S2",
+          "S5"
+        ],
+        "inspection": "The failing assertions show raw_path ending with '?' when query is removed, contradicting expected paths without '?'. The raw_path property in S2 appends '?' only if query is not None, but the test expects paths without trailing '?' after query removal. This suggests the implementation doesn't strip the '?' when query becomes empty.",
+        "expected_observation": "If raw_path includes '?' even when query is empty, it would explain the test failures where expected paths don't have trailing '?' characters.",
+        "alternative": "The test expectations are incorrect and should include the trailing '?' when query is removed, since the current implementation behavior is correct."
+      },
+      "reference_catalog": [
+        {
+          "id": "S1",
+          "path": ".triage/test_case.py",
+          "line": 23,
+          "symbols": [],
+          "origins": [
+            "log_reference"
+          ],
+          "implementation_context": [],
+          "excerpt": "21 |     assert transformed.query == b\"\"\n22 |     assert len(transformed.params) == 0\n23 |     assert transformed.raw_path == expected.raw_path\n24 |     assert transformed == expected\n25 |     assert str(transformed.copy_with(fragment=\"part\")) == str(expected.copy_with(fragment=\"part\"))"
+        },
+        {
+          "id": "S2",
+          "path": "vendor/httpx/_urls.py",
+          "line": 282,
+          "symbols": [
+            "URL.raw_path"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "URL.raw_path",
+              "resolution": "static_python_property",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 23
+              },
+              "caller": {
+                "path": ".triage/test_case.py",
+                "line": 23,
+                "symbol": "test_query_removal_result"
+              },
+              "import_chain": [
+                {
+                  "path": ".triage/test_case.py",
+                  "line": 7,
+                  "module": "httpx",
+                  "symbol": "<module>"
+                },
+                {
+                  "path": "vendor/httpx/__init__.py",
+                  "line": 12,
+                  "module": "httpx._urls",
+                  "symbol": "URL"
+                }
+              ]
+            }
+          ],
+          "excerpt": "282 |     @property\n283 |     def raw_path(self) -> bytes:\n284 |         \"\"\"\n285 |         The complete URL path and query string as raw bytes.\n286 |         Used as the target when constructing HTTP requests.\n287 | \n288 |         For example:\n289 | \n290 |         GET [EXTERNAL]/users?search=some%20text HTTP/1.1\n291 |         Host: www.example.org\n292 |         Connection: close\n293 |         \"\"\"\n294 |         path = self._uri_reference.path or \"[EXTERNAL]/\"\n295 |         if self._uri_reference.query is not None:\n296 |             path += \"?\" + self._uri_reference.query\n297 |         return path.encode(\"ascii\")"
+        },
+        {
+          "id": "S3",
+          "path": "vendor/httpx/_urls.py",
+          "line": 274,
+          "symbols": [
+            "URL.params"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "URL.params",
+              "resolution": "static_python_property",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 23
+              },
+              "caller": {
+                "path": ".triage/test_case.py",
+                "line": 22,
+                "symbol": "test_query_removal_result"
+              },
+              "import_chain": [
+                {
+                  "path": ".triage/test_case.py",
+                  "line": 7,
+                  "module": "httpx",
+                  "symbol": "<module>"
+                },
+                {
+                  "path": "vendor/httpx/__init__.py",
+                  "line": 12,
+                  "module": "httpx._urls",
+                  "symbol": "URL"
+                }
+              ]
+            }
+          ],
+          "excerpt": "274 |     @property\n275 |     def params(self) -> QueryParams:\n276 |         \"\"\"\n277 |         The URL query parameters, neatly parsed and packaged into an immutable\n278 |         multidict representation.\n279 |         \"\"\"\n280 |         return QueryParams(self._uri_reference.query)"
+        },
+        {
+          "id": "S4",
+          "path": "vendor/httpx/_urls.py",
+          "line": 327,
+          "symbols": [
+            "URL.copy_with"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "URL.copy_with",
+              "resolution": "static_python_call",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 23
+              },
+              "caller": {
+                "path": ".triage/test_case.py",
+                "line": 25,
+                "symbol": "test_query_removal_result"
+              },
+              "import_chain": [
+                {
+                  "path": ".triage/test_case.py",
+                  "line": 7,
+                  "module": "httpx",
+                  "symbol": "<module>"
+                },
+                {
+                  "path": "vendor/httpx/__init__.py",
+                  "line": 12,
+                  "module": "httpx._urls",
+                  "symbol": "URL"
+                }
+              ]
+            }
+          ],
+          "excerpt": "327 |     def copy_with(self, **kwargs: typing.Any) -> URL:\n328 |         \"\"\"\n329 |         Copy this URL, returning a new URL with some components altered.\n330 |         Accepts the same set of parameters as the components that are made\n331 |         available via properties on the `URL` class.\n332 | \n333 |         For example:\n334 | \n335 |         url = httpx.URL(\"https://www.example.com\").copy_with(\n336 |             username=\"jo@gmail.com\", password=\"[REDACTED]\"\n337 |         )\n338 |         assert url == \"https://jo%40email.com:a%20secret@www.example.com\"\n339 |         \"\"\"\n340 |         return URL(self, **kwargs)",
+          "excerpt_original_sha256": "59c9e738b2d52811513b23f5e7fa1856d3aa279d98c72ebbd0b15bbe1208d84e"
+        },
+        {
+          "id": "S5",
+          "path": "vendor/httpx/_urls.py",
+          "line": 257,
+          "symbols": [
+            "URL.query"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "URL.query",
+              "resolution": "static_python_property",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 23
+              },
+              "caller": {
+                "path": ".triage/test_case.py",
+                "line": 21,
+                "symbol": "test_query_removal_result"
+              },
+              "import_chain": [
+                {
+                  "path": ".triage/test_case.py",
+                  "line": 7,
+                  "module": "httpx",
+                  "symbol": "<module>"
+                },
+                {
+                  "path": "vendor/httpx/__init__.py",
+                  "line": 12,
+                  "module": "httpx._urls",
+                  "symbol": "URL"
+                }
+              ]
+            }
+          ],
+          "excerpt": "257 |     @property\n258 |     def query(self) -> bytes:\n259 |         \"\"\"\n260 |         The URL query string, as raw bytes, excluding the leading b\"?\".\n261 | \n262 |         This is necessarily a bytewise interface, because we cannot\n263 |         perform URL decoding of this representation until we've parsed\n264 |         the keys and values into a QueryParams instance.\n265 | \n266 |         For example:\n267 | \n268 |         url = httpx.URL(\"https://example.com/?filter=some%20search%20terms\")\n269 |         assert url.query == b\"filter=some%20search%20terms\"\n270 |         \"\"\"\n271 |         query = self._uri_reference.query or \"\"\n272 |         return query.encode(\"ascii\")",
+          "excerpt_original_sha256": "1b5c15611f885b72d3c6d659ebe16675d7c390dbf7c15823f791fb1e0c040494"
+        },
+        {
+          "id": "S6",
+          "path": "vendor/httpx/_urls.py",
+          "line": 348,
+          "symbols": [
+            "URL.copy_remove_param"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "URL.copy_remove_param",
+              "resolution": "static_python_call",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 23
+              },
+              "caller": {
+                "path": ".triage/test_case.py",
+                "line": 19,
+                "symbol": "test_query_removal_result"
+              },
+              "import_chain": [
+                {
+                  "path": ".triage/test_case.py",
+                  "line": 7,
+                  "module": "httpx",
+                  "symbol": "<module>"
+                },
+                {
+                  "path": "vendor/httpx/__init__.py",
+                  "line": 12,
+                  "module": "httpx._urls",
+                  "symbol": "URL"
+                }
+              ]
+            }
+          ],
+          "excerpt": "348 |     def copy_remove_param(self, key: str) -> URL:\n349 |         return self.copy_with(params=self.params.remove(key))"
+        },
+        {
+          "id": "S7",
+          "path": "vendor/httpx/_urls.py",
+          "line": 567,
+          "symbols": [
+            "QueryParams.remove"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "QueryParams.remove",
+              "resolution": "static_python_call",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 23
+              },
+              "caller": {
+                "path": "vendor/httpx/_urls.py",
+                "line": 349,
+                "symbol": "URL.copy_remove_param"
+              },
+              "import_chain": []
+            }
+          ],
+          "excerpt": "567 |     def remove(self, key: str) -> QueryParams:\n568 |         \"\"\"\n569 |         Return a new QueryParams instance, removing the value of a key.\n570 | \n571 |         Usage:\n572 | \n573 |         q = httpx.QueryParams(\"a=123\")\n574 |         q = q.remove(\"a\")\n575 |         assert q == httpx.QueryParams(\"\")\n576 |         \"\"\"\n577 |         q = QueryParams()\n578 |         q._dict = dict(self._dict)\n579 |         q._dict.pop(str(key), None)\n580 |         return q"
+        }
+      ],
+      "fields_at_schema_character_cap": [],
+      "native_stop_type": "eos"
+    },
+    {
+      "case_id": "h08",
+      "assessment": "unsupported_or_wrong",
+      "reason": "Recognizes double encoding as a symptom but assigns the mechanism to raw_path/ASCII decoding and suggests intentional double encoding. The distinguishing mutation re-encodes existing percent escapes in quote; that implementation is absent. A symptom-only reading could count as partial, but there is no specific supported causal diagnosis under either reading.",
+      "mutation_statement_visible_in_supplied_source": false,
+      "reference_target_match": false,
+      "generated_diagnostic": {
+        "hypothesis": "The URL.raw_path property encodes URL paths with double percent-encoding, causing assertion failures when comparing against single-encoded paths.",
+        "source_ids": [
+          "S1",
+          "S2",
+          "S4"
+        ],
+        "inspection": "The test expects raw_path to match the input URL path exactly, but URL.__init__ decodes bytes to ASCII strings in line 105, which may cause double encoding during reconstruction. The failing assertions show mismatched percent-encoding patterns like %25%32%46 vs %2F, indicating the raw_path property does not preserve original encoding correctly during roundtrip operations. The hypothesis is supported if the raw_path property returns double-encoded bytes instead of single-encoded bytes, and disproven if the encoding is consistent with the input. An alternative explanation is that the URL parsing",
+        "expected_observation": "The raw_path property should return bytes that match the original input without double encoding, or the test should account for expected double encoding behavior in the assertion logic.",
+        "alternative": "The test assertions are incorrect and should expect double-encoded paths instead of single-encoded paths, as the URL implementation intentionally applies double percent-encoding during reconstruction."
+      },
+      "reference_catalog": [
+        {
+          "id": "S1",
+          "path": ".triage/test_case.py",
+          "line": 21,
+          "symbols": [],
+          "origins": [
+            "log_reference"
+          ],
+          "implementation_context": [],
+          "excerpt": "19 |     transformed = original.copy_with(raw_path=raw)\n20 |     reconstructed = httpx.URL(str(transformed))\n21 |     assert transformed.raw_path == raw\n22 |     assert reconstructed.raw_path == raw\n23 |     assert reconstructed == transformed"
+        },
+        {
+          "id": "S2",
+          "path": "vendor/httpx/_urls.py",
+          "line": 282,
+          "symbols": [
+            "URL.raw_path"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "URL.raw_path",
+              "resolution": "static_python_property",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 21
+              },
+              "caller": {
+                "path": ".triage/test_case.py",
+                "line": 21,
+                "symbol": "test_url_roundtrip_result"
+              },
+              "import_chain": [
+                {
+                  "path": ".triage/test_case.py",
+                  "line": 7,
+                  "module": "httpx",
+                  "symbol": "<module>"
+                },
+                {
+                  "path": "vendor/httpx/__init__.py",
+                  "line": 12,
+                  "module": "httpx._urls",
+                  "symbol": "URL"
+                }
+              ]
+            }
+          ],
+          "excerpt": "282 |     @property\n283 |     def raw_path(self) -> bytes:\n284 |         \"\"\"\n285 |         The complete URL path and query string as raw bytes.\n286 |         Used as the target when constructing HTTP requests.\n287 | \n288 |         For example:\n289 | \n290 |         GET [EXTERNAL]/users?search=some%20text HTTP/1.1\n291 |         Host: www.example.org\n292 |         Connection: close\n293 |         \"\"\"\n294 |         path = self._uri_reference.path or \"[EXTERNAL]/\"\n295 |         if self._uri_reference.query is not None:\n296 |             path += \"?\" + self._uri_reference.query\n297 |         return path.encode(\"ascii\")"
+        },
+        {
+          "id": "S3",
+          "path": "vendor/httpx/_urls.py",
+          "line": 327,
+          "symbols": [
+            "URL.copy_with"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "URL.copy_with",
+              "resolution": "static_python_call",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 21
+              },
+              "caller": {
+                "path": ".triage/test_case.py",
+                "line": 19,
+                "symbol": "test_url_roundtrip_result"
+              },
+              "import_chain": [
+                {
+                  "path": ".triage/test_case.py",
+                  "line": 7,
+                  "module": "httpx",
+                  "symbol": "<module>"
+                },
+                {
+                  "path": "vendor/httpx/__init__.py",
+                  "line": 12,
+                  "module": "httpx._urls",
+                  "symbol": "URL"
+                }
+              ]
+            }
+          ],
+          "excerpt": "327 |     def copy_with(self, **kwargs: typing.Any) -> URL:\n328 |         \"\"\"\n329 |         Copy this URL, returning a new URL with some components altered.\n330 |         Accepts the same set of parameters as the components that are made\n331 |         available via properties on the `URL` class.\n332 | \n333 |         For example:\n334 | \n335 |         url = httpx.URL(\"https://www.example.com\").copy_with(\n336 |             username=\"jo@gmail.com\", password=\"[REDACTED]\"\n337 |         )\n338 |         assert url == \"https://jo%40email.com:a%20secret@www.example.com\"\n339 |         \"\"\"\n340 |         return URL(self, **kwargs)",
+          "excerpt_original_sha256": "59c9e738b2d52811513b23f5e7fa1856d3aa279d98c72ebbd0b15bbe1208d84e"
+        },
+        {
+          "id": "S4",
+          "path": "vendor/httpx/_urls.py",
+          "line": 77,
+          "symbols": [
+            "URL.__init__"
+          ],
+          "origins": [
+            "implementation"
+          ],
+          "implementation_context": [
+            {
+              "symbol": "URL.__init__",
+              "resolution": "static_python_call",
+              "reference": {
+                "path": ".triage/test_case.py",
+                "line": 21
+              },
+              "caller": {
+                "path": "vendor/httpx/_urls.py",
+                "line": 340,
+                "symbol": "URL.copy_with"
+              },
+              "import_chain": []
+            }
+          ],
+          "excerpt": "77 |     def __init__(self, url: URL | str = \"\", **kwargs: typing.Any) -> None:\n78 |         if kwargs:\n79 |             allowed = {\n80 |                 \"scheme\": str,\n81 |                 \"username\": str,\n82 |                 \"password\": [REDACTED],\n83 |                 \"userinfo\": bytes,\n84 |                 \"host\": str,\n85 |                 \"port\": int,\n86 |                 \"netloc\": bytes,\n87 |                 \"path\": str,\n88 |                 \"query\": bytes,\n89 |                 \"raw_path\": bytes,\n90 |                 \"fragment\": str,\n91 |                 \"params\": object,\n92 |             }\n93 | \n94 |             # Perform type checking for all supported keyword arguments.\n95 |             for key, value in kwargs.items():\n96 |                 if key not in allowed:\n97 |                     message = f\"{key!r} is an invalid keyword argument for URL()\"\n98 |                     raise TypeError(message)\n99 |                 if value is not None and not isinstance(value, allowed[key]):\n100 |                     expected = allowed[key].__name__\n101 |                     seen = type(value).__name__\n102 |                     message = f\"Argument {key!r} must be {expected} but got {seen}\"\n103 |                     raise TypeError(message)\n104 |                 if isinstance(value, bytes):\n105 |                     kwargs[key] = value.decode(\"ascii\")\n106 | \n107 |             if \"params\" in kwargs:\n108 |                 # Replace any \"params\" keyword with the raw \"query\" instead.\n109 |                 #\n110 |                 # Ensure that empty params use `kwargs[\"query\"] = None` rather\n111 |                 # than `kwargs[\"query\"] = \"\"`, so that generated URLs do not\n112 |                 # include an empty trailing \"?\".\n113 |                 params = kwargs.pop(\"params\")\n114 |                 kwargs[\"query\"] = None if not params else str(QueryParams(params))\n115 | \n116 |         if isinstance(url, str):\n117 |             self._uri_reference = urlparse(url, **kwargs)\n118 |         elif isinstance(url, URL):\n119 |             self._uri_reference = url._uri_reference.copy_with(**kwargs)\n120 |         else:\n121 |             raise TypeError(\n122 |                 \"Invalid type for url.  Expected str or httpx.URL,\"\n123 |                 f\" got {type(url)}: {url!r}\"\n124 |             )"
+        }
+      ],
+      "fields_at_schema_character_cap": [
+        "inspection"
+      ],
+      "native_stop_type": "eos"
+    }
+  ],
+  "limitations": [
+    "Manual assessment of six seeded regressions; citations and source matches do not establish causal correctness.",
+    "A permissive symptom-only rubric could relabel h08 partial; it still does not explain the distinguishing mechanism.",
+    "The missing earlier test events in h02/h03/h04 prevent attributing all failures to model reasoning alone.",
+    "Schema-valid EOS responses can end a field at its character cap with an incomplete sentence.",
+    "A separate explicitly exploratory replay expands only test context; primary observations are never overwritten."
+  ]
+}

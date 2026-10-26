@@ -1,0 +1,78 @@
+{
+  "suite": "triage-v3-root-repair-audit",
+  "rows": [
+    {
+      "slot": "slot-01",
+      "case_id": "r01",
+      "allowed_file": "vendor/httpx/_urls.py",
+      "current_sha256": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd",
+      "matches_pinned_unmutated_source_exactly": true,
+      "root_semantic_inspection": "QueryParams set/remove constructs a fresh dict before replacing/removing a key; parent and sibling storage are preserved.",
+      "protected_tests": "Fresh root verification in triage-v3-agent-trials-2026-10-26.json passed all 3 tests and all protected-file checks."
+    },
+    {
+      "slot": "slot-02",
+      "case_id": "r02",
+      "allowed_file": "vendor/httpx/_urls.py",
+      "current_sha256": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd",
+      "matches_pinned_unmutated_source_exactly": true,
+      "root_semantic_inspection": "QueryParams set/remove constructs a fresh dict before replacing/removing a key; parent and sibling storage are preserved.",
+      "protected_tests": "Fresh root verification in triage-v3-agent-trials-2026-10-26.json passed all 3 tests and all protected-file checks."
+    },
+    {
+      "slot": "slot-03",
+      "case_id": "r01",
+      "allowed_file": "vendor/httpx/_urls.py",
+      "current_sha256": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd",
+      "matches_pinned_unmutated_source_exactly": true,
+      "root_semantic_inspection": "QueryParams set/remove constructs a fresh dict before replacing/removing a key; parent and sibling storage are preserved.",
+      "protected_tests": "Fresh root verification in triage-v3-agent-trials-2026-10-26.json passed all 3 tests and all protected-file checks."
+    },
+    {
+      "slot": "slot-04",
+      "case_id": "r02",
+      "allowed_file": "vendor/httpx/_urls.py",
+      "current_sha256": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd",
+      "matches_pinned_unmutated_source_exactly": true,
+      "root_semantic_inspection": "QueryParams set/remove constructs a fresh dict before replacing/removing a key; parent and sibling storage are preserved.",
+      "protected_tests": "Fresh root verification in triage-v3-agent-trials-2026-10-26.json passed all 3 tests and all protected-file checks."
+    },
+    {
+      "slot": "slot-05",
+      "case_id": "r01",
+      "allowed_file": "vendor/httpx/_urls.py",
+      "current_sha256": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd",
+      "matches_pinned_unmutated_source_exactly": true,
+      "root_semantic_inspection": "QueryParams set/remove constructs a fresh dict before replacing/removing a key; parent and sibling storage are preserved.",
+      "protected_tests": "Fresh root verification in triage-v3-agent-trials-2026-10-26.json passed all 3 tests and all protected-file checks."
+    },
+    {
+      "slot": "slot-06",
+      "case_id": "r02",
+      "allowed_file": "vendor/httpx/_urls.py",
+      "current_sha256": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd",
+      "matches_pinned_unmutated_source_exactly": true,
+      "root_semantic_inspection": "QueryParams set/remove constructs a fresh dict before replacing/removing a key; parent and sibling storage are preserved.",
+      "protected_tests": "Fresh root verification in triage-v3-agent-trials-2026-10-26.json passed all 3 tests and all protected-file checks."
+    },
+    {
+      "slot": "slot-07",
+      "case_id": "r01",
+      "allowed_file": "vendor/httpx/_urls.py",
+      "current_sha256": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd",
+      "matches_pinned_unmutated_source_exactly": true,
+      "root_semantic_inspection": "QueryParams set/remove constructs a fresh dict before replacing/removing a key; parent and sibling storage are preserved.",
+      "protected_tests": "Fresh root verification in triage-v3-agent-trials-2026-10-26.json passed all 3 tests and all protected-file checks."
+    },
+    {
+      "slot": "slot-08",
+      "case_id": "r02",
+      "allowed_file": "vendor/httpx/_urls.py",
+      "current_sha256": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd",
+      "matches_pinned_unmutated_source_exactly": true,
+      "root_semantic_inspection": "QueryParams set/remove constructs a fresh dict before replacing/removing a key; parent and sibling storage are preserved.",
+      "protected_tests": "Fresh root verification in triage-v3-agent-trials-2026-10-26.json passed all 3 tests and all protected-file checks."
+    }
+  ],
+  "limitation": "Two simple shared-dictionary regressions; eight runs are not eight independent defects."
+}
