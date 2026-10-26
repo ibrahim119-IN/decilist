@@ -182,6 +182,26 @@ def _state_accesses(function, executed_lines):
     return {"reads": reads, "writes": writes, "write_calls": calls}
 
 
+def _executed_exception_scope(function, executed_lines):
+    """An executed handler and raise in this function's own lexical scope."""
+    handlers, raises = False, False
+
+    def visit(node):
+        nonlocal handlers, raises
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.Lambda)):
+            return
+        if isinstance(node, ast.ExceptHandler) and node.lineno in executed_lines:
+            handlers = True
+        if isinstance(node, ast.Raise) and node.lineno in executed_lines:
+            raises = True
+        for child in ast.iter_child_nodes(node):
+            visit(child)
+
+    for statement in function.body:
+        visit(statement)
+    return handlers and raises
+
+
 def _unique_module_binding(tree, name):
     """Fail closed on visible rebinding, wildcard imports or global mutation."""
     count = 0
@@ -504,9 +524,14 @@ def build_context(project: Path, trace: dict, *, max_chars: int = 24000,
     relevance = {}
     body_cost = {}
     first_event = {}
+    exception_events = set()
     for event in trace.get("events", [])[:2000]:
         if isinstance(event, dict) and isinstance(event.get("function_id"), str):
             first_event.setdefault(event["function_id"], _integer(event.get("seq"), 100000000))
+            if (event.get("kind") == "exception" and isinstance(event.get("exception_type"), str)
+                    and event["exception_type"] not in {"StopIteration", "StopAsyncIteration", "GeneratorExit"}
+                    and isinstance(event.get("nodeid"), str) and (not failed_tests or event["nodeid"] in failed_tests)):
+                exception_events.add(event["function_id"])
     for row in functions:
         identifier = row["id"]
         if identifier not in related:
@@ -617,7 +642,8 @@ def build_context(project: Path, trace: dict, *, max_chars: int = 24000,
               "limits": {**_LIMITS, "max_chars": max_chars, "max_functions": max_functions,
                          "max_depth": max_depth, "semantic_depth_extension": 4, "trace_function_cap": 256,
                          "max_state_sources": 10, "max_state_call_hops": 2, "max_state_source_bytes": max_chars // 2,
-                         "max_read_only_helpers": 2, "max_read_only_helper_bytes": 1600, "max_read_only_source_bytes": 2400},
+                         "max_read_only_helpers": 2, "max_read_only_helper_bytes": 1600, "max_read_only_source_bytes": 2400,
+                         "max_exception_anchors": 2, "max_exception_sources": 8, "max_exception_source_bytes": max_chars // 3},
               "truncation": {"truncated": False, "reasons": [], "omitted_function_count": 0,
                              "omitted_functions": [], "omitted_events": 0, "omitted_call_edges": 0},
               "coverage": {"input_schema_version": trace["schema_version"], "observed_functions": len(functions),
@@ -626,7 +652,7 @@ def build_context(project: Path, trace: dict, *, max_chars: int = 24000,
               "redaction_count": sources.redactions,
               "source_projection": "one exact unnumbered AST body; source_numbered intentionally empty; start_line supports rendering",
               "state_dependency_note": "Executed receiver-field reads/writes in the exact same lexical class are source candidates, not observed object identity. State links are separate from recorded runtime call edges.",
-              "note": "functions contains runtime-observed bodies. read_only_helpers contains separately supplied unobserved static definitions; these do not establish calls or edit permission. Failure/assertion fields and callback accesses rank candidates. Whole bodies use actual serialized size with bounded observed neighbors. No dynamic dispatch is guessed. Reachability is not causality. Source/failure-text redaction is heuristic. Missing trace metadata is incomplete coverage, not proof of non-execution. Static helper policy requires exactly one unobserved module-level definition and does not search other modules or all helpers."}
+              "note": "functions contains runtime-observed bodies. read_only_helpers contains separately supplied unobserved static definitions; these do not establish calls or edit permission. Executed handler/raise paths reserve bounded recorded neighbors before setup packing. exception_context marks selection only, not proved exception propagation. selected_exception_sources counts newly admitted bodies. Failure/assertion fields and callback accesses rank candidates. Whole bodies use actual serialized size with bounded observed neighbors. No dynamic dispatch is guessed. Reachability is not causality. Source/failure-text redaction is heuristic. Missing trace metadata is incomplete coverage, not proof of non-execution. Static helper policy requires exactly one unobserved module-level definition and does not search other modules or all helpers."}
     selected = []
     def refresh():
         result["functions"] = [bodies[identifier] for identifier in selected]
@@ -788,6 +814,68 @@ def build_context(project: Path, trace: dict, *, max_chars: int = 24000,
                     queue.append((identifier, depth + 1))
                     if connected_admissions >= 12:
                         break
+    # Process failure-origin field writers before API/setup wrappers can spend
+    # their reserved source budget. This preserves initialization of an error
+    # object even when the visible failure is a later property access.
+    for seed in sorted(origin_witnesses - roots):
+        if seed in selected:
+            admit_neighbors(seed)
+    failure_state = set(origin_witnesses)
+    for seed in origin_witnesses:
+        failure_state.update(writer for writer, _ in state_writers.get(seed, []))
+    exception_candidates = [identifier for identifier in eligible & exception_events
+                            if _executed_exception_scope(function_nodes[identifier], set(by_id[identifier]["executed_lines"]))]
+    related_handlers = {edge["caller"] for edge in edges if edge["callee"] in failure_state}
+    exception_candidates.sort(key=lambda identifier: (identifier not in related_handlers, body_cost[identifier], compact[identifier]))
+    exception_ids = failure_state & set(selected)
+    exception_sources, exception_bytes, exception_anchors = 0, 0, 0
+    def add_exception_source(identifier):
+        nonlocal exception_sources, exception_bytes
+        if identifier in selected:
+            exception_ids.add(identifier)
+            return True
+        if (identifier not in eligible or exception_sources >= 8 or body_cost[identifier] > 3000
+                or exception_bytes + body_cost[identifier] > max_chars // 3):
+            return False
+        if not try_add(identifier):
+            return False
+        exception_sources += 1
+        exception_bytes += body_cost[identifier]
+        exception_ids.add(identifier)
+        return True
+    covered_tests = set()
+    for anchor in exception_candidates:
+        tests = set(by_id[anchor]["test_ids"]) & failed_tests
+        if exception_anchors >= 2:
+            break
+        if exception_anchors and tests <= covered_tests and anchor not in related_handlers:
+            continue
+        if not add_exception_source(anchor):
+            continue
+        exception_anchors += 1
+        covered_tests |= tests
+        # Incoming callers are actual recorded paths; diversify by failing-test
+        # association so an early source branch cannot hide a later mode.
+        incoming = {edge["caller"] for edge in edges if edge["callee"] == anchor and edge["caller"] in eligible}
+        caller_coverage = set()
+        for _ in range(2):
+            if not incoming:
+                break
+            caller = min(incoming, key=lambda identifier: (-len((set(by_id[identifier]["test_ids"]) & failed_tests) - caller_coverage),
+                                                           body_cost[identifier], compact[identifier]))
+            incoming.remove(caller)
+            if add_exception_source(caller):
+                caller_coverage.update(set(by_id[caller]["test_ids"]) & failed_tests)
+        outgoing = {edge["callee"] for edge in edges if edge["caller"] == anchor and edge["callee"] in eligible}
+        for child in sorted(outgoing, key=lambda identifier: (body_cost[identifier], compact[identifier]))[:2]:
+            if not add_exception_source(child):
+                continue
+            if by_id[child]["symbol"].rsplit(".", 1)[-1] == "__init__":
+                grandchildren = {edge["callee"] for edge in edges if edge["caller"] == child and edge["callee"] in eligible}
+                for grandchild in sorted(grandchildren, key=lambda identifier: (body_cost[identifier], compact[identifier]))[:2]:
+                    add_exception_source(grandchild)
+    result["coverage"]["selected_exception_anchors"] = exception_anchors
+    result["coverage"]["selected_exception_sources"] = exception_sources
     # Reserve actual test-to-implementation call paths before generic small
     # accessors can monopolize the byte budget. The closest non-lifecycle call
     # at/before the failure is observed evidence even for callback side effects.
@@ -899,11 +987,14 @@ def build_context(project: Path, trace: dict, *, max_chars: int = 24000,
     # Add observed edges after bodies. Provenance edges are first and cannot be
     # displaced by unrelated event/module metadata.
     graph = [edge for edge in edges if edge["caller"] in selected_set and edge["callee"] in selected_set]
-    graph.sort(key=lambda edge: ((edge["caller"], edge["callee"], edge["line"]) not in producer_edges,
+    graph.sort(key=lambda edge: (not (edge["caller"] in exception_ids and edge["callee"] in exception_ids),
+                                 (edge["caller"], edge["callee"], edge["line"]) not in producer_edges,
                                  not any(bodies[edge[key]].get("selection_provenance", {}).get("observed_neighbor_of") == compact[edge[other]] for key, other in (("callee", "caller"), ("caller", "callee"))),
                                  -min(relevance[edge["caller"]], relevance[edge["callee"]]), edge["caller"], edge["callee"], edge["line"]))
     for edge in graph:
         projected = {"caller": compact[edge["caller"]], "callee": compact[edge["callee"]], "line": edge["line"], "count": edge["count"]}
+        if edge["caller"] in exception_ids and edge["callee"] in exception_ids:
+            projected["exception_context"] = True
         if (edge["caller"], edge["callee"], edge["line"]) in producer_edges:
             projected["value_flow"] = producer_edges[(edge["caller"], edge["callee"], edge["line"])]
         if edge["callee"] in state_helpers.get(edge["caller"], {}):

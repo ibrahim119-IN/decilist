@@ -10,6 +10,7 @@ Decilist's original code is Apache-2.0. Dependencies and optional model artifact
 | LiquidAI/d1-3B weights and vendor code | [LFM Open License v1.0](https://huggingface.co/LiquidAI/d1-3B/blob/main/LICENSE), pinned revision in adapter | No |
 | Transformers, PyTorch, torchvision, Pillow | Separate upstream licenses; optional runtime | No |
 | Qwen3-Coder-30B-A3B-Instruct and ggml-org GGUF conversion | Apache-2.0 as declared by the [model publisher](https://huggingface.co/Qwen/Qwen3-Coder-30B-A3B-Instruct) and [conversion publisher](https://huggingface.co/ggml-org/Qwen3-Coder-30B-A3B-Instruct-GGUF); pinned artifact in the explicit setup helper | No weights |
+| Experimental Qwen3.6-27B and ggml-org Q8_0 GGUF conversion | [Apache-2.0 at the pinned base revision](https://huggingface.co/Qwen/Qwen3.6-27B/blob/6a9e13bd6fc8f0983b9b99948120bc37f49c13e9/LICENSE); [conversion metadata at its pinned revision](https://huggingface.co/ggml-org/Qwen3.6-27B-GGUF/blob/1132d03976d88e30a09ab0ddbf1531d5e1b46e7c/README.md) | No weights; runtime compatibility and repair quality require separate measured evidence |
 | llama.cpp b11889 | [MIT](https://github.com/ggml-org/llama.cpp/blob/d854d98bae598388ecea1ed84396587e5edc326d/LICENSE); pinned official Windows binary downloaded separately | No binaries |
 | Optional CUDA runtime DLLs | Separate upstream CUDA runtime terms; not covered by Decilist's Apache-2.0 license | No DLLs |
 | OpenAI Decisions | Hosted service terms; future opt-in integration | No implementation, key, or model artifacts |

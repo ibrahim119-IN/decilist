@@ -12,6 +12,15 @@ python -m pip install -c requirements-dev.lock -e "./packages/python[dev]"
 
 المساعد بيستخدم نفس Python اللي شغّلته؛ اعتماديات مشروعك لازم تكون متاحة فيه. الموديل وخادم `llama.cpp` لهم إعداد منفصل، والأمر ده ما بينزّلش أوزانًا. الإصدار الحالي متحقق منه مع البناء `b11889-d854d98ba` وسياق 16384 token.
 
+على Windows مع CUDA، [أداة إعداد Qwen3-Coder الموجودة](stronger-local.md) بتنزّل الملف المحدد وتتحقق منه. للتشغيل مع V6 استخدم `--context 16384` صراحةً بدل القيمة الافتراضية القديمة:
+
+```powershell
+python scripts/setup_stronger_local.py download --cache-dir L:/DecilistModels/qwen-coder
+python scripts/setup_stronger_local.py serve --cache-dir L:/DecilistModels/qwen-coder --gpu 0 --context 16384
+```
+
+التنزيل صريح وحجمه حوالي 18 جيجابايت. سيب نافذة الخدمة مفتوحة وافتح تيرمنال تاني للمساعد. دي تجربة على جهاز بكارت RTX 3090 وذاكرة 24 جيجابايت؛ مش وعد بالتوافق مع أي لابتوب. اتبع متطلبات أداة الإعداد ورخص الموديلات في الدليل المرتبط.
+
 بعد تشغيل خادم Qwen3-Coder المحلي، احفظ إعداداته الفعلية بأمر واحد:
 
 ```bash

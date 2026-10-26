@@ -1,4 +1,4 @@
-"""Generic V5 execution/source regressions, independent of measured corpora."""
+"""Generic V6 execution/source regressions, independent of measured corpora."""
 import json
 import os
 from pathlib import Path
@@ -7,22 +7,9 @@ import sys
 
 import pytest
 
-import importlib.util
+from decilist.triage_context_v6 import _executed_exception_scope, _state_accesses, _tokens, _unique_module_binding, build_context
 
-_DRAFT = Path(__file__).with_name("triage_context_v6.py")
-if _DRAFT.is_file():
-    _spec = importlib.util.spec_from_file_location("decilist.triage_context_v6_draft", _DRAFT)
-    _module = importlib.util.module_from_spec(_spec)
-    sys.modules[_spec.name] = _module
-    _spec.loader.exec_module(_module)
-    _tokens, build_context = _module._tokens, _module.build_context
-    _state_accesses, _unique_module_binding = _module._state_accesses, _module._unique_module_binding
-    _BASELINE_SRC = Path(__file__).resolve().parents[2] / "outputs/decilist/packages/python/src"
-else:
-    from decilist.triage_context_v6 import _state_accesses, _tokens, _unique_module_binding, build_context
-    _BASELINE_SRC = Path(__file__).resolve().parents[1] / "src"
-
-
+_BASELINE_SRC = Path(__file__).resolve().parents[1] / "src"
 
 def write(root, path, source):
     target = root / path
@@ -464,3 +451,36 @@ def test_state_link_count_matches_final_bounded_projection(project):
         assert context["coverage"]["represented_state_links"] == len(context["state_dependencies"])
         retained = {row["id"] for row in context["functions"]}
         assert all(link["reader"] in retained and link["writer"] in retained for link in context["state_dependencies"])
+
+
+def test_exception_scope_requires_executed_handler_and_raise_in_own_scope():
+    import ast
+    function = ast.parse("def forward(callback):\n    try:\n        return callback()\n    except ValueError:\n        raise\n").body[0]
+    assert not _executed_exception_scope(function, {2, 3})
+    assert not _executed_exception_scope(function, {4})
+    assert _executed_exception_scope(function, {4, 5})
+    outer = ast.parse("def outer(callback):\n    def inner():\n        try:\n            callback()\n        except ValueError:\n            raise\n    return callback()\n").body[0]
+    assert not _executed_exception_scope(outer, set(range(1, 20)))
+
+
+def test_exception_bundle_preserves_context_state_and_both_observed_modes_after_event_loss(project):
+    source = "import contextlib\n\nclass Signal(Exception):\n    def __init__(self, message):\n        super().__init__(message)\n        self._record = None\n    @property\n    def record(self):\n        if self._record is None:\n            raise RuntimeError('record not attached')\n        return self._record\n    @record.setter\n    def record(self, value):\n        self._record = value\n\nclass Alpha(Signal):\n    pass\nclass Beta(Signal):\n    pass\n\n@contextlib.contextmanager\ndef attach_record(record):\n    try:\n        yield\n    except Signal as error:\n        error.record = record\n        raise type(error)(str(error)) from error\n\nclass Gateway:\n    def __init__(self):\n        self.settings = {}\n        for number in range(1800):\n            self.settings[str(number)] = number\n    def send_sync(self, record, error):\n        checked = self.settings.get('1', 0)\n        return self._middle_sync(record, error, checked)\n    def _middle_sync(self, record, error, checked):\n        return self._exchange_sync(record, error)\n    def _exchange_sync(self, record, error):\n        with attach_record(record):\n            raise error\n    async def send_async(self, record, error):\n        checked = self.settings.get('1', 0)\n        return await self._middle_async(record, error, checked)\n    async def _middle_async(self, record, error, checked):\n        return await self._exchange_async(record, error)\n    async def _exchange_async(self, record, error):\n        with attach_record(record):\n            raise error\n"
+    write(project, "src/propagation.py", source)
+    test = "import asyncio\nimport pytest\nfrom propagation import Alpha, Beta, Gateway, Signal\n@pytest.mark.parametrize('kind', [Alpha, Beta])\n@pytest.mark.parametrize('asynchronous', [False, True])\ndef test_record(kind, asynchronous):\n    original = kind('message')\n    gateway = Gateway()\n    record = object()\n    if asynchronous:\n        async def exercise():\n            with pytest.raises(Signal) as captured:\n                await gateway.send_async(record, original)\n            return captured.value\n        caught = asyncio.run(exercise())\n    else:\n        with pytest.raises(Signal) as captured:\n            gateway.send_sync(record, original)\n        caught = captured.value\n    assert caught.record is record\n    assert caught is original\n"
+    write(project, "tests/test_record.py", test)
+    trace = run_trace(project)
+    rows = {row["symbol"]: row for row in trace["functions"]}
+    assert trace["truncation"]["truncated"]
+    assert not any(event["kind"] == "exception" and event["function_id"] == rows["Gateway._exchange_sync"]["id"] for event in trace["events"])
+    context = build_context(project, trace)
+    by_name = {row["symbol"]: row for row in context["functions"]}
+    for name in ("Signal.__init__", "attach_record", "Gateway._exchange_sync", "Gateway._exchange_async"):
+        assert by_name[name]["complete"] and by_name[name]["editable"] and by_name[name]["runtime_observed"]
+    assert context["coverage"]["selected_exception_anchors"] >= 1
+    assert context["coverage"]["selected_exception_sources"] >= 1
+    edges = {(edge["caller"], edge["callee"]): edge for edge in context["call_graph"]}
+    for name in ("Gateway._exchange_sync", "Gateway._exchange_async"):
+        assert edges[(by_name[name]["id"], by_name["attach_record"]["id"])]["exception_context"] is True
+    assert "selection only" in context["note"] and "not proved exception propagation" in context["note"]
+    assert any(row["symbol"] == "test_record" and row["complete"] and row["source"] == test[test.index("@pytest.mark.parametrize"):] for row in context["functions"])
+    assert len(json.dumps(context)) <= 24000

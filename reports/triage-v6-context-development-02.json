@@ -1,0 +1,71 @@
+{
+  "kind": "root_recomputed_context_from_original_development_traces",
+  "model_calls": 0,
+  "fresh_accuracy": false,
+  "prior_context_sha256": "7fcbb218d2e2bc1705a4fd818ea0b91a99881a9f1395576ed5932a1a1f516c1b",
+  "active_context_sha256": "d9a6ff80866e5f122d25d904738b58ec3275df18a016add1fed86b13ee7c7bd8",
+  "rows": [
+    {
+      "case_id": "d01",
+      "original_trace_sha256": "6dedddda86051d2b7280d997c781460a3339a445030be98f1315d3219daff5d3",
+      "independent_replay_matches_draft_evidence": true,
+      "before_chars": 23920,
+      "after_chars": 23941,
+      "complete_editable_required_bodies": [
+        "HTTPError.__init__",
+        "RequestError.__init__",
+        "request_context",
+        "Client._send_single_request",
+        "AsyncClient._send_single_request"
+      ],
+      "before_functions": 11,
+      "after_functions": 12,
+      "coverage": {
+        "input_schema_version": 5,
+        "observed_functions": 96,
+        "retrieved_functions": 96,
+        "candidate_functions": 88,
+        "complete_failing_tests": 1,
+        "unobserved_source_fallback": false,
+        "trace_function_evictions": 0,
+        "trace_function_rejections": 0,
+        "trace_output_functions_omitted": 0,
+        "represented_state_links": 3,
+        "selected_exception_anchors": 1,
+        "selected_exception_sources": 4,
+        "selected_state_sources": 3,
+        "observed_value_producer_edges": 12,
+        "selected_value_producer_edges": 3
+      }
+    },
+    {
+      "case_id": "d02",
+      "original_trace_sha256": "2d85b7ec63d42c0527e436b710453762ebf17f56aa3cf572cc2179f54d67a47b",
+      "independent_replay_matches_draft_evidence": true,
+      "before_chars": 23943,
+      "after_chars": 23990,
+      "complete_editable_required_bodies": [
+        "summarize"
+      ],
+      "before_functions": 13,
+      "after_functions": 12,
+      "coverage": {
+        "input_schema_version": 5,
+        "observed_functions": 17,
+        "retrieved_functions": 17,
+        "candidate_functions": 16,
+        "complete_failing_tests": 1,
+        "unobserved_source_fallback": false,
+        "trace_function_evictions": 0,
+        "trace_function_rejections": 0,
+        "trace_output_functions_omitted": 0,
+        "represented_state_links": 2,
+        "selected_exception_anchors": 0,
+        "selected_exception_sources": 0,
+        "selected_state_sources": 2,
+        "observed_value_producer_edges": 9,
+        "selected_value_producer_edges": 7
+      }
+    }
+  ]
+}
