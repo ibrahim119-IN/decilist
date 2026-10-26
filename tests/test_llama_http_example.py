@@ -89,7 +89,7 @@ async def test_shutdown_closes_provider_even_if_application_lifespan_body_fails(
     assert model.close_calls == 1 and app.state.provider_ready is False
 
 
-@pytest.mark.parametrize("url", ["http://localhost:8792","https://example.com","http://192.168.1.4:8792","file:///model","http://127.0.0.1/path","http://user:secret@127.0.0.1:8792","http://127.0.0.1:8792?token=secret","http://127.0.0.1:8792#fragment","http://127.0.0.1:0","http://127.0.0.1:65536"])
+@pytest.mark.parametrize("url", ["http://localhost:8792","https://example.com","http://192.168.1.4:8792","file:///model","http://127.0.0.1/path","http://user:secret@127.0.0.1:8792","http://127.0.0.1:8792?token=secret","http://127.0.0.1:8792#fragment","http://127.0.0.1:0","http://127.0.0.1:65536","http://[::ffff:127.0.0.1]:8792"])
 def test_invalid_model_origin_is_refused_before_provider_construction(monkeypatch,url):
     def forbidden(**kwargs):
         pytest.fail("invalid origin must not create a provider or a connection")

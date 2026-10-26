@@ -199,6 +199,12 @@ def test_nonlocal_ambiguous_or_decorated_origins_are_refused_before_io(url):
         LlamaCppProvider(model=MODEL, expected_build=BUILD, base_url=url)
 
 
+def test_mapped_ipv4_is_refused_even_when_python_reports_it_as_loopback(monkeypatch):
+    monkeypatch.setattr(adapter.ipaddress.IPv6Address, "is_loopback", property(lambda _self: True))
+    with pytest.raises(ValueError):
+        LlamaCppProvider(model=MODEL, expected_build=BUILD, base_url="http://[::ffff:127.0.0.1]:8792")
+
+
 @pytest.mark.parametrize("url", ["http://127.0.0.1:8792", "http://[::1]:8792"])
 async def test_numeric_loopback_and_client_ownership(url):
     server = StubServer()

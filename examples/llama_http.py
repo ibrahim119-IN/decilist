@@ -29,6 +29,7 @@ def model_origin(value: str) -> str:
         address = ipaddress.ip_address(parsed.hostname or "")
         port = parsed.port
         if (value != value.strip() or parsed.scheme not in {"http", "https"} or not address.is_loopback
+                or (isinstance(address, ipaddress.IPv6Address) and address.ipv4_mapped is not None)
                 or parsed.username or parsed.password or parsed.path not in {"", "/"} or "?" in value or "#" in value
                 or (port is not None and not 1 <= port <= 65535)):
             raise ValueError(message)

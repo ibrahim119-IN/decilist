@@ -61,7 +61,8 @@ def _origin(value: str) -> str:
         address = ipaddress.ip_address(url.host or "")
     except (TypeError, ValueError, httpx.InvalidURL) as exc:
         raise ValueError("llama.cpp requires a numeric loopback HTTP(S) origin; DNS names are not accepted") from exc
-    if (url.scheme not in {"http", "https"} or not address.is_loopback or url.username or url.password
+    mapped_ipv4 = isinstance(address, ipaddress.IPv6Address) and address.ipv4_mapped is not None
+    if (url.scheme not in {"http", "https"} or mapped_ipv4 or not address.is_loopback or url.username or url.password
             or url.query or url.fragment or url.path not in {"", "/"}):
         raise ValueError("llama.cpp requires a numeric loopback HTTP(S) origin without credentials, path, query, or fragment")
     return str(url).rstrip("/")
