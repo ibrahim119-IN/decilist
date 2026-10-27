@@ -1,0 +1,603 @@
+{
+  "suite": "triage-v6-model-context-matrix",
+  "cells": [
+    {
+      "batch": "current-v5",
+      "position": 1,
+      "model_profile": "current",
+      "context_policy": "v5",
+      "record_count": 1,
+      "outcome": "complete",
+      "summary": {
+        "unique_regressions": 6,
+        "observations": 8,
+        "first_observation_attempt_counts": {
+          "generation_helper_attempted": 7,
+          "model_request_attempted": 7,
+          "generated_output_retained": 7,
+          "structurally_valid_hypothesis": 3,
+          "patched_disposable_copy": 1,
+          "target_tests_all_passed": 0,
+          "regression_tests_all_passed": 1,
+          "rejected_or_error": 7
+        },
+        "errors": 4,
+        "measurement_errors": 0,
+        "workflow_errors": 4,
+        "workflow_supported": 0,
+        "root_protected_repairs": 0,
+        "guarded_first_observations": 1,
+        "needs_review_first_observations": 0,
+        "first_observation_median_ms": 12649.665500008268,
+        "states": {
+          "unverified": 8
+        },
+        "controls": [
+          {
+            "case_id": "c01",
+            "score": {
+              "workflow_supported_by_unchanged_tests": false,
+              "applied": false,
+              "root_protected_repair_verified": false,
+              "guarded": true,
+              "needs_review": false,
+              "source_citation_correctness": null,
+              "complete_causal_correctness": null,
+              "attempt_outcomes": []
+            },
+            "model_correctness_credit": null
+          },
+          {
+            "case_id": "c02",
+            "score": {
+              "workflow_supported_by_unchanged_tests": false,
+              "applied": false,
+              "root_protected_repair_verified": false,
+              "guarded": false,
+              "needs_review": false,
+              "source_citation_correctness": null,
+              "complete_causal_correctness": null,
+              "attempt_outcomes": [
+                {
+                  "attempt": 1,
+                  "generation_helper_attempted": true,
+                  "model_request_attempted": true,
+                  "generated_output_retained": true,
+                  "structurally_valid_hypothesis": true,
+                  "patched_disposable_copy": false,
+                  "target_tests_all_passed": false,
+                  "regression_tests_all_passed": false,
+                  "rejected_or_error": true
+                }
+              ]
+            },
+            "model_correctness_credit": null
+          }
+        ],
+        "human_time_saved": null,
+        "complete_causal_correctness": null
+      },
+      "report": "triage-v6-matrix-first-01-current-v5.json",
+      "evaluation_passes": []
+    },
+    {
+      "batch": "current-v6",
+      "position": 2,
+      "model_profile": "current",
+      "context_policy": "v6",
+      "record_count": 1,
+      "outcome": "complete",
+      "summary": {
+        "unique_regressions": 6,
+        "observations": 8,
+        "first_observation_attempt_counts": {
+          "generation_helper_attempted": 8,
+          "model_request_attempted": 8,
+          "generated_output_retained": 8,
+          "structurally_valid_hypothesis": 4,
+          "patched_disposable_copy": 4,
+          "target_tests_all_passed": 1,
+          "regression_tests_all_passed": 4,
+          "rejected_or_error": 7
+        },
+        "errors": 5,
+        "measurement_errors": 0,
+        "workflow_errors": 5,
+        "workflow_supported": 1,
+        "root_protected_repairs": 1,
+        "guarded_first_observations": 1,
+        "needs_review_first_observations": 0,
+        "first_observation_median_ms": 13197.814450002625,
+        "states": {
+          "unverified": 7,
+          "hypothesis_supported_by_tests": 1
+        },
+        "controls": [
+          {
+            "case_id": "c01",
+            "score": {
+              "workflow_supported_by_unchanged_tests": false,
+              "applied": false,
+              "root_protected_repair_verified": false,
+              "guarded": true,
+              "needs_review": false,
+              "source_citation_correctness": null,
+              "complete_causal_correctness": null,
+              "attempt_outcomes": []
+            },
+            "model_correctness_credit": null
+          },
+          {
+            "case_id": "c02",
+            "score": {
+              "workflow_supported_by_unchanged_tests": false,
+              "applied": false,
+              "root_protected_repair_verified": false,
+              "guarded": false,
+              "needs_review": false,
+              "source_citation_correctness": null,
+              "complete_causal_correctness": null,
+              "attempt_outcomes": [
+                {
+                  "attempt": 1,
+                  "generation_helper_attempted": true,
+                  "model_request_attempted": true,
+                  "generated_output_retained": true,
+                  "structurally_valid_hypothesis": true,
+                  "patched_disposable_copy": true,
+                  "target_tests_all_passed": false,
+                  "regression_tests_all_passed": true,
+                  "rejected_or_error": true
+                },
+                {
+                  "attempt": 2,
+                  "generation_helper_attempted": true,
+                  "model_request_attempted": true,
+                  "generated_output_retained": true,
+                  "structurally_valid_hypothesis": false,
+                  "patched_disposable_copy": false,
+                  "target_tests_all_passed": false,
+                  "regression_tests_all_passed": false,
+                  "rejected_or_error": true
+                }
+              ]
+            },
+            "model_correctness_credit": null
+          }
+        ],
+        "human_time_saved": null,
+        "complete_causal_correctness": null
+      },
+      "report": "triage-v6-matrix-first-01-current-v6.json",
+      "evaluation_passes": [
+        "e04"
+      ]
+    },
+    {
+      "batch": "stronger-v5",
+      "position": 3,
+      "model_profile": "stronger",
+      "context_policy": "v5",
+      "record_count": 1,
+      "outcome": "complete",
+      "summary": {
+        "unique_regressions": 6,
+        "observations": 8,
+        "first_observation_attempt_counts": {
+          "generation_helper_attempted": 7,
+          "model_request_attempted": 7,
+          "generated_output_retained": 7,
+          "structurally_valid_hypothesis": 4,
+          "patched_disposable_copy": 2,
+          "target_tests_all_passed": 1,
+          "regression_tests_all_passed": 2,
+          "rejected_or_error": 5
+        },
+        "errors": 3,
+        "measurement_errors": 0,
+        "workflow_errors": 3,
+        "workflow_supported": 1,
+        "root_protected_repairs": 1,
+        "guarded_first_observations": 1,
+        "needs_review_first_observations": 1,
+        "first_observation_median_ms": 20730.560249998234,
+        "states": {
+          "unverified": 7,
+          "hypothesis_supported_by_tests": 1
+        },
+        "controls": [
+          {
+            "case_id": "c01",
+            "score": {
+              "workflow_supported_by_unchanged_tests": false,
+              "applied": false,
+              "root_protected_repair_verified": false,
+              "guarded": true,
+              "needs_review": false,
+              "source_citation_correctness": null,
+              "complete_causal_correctness": null,
+              "attempt_outcomes": []
+            },
+            "model_correctness_credit": null
+          },
+          {
+            "case_id": "c02",
+            "score": {
+              "workflow_supported_by_unchanged_tests": false,
+              "applied": false,
+              "root_protected_repair_verified": false,
+              "guarded": false,
+              "needs_review": false,
+              "source_citation_correctness": null,
+              "complete_causal_correctness": null,
+              "attempt_outcomes": [
+                {
+                  "attempt": 1,
+                  "generation_helper_attempted": true,
+                  "model_request_attempted": true,
+                  "generated_output_retained": true,
+                  "structurally_valid_hypothesis": true,
+                  "patched_disposable_copy": true,
+                  "target_tests_all_passed": false,
+                  "regression_tests_all_passed": true,
+                  "rejected_or_error": true
+                },
+                {
+                  "attempt": 2,
+                  "generation_helper_attempted": true,
+                  "model_request_attempted": true,
+                  "generated_output_retained": true,
+                  "structurally_valid_hypothesis": false,
+                  "patched_disposable_copy": false,
+                  "target_tests_all_passed": false,
+                  "regression_tests_all_passed": false,
+                  "rejected_or_error": true
+                }
+              ]
+            },
+            "model_correctness_credit": null
+          }
+        ],
+        "human_time_saved": null,
+        "complete_causal_correctness": null
+      },
+      "report": "triage-v6-matrix-first-01-stronger-v5.json",
+      "evaluation_passes": [
+        "e04"
+      ]
+    },
+    {
+      "batch": "stronger-v6",
+      "position": 4,
+      "model_profile": "stronger",
+      "context_policy": "v6",
+      "record_count": 1,
+      "outcome": "complete",
+      "summary": {
+        "unique_regressions": 6,
+        "observations": 8,
+        "first_observation_attempt_counts": {
+          "generation_helper_attempted": 8,
+          "model_request_attempted": 8,
+          "generated_output_retained": 8,
+          "structurally_valid_hypothesis": 4,
+          "patched_disposable_copy": 3,
+          "target_tests_all_passed": 1,
+          "regression_tests_all_passed": 3,
+          "rejected_or_error": 5
+        },
+        "errors": 3,
+        "measurement_errors": 0,
+        "workflow_errors": 3,
+        "workflow_supported": 1,
+        "root_protected_repairs": 1,
+        "guarded_first_observations": 1,
+        "needs_review_first_observations": 2,
+        "first_observation_median_ms": 19797.05734999152,
+        "states": {
+          "unverified": 7,
+          "hypothesis_supported_by_tests": 1
+        },
+        "controls": [
+          {
+            "case_id": "c01",
+            "score": {
+              "workflow_supported_by_unchanged_tests": false,
+              "applied": false,
+              "root_protected_repair_verified": false,
+              "guarded": true,
+              "needs_review": false,
+              "source_citation_correctness": null,
+              "complete_causal_correctness": null,
+              "attempt_outcomes": []
+            },
+            "model_correctness_credit": null
+          },
+          {
+            "case_id": "c02",
+            "score": {
+              "workflow_supported_by_unchanged_tests": false,
+              "applied": false,
+              "root_protected_repair_verified": false,
+              "guarded": false,
+              "needs_review": false,
+              "source_citation_correctness": null,
+              "complete_causal_correctness": null,
+              "attempt_outcomes": [
+                {
+                  "attempt": 1,
+                  "generation_helper_attempted": true,
+                  "model_request_attempted": true,
+                  "generated_output_retained": true,
+                  "structurally_valid_hypothesis": true,
+                  "patched_disposable_copy": true,
+                  "target_tests_all_passed": false,
+                  "regression_tests_all_passed": true,
+                  "rejected_or_error": true
+                },
+                {
+                  "attempt": 2,
+                  "generation_helper_attempted": true,
+                  "model_request_attempted": true,
+                  "generated_output_retained": true,
+                  "structurally_valid_hypothesis": false,
+                  "patched_disposable_copy": false,
+                  "target_tests_all_passed": false,
+                  "regression_tests_all_passed": false,
+                  "rejected_or_error": true
+                }
+              ]
+            },
+            "model_correctness_credit": null
+          }
+        ],
+        "human_time_saved": null,
+        "complete_causal_correctness": null
+      },
+      "report": "triage-v6-matrix-first-01-stronger-v6.json",
+      "evaluation_passes": [
+        "e04"
+      ]
+    }
+  ],
+  "paired_same_case": [
+    {
+      "case_id": "e01",
+      "comparisons": [
+        {
+          "from": "current-v5",
+          "to": "current-v6",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": false,
+          "to_protected_repair": false,
+          "difference_ms_to_minus_from": 1175.6011999968905
+        },
+        {
+          "from": "stronger-v5",
+          "to": "stronger-v6",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": false,
+          "to_protected_repair": false,
+          "difference_ms_to_minus_from": 23.583300004247576
+        },
+        {
+          "from": "current-v5",
+          "to": "stronger-v5",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": false,
+          "to_protected_repair": false,
+          "difference_ms_to_minus_from": 6731.142299977364
+        },
+        {
+          "from": "current-v6",
+          "to": "stronger-v6",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": false,
+          "to_protected_repair": false,
+          "difference_ms_to_minus_from": 5579.124399984721
+        }
+      ]
+    },
+    {
+      "case_id": "e02",
+      "comparisons": [
+        {
+          "from": "current-v5",
+          "to": "current-v6",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": false,
+          "to_protected_repair": false,
+          "difference_ms_to_minus_from": -431.25580000923946
+        },
+        {
+          "from": "stronger-v5",
+          "to": "stronger-v6",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": false,
+          "to_protected_repair": false,
+          "difference_ms_to_minus_from": -1067.437699995935
+        },
+        {
+          "from": "current-v5",
+          "to": "stronger-v5",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": false,
+          "to_protected_repair": false,
+          "difference_ms_to_minus_from": 9470.45649998472
+        },
+        {
+          "from": "current-v6",
+          "to": "stronger-v6",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": false,
+          "to_protected_repair": false,
+          "difference_ms_to_minus_from": 8834.274599998025
+        }
+      ]
+    },
+    {
+      "case_id": "e03",
+      "comparisons": [
+        {
+          "from": "current-v5",
+          "to": "current-v6",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": false,
+          "to_protected_repair": false,
+          "difference_ms_to_minus_from": 14026.125300006242
+        },
+        {
+          "from": "stronger-v5",
+          "to": "stronger-v6",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": false,
+          "to_protected_repair": false,
+          "difference_ms_to_minus_from": 17649.561400001403
+        },
+        {
+          "from": "current-v5",
+          "to": "stronger-v5",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": false,
+          "to_protected_repair": false,
+          "difference_ms_to_minus_from": 11397.741299995687
+        },
+        {
+          "from": "current-v6",
+          "to": "stronger-v6",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": false,
+          "to_protected_repair": false,
+          "difference_ms_to_minus_from": 15021.177399990847
+        }
+      ]
+    },
+    {
+      "case_id": "e04",
+      "comparisons": [
+        {
+          "from": "current-v5",
+          "to": "current-v6",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": false,
+          "to_protected_repair": true,
+          "difference_ms_to_minus_from": -819.0292999788653
+        },
+        {
+          "from": "stronger-v5",
+          "to": "stronger-v6",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": true,
+          "to_protected_repair": true,
+          "difference_ms_to_minus_from": -799.5681000174955
+        },
+        {
+          "from": "current-v5",
+          "to": "stronger-v5",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": false,
+          "to_protected_repair": true,
+          "difference_ms_to_minus_from": 6889.970100048231
+        },
+        {
+          "from": "current-v6",
+          "to": "stronger-v6",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": true,
+          "to_protected_repair": true,
+          "difference_ms_to_minus_from": 6909.431300009601
+        }
+      ]
+    },
+    {
+      "case_id": "e05",
+      "comparisons": [
+        {
+          "from": "current-v5",
+          "to": "current-v6",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": false,
+          "to_protected_repair": false,
+          "difference_ms_to_minus_from": -2559.19620001805
+        },
+        {
+          "from": "stronger-v5",
+          "to": "stronger-v6",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": false,
+          "to_protected_repair": false,
+          "difference_ms_to_minus_from": -5162.064799980726
+        },
+        {
+          "from": "current-v5",
+          "to": "stronger-v5",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": false,
+          "to_protected_repair": false,
+          "difference_ms_to_minus_from": 17316.78829996963
+        },
+        {
+          "from": "current-v6",
+          "to": "stronger-v6",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": false,
+          "to_protected_repair": false,
+          "difference_ms_to_minus_from": 14713.919700006954
+        }
+      ]
+    },
+    {
+      "case_id": "e06",
+      "comparisons": [
+        {
+          "from": "current-v5",
+          "to": "current-v6",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": false,
+          "to_protected_repair": false,
+          "difference_ms_to_minus_from": -1273.6768000177108
+        },
+        {
+          "from": "stronger-v5",
+          "to": "stronger-v6",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": false,
+          "to_protected_repair": false,
+          "difference_ms_to_minus_from": -3836.519299977226
+        },
+        {
+          "from": "current-v5",
+          "to": "stronger-v5",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": false,
+          "to_protected_repair": false,
+          "difference_ms_to_minus_from": 7361.701199959498
+        },
+        {
+          "from": "current-v6",
+          "to": "stronger-v6",
+          "valid_first_observation_pair": true,
+          "from_protected_repair": false,
+          "to_protected_repair": false,
+          "difference_ms_to_minus_from": 4798.8586999999825
+        }
+      ]
+    }
+  ],
+  "operational_records": [],
+  "replay_records": [],
+  "complete_unique_matrix": true,
+  "human_time_saved": null,
+  "quality_gate": {
+    "required_protected_repairs": 4,
+    "observed": 1,
+    "passed": false,
+    "preselected": "stronger-v6"
+  },
+  "semantic_diff_audit": {
+    "applied_evaluation_case": "e04",
+    "observed_fix": "Delete stored indexes in reverse order so earlier deletions do not invalidate later indexes.",
+    "audit_scope": "Root inspected every successful cell diff; only e04 was repaired. Tests are not an exhaustive semantic proof."
+  },
+  "candidate_sha256": "760b3e8f4eb5d52f975f754718e614945198fc63f3530aa2591e95f7ca8d2932"
+}
