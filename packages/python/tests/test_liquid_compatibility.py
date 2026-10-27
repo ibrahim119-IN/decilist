@@ -92,6 +92,17 @@ def test_compiled_flash_keeps_vendor_predicate_and_architecture_dtype_checks(ven
     assert vendor.hybrid._own(query(architecture=False)) == "existing-vendor-explicit"
 
 
+def test_specialist_load_requests_only_the_same_explicit_runtime_files_as_setup(vendor):
+    from decilist.code_review import LiquidCodeReviewProvider, REVIEW_FILES
+    LiquidCodeReviewProvider.load(allow_model_code=True, offline=True)
+    snapshot = vendor.calls[0]
+    assert snapshot == ("snapshot", LiquidCodeReviewProvider.model, {
+        "revision": LiquidCodeReviewProvider.revision, "local_files_only": True,
+        "allow_patterns": list(REVIEW_FILES),
+    })
+    assert "model.safetensors" in REVIEW_FILES and "tokenizer.json" in REVIEW_FILES
+
+
 @pytest.mark.parametrize("device", ["cpu", "cpu:0", "mps", "xpu"])
 def test_non_cuda_preserves_vendor_predicate_without_cuda_build_probe(vendor, device):
     def must_not_probe():

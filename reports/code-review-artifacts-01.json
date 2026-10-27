@@ -1,0 +1,49 @@
+{
+  "model": "yannelli/d1-3b-code-review-decisions",
+  "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+  "artifact_integrity": {
+    "tokenizer.json": {
+      "sha256": "8096ecb9f54599d756c8de728a598a340bc1e43c0deb77ddd62456c38349fcee",
+      "bytes": 17905750
+    },
+    "model.safetensors": {
+      "sha256": "7533d57eb430090bf5eb469b41efed4106d06c76e4072f9b5856ae7f7495c778",
+      "bytes": 6247065504
+    }
+  },
+  "vendor_runtime_comparison": {
+    "api.py": {
+      "sha256": "94e9f82eabfdf92c4abe1153e9a6dc4dd9821f9cc2fec3221e79e70723d8ada0",
+      "identical_to_audited_base_runtime": true
+    },
+    "hybrid.py": {
+      "sha256": "ce579827b952a6978a3560f70e74be9e228f9029de46048996b0c5f58d7f1f39",
+      "identical_to_audited_base_runtime": true
+    },
+    "lfm2_vl.py": {
+      "sha256": "f9e8d3354572a169237865283594b0364209fdb858901121b9f99147328b5d95",
+      "identical_to_audited_base_runtime": true
+    },
+    "modeling_d1.py": {
+      "sha256": "7fc6a001f80fc2d146f2a51128478f3b3bd4f1423a3ac129bc10f3fd0caf1d98",
+      "identical_to_audited_base_runtime": true
+    },
+    "prompt.py": {
+      "sha256": "a20b5f52e41a6d29e694bb8c861a5a4803ce3eb69364edad79511ccf8edb5c31",
+      "identical_to_audited_base_runtime": true
+    },
+    "runner.py": {
+      "sha256": "24d3ae718e9f9717771c0df39c93d324d00aa27bf3e12bab085c0922096cb0dd",
+      "identical_to_audited_base_runtime": true
+    }
+  },
+  "weights_license": "LFM Open License v1.0",
+  "question_definitions_license": "CC BY 4.0",
+  "storage_drive": "L",
+  "weights_redistributed_in_repository": false,
+  "question_definitions": {
+    "count": 13,
+    "unchanged_from_manifest": true,
+    "manifest_sha256": "f4a145edbd74a7ab736673be9162b02dcffa3a5b98c358072a558402d9440962"
+  }
+}

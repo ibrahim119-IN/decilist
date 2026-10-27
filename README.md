@@ -12,6 +12,8 @@ Current repair development adds observed producer retrieval and checked module-l
 
 ## Why this exists
 
+The optional [local JS/TS reviewer](docs/code-review.md) integrates an existing specialist model with `sdk.review(existingSource, { task })`, Python, HTTP, and a terminal command. It returns advisory findings with explicit coverage and failure states. In an 18-snippet authored pilot it detected all nine target issues and flagged one valid snippet, versus three issues detected by the selected ESLint configuration. This is preliminary quality evidence, not a developer time-saving measurement. No new form or decision definition is required.
+
 Calling a model is one step. A developer still needs to decide what counts as a valid answer, when to abstain, which fallback may receive the input, and whether a new provider actually improves their workload.
 
 Decilist's intended value is that complete development loop:

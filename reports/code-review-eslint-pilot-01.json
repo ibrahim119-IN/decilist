@@ -1,0 +1,197 @@
+{
+  "purpose": "Recommended type-aware ESLint diagnostics on authored cases. A diagnostic is not automatically a correct target-rule classification; raw messages are retained.",
+  "configuration": "eslint recommended + typescript-eslint recommendedTypeChecked; no custom rules or disabled rules",
+  "cases_sha256": "ce7762d3da814957418d40423a57e17e60530bf01cbb8a5035cb64cdf0d293e0",
+  "versions": {
+    "eslint": "10.13.0",
+    "@eslint/js": "10.0.1",
+    "typescript-eslint": "8.72.1",
+    "typescript": "6.0.3"
+  },
+  "total_ms": 680.0955,
+  "rows": [
+    {
+      "id": "catch-swallow",
+      "expected_target_flaw": true,
+      "target_rule": "error_handling_problem",
+      "diagnostic_count": 0,
+      "latency_ms": 564.75,
+      "diagnostics": []
+    },
+    {
+      "id": "await-propagates",
+      "expected_target_flaw": false,
+      "target_rule": "error_handling_problem",
+      "diagnostic_count": 0,
+      "latency_ms": 7.065600000000018,
+      "diagnostics": []
+    },
+    {
+      "id": "throw-string",
+      "expected_target_flaw": true,
+      "target_rule": "error_handling_problem",
+      "diagnostic_count": 1,
+      "latency_ms": 17.57000000000005,
+      "diagnostics": [
+        {
+          "ruleId": "@typescript-eslint/only-throw-error",
+          "message": "Expected an error object to be thrown.",
+          "line": 2,
+          "column": 24
+        }
+      ]
+    },
+    {
+      "id": "throw-error",
+      "expected_target_flaw": false,
+      "target_rule": "error_handling_problem",
+      "diagnostic_count": 0,
+      "latency_ms": 7.357900000000086,
+      "diagnostics": []
+    },
+    {
+      "id": "error-hidden-as-success",
+      "expected_target_flaw": true,
+      "target_rule": "error_handling_problem",
+      "diagnostic_count": 0,
+      "latency_ms": 11.278999999999996,
+      "diagnostics": []
+    },
+    {
+      "id": "error-preserved",
+      "expected_target_flaw": false,
+      "target_rule": "error_handling_problem",
+      "diagnostic_count": 0,
+      "latency_ms": 7.125400000000013,
+      "diagnostics": []
+    },
+    {
+      "id": "any-record",
+      "expected_target_flaw": true,
+      "target_rule": "type_safety_hole",
+      "diagnostic_count": 3,
+      "latency_ms": 3.828899999999976,
+      "diagnostics": [
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "message": "Unexpected any. Specify a different type.",
+          "line": 1,
+          "column": 35
+        },
+        {
+          "ruleId": "@typescript-eslint/no-unsafe-return",
+          "message": "Unsafe return of a value of type `any`.",
+          "line": 2,
+          "column": 3
+        },
+        {
+          "ruleId": "@typescript-eslint/no-unsafe-member-access",
+          "message": "Unsafe member access .title on an `any` value.",
+          "line": 2,
+          "column": 17
+        }
+      ]
+    },
+    {
+      "id": "unknown-record-guard",
+      "expected_target_flaw": false,
+      "target_rule": "type_safety_hole",
+      "diagnostic_count": 0,
+      "latency_ms": 7.411800000000085,
+      "diagnostics": []
+    },
+    {
+      "id": "unchecked-cast",
+      "expected_target_flaw": true,
+      "target_rule": "type_safety_hole",
+      "diagnostic_count": 0,
+      "latency_ms": 5.941100000000006,
+      "diagnostics": []
+    },
+    {
+      "id": "checked-type",
+      "expected_target_flaw": false,
+      "target_rule": "type_safety_hole",
+      "diagnostic_count": 0,
+      "latency_ms": 4.437400000000025,
+      "diagnostics": []
+    },
+    {
+      "id": "unchecked-find",
+      "expected_target_flaw": true,
+      "target_rule": "type_safety_hole",
+      "diagnostic_count": 0,
+      "latency_ms": 8.920499999999947,
+      "diagnostics": []
+    },
+    {
+      "id": "checked-find",
+      "expected_target_flaw": false,
+      "target_rule": "type_safety_hole",
+      "diagnostic_count": 0,
+      "latency_ms": 7.251999999999953,
+      "diagnostics": []
+    },
+    {
+      "id": "html-unescaped",
+      "expected_target_flaw": true,
+      "target_rule": "unsafe_input",
+      "diagnostic_count": 0,
+      "latency_ms": 6.263900000000149,
+      "diagnostics": []
+    },
+    {
+      "id": "html-text-only",
+      "expected_target_flaw": false,
+      "target_rule": "unsafe_input",
+      "diagnostic_count": 0,
+      "latency_ms": 3.0715000000000146,
+      "diagnostics": []
+    },
+    {
+      "id": "sql-concatenation",
+      "expected_target_flaw": true,
+      "target_rule": "unsafe_input",
+      "diagnostic_count": 0,
+      "latency_ms": 4.5680999999999585,
+      "diagnostics": []
+    },
+    {
+      "id": "sql-parameters",
+      "expected_target_flaw": false,
+      "target_rule": "unsafe_input",
+      "diagnostic_count": 0,
+      "latency_ms": 4.2065000000000055,
+      "diagnostics": []
+    },
+    {
+      "id": "json-unvalidated",
+      "expected_target_flaw": true,
+      "target_rule": "unsafe_input",
+      "diagnostic_count": 2,
+      "latency_ms": 2.8991000000000895,
+      "diagnostics": [
+        {
+          "ruleId": "@typescript-eslint/no-unsafe-return",
+          "message": "Unsafe return of a value of type `any`.",
+          "line": 2,
+          "column": 3
+        },
+        {
+          "ruleId": "@typescript-eslint/no-unsafe-member-access",
+          "message": "Unsafe member access .name on an `any` value.",
+          "line": 2,
+          "column": 35
+        }
+      ]
+    },
+    {
+      "id": "json-validated",
+      "expected_target_flaw": false,
+      "target_rule": "unsafe_input",
+      "diagnostic_count": 0,
+      "latency_ms": 4.314499999999953,
+      "diagnostics": []
+    }
+  ]
+}

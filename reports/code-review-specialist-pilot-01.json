@@ -1,0 +1,757 @@
+{
+  "schema_version": "code-review-pilot.1",
+  "checked_at_utc": "2026-10-27T22:35:57.977260+00:00",
+  "purpose": "18 newly authored cases scored only on their target rule; not independent human labels, natural bugs, or a developer time study.",
+  "cases_sha256": "ce7762d3da814957418d40423a57e17e60530bf01cbb8a5035cb64cdf0d293e0",
+  "device": "cuda:1",
+  "gpu": "NVIDIA GeForce RTX 3090",
+  "python_socket_connections_blocked": true,
+  "blocked_connection_attempts": 0,
+  "results": {
+    "specialist": {
+      "model": "yannelli/d1-3b-code-review-decisions",
+      "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+      "attention_backend": "vendor-explicit",
+      "load_seconds": 5.169917599996552,
+      "warmup_ms": 1378.0532000018866,
+      "threshold": 0.9,
+      "metrics": {
+        "cases": 18,
+        "unavailable": 0,
+        "tp": 9,
+        "tn": 8,
+        "fp": 1,
+        "fn": 0,
+        "target_accuracy_all_cases": 0.9444444444444444,
+        "target_f1": 0.9473684210526315,
+        "median_ms": 53.33020000034594
+      },
+      "rows": [
+        {
+          "id": "catch-swallow",
+          "target_rule": "error_handling_problem",
+          "expected": true,
+          "predicted": true,
+          "probability": 0.9928785712542649,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "flagged",
+            "advisory": true,
+            "model": "yannelli/d1-3b-code-review-decisions",
+            "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 4,
+            "reviewed_lines": 4,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 4,
+                "probabilities": {
+                  "error_handling_problem": 0.9928785712542649,
+                  "type_safety_hole": 0.004070137715896127,
+                  "unsafe_input": 0.011687257995694434
+                }
+              }
+            ],
+            "findings": [
+              {
+                "rule": "error_handling_problem",
+                "probability": 0.9928785712542649,
+                "start_line": 1,
+                "end_line": 4
+              }
+            ],
+            "latency_ms": 56.12680000194814,
+            "error": null
+          }
+        },
+        {
+          "id": "await-propagates",
+          "target_rule": "error_handling_problem",
+          "expected": false,
+          "predicted": false,
+          "probability": 0.05033063259747688,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "no_flags",
+            "advisory": true,
+            "model": "yannelli/d1-3b-code-review-decisions",
+            "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 3,
+            "reviewed_lines": 3,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 3,
+                "probabilities": {
+                  "error_handling_problem": 0.05033063259747688,
+                  "type_safety_hole": 0.004905405705722035,
+                  "unsafe_input": 0.010328152519305191
+                }
+              }
+            ],
+            "findings": [],
+            "latency_ms": 55.41809999704128,
+            "error": null
+          }
+        },
+        {
+          "id": "throw-string",
+          "target_rule": "error_handling_problem",
+          "expected": true,
+          "predicted": true,
+          "probability": 0.9990889488055994,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "flagged",
+            "advisory": true,
+            "model": "yannelli/d1-3b-code-review-decisions",
+            "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 4,
+            "reviewed_lines": 4,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 4,
+                "probabilities": {
+                  "error_handling_problem": 0.9990889488055994,
+                  "type_safety_hole": 0.006692850924284856,
+                  "unsafe_input": 0.004609572179374208
+                }
+              }
+            ],
+            "findings": [
+              {
+                "rule": "error_handling_problem",
+                "probability": 0.9990889488055994,
+                "start_line": 1,
+                "end_line": 4
+              }
+            ],
+            "latency_ms": 56.24520000128541,
+            "error": null
+          }
+        },
+        {
+          "id": "throw-error",
+          "target_rule": "error_handling_problem",
+          "expected": false,
+          "predicted": false,
+          "probability": 0.0062899021368924835,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "no_flags",
+            "advisory": true,
+            "model": "yannelli/d1-3b-code-review-decisions",
+            "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 4,
+            "reviewed_lines": 4,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 4,
+                "probabilities": {
+                  "error_handling_problem": 0.0062899021368924835,
+                  "type_safety_hole": 0.0024726231566347748,
+                  "unsafe_input": 0.0038244836446372104
+                }
+              }
+            ],
+            "findings": [],
+            "latency_ms": 55.14419999963138,
+            "error": null
+          }
+        },
+        {
+          "id": "error-hidden-as-success",
+          "target_rule": "error_handling_problem",
+          "expected": true,
+          "predicted": true,
+          "probability": 0.9937100978631075,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "flagged",
+            "advisory": true,
+            "model": "yannelli/d1-3b-code-review-decisions",
+            "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 4,
+            "reviewed_lines": 4,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 4,
+                "probabilities": {
+                  "error_handling_problem": 0.9937100978631075,
+                  "type_safety_hole": 0.0018102110262026487,
+                  "unsafe_input": 0.002050743539917378
+                }
+              }
+            ],
+            "findings": [
+              {
+                "rule": "error_handling_problem",
+                "probability": 0.9937100978631075,
+                "start_line": 1,
+                "end_line": 4
+              }
+            ],
+            "latency_ms": 53.0304000058095,
+            "error": null
+          }
+        },
+        {
+          "id": "error-preserved",
+          "target_rule": "error_handling_problem",
+          "expected": false,
+          "predicted": false,
+          "probability": 0.22270013882530884,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "no_flags",
+            "advisory": true,
+            "model": "yannelli/d1-3b-code-review-decisions",
+            "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 4,
+            "reviewed_lines": 4,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 4,
+                "probabilities": {
+                  "error_handling_problem": 0.22270013882530884,
+                  "type_safety_hole": 0.0024726231566347748,
+                  "unsafe_input": 0.002800926967120973
+                }
+              }
+            ],
+            "findings": [],
+            "latency_ms": 53.10209999879589,
+            "error": null
+          }
+        },
+        {
+          "id": "any-record",
+          "target_rule": "type_safety_hole",
+          "expected": true,
+          "predicted": true,
+          "probability": 0.999541687099365,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "flagged",
+            "advisory": true,
+            "model": "yannelli/d1-3b-code-review-decisions",
+            "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 3,
+            "reviewed_lines": 3,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 3,
+                "probabilities": {
+                  "error_handling_problem": 0.004070137715896127,
+                  "type_safety_hole": 0.999541687099365,
+                  "unsafe_input": 0.9496693674025232
+                }
+              }
+            ],
+            "findings": [
+              {
+                "rule": "type_safety_hole",
+                "probability": 0.999541687099365,
+                "start_line": 1,
+                "end_line": 3
+              },
+              {
+                "rule": "unsafe_input",
+                "probability": 0.9496693674025232,
+                "start_line": 1,
+                "end_line": 3
+              }
+            ],
+            "latency_ms": 53.28960000042571,
+            "error": null
+          }
+        },
+        {
+          "id": "unknown-record-guard",
+          "target_rule": "type_safety_hole",
+          "expected": false,
+          "predicted": false,
+          "probability": 0.004070137715896127,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "no_flags",
+            "advisory": true,
+            "model": "yannelli/d1-3b-code-review-decisions",
+            "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 4,
+            "reviewed_lines": 4,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 4,
+                "probabilities": {
+                  "error_handling_problem": 0.007121428745735101,
+                  "type_safety_hole": 0.004070137715896127,
+                  "unsafe_input": 0.020332353342658753
+                }
+              }
+            ],
+            "findings": [],
+            "latency_ms": 53.08019999938551,
+            "error": null
+          }
+        },
+        {
+          "id": "unchecked-cast",
+          "target_rule": "type_safety_hole",
+          "expected": true,
+          "predicted": true,
+          "probability": 0.9875683491468141,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "flagged",
+            "advisory": true,
+            "model": "yannelli/d1-3b-code-review-decisions",
+            "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 3,
+            "reviewed_lines": 3,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 3,
+                "probabilities": {
+                  "error_handling_problem": 0.005911068856243796,
+                  "type_safety_hole": 0.9875683491468141,
+                  "unsafe_input": 0.13296424019782924
+                }
+              }
+            ],
+            "findings": [
+              {
+                "rule": "type_safety_hole",
+                "probability": 0.9875683491468141,
+                "start_line": 1,
+                "end_line": 3
+              }
+            ],
+            "latency_ms": 51.73020000074757,
+            "error": null
+          }
+        },
+        {
+          "id": "checked-type",
+          "target_rule": "type_safety_hole",
+          "expected": false,
+          "predicted": false,
+          "probability": 0.006692850924284856,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "no_flags",
+            "advisory": true,
+            "model": "yannelli/d1-3b-code-review-decisions",
+            "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 4,
+            "reviewed_lines": 4,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 4,
+                "probabilities": {
+                  "error_handling_problem": 0.006692850924284856,
+                  "type_safety_hole": 0.006692850924284856,
+                  "unsafe_input": 0.04742587317756679
+                }
+              }
+            ],
+            "findings": [],
+            "latency_ms": 53.8553000005777,
+            "error": null
+          }
+        },
+        {
+          "id": "unchecked-find",
+          "target_rule": "type_safety_hole",
+          "expected": true,
+          "predicted": true,
+          "probability": 0.9982992775885648,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "flagged",
+            "advisory": true,
+            "model": "yannelli/d1-3b-code-review-decisions",
+            "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 3,
+            "reviewed_lines": 3,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 3,
+                "probabilities": {
+                  "error_handling_problem": 0.009708476481474066,
+                  "type_safety_hole": 0.9982992775885648,
+                  "unsafe_input": 0.004905405705722035
+                }
+              }
+            ],
+            "findings": [
+              {
+                "rule": "type_safety_hole",
+                "probability": 0.9982992775885648,
+                "start_line": 1,
+                "end_line": 3
+              }
+            ],
+            "latency_ms": 53.91090000193799,
+            "error": null
+          }
+        },
+        {
+          "id": "checked-find",
+          "target_rule": "type_safety_hole",
+          "expected": false,
+          "predicted": false,
+          "probability": 0.00263167397488458,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "no_flags",
+            "advisory": true,
+            "model": "yannelli/d1-3b-code-review-decisions",
+            "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 5,
+            "reviewed_lines": 5,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 5,
+                "probabilities": {
+                  "error_handling_problem": 0.005911068856243796,
+                  "type_safety_hole": 0.00263167397488458,
+                  "unsafe_input": 0.00433150202056399
+                }
+              }
+            ],
+            "findings": [],
+            "latency_ms": 53.37080000026617,
+            "error": null
+          }
+        },
+        {
+          "id": "html-unescaped",
+          "target_rule": "unsafe_input",
+          "expected": true,
+          "predicted": true,
+          "probability": 0.9980732653366725,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "flagged",
+            "advisory": true,
+            "model": "yannelli/d1-3b-code-review-decisions",
+            "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 3,
+            "reviewed_lines": 3,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 3,
+                "probabilities": {
+                  "error_handling_problem": 0.0029810327298548972,
+                  "type_safety_hole": 0.004070137715896127,
+                  "unsafe_input": 0.9980732653366725
+                }
+              }
+            ],
+            "findings": [
+              {
+                "rule": "unsafe_input",
+                "probability": 0.9980732653366725,
+                "start_line": 1,
+                "end_line": 3
+              }
+            ],
+            "latency_ms": 50.89050000242423,
+            "error": null
+          }
+        },
+        {
+          "id": "html-text-only",
+          "target_rule": "unsafe_input",
+          "expected": false,
+          "predicted": true,
+          "probability": 0.9465966702001757,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "flagged",
+            "advisory": true,
+            "model": "yannelli/d1-3b-code-review-decisions",
+            "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 3,
+            "reviewed_lines": 3,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 3,
+                "probabilities": {
+                  "error_handling_problem": 0.0035936025814200896,
+                  "type_safety_hole": 0.005554924703691103,
+                  "unsafe_input": 0.9465966702001757
+                }
+              }
+            ],
+            "findings": [
+              {
+                "rule": "unsafe_input",
+                "probability": 0.9465966702001757,
+                "start_line": 1,
+                "end_line": 3
+              }
+            ],
+            "latency_ms": 51.02269999770215,
+            "error": null
+          }
+        },
+        {
+          "id": "sql-concatenation",
+          "target_rule": "unsafe_input",
+          "expected": true,
+          "predicted": true,
+          "probability": 0.9971990730328789,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "flagged",
+            "advisory": true,
+            "model": "yannelli/d1-3b-code-review-decisions",
+            "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 3,
+            "reviewed_lines": 3,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 3,
+                "probabilities": {
+                  "error_handling_problem": 0.0019267346633274755,
+                  "type_safety_hole": 0.00433150202056399,
+                  "unsafe_input": 0.9971990730328789
+                }
+              }
+            ],
+            "findings": [
+              {
+                "rule": "unsafe_input",
+                "probability": 0.9971990730328789,
+                "start_line": 1,
+                "end_line": 3
+              }
+            ],
+            "latency_ms": 52.67620000086026,
+            "error": null
+          }
+        },
+        {
+          "id": "sql-parameters",
+          "target_rule": "unsafe_input",
+          "expected": false,
+          "predicted": false,
+          "probability": 0.6513548646660542,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "no_flags",
+            "advisory": true,
+            "model": "yannelli/d1-3b-code-review-decisions",
+            "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 3,
+            "reviewed_lines": 3,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 3,
+                "probabilities": {
+                  "error_handling_problem": 0.0038244836446372104,
+                  "type_safety_hole": 0.009708476481474066,
+                  "unsafe_input": 0.6513548646660542
+                }
+              }
+            ],
+            "findings": [],
+            "latency_ms": 53.74609999853419,
+            "error": null
+          }
+        },
+        {
+          "id": "json-unvalidated",
+          "target_rule": "unsafe_input",
+          "expected": true,
+          "predicted": true,
+          "probability": 0.98504291340685,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "flagged",
+            "advisory": true,
+            "model": "yannelli/d1-3b-code-review-decisions",
+            "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 3,
+            "reviewed_lines": 3,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 3,
+                "probabilities": {
+                  "error_handling_problem": 0.07585818002124356,
+                  "type_safety_hole": 0.03514484640079327,
+                  "unsafe_input": 0.98504291340685
+                }
+              }
+            ],
+            "findings": [
+              {
+                "rule": "unsafe_input",
+                "probability": 0.98504291340685,
+                "start_line": 1,
+                "end_line": 3
+              }
+            ],
+            "latency_ms": 51.49909999454394,
+            "error": null
+          }
+        },
+        {
+          "id": "json-validated",
+          "target_rule": "unsafe_input",
+          "expected": false,
+          "predicted": false,
+          "probability": 0.014063627043245474,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "no_flags",
+            "advisory": true,
+            "model": "yannelli/d1-3b-code-review-decisions",
+            "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 5,
+            "reviewed_lines": 5,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 5,
+                "probabilities": {
+                  "error_handling_problem": 0.005911068856243796,
+                  "type_safety_hole": 0.004905405705722035,
+                  "unsafe_input": 0.014063627043245474
+                }
+              }
+            ],
+            "findings": [],
+            "latency_ms": 64.87010000273585,
+            "error": null
+          }
+        }
+      ]
+    }
+  }
+}

@@ -8,9 +8,10 @@ from starlette.middleware.trustedhost import TrustedHostMiddleware
 from .contracts import Decision, DecisionRequest
 from .engine import Decilist
 from .runtime import SCHEMA_VERSION, runtime_version
+from .code_review import CodeReviewer, ReviewRequest, ReviewResult
 
 
-def create_app(engine: Decilist | None = None, *, local_only: bool = True, provider: str = "demo", include_ui: bool = True) -> FastAPI:
+def create_app(engine: Decilist | None = None, *, local_only: bool = True, provider: str = "demo", include_ui: bool = True, reviewer: CodeReviewer | None = None) -> FastAPI:
     if engine is None:
         from .demo import make_demo_engine
         engine = make_demo_engine()
@@ -45,6 +46,12 @@ def create_app(engine: Decilist | None = None, *, local_only: bool = True, provi
     async def decide(body: DecisionRequest):
         policy = body.policy.model_copy(update={"local_only": local_only or body.policy.local_only})
         return await engine.decide(body.question, policy)
+
+    @app.post("/v1/code-review", response_model=ReviewResult)
+    async def review(body: ReviewRequest):
+        if reviewer is None:
+            return JSONResponse({"error": "code_review_not_loaded", "hint": "Start decilist review serve on port 8766"}, status_code=503)
+        return await reviewer.review(body.code, task=body.task, language=body.language, policy=body.policy)
 
     if include_ui:
         from .web import attach_ui

@@ -1,0 +1,6 @@
+Question definitions extracted without textual changes from JS/TS Code Review Decisions.
+Copyright (c) 2026 Ryan Yannelli. CC BY 4.0.
+https://creativecommons.org/licenses/by/4.0/
+https://huggingface.co/datasets/yannelli/js-ts-code-review-decisions/tree/5c3f3923f4a4278e249731ac3d3b613861efe3e4
+Source manifest SHA256: f4a145edbd74a7ab736673be9162b02dcffa3a5b98c358072a558402d9440962
+Decilist selects requested rules and supplies its own advisory policy; weights are downloaded separately under LFM Open License v1.0.

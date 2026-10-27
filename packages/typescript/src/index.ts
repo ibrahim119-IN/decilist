@@ -1,4 +1,7 @@
 import { z } from "zod";
+import { reviewRequestSchema, validateReviewResult, type ReviewOptions, type ReviewRequest, type ReviewResult } from "./code-review.js";
+export { reviewRequestSchema, reviewPolicySchema, reviewResultSchema, validateReviewResult } from "./code-review.js";
+export type { ReviewPolicy, ReviewOptions, ReviewRequest, ReviewResult } from "./code-review.js";
 
 const text = z.string().trim().min(1).max(65536);
 const label = z.string().min(1).max(256).refine(value => value === value.trim());
@@ -63,6 +66,7 @@ export function validateDecision<T>(question: Question, input: unknown): Decisio
 /** Transports return the canonical envelope. Policies execute in the Python runtime. */
 export interface Transport {
   decide(question: Question, policy: z.infer<typeof policySchema>): Promise<unknown>;
+  review?(request: ReviewRequest): Promise<unknown>;
 }
 
 export class RuntimeConnectionError extends Error {
@@ -116,6 +120,21 @@ export class HttpTransport implements Transport {
       }
     }
   }
+  async review(request: ReviewRequest): Promise<unknown> {
+    if (!this.isReady) await this.ready();
+    let response: Response;
+    try {
+      response = await fetch(new URL("/v1/code-review", this.baseUrl), {
+        method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(request),
+        signal:AbortSignal.timeout(this.timeoutMs), redirect:"error",
+      });
+    } catch (error) {
+      this.isReady = false;
+      throw new RuntimeConnectionError("Code review connection failed. Check that decilist review serve is running.", {cause:error});
+    }
+    if (!response.ok) throw new RuntimeConnectionError(`Code review HTTP ${response.status}. Start decilist review serve and connect to its port.`);
+    return response.json();
+  }
   async decide(question: Question, policy: z.infer<typeof policySchema>): Promise<unknown> {
     if (!this.isReady) await this.ready();
     let response: Response;
@@ -137,6 +156,11 @@ export type ConnectOptions = {baseUrl?: string; timeoutMs?: number; waitMs?: num
 
 export class Decilist {
   constructor(readonly transport: Transport = new HttpTransport(), readonly policy: Policy = {}) {}
+  async review(code: string, options: ReviewOptions): Promise<ReviewResult> {
+    const request = reviewRequestSchema.parse({code,...options});
+    if (!this.transport.review) throw new RuntimeCompatibilityError("This transport does not support code review");
+    return validateReviewResult(request, await this.transport.review(request));
+  }
   /** Configure one endpoint for all direct choose/predict/score calls. */
   static async connect(options: ConnectOptions = {}): Promise<Decilist> {
     const policy = policySchema.parse(options.policy ?? {});

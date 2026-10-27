@@ -33,6 +33,7 @@ class LiquidLocalProvider:
     name = "liquid-local"
     model = "LiquidAI/d1-3B"
     revision = "051bcc464b01b9f92942b364d9586b0ef5912432"
+    snapshot_files: tuple[str, ...] | None = None
 
     def __init__(self, model: Any):
         self._model = model
@@ -50,7 +51,8 @@ class LiquidLocalProvider:
         dtype = torch.float32 if device == "cpu" else torch.bfloat16
         # Resolve a pinned local snapshot so vendor lazy tokenizer loading cannot
         # silently use the repository's moving main branch or access the network.
-        snapshot = snapshot_download(cls.model, revision=cls.revision, local_files_only=offline)
+        snapshot_options = {"allow_patterns": list(cls.snapshot_files)} if cls.snapshot_files is not None else {}
+        snapshot = snapshot_download(cls.model, revision=cls.revision, local_files_only=offline, **snapshot_options)
         model = AutoModel.from_pretrained(snapshot, trust_remote_code=True, local_files_only=True, dtype=dtype)
         model = model.to(device).eval()
         attention_backend = cls._configure_attention(model, torch, device=device)
@@ -135,10 +137,13 @@ class LiquidLocalProvider:
         return probabilities
 
     async def infer(self, question: Question) -> dict[str, float]:
+        return await self._run_locked(lambda: self._infer_sync(question))
+
+    async def _run_locked(self, call: Callable[[], Any]) -> Any:
         # Acquire before spawning. A timed-out native inference retains the lock until
         # it finishes, preventing overlapping GPU jobs or an unbounded worker queue.
         await self._lock.acquire()
-        task = asyncio.create_task(asyncio.to_thread(self._infer_sync, question))
+        task = asyncio.create_task(asyncio.to_thread(call))
         self._running.add(task)
         def done(completed: asyncio.Task):
             self._lock.release()

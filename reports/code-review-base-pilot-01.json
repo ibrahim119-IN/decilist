@@ -1,0 +1,716 @@
+{
+  "schema_version": "code-review-pilot.1",
+  "checked_at_utc": "2026-10-27T22:18:01.512477+00:00",
+  "purpose": "18 newly authored cases scored only on their target rule; not independent human labels, natural bugs, or a developer time study.",
+  "cases_sha256": "ce7762d3da814957418d40423a57e17e60530bf01cbb8a5035cb64cdf0d293e0",
+  "device": "cuda:1",
+  "gpu": "NVIDIA GeForce RTX 3090",
+  "python_socket_connections_blocked": true,
+  "blocked_connection_attempts": 0,
+  "results": {
+    "base": {
+      "model": "LiquidAI/d1-3B",
+      "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+      "attention_backend": "vendor-explicit",
+      "load_seconds": 24.075885500002187,
+      "warmup_ms": 1917.639399995096,
+      "threshold": 0.9,
+      "metrics": {
+        "cases": 18,
+        "unavailable": 0,
+        "tp": 3,
+        "tn": 8,
+        "fp": 1,
+        "fn": 6,
+        "target_accuracy_all_cases": 0.6111111111111112,
+        "target_f1": 0.46153846153846156,
+        "median_ms": 52.05175000082818
+      },
+      "rows": [
+        {
+          "id": "catch-swallow",
+          "target_rule": "error_handling_problem",
+          "expected": true,
+          "predicted": false,
+          "probability": 0.7310585786300049,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "no_flags",
+            "advisory": true,
+            "model": "LiquidAI/d1-3B",
+            "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 4,
+            "reviewed_lines": 4,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 4,
+                "probabilities": {
+                  "error_handling_problem": 0.7310585786300049,
+                  "type_safety_hole": 0.1645164628965632,
+                  "unsafe_input": 0.053403329799824234
+                }
+              }
+            ],
+            "findings": [],
+            "latency_ms": 113.31110000173794,
+            "error": null
+          }
+        },
+        {
+          "id": "await-propagates",
+          "target_rule": "error_handling_problem",
+          "expected": false,
+          "predicted": false,
+          "probability": 0.5926665999540697,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "no_flags",
+            "advisory": true,
+            "model": "LiquidAI/d1-3B",
+            "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 3,
+            "reviewed_lines": 3,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 3,
+                "probabilities": {
+                  "error_handling_problem": 0.5926665999540697,
+                  "type_safety_hole": 0.18242552380635632,
+                  "unsafe_input": 0.0675466911396291
+                }
+              }
+            ],
+            "findings": [],
+            "latency_ms": 54.74479999975301,
+            "error": null
+          }
+        },
+        {
+          "id": "throw-string",
+          "target_rule": "error_handling_problem",
+          "expected": true,
+          "predicted": false,
+          "probability": 0.8519528019683106,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "no_flags",
+            "advisory": true,
+            "model": "LiquidAI/d1-3B",
+            "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 4,
+            "reviewed_lines": 4,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 4,
+                "probabilities": {
+                  "error_handling_problem": 0.8519528019683106,
+                  "type_safety_hole": 0.1480471980316895,
+                  "unsafe_input": 0.06008665017400762
+                }
+              }
+            ],
+            "findings": [],
+            "latency_ms": 54.24039999343222,
+            "error": null
+          }
+        },
+        {
+          "id": "throw-error",
+          "target_rule": "error_handling_problem",
+          "expected": false,
+          "predicted": false,
+          "probability": 0.11920292202211755,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "no_flags",
+            "advisory": true,
+            "model": "LiquidAI/d1-3B",
+            "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 4,
+            "reviewed_lines": 4,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 4,
+                "probabilities": {
+                  "error_handling_problem": 0.11920292202211755,
+                  "type_safety_hole": 0.07585818002124356,
+                  "unsafe_input": 0.04208772791561884
+                }
+              }
+            ],
+            "findings": [],
+            "latency_ms": 53.94990000058897,
+            "error": null
+          }
+        },
+        {
+          "id": "error-hidden-as-success",
+          "target_rule": "error_handling_problem",
+          "expected": true,
+          "predicted": false,
+          "probability": 0.7057850278370112,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "no_flags",
+            "advisory": true,
+            "model": "LiquidAI/d1-3B",
+            "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 4,
+            "reviewed_lines": 4,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 4,
+                "probabilities": {
+                  "error_handling_problem": 0.7057850278370112,
+                  "type_safety_hole": 0.10669059394565118,
+                  "unsafe_input": 0.029312230751356316
+                }
+              }
+            ],
+            "findings": [],
+            "latency_ms": 51.869900002202485,
+            "error": null
+          }
+        },
+        {
+          "id": "error-preserved",
+          "target_rule": "error_handling_problem",
+          "expected": false,
+          "predicted": false,
+          "probability": 0.20181322226037882,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "no_flags",
+            "advisory": true,
+            "model": "LiquidAI/d1-3B",
+            "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 4,
+            "reviewed_lines": 4,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 4,
+                "probabilities": {
+                  "error_handling_problem": 0.20181322226037882,
+                  "type_safety_hole": 0.0675466911396291,
+                  "unsafe_input": 0.02297736991002561
+                }
+              }
+            ],
+            "findings": [],
+            "latency_ms": 53.3203999948455,
+            "error": null
+          }
+        },
+        {
+          "id": "any-record",
+          "target_rule": "type_safety_hole",
+          "expected": true,
+          "predicted": false,
+          "probability": 0.8807970779778823,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "no_flags",
+            "advisory": true,
+            "model": "LiquidAI/d1-3B",
+            "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 3,
+            "reviewed_lines": 3,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 3,
+                "probabilities": {
+                  "error_handling_problem": 0.46879062662624377,
+                  "type_safety_hole": 0.8807970779778823,
+                  "unsafe_input": 0.2689414213699951
+                }
+              }
+            ],
+            "findings": [],
+            "latency_ms": 51.35619999782648,
+            "error": null
+          }
+        },
+        {
+          "id": "unknown-record-guard",
+          "target_rule": "type_safety_hole",
+          "expected": false,
+          "predicted": false,
+          "probability": 0.2689414213699951,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "no_flags",
+            "advisory": true,
+            "model": "LiquidAI/d1-3B",
+            "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 4,
+            "reviewed_lines": 4,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 4,
+                "probabilities": {
+                  "error_handling_problem": 0.0953494648991095,
+                  "type_safety_hole": 0.2689414213699951,
+                  "unsafe_input": 0.13296424019782924
+                }
+              }
+            ],
+            "findings": [],
+            "latency_ms": 52.731600000697654,
+            "error": null
+          }
+        },
+        {
+          "id": "unchecked-cast",
+          "target_rule": "type_safety_hole",
+          "expected": true,
+          "predicted": true,
+          "probability": 0.9046505351008906,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "flagged",
+            "advisory": true,
+            "model": "LiquidAI/d1-3B",
+            "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 3,
+            "reviewed_lines": 3,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 3,
+                "probabilities": {
+                  "error_handling_problem": 0.6224593312018546,
+                  "type_safety_hole": 0.9046505351008906,
+                  "unsafe_input": 0.5312093733737563
+                }
+              }
+            ],
+            "findings": [
+              {
+                "rule": "type_safety_hole",
+                "probability": 0.9046505351008906,
+                "start_line": 1,
+                "end_line": 3
+              }
+            ],
+            "latency_ms": 51.18640000000596,
+            "error": null
+          }
+        },
+        {
+          "id": "checked-type",
+          "target_rule": "type_safety_hole",
+          "expected": false,
+          "predicted": false,
+          "probability": 0.11920292202211755,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "no_flags",
+            "advisory": true,
+            "model": "LiquidAI/d1-3B",
+            "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 4,
+            "reviewed_lines": 4,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 4,
+                "probabilities": {
+                  "error_handling_problem": 0.07585818002124356,
+                  "type_safety_hole": 0.11920292202211755,
+                  "unsafe_input": 0.10669059394565118
+                }
+              }
+            ],
+            "findings": [],
+            "latency_ms": 51.623300001665484,
+            "error": null
+          }
+        },
+        {
+          "id": "unchecked-find",
+          "target_rule": "type_safety_hole",
+          "expected": true,
+          "predicted": false,
+          "probability": 0.7549149868676283,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "no_flags",
+            "advisory": true,
+            "model": "LiquidAI/d1-3B",
+            "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 3,
+            "reviewed_lines": 3,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 3,
+                "probabilities": {
+                  "error_handling_problem": 0.7772998611746911,
+                  "type_safety_hole": 0.7549149868676283,
+                  "unsafe_input": 0.2689414213699951
+                }
+              }
+            ],
+            "findings": [],
+            "latency_ms": 51.67790000268724,
+            "error": null
+          }
+        },
+        {
+          "id": "checked-find",
+          "target_rule": "type_safety_hole",
+          "expected": false,
+          "predicted": false,
+          "probability": 0.10669059394565118,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "no_flags",
+            "advisory": true,
+            "model": "LiquidAI/d1-3B",
+            "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 5,
+            "reviewed_lines": 5,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 5,
+                "probabilities": {
+                  "error_handling_problem": 0.1480471980316895,
+                  "type_safety_hole": 0.10669059394565118,
+                  "unsafe_input": 0.0953494648991095
+                }
+              }
+            ],
+            "findings": [],
+            "latency_ms": 59.394500000053085,
+            "error": null
+          }
+        },
+        {
+          "id": "html-unescaped",
+          "target_rule": "unsafe_input",
+          "expected": true,
+          "predicted": true,
+          "probability": 0.9465966702001757,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "flagged",
+            "advisory": true,
+            "model": "LiquidAI/d1-3B",
+            "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 3,
+            "reviewed_lines": 3,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 3,
+                "probabilities": {
+                  "error_handling_problem": 0.08509904500702024,
+                  "type_safety_hole": 0.22270013882530884,
+                  "unsafe_input": 0.9465966702001757
+                }
+              }
+            ],
+            "findings": [
+              {
+                "rule": "unsafe_input",
+                "probability": 0.9465966702001757,
+                "start_line": 1,
+                "end_line": 3
+              }
+            ],
+            "latency_ms": 50.9297999960836,
+            "error": null
+          }
+        },
+        {
+          "id": "html-text-only",
+          "target_rule": "unsafe_input",
+          "expected": false,
+          "predicted": false,
+          "probability": 0.8519528019683106,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "no_flags",
+            "advisory": true,
+            "model": "LiquidAI/d1-3B",
+            "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 3,
+            "reviewed_lines": 3,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 3,
+                "probabilities": {
+                  "error_handling_problem": 0.037326887344129464,
+                  "type_safety_hole": 0.13296424019782924,
+                  "unsafe_input": 0.8519528019683106
+                }
+              }
+            ],
+            "findings": [],
+            "latency_ms": 50.885500000731554,
+            "error": null
+          }
+        },
+        {
+          "id": "sql-concatenation",
+          "target_rule": "unsafe_input",
+          "expected": true,
+          "predicted": true,
+          "probability": 0.9706877692486436,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "flagged",
+            "advisory": true,
+            "model": "LiquidAI/d1-3B",
+            "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 3,
+            "reviewed_lines": 3,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 3,
+                "probabilities": {
+                  "error_handling_problem": 0.679178699175393,
+                  "type_safety_hole": 0.8175744761936437,
+                  "unsafe_input": 0.9706877692486436
+                }
+              }
+            ],
+            "findings": [
+              {
+                "rule": "unsafe_input",
+                "probability": 0.9706877692486436,
+                "start_line": 1,
+                "end_line": 3
+              }
+            ],
+            "latency_ms": 52.23359999945387,
+            "error": null
+          }
+        },
+        {
+          "id": "sql-parameters",
+          "target_rule": "unsafe_input",
+          "expected": false,
+          "predicted": true,
+          "probability": 0.9399133498259924,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "flagged",
+            "advisory": true,
+            "model": "LiquidAI/d1-3B",
+            "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 3,
+            "reviewed_lines": 3,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 3,
+                "probabilities": {
+                  "error_handling_problem": 0.32082130082460697,
+                  "type_safety_hole": 0.6224593312018546,
+                  "unsafe_input": 0.9399133498259924
+                }
+              }
+            ],
+            "findings": [
+              {
+                "rule": "unsafe_input",
+                "probability": 0.9399133498259924,
+                "start_line": 1,
+                "end_line": 3
+              }
+            ],
+            "latency_ms": 50.84730000089621,
+            "error": null
+          }
+        },
+        {
+          "id": "json-unvalidated",
+          "target_rule": "unsafe_input",
+          "expected": true,
+          "predicted": false,
+          "probability": 0.8519528019683106,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "flagged",
+            "advisory": true,
+            "model": "LiquidAI/d1-3B",
+            "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 3,
+            "reviewed_lines": 3,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 3,
+                "probabilities": {
+                  "error_handling_problem": 0.9324533088603709,
+                  "type_safety_hole": 0.7057850278370112,
+                  "unsafe_input": 0.8519528019683106
+                }
+              }
+            ],
+            "findings": [
+              {
+                "rule": "error_handling_problem",
+                "probability": 0.9324533088603709,
+                "start_line": 1,
+                "end_line": 3
+              }
+            ],
+            "latency_ms": 50.539399999252055,
+            "error": null
+          }
+        },
+        {
+          "id": "json-validated",
+          "target_rule": "unsafe_input",
+          "expected": false,
+          "predicted": false,
+          "probability": 0.6224593312018546,
+          "result": {
+            "schema_version": "code-review.1",
+            "status": "no_flags",
+            "advisory": true,
+            "model": "LiquidAI/d1-3B",
+            "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+            "rules": [
+              "error_handling_problem",
+              "type_safety_hole",
+              "unsafe_input"
+            ],
+            "threshold": 0.9,
+            "total_lines": 5,
+            "reviewed_lines": 5,
+            "windows": [
+              {
+                "start_line": 1,
+                "end_line": 5,
+                "probabilities": {
+                  "error_handling_problem": 0.34864513533394575,
+                  "type_safety_hole": 0.5312093733737563,
+                  "unsafe_input": 0.6224593312018546
+                }
+              }
+            ],
+            "findings": [],
+            "latency_ms": 69.7881999949459,
+            "error": null
+          }
+        }
+      ]
+    }
+  }
+}

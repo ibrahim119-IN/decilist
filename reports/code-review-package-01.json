@@ -1,0 +1,9 @@
+{
+  "wheel": "decilist-0.1.0a1-py3-none-any.whl",
+  "wheel_sha256": "c02a31c6cfe4973c99e4d6503a4038c3d01686fb6d69ed4280b254c44d9401a5",
+  "sdist": "decilist-0.1.0a1.tar.gz",
+  "bundled_question_license_notice_verified": true,
+  "installed_outside_source_tree": true,
+  "import_does_not_load_torch": true,
+  "review_cli_help": "passed"
+}

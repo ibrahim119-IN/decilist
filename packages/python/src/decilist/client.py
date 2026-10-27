@@ -7,6 +7,7 @@ from time import monotonic
 import httpx
 from .contracts import Choose, Decision, DecisionRequest, Policy, Predict, Question, Score, validate_decision
 from .runtime import DEFAULT_URL, RuntimeCompatibilityError, RuntimeConnectionError, validate_base_url, validate_runtime_health
+from .code_review import Language, ReviewPolicy, ReviewRequest, ReviewResult
 
 
 class Client:
@@ -86,3 +87,17 @@ class Client:
 
     async def score(self, state: str, instructions: str, levels: list[str], *, policy: Policy | None = None) -> Decision:
         return await self.decide(Score(state=state, instructions=instructions, levels=levels), policy)
+
+    async def review(self, code: str, *, task: str, language: Language = "TypeScript", policy: ReviewPolicy | None = None) -> ReviewResult:
+        body = ReviewRequest(code=code, task=task, language=language, policy=policy or ReviewPolicy())
+        if not self._ready:
+            await self.ready()
+        try:
+            response = await self._http.post("/v1/code-review", json=body.model_dump())
+            response.raise_for_status()
+        except httpx.HTTPError as exc:
+            raise RuntimeConnectionError("Code review is unavailable. Start decilist review serve and connect to its port.") from exc
+        result = ReviewResult.model_validate(response.json())
+        if result.rules != body.policy.rules or result.threshold != body.policy.threshold or result.total_lines != len(body.code.splitlines()):
+            raise ValueError("review response does not match the request")
+        return result

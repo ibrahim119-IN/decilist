@@ -1,0 +1,118 @@
+{
+  "unclear_naming": {
+    "type": "noul",
+    "instructions": "Does this code have unclear naming?",
+    "criteria": {
+      "true": "Some names in this code do not say what the thing holds or does. Definition: Single letters outside short callbacks, names like data/temp/obj/handle, misleading names, abbreviations a new teammate could not expand.",
+      "false": "Nothing in the code matches the unclear naming definition."
+    }
+  },
+  "noise_comments": {
+    "type": "noul",
+    "instructions": "Does this code have noise comments?",
+    "criteria": {
+      "true": "This code has comments. Definition: Any comment, including JSDoc blocks, comments that explain why, and banners; code should explain itself through names, types and structure. Tool directives such as `// @ts-check` or `// eslint-disable-next-line` do not count, and commented-out code is dead code.",
+      "false": "Nothing in the code matches the noise comments definition."
+    }
+  },
+  "dead_code": {
+    "type": "noul",
+    "instructions": "Does this code have dead code?",
+    "criteria": {
+      "true": "This code contains code that is unused, unreachable, commented out, or left over from debugging. Definition: Commented-out code, unused variables, imports, or parameters, unreachable branches, leftover console.log or debugger. Unused exports do not count, because callers are not visible.",
+      "false": "Nothing in the code matches the dead code definition."
+    }
+  },
+  "inconsistent_style": {
+    "type": "noul",
+    "instructions": "Does this code have inconsistent style?",
+    "criteria": {
+      "true": "This code uses two different conventions for the same thing. Definition: camelCase next to snake_case, async/await mixed with .then chains, var next to const, mixed quotes or semicolon use, all inside one snippet.",
+      "false": "Nothing in the code matches the inconsistent style definition."
+    }
+  },
+  "over_abstracted": {
+    "type": "noul",
+    "instructions": "Does this code have over-abstraction?",
+    "criteria": {
+      "true": "This code has more structure than its task needs. Definition: An interface with one implementation, a factory or strategy for one case, generic parameters only ever used with one type, options that never vary, wrappers that only forward.",
+      "false": "Nothing in the code matches the over-abstraction definition."
+    }
+  },
+  "too_clever": {
+    "type": "noul",
+    "instructions": "Does this code have overly clever code?",
+    "criteria": {
+      "true": "This code is correct but written so densely that it is hard to follow. Definition: Nested ternaries, one reduce doing three jobs, bitwise tricks, comma operators, side effects hidden in short-circuit expressions, a regex doing a parser's work.",
+      "false": "Nothing in the code matches the overly clever code definition."
+    }
+  },
+  "duplicated_logic": {
+    "type": "noul",
+    "instructions": "Does this code have duplicated logic?",
+    "criteria": {
+      "true": "This code repeats the same logic where one function or loop would do. Definition: The same logic appears two or more times with small variations.",
+      "false": "Nothing in the code matches the duplicated logic definition."
+    }
+  },
+  "error_handling_problem": {
+    "type": "noul",
+    "instructions": "Does this code have an error handling problem?",
+    "criteria": {
+      "true": "This code can lose or hide an error. Definition: Empty catch, catch that logs and carries on as if the call succeeded, promise with no rejection handling, errors converted to null or false with the cause lost, thrown strings. An awaited or returned promise propagates errors; a local catch is not required.",
+      "false": "Nothing in the code matches the an error handling problem definition."
+    }
+  },
+  "type_safety_hole": {
+    "type": "noul",
+    "instructions": "Does this code have a type safety hole?",
+    "criteria": {
+      "true": "This code bypasses type checking or trusts a type it has not verified. Definition: any, non-null `!`, `as` casts on unchecked values, @ts-ignore. In plain JS: loose equality where types can differ, property access on values that can be undefined.",
+      "false": "Nothing in the code matches the a type safety hole definition."
+    }
+  },
+  "unsafe_input": {
+    "type": "noul",
+    "instructions": "Does this code have unsafe input handling?",
+    "criteria": {
+      "true": "This code uses external data without validating or escaping it. Definition: Request bodies, query params, env vars, file contents, or API responses used unchecked. String-built SQL, innerHTML, eval, file paths built from user input.",
+      "false": "Nothing in the code matches the unsafe input handling definition."
+    }
+  },
+  "has_flaw": {
+    "type": "noul",
+    "instructions": "Does this code have at least one code review flaw?",
+    "criteria": {
+      "true": "At least one of these appears: unclear naming, noise comments, dead code, inconsistent style, over-abstraction, overly clever code, duplicated logic, an error handling problem, a type safety hole, or unsafe input handling.",
+      "false": "None of those problems appear. The code is clean."
+    }
+  },
+  "primary_flaw": {
+    "type": "choice",
+    "instructions": "Which code review problem matters most in this code? Choose none if the code is clean.",
+    "criteria": {
+      "none": "None. The code is clean.",
+      "unclear_naming": "Unclear naming: Some names in this code do not say what the thing holds or does.",
+      "noise_comments": "Noise comments: This code has comments.",
+      "dead_code": "Dead code: This code contains code that is unused, unreachable, commented out, or left over from debugging.",
+      "inconsistent_style": "Inconsistent style: This code uses two different conventions for the same thing.",
+      "over_abstracted": "Over-abstraction: This code has more structure than its task needs.",
+      "too_clever": "Overly clever code: This code is correct but written so densely that it is hard to follow.",
+      "duplicated_logic": "Duplicated logic: This code repeats the same logic where one function or loop would do.",
+      "error_handling_problem": "An error handling problem: This code can lose or hide an error.",
+      "type_safety_hole": "A type safety hole: This code bypasses type checking or trusts a type it has not verified.",
+      "unsafe_input": "Unsafe input handling: This code uses external data without validating or escaping it."
+    }
+  },
+  "quality": {
+    "type": "score",
+    "instructions": "How mergeable is this code as written?",
+    "criteria": [
+      "Should not merge.",
+      "Needs significant changes before it can merge.",
+      "Mergeable with review comments.",
+      "Mergeable with minor comments.",
+      "Exemplary. Merge as is."
+    ]
+  }
+}

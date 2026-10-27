@@ -8,8 +8,8 @@ version = "0.1.0a1"
 description = "Local-first decision contracts, policies, and evaluation for developers"
 readme = "README.md"
 requires-python = ">=3.11"
-license = "Apache-2.0"
-license-files = ["LICENSE"]
+license = "Apache-2.0 AND CC-BY-4.0"
+license-files = ["LICENSE", "src/decilist/data/code_review_LICENSE.txt", "src/decilist/data/code_review_NOTICE.txt"]
 dependencies = ["pydantic>=2.14.1,<3", "httpx>=0.28.1,<1"]
 
 [project.scripts]
@@ -24,7 +24,7 @@ liquid = ["transformers==5.14.1", "torch>=2.9,<3", "torchvision>=0.24,<1", "pill
 where = ["src"]
 
 [tool.setuptools.package-data]
-decilist = ["py.typed", "static/*"]
+decilist = ["py.typed", "static/*", "data/*"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

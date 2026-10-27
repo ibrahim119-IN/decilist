@@ -1,0 +1,190 @@
+{
+  "source": "packages/typescript/src/cli-args.ts",
+  "source_sha256": "2860be607271979530170d43304285fc72419130b670831263f34fb7f8d4886d",
+  "purpose": "Actual installed Python/TypeScript packages and CLI against the specialist local service; usability/integration smoke test, not human time saving.",
+  "python_from_installed_wheel": true,
+  "typescript_from_installed_tarball": true,
+  "model": "yannelli/d1-3b-code-review-decisions",
+  "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+  "health": {
+    "service": "decilist",
+    "schema_version": "1",
+    "runtime_version": "0.1.0a1",
+    "ready": true,
+    "status": "ok",
+    "provider": "liquid-code-review",
+    "local_only": true,
+    "providers": [
+      {
+        "name": "liquid-code-review",
+        "model": "yannelli/d1-3b-code-review-decisions",
+        "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+        "locality": "local"
+      }
+    ]
+  },
+  "python": {
+    "wall_ms": 2039.6656000011717,
+    "result": {
+      "schema_version": "code-review.1",
+      "status": "no_flags",
+      "advisory": true,
+      "model": "yannelli/d1-3b-code-review-decisions",
+      "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+      "rules": [
+        "error_handling_problem",
+        "type_safety_hole",
+        "unsafe_input"
+      ],
+      "threshold": 0.9,
+      "total_lines": 14,
+      "reviewed_lines": 14,
+      "windows": [
+        {
+          "start_line": 1,
+          "end_line": 14,
+          "probabilities": {
+            "error_handling_problem": 0.0062899021368924835,
+            "type_safety_hole": 0.002323162522631283,
+            "unsafe_input": 0.34864513533394575
+          }
+        }
+      ],
+      "findings": [],
+      "latency_ms": 1754.445200000191,
+      "error": null
+    }
+  },
+  "typescript": {
+    "wall_ms_including_node_start": 200.95109999965644,
+    "result": {
+      "schema_version": "code-review.1",
+      "status": "no_flags",
+      "advisory": true,
+      "model": "yannelli/d1-3b-code-review-decisions",
+      "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+      "rules": [
+        "error_handling_problem",
+        "type_safety_hole",
+        "unsafe_input"
+      ],
+      "threshold": 0.9,
+      "total_lines": 14,
+      "reviewed_lines": 14,
+      "windows": [
+        {
+          "start_line": 1,
+          "end_line": 14,
+          "probabilities": {
+            "error_handling_problem": 0.0062899021368924835,
+            "type_safety_hole": 0.002323162522631283,
+            "unsafe_input": 0.34864513533394575
+          }
+        }
+      ],
+      "findings": [],
+      "latency_ms": 70.10530000115978,
+      "error": null
+    }
+  },
+  "cli": {
+    "wall_ms_including_python_start": 689.0999000024749,
+    "result": {
+      "schema_version": "code-review.1",
+      "status": "no_flags",
+      "advisory": true,
+      "model": "yannelli/d1-3b-code-review-decisions",
+      "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+      "rules": [
+        "error_handling_problem",
+        "type_safety_hole",
+        "unsafe_input"
+      ],
+      "threshold": 0.9,
+      "total_lines": 14,
+      "reviewed_lines": 14,
+      "windows": [
+        {
+          "start_line": 1,
+          "end_line": 14,
+          "probabilities": {
+            "error_handling_problem": 0.0062899021368924835,
+            "type_safety_hole": 0.002323162522631283,
+            "unsafe_input": 0.34864513533394575
+          }
+        }
+      ],
+      "findings": [],
+      "latency_ms": 69.74520000221673,
+      "error": null
+    }
+  },
+  "three_concurrent_reviews_completed": true,
+  "concurrent_service_ms": [
+    72.33870000345632,
+    139.94370000000345,
+    209.39009999710834
+  ],
+  "multi_window_source": "packages/typescript/src/index.ts",
+  "multi_window_result": {
+    "schema_version": "code-review.1",
+    "status": "flagged",
+    "advisory": true,
+    "model": "yannelli/d1-3b-code-review-decisions",
+    "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+    "rules": [
+      "error_handling_problem",
+      "type_safety_hole",
+      "unsafe_input"
+    ],
+    "threshold": 0.9,
+    "total_lines": 187,
+    "reviewed_lines": 187,
+    "windows": [
+      {
+        "start_line": 1,
+        "end_line": 80,
+        "probabilities": {
+          "error_handling_problem": 0.004070137715896127,
+          "type_safety_hole": 0.9830850867332734,
+          "unsafe_input": 0.020332353342658753
+        }
+      },
+      {
+        "start_line": 69,
+        "end_line": 148,
+        "probabilities": {
+          "error_handling_problem": 0.03514484640079327,
+          "type_safety_hole": 0.8519528019683106,
+          "unsafe_input": 0.21206880435710532
+        }
+      },
+      {
+        "start_line": 137,
+        "end_line": 187,
+        "probabilities": {
+          "error_handling_problem": 0.04208772791561884,
+          "type_safety_hole": 0.007121428745735101,
+          "unsafe_input": 0.9669140216112958
+        }
+      }
+    ],
+    "findings": [
+      {
+        "rule": "type_safety_hole",
+        "probability": 0.9830850867332734,
+        "start_line": 1,
+        "end_line": 80
+      },
+      {
+        "rule": "unsafe_input",
+        "probability": 0.9669140216112958,
+        "start_line": 137,
+        "end_line": 187
+      }
+    ],
+    "latency_ms": 592.0776999992086,
+    "error": null
+  },
+  "real_source_findings_quality": "Not independently adjudicated; these calls verify integration and coverage, not defect accuracy."
+}
