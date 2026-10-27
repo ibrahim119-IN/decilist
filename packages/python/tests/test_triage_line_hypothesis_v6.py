@@ -146,7 +146,7 @@ def test_measurement_resolves_the_selected_executed_specification_without_case_a
     assert measurement._workflow_module() is selected
     spec = measurement._specification()
     assert spec["hypothesis"] == lines.specification()
-    assert spec["hypothesis"]["version"] == "evidence_absolute_lines_verbatim.3"
+    assert spec["hypothesis"]["version"] == "evidence_absolute_lines_verbatim.4"
     assert "edits" in spec["hypothesis"]["schema"]["properties"]
     assert "replacements" not in spec["hypothesis"]["schema"]["properties"]
     assert spec["workflow_version"] == selected.VERSION

@@ -8,6 +8,8 @@ Decilist is an early, open-source Decision Intelligence SDK. Ask a bounded quest
 
 ![Normal-app example using the local model](reports/ui/demo-liquid.png)
 
+Current repair development adds observed producer retrieval and checked module-literal edits. Its replay of the same three exposed historical cases produced no automatic protected repairs; see the [V8 development failures and scope](docs/triage-v8-development.md). These capabilities remain experimental.
+
 ## Why this exists
 
 Calling a model is one step. A developer still needs to decide what counts as a valid answer, when to abstain, which fallback may receive the input, and whether a new provider actually improves their workload.

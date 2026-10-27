@@ -5,6 +5,7 @@ from pathlib import Path
 
 from . import triage_v6 as legacy_workflow
 from . import triage_line_hypothesis_v6 as selected_generator
+from .triage_module_literals_v8 import validate_generated
 
 
 VERSION = legacy_workflow.VERSION + "+" + selected_generator.VERSION
@@ -16,10 +17,11 @@ format_text = legacy_workflow.format_text
 
 async def run_triage_v6(*args, **kwargs):
     """Allocate isolated feedback state for this workflow's bounded attempts."""
-    if "_generator" in kwargs:
-        raise TypeError("The selected line workflow owns its per-run generator")
+    if {"_generator", "_validator", "_module_literals"} & kwargs.keys():
+        raise TypeError("The selected line workflow owns its per-run generator and validation contract")
     adapter = selected_generator.LineEditGenerator()
-    result = await legacy_workflow.run_triage_v6(*args, **kwargs, _generator=adapter.generate_hypothesis)
+    result = await legacy_workflow.run_triage_v6(*args, **kwargs, _generator=adapter.generate_hypothesis,
+        _validator=validate_generated, _module_literals=True)
     result["workflow_version"] = VERSION
     result["edit_protocol"] = selected_generator.VERSION
     result["generation_module"] = selected_generator.__name__

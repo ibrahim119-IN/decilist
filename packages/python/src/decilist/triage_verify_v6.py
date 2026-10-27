@@ -284,6 +284,38 @@ def _screen_ast_changes(original: str, candidate: str, filename: str, *, context
     return sorted(checked)
 
 
+def _revalidate_module_literal(data, replacement, context, evidence_ids, expected_hash):
+    """Rebuild a distinct literal edit against pre-patch snapshot authority."""
+    rows = context.get("module_literal_sources", []) if isinstance(context, dict) else []
+    matching = [row for row in rows if isinstance(row, dict)
+                and row.get("path") == replacement["path"] and row.get("source") == replacement["old"]]
+    if not matching:
+        return None
+    from .triage_module_literals_v8 import checked_literal_sources, reconstruct_literal
+    checked_literal_sources(context)
+    accepted = []
+    for row in matching:
+        old, new = row["source"], replacement["new"]
+        prefix, suffix = old[:row["literal_start_offset"]], old[row["literal_end_offset"]:]
+        if not new.startswith(prefix) or not new.endswith(suffix) or len(new) < len(prefix) + len(suffix):
+            continue
+        token = new[len(prefix):len(new) - len(suffix) if suffix else len(new)]
+        parents = [parent for parent in context.get("module_context", [])
+                   if parent.get("evidence_id") == row["provenance"]["module_evidence_id"]]
+        if len(parents) != 1:
+            continue
+        try:
+            rebuilt = reconstruct_literal(data, parents[0], row, token.replace("\r\n", "\n"),
+                expected_file_sha256=expected_hash, cited_ids=list(evidence_ids))
+        except (ValueError, SyntaxError, UnicodeError):
+            continue
+        if rebuilt == dict(replacement):
+            accepted.append(row["evidence_id"])
+    if len(accepted) != 1:
+        raise ValueError("Module literal replacement lacks unique canonical snapshot authority")
+    return accepted[0]
+
+
 def apply_replacements(snapshot: Snapshot, replacements: Sequence[Mapping[str, str]], *, allowed_production_roots: Sequence[str] = _DEFAULT_PRODUCTION_ROOTS, context: dict | None = None, evidence_ids: Sequence[str] = ()) -> dict[str, Any]:
     """Apply exact single-match, compiling production-Python edits only in the copy."""
     _owned(snapshot)
@@ -300,6 +332,7 @@ def apply_replacements(snapshot: Snapshot, replacements: Sequence[Mapping[str, s
         raise ValueError("Project or copy changed before candidate application")
     plans, prepared, changed = {}, {}, []
     admitted_helpers = set()
+    admitted_literals = set()
     for row in replacements:
         if not isinstance(row, Mapping) or set(row) != {"path", "old", "new"}:
             raise ValueError("Replacements contain only path, old, and new")
@@ -320,6 +353,9 @@ def apply_replacements(snapshot: Snapshot, replacements: Sequence[Mapping[str, s
         data = path.read_bytes()
         if _digest(data) != snapshot.source_hashes[relative]:
             raise ValueError("Candidate source was modified before application")
+        literal_id = _revalidate_module_literal(data, row, context, evidence_ids, snapshot.source_hashes[relative])
+        if literal_id is not None:
+            admitted_literals.add(literal_id)
         text = data.decode("utf-8")
         if text.count(old) != 1:
             raise ValueError("Each candidate old string must match exactly once")
@@ -347,4 +383,4 @@ def apply_replacements(snapshot: Snapshot, replacements: Sequence[Mapping[str, s
         row["sha256_after"] = _digest(prepared[row["path"]])
     for relative, data in prepared.items():
         (snapshot.root / relative).write_bytes(data)
-    return {"replacements": changed, "hashes_after": _manifest(snapshot.root, snapshot.limits), "original_unchanged": _source_unchanged(snapshot), "screening": "conservative_ast_change_screen_v6_cited_helpers", "admitted_static_helpers": sorted(admitted_helpers), "screening_limitation": "Existing callable shapes can still have effects; this is not a security sandbox."}
+    return {"replacements": changed, "hashes_after": _manifest(snapshot.root, snapshot.limits), "original_unchanged": _source_unchanged(snapshot), "screening": "conservative_ast_change_screen_v6_cited_helpers", "admitted_static_helpers": sorted(admitted_helpers), "admitted_module_literals": sorted(admitted_literals), "screening_limitation": "Existing callable shapes can still have effects; this is not a security sandbox."}

@@ -615,11 +615,12 @@ def intervention_signature(result: Hypothesis, context: dict) -> str | None:
     return _fingerprint(affected)
 
 
-def _validate_revision(result: Hypothesis, context: dict, feedback: dict | None) -> str | None:
-    signature = intervention_signature(result, context)
+def _validate_revision(result: Hypothesis, context: dict, feedback: dict | None, *, signature_fn=None) -> str | None:
+    signature_fn = intervention_signature if signature_fn is None else signature_fn
+    signature = signature_fn(result, context)
     if feedback is not None and signature is not None:
         previous = Hypothesis.model_validate(feedback["previous_result"])
-        if signature is None or signature == intervention_signature(previous, context):
+        if signature is None or signature == signature_fn(previous, context):
             raise GenerationValidationError("repeated_intervention", "Actual tests rejected this same resulting source intervention; propose a distinct candidate or abstain.", "replacements")
     return signature
 
@@ -635,13 +636,13 @@ def generation_schema(context: dict) -> dict:
     return schema
 
 
-def _checked_feedback(feedback: dict | None, context: dict) -> dict | None:
+def _checked_feedback(feedback: dict | None, context: dict, *, validate_fn=None) -> dict | None:
     if feedback is None:
         return None
     if (not isinstance(feedback, dict) or set(feedback) != {"attempt", "previous_result", "rejection"}
             or type(feedback.get("attempt")) is not int or feedback["attempt"] != 1):
         raise ValueError("Only one observed test-feedback attempt is allowed")
-    previous = validate_generated(feedback["previous_result"], context)
+    previous = (validate_generated if validate_fn is None else validate_fn)(feedback["previous_result"], context)
     rejection = feedback["rejection"]
     if (not previous.replacements or not isinstance(rejection, dict)
             or set(rejection) - {"kind", "exit_code", "output", "timed_out"}
@@ -718,7 +719,8 @@ async def generate_hypothesis(context: dict, *, provider: _llama.LlamaCppProvide
 
 async def _generate_with_contract(context: dict, *, provider: _llama.LlamaCppProvider,
                                   feedback: dict | None, version: str, specification_fn,
-                                  messages_fn, schema_fn, validate_fn) -> dict:
+                                  messages_fn, schema_fn, validate_fn, context_fn=None,
+                                  feedback_fn=None, revision_fn=None) -> dict:
     """Generate one candidate, or one revision using only an actual test rejection.
 
     Pass V6LlamaCppProvider for the isolated 1200-token generation budget. The
@@ -736,9 +738,9 @@ async def _generate_with_contract(context: dict, *, provider: _llama.LlamaCppPro
               "errors": []}
     stage = "input"
     try:
-        context = _checked_context(context)
+        context = (_checked_context if context_fn is None else context_fn)(context)
         report["context_schema_version"] = context["schema_version"]
-        feedback = _checked_feedback(feedback, context)
+        feedback = (_checked_feedback if feedback_fn is None else feedback_fn)(feedback, context)
         report["context_sha256"] = _fingerprint(context)
         report["feedback_attempt"] = int(feedback is not None)
         if not context["evidence_ids"] or not context.get("failures") or not (context.get("functions") or context.get("module_context")):
@@ -775,7 +777,7 @@ async def _generate_with_contract(context: dict, *, provider: _llama.LlamaCppPro
             raise ValueError("Invalid bounded generated content")
         raw = json.loads(content, object_pairs_hook=_llama._unique_object, parse_constant=_llama._nonfinite)
         result = validate_fn(raw, context)
-        report["intervention_signature_sha256"] = _validate_revision(result, context, feedback)
+        report["intervention_signature_sha256"] = (_validate_revision if revision_fn is None else revision_fn)(result, context, feedback)
         supported = result.hypothesis is not None
         report.update(result=result.model_dump(), source="local_model_generation",
                       status="hypothesis" if supported and result.replacements else "needs_review",

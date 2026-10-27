@@ -246,7 +246,8 @@ async def run_triage_v6(project: Path | str, tests: Sequence[str], regressions: 
                         provider=None, endpoint: str = "http://127.0.0.1:8792",
                         timeout_seconds: float = 30, max_context_chars: int = DEFAULT_MAX_CONTEXT_CHARS,
                         allowed_production_roots: Sequence[str] = _PRODUCTION_ROOTS,
-                        context_policy: str = "v6", _generator=None) -> dict:
+                        context_policy: str = "v6", _generator=None, _validator=None,
+                        _module_literals: bool = False) -> dict:
     """Reproduce once, generate at most twice, and verify unchanged selections.
 
     A supplied provider is caller-owned and is useful for explicit test
@@ -313,7 +314,10 @@ async def run_triage_v6(project: Path | str, tests: Sequence[str], regressions: 
                 raise ValueError("Runtime trace exceeds the bounded workflow input")
             trace = json.loads(trace_data)
             context_builder = build_context if context_policy == "v6" else build_context_v5
-            context = context_builder(original.root, trace, max_chars=max_context_chars)
+            context_options = {"max_chars": max_context_chars}
+            if _module_literals and context_policy == "v6":
+                context_options["include_module_literals"] = True
+            context = context_builder(original.root, trace, **context_options)
             expected_schema = 6 if context_policy == "v6" else 5
             if context.get("schema_version") != expected_schema or context.get("kind") != "runtime_python_context":
                 raise ValueError("Context policy returned an unexpected schema or context kind")
@@ -349,7 +353,7 @@ async def run_triage_v6(project: Path | str, tests: Sequence[str], regressions: 
                 generation = attempt["generation"] = await (_generator or generate_hypothesis)(context, provider=provider, feedback=feedback)
                 _write_json(original.evidence / f"generation_{index + 1}.json", generation)
                 if isinstance(generation.get("result"), dict):
-                    proposed = validate_generated(generation["result"], context).model_dump()
+                    proposed = (_validator or validate_generated)(generation["result"], context).model_dump()
                     attempt["hypothesis"] = proposed
                 if generation.get("status") != "hypothesis" or not isinstance(generation.get("result"), dict):
                     result["reason"] = generation.get("reason") or "model_did_not_supply_a_valid_hypothesis"

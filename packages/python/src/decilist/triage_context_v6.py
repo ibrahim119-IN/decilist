@@ -139,6 +139,50 @@ def _value_calls(function):
     return result
 
 
+def _lexical_nodes(roots):
+    """Own-scope AST nodes, excluding deferred/nested function bodies."""
+    for node in roots:
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.Lambda)):
+            continue
+        yield node
+        yield from _lexical_nodes(ast.iter_child_nodes(node))
+
+
+def _subscript_rhs_calls(function, line):
+    """Unambiguous named RHS calls at one plain subscript assignment line.
+
+    This labels source syntax only. Matching runtime setter/producer edges and
+    failing-read association are required separately; no receiver is resolved.
+    """
+    nodes = list(_lexical_nodes(function.body))
+    writes = []
+    for node in nodes:
+        if not isinstance(node, (ast.Assign, ast.AnnAssign)) or node.lineno != line:
+            continue
+        targets = node.targets if isinstance(node, ast.Assign) else [node.target]
+        if any(isinstance(child, ast.Subscript) and isinstance(child.ctx, ast.Store)
+               for target in targets for child in ast.walk(target)):
+            writes.append((node, targets))
+    if len(writes) != 1:
+        return []
+    assignment, targets = writes[0]
+    if len(targets) != 1 or not isinstance(targets[0], ast.Subscript) or assignment.value is None:
+        return []
+    calls = [node for node in nodes if isinstance(node, ast.Call) and node.lineno <= line <= node.end_lineno]
+    def name(call):
+        return call.func.id if isinstance(call.func, ast.Name) else call.func.attr if isinstance(call.func, ast.Attribute) else None
+    result = []
+    for call in _lexical_nodes([assignment.value]):
+        if not isinstance(call, ast.Call) or not call.lineno <= line <= call.end_lineno:
+            continue
+        target = name(call)
+        # An aggregated same-line edge cannot disambiguate two source calls
+        # with the same target name (for example one in a key and one in RHS).
+        if target and sum(name(candidate) == target for candidate in calls) == 1:
+            result.append(target)
+    return result
+
+
 def _state_accesses(function, executed_lines):
     """Direct receiver fields on executed lines, without object values."""
     arguments = [*function.args.posonlyargs, *function.args.args]
@@ -332,6 +376,7 @@ class _Sources:
         self.redactions += redactions
         value = {"path": source[1], "tree": tree, "lines": sanitized.splitlines(keepends=True),
                  "raw_lines": original.splitlines(keepends=True), "definitions": definitions,
+                 "raw_bytes": data,
                  "file_sha256": hashlib.sha256(data).hexdigest()}
         self.modules[raw] = value
         return value
@@ -413,13 +458,16 @@ def _json_size(value):
 
 
 def build_context(project: Path, trace: dict, *, max_chars: int = 24000,
-                  max_functions: int = 32, max_depth: int = 4) -> dict:
+                  max_functions: int = 32, max_depth: int = 4,
+                  include_module_literals: bool = False) -> dict:
     """Pack whole observed AST bodies and a bounded connected runtime slice.
 
     Schema-v4 traces are accepted only as replay input. Schema-v6 output uses
     compact evidence IDs and one canonical unnumbered source copy. Candidate
     selection never imports project source or invents dynamic call targets.
     """
+    if type(include_module_literals) is not bool:
+        raise ValueError("Module literal selection must be an explicit boolean")
     for value, minimum, maximum in ((max_chars, 2000, 96000), (max_functions, 1, 64), (max_depth, 0, 8)):
         if type(value) is not int or not minimum <= value <= maximum:
             raise ValueError("Invalid context limit")
@@ -639,6 +687,60 @@ def build_context(project: Path, trace: dict, *, max_chars: int = 24000,
                 state_writers[reader].append((writer, frozenset(fields)))
         state_writers[reader].sort(key=lambda item: (by_id[item[0]]["symbol"].rsplit(".", 1)[-1] != "__init__",
                                                     -len(item[1]), body_cost[item[0]], compact[item[0]]))
+    # Failure-site subscript reads and same-lexical-class setters supply a
+    # bounded candidate association, never runtime object identity. Reserve a
+    # named RHS producer only when both sibling edges were actually recorded
+    # for the identical caller/line and AST source has one unambiguous write.
+    read_owners = {}
+    for edge in edges:
+        root, reader = edge["caller"], edge["callee"]
+        if (root not in roots or root not in eligible or reader not in eligible or reader not in method_owners
+                or by_id[reader]["symbol"].rsplit(".", 1)[-1] != "__getitem__"):
+            continue
+        failure_lines = {location["line"] for location in locations if location["path"] == by_id[root]["path"]}
+        root_nodes = list(_lexical_nodes(function_nodes[root].body))
+        # Assertion rewriting reports the assert's first physical line even
+        # when its recorded subscript read occurs on a later continuation.
+        failed_asserts = [node for node in root_nodes if isinstance(node, ast.Assert)
+                          and any(node.lineno <= line <= node.end_lineno for line in failure_lines)]
+        if any(isinstance(node, ast.Subscript) and isinstance(node.ctx, ast.Load)
+               and node.lineno <= edge["line"] <= node.end_lineno
+               and (any(node.lineno <= line <= node.end_lineno for line in failure_lines)
+                    or any(anchor.lineno <= node.lineno <= node.end_lineno <= anchor.end_lineno
+                           for anchor in failed_asserts))
+               for node in root_nodes):
+            read_owners.setdefault(method_owners[reader], []).append((root, reader))
+    sibling_edges = {}
+    for edge in edges:
+        sibling_edges.setdefault((edge["caller"], edge["line"]), []).append(edge)
+    container_links = {}
+    rhs_sites = {}
+    for setter_edge in edges:
+        caller, setter, line = setter_edge["caller"], setter_edge["callee"], setter_edge["line"]
+        if (caller not in eligible or setter not in eligible or setter not in method_owners
+                or _test_path(by_id[caller]["path"])
+                or by_id[setter]["symbol"].rsplit(".", 1)[-1] != "__setitem__"
+                or method_owners[setter] not in read_owners
+                or line not in by_id[caller]["executed_lines"]):
+            continue
+        site = (caller, line)
+        if site not in rhs_sites:
+            rhs_sites[site] = set(_subscript_rhs_calls(function_nodes[caller], line))
+        for edge in sibling_edges[site]:
+            producer = edge["callee"]
+            if (producer not in eligible or producer == setter
+                    or by_id[producer]["symbol"].rsplit(".", 1)[-1] not in rhs_sites[site]):
+                continue
+            for root, reader in sorted(read_owners[method_owners[setter]]):
+                shared = failed_tests.copy()
+                for identifier in (root, reader, caller, setter, producer):
+                    shared.intersection_update(by_id[identifier]["test_ids"])
+                if not shared:
+                    continue
+                key = (caller, producer, line)
+                container_links.setdefault(key, (root, reader, setter, len(shared)))
+                producer_edges.setdefault(key, "observed_rhs_call_at_subscript_assignment")
+                break
     result = {"schema_version": 6, "kind": "runtime_python_context", "functions": [],
               "module_context": [], "call_graph": [], "state_dependencies": [], "read_only_helpers": [], "events": [], "failures": failures,
               "evidence_ids": [], "edit_allowlist": [], "missing": sources.missing,
@@ -648,6 +750,9 @@ def build_context(project: Path, trace: dict, *, max_chars: int = 24000,
                          "max_read_only_helpers": 2, "max_read_only_helper_bytes": 1600, "max_read_only_source_bytes": 2400,
                          "max_callback_invokers": 2, "max_callback_body_chars": min(5000, max_chars // 3),
                          "max_callback_source_chars": max_chars // 4,
+                         "max_container_rhs_producers": 2, "max_container_rhs_sources": 4,
+                         "max_container_rhs_body_chars": min(5000, max_chars // 3),
+                         "max_container_rhs_source_chars": max_chars // 3,
                          "max_exception_anchors": 2, "max_exception_sources": 8, "max_exception_source_bytes": max_chars // 3},
               "truncation": {"truncated": False, "reasons": [], "omitted_function_count": 0,
                              "omitted_functions": [], "omitted_events": 0, "omitted_call_edges": 0},
@@ -658,13 +763,20 @@ def build_context(project: Path, trace: dict, *, max_chars: int = 24000,
               "source_projection": "one exact unnumbered AST body; source_numbered intentionally empty; start_line supports rendering",
               "state_dependency_note": "Executed receiver-field reads/writes in the exact same lexical class are source candidates, not observed object identity. State links are separate from recorded runtime call edges.",
               "note": "functions contains runtime-observed bodies. read_only_helpers contains separately supplied unobserved static definitions; these do not establish calls or edit permission. Executed handler/raise paths reserve bounded recorded neighbors before setup packing. exception_context marks selection only, not proved exception propagation. selected_exception_sources counts newly admitted bodies. Failure/assertion fields and callback accesses rank candidates. Whole bodies use actual serialized size with bounded observed neighbors. No dynamic dispatch is guessed. Reachability is not causality. Source/failure-text redaction is heuristic. Missing trace metadata is incomplete coverage, not proof of non-execution. Static helper policy requires exactly one unobserved module-level definition and does not search other modules or all helpers."}
+    if include_module_literals:
+        result["module_literal_sources"] = []
+        result["limits"].update(max_module_literal_sources=2, max_module_literal_source_bytes=2400)
     selected = []
     def refresh():
         result["functions"] = [bodies[identifier] for identifier in selected]
         result["edit_allowlist"] = [{"path": row["path"], "function_id": row["id"], "evidence_id": row["evidence_id"],
                                       "start_line": row["start_line"], "end_line": row["end_line"]}
                                      for row in result["functions"] if row["editable"] and row["complete"]]
-        result["evidence_ids"] = [row["evidence_id"] for key in ("functions", "module_context", "read_only_helpers", "events", "failures") for row in result[key]]
+        parents = {row["evidence_id"] for row in result["module_context"]}
+        if include_module_literals:
+            result["module_literal_sources"] = [row for row in result["module_literal_sources"]
+                if row["provenance"]["module_evidence_id"] in parents]
+        result["evidence_ids"] = [row["evidence_id"] for key in ("functions", "module_context", "read_only_helpers", "events", "failures", "module_literal_sources") for row in result.get(key, [])]
         result["truncation"]["reasons"] = sorted(reasons)
         result["truncation"]["truncated"] = bool(reasons)
         result["coverage"]["complete_failing_tests"] = sum(identifier in roots and bodies[identifier]["complete"] for identifier in selected)
@@ -723,12 +835,61 @@ def build_context(project: Path, trace: dict, *, max_chars: int = 24000,
             selected.pop()
             refresh()
         return False
+    def try_add_source_bundle(identifiers, producer, provenance):
+        fresh = [identifier for identifier in dict.fromkeys(identifiers) if identifier not in selected]
+        if (any(identifier not in eligible or not bodies[identifier]["complete"] for identifier in identifiers)
+                or len(selected) + len(fresh) > max_functions):
+            return False
+        old_provenance = bodies[producer].get("selection_provenance")
+        selected.extend(fresh)
+        bodies[producer]["selection_provenance"] = provenance
+        refresh()
+        if _json_size(result) <= source_ceiling:
+            return True
+        for identifier in fresh:
+            selected.remove(identifier)
+        if old_provenance is None:
+            bodies[producer].pop("selection_provenance", None)
+        else:
+            bodies[producer]["selection_provenance"] = old_provenance
+        refresh()
+        return False
     # Root/origin bodies stay complete; outer traceback wrappers compete for
     # bytes with observed state producers instead of all becoming mandatory.
     for identifier in sorted(roots | origin_witnesses, key=lambda identifier: (identifier not in roots, identifier)):
         if identifier in bodies:
             try_add(identifier, mandatory=True)
     lifecycle = {"__init__", "__new__", "__enter__", "__exit__", "__aenter__", "__aexit__", "close", "aclose"}
+    container_admissions, container_chars, container_sources = 0, 0, 0
+    container_seen = set()
+    for (caller, producer, line), (root, reader, setter, shared) in sorted(
+            container_links.items(), key=lambda item: (-item[1][3], distance.get(item[0][0], max_depth + 1),
+                                                      body_cost[item[0][1]], compact[item[0][0]],
+                                                      compact[item[0][1]], item[0][2])):
+        if producer in container_seen:
+            continue
+        fresh = [identifier for identifier in dict.fromkeys((producer, caller)) if identifier not in selected]
+        cost = sum(body_cost[identifier] for identifier in fresh)
+        if (root not in selected or not bodies[root]["complete"] or container_admissions >= 2
+                or container_sources + len(fresh) > 4
+                or any(body_cost[identifier] > min(5000, max_chars // 3) for identifier in fresh)
+                or container_chars + cost > max_chars // 3):
+            continue
+        provenance = {"relation": "observed_rhs_call_at_subscript_assignment",
+                      "observed_caller": compact[caller], "observed_setter": compact[setter],
+                      "failure_read_root": compact[root], "failure_read_getter": compact[reader],
+                      "observed_call_line": line, "receiver_relation": "same_lexical_class_candidate",
+                      "runtime_object_identity_observed": False, "same_invocation_observed": False,
+                      "causality_established": False}
+        if try_add_source_bundle((producer, caller), producer, provenance):
+            container_seen.add(producer)
+            container_admissions += 1
+            container_sources += len(fresh)
+            container_chars += cost
+    result["coverage"]["container_rhs_candidates"] = len(container_links)
+    result["coverage"]["selected_container_rhs_producers"] = container_admissions
+    result["coverage"]["selected_container_rhs_sources"] = container_sources
+    result["coverage"]["container_rhs_source_chars"] = container_chars
     # Reserve actual implementation callers of callbacks whose complete source
     # is contained in a failing test. An assertion reader may be later/cheaper,
     # but it must not spend every seed slot before a recorded callback invoker.
@@ -1037,6 +1198,73 @@ def build_context(project: Path, trace: dict, *, max_chars: int = 24000,
     result["coverage"]["selected_value_producer_edges"] = len(value_obligations) - len(missing_producers)
     if missing_producers:
         reasons.add("observed_value_producer_bundle_incomplete")
+    if include_module_literals:
+        # A global name referenced by an admitted implementation body may need
+        # its existing module assignment. Keep these static sources distinct
+        # from executed functions; full canonical qualification grants only a
+        # literal leaf capability. No body is removed to make room for one.
+        from .triage_module_literals_v8 import qualify_module_literals
+        seen_assignments = set()
+        literal_bytes = 0
+        for identifier in selected:
+            anchor = bodies[identifier]
+            if not anchor["complete"] or "implementation" not in anchor["roles"] or _test_path(anchor["path"]):
+                continue
+            executed = set(by_id[identifier]["executed_lines"])
+            names = {}
+            for reference in ast.walk(function_nodes[identifier]):
+                if (isinstance(reference, ast.Name) and isinstance(reference.ctx, ast.Load)
+                        and reference.lineno in executed):
+                    names[reference.id] = max(reference.lineno, names.get(reference.id, 0))
+            module = sources.load(anchor["path"])
+            assignments = sorted((node for node in module["tree"].body
+                if isinstance(node, ast.Assign) and len(node.targets) == 1
+                and isinstance(node.targets[0], ast.Name) and node.targets[0].id in names),
+                # A referenced compiled pattern performs a transformation;
+                # reserve it before small alphabet/separator constants. This
+                # ranks candidates only; canonical qualification remains strict.
+                key=lambda node: (not isinstance(node.value, ast.Call), -names[node.targets[0].id], node.lineno))
+            for node in assignments:
+                if (not isinstance(node, ast.Assign) or len(node.targets) != 1
+                        or not isinstance(node.targets[0], ast.Name) or node.targets[0].id not in names):
+                    continue
+                key = (anchor["path"], node.lineno)
+                if key in seen_assignments:
+                    continue
+                seen_assignments.add(key)
+                snippet = "".join(module["lines"][node.lineno - 1:node.end_lineno])
+                parent = {"evidence_id": f"ml{len(seen_assignments)}", "path": anchor["path"],
+                          "snippets": [{"start_line": node.lineno, "end_line": node.end_lineno, "source": snippet}],
+                          "complete": False, "editable": False,
+                          "selection_provenance": {"relation": "selected_function_name_reference",
+                              "observed_function_id": anchor["id"],
+                              "observed_reference_line": names[node.targets[0].id],
+                              "runtime_value_observed": False}}
+                try:
+                    leaves = qualify_module_literals(module["raw_bytes"], parent)
+                except (ValueError, SyntaxError, UnicodeError, RecursionError):
+                    continue
+                for leaf in leaves:
+                    size = len(leaf["source"].encode("utf-8"))
+                    if len(result["module_literal_sources"]) >= 2 or literal_bytes + size > 2400:
+                        break
+                    fresh_parent = parent not in result["module_context"]
+                    if fresh_parent:
+                        result["module_context"].append(parent)
+                    result["module_literal_sources"].append(leaf)
+                    refresh()
+                    if _json_size(result) > max_chars:
+                        result["module_literal_sources"].pop()
+                        if fresh_parent:
+                            result["module_context"].remove(parent)
+                        reasons.add("module_literal_projection_limit")
+                        refresh()
+                    else:
+                        literal_bytes += size
+                if len(result["module_literal_sources"]) >= 2:
+                    break
+            if len(result["module_literal_sources"]) >= 2:
+                break
     # Add observed edges after bodies. Provenance edges are first and cannot be
     # displaced by unrelated event/module metadata.
     graph = [edge for edge in edges if edge["caller"] in selected_set and edge["callee"] in selected_set]
@@ -1114,14 +1342,21 @@ def build_context(project: Path, trace: dict, *, max_chars: int = 24000,
     # optional metadata, never already admitted complete source bodies.
     while _json_size(result) > max_chars:
         reasons.add("context_metadata_limit")
-        if result["module_context"]:
-            result["module_context"].pop()
+        literal_parents = {row["provenance"]["module_evidence_id"] for row in result.get("module_literal_sources", [])}
+        optional_modules = [row for row in result["module_context"] if row["evidence_id"] not in literal_parents]
+        if include_module_literals and result["events"]:
+            result["events"].pop(0)
+            result["truncation"]["omitted_events"] += 1
+        elif optional_modules:
+            result["module_context"].remove(optional_modules[-1])
         elif result["events"]:
             result["events"].pop(0)
             result["truncation"]["omitted_events"] += 1
         elif result["call_graph"]:
             result["call_graph"].pop()
             result["truncation"]["omitted_call_edges"] += 1
+        elif result["module_context"]:
+            result["module_context"].pop()
         elif result["truncation"]["omitted_functions"]:
             result["truncation"]["omitted_functions"].pop()
         elif result["read_only_helpers"]:

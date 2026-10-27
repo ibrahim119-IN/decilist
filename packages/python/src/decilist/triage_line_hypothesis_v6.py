@@ -6,6 +6,7 @@ import hashlib
 from pathlib import Path
 
 from . import triage_hypothesis_v6 as legacy
+from . import triage_module_literals_v8 as literals
 from .triage_line_edits_v6 import VERSION, LineHypothesis, generation_schema, project_context, reconstruct
 
 
@@ -22,6 +23,10 @@ SYSTEM = (
     "those lines; do not repeat the function header or surrounding unchanged blocks unless selected and needed. "
     "If the proposed change is already present, re-evaluate the hypothesis; use edits:[] when no supported source "
     "change remains. Never copy unchanged source as a placeholder. Do not emit paths or old text. "
+    "Separately supplied module_literal_sources authorize only their selected literal leaf: use source_evidence_id "
+    "and replacement_literal containing one complete same-type literal token. Do not change the assignment name, "
+    "fixed format template, callable, flags or keyword names. Module source is unobserved; its read-only parent "
+    "alone grants no edit permission. Function and literal edits share the same total limit of two. "
     "replacement uses EXACT verbatim indentation from displayed source on every line. No indentation is added, "
     "removed or guessed. Do not start/end an edit inside a multiline string token. "
     "Use LF in replacement; original LF/CRLF framing is reconstructed. Preserve quotes, escapes and literal values "
@@ -36,10 +41,10 @@ SYSTEM = (
 
 
 def specification():
-    """Selected line3 start/count contract; provider and guards remain unchanged."""
+    """Selected line4 contract with separate module literal authority."""
     result = copy.deepcopy(legacy.specification())
     result.update(version=VERSION, system=SYSTEM, schema=LineHypothesis.model_json_schema(),
-                  max_context_chars=24000, representation="source evidence ID plus absolute start line and physical line count",
+                  max_context_chars=24000, representation="source evidence ID plus function start/count or selected module literal token",
                   indentation="exact displayed indentation; no anchoring, dedent or whitespace inference",
                   unchanged_validation="All V6 citation/source-size/AST/helper/revision and runner checks remain authoritative")
     return result
@@ -110,7 +115,8 @@ class LineEditGenerator:
         try:
             report = await legacy._generate_with_contract(context, provider=provider, feedback=feedback,
                 version=VERSION, specification_fn=self.specification, messages_fn=self.input_messages,
-                schema_fn=self.schema, validate_fn=self.validate)
+                schema_fn=self.schema, validate_fn=self.validate, context_fn=literals.checked_context,
+                feedback_fn=literals.checked_feedback, revision_fn=literals.validate_revision)
             if report.get("result") is not None:
                 self.last_line = self._pending_line
                 self.last_canonical_hash = self._pending_canonical_hash
@@ -123,6 +129,11 @@ class LineEditGenerator:
                 {"evidence_id": key, "path": row["path"], "start_line": row["start_line"], "end_line": row["end_line"],
                  "source_sha256": hashlib.sha256(row["source"].encode("utf-8")).hexdigest()}
                 for key, row in sorted(self.projection.sources.items())]
+            report["canonical_literal_manifest"] = [] if self.projection is None else [
+                {"evidence_id": key, "path": row["path"], "start_line": row["start_line"], "end_line": row["end_line"],
+                 "source_sha256": row["source_sha256"], "file_sha256": row["file_sha256"],
+                 "literal_selector": row["literal_selector"]}
+                for key, row in sorted(self.projection.literal_sources.items())]
             return report
         finally:
             self._busy = False
