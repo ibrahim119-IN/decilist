@@ -1,4 +1,4 @@
-"""Selected line2 V6 workflow; exact canonical verification remains shared."""
+"""Selected bounded line-edit workflow; canonical verification remains shared."""
 from __future__ import annotations
 
 from pathlib import Path

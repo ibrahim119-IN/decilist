@@ -563,11 +563,14 @@ def build_context(project: Path, trace: dict, *, max_chars: int = 24000,
         bodies[identifier] = body
         relevance[identifier] = score
         body_cost[identifier] = _json_size(body) + (180 if body["editable"] else 0)
-    # A root body already includes its lexical callbacks. Keep callback identity
-    # only when it is a failure witness; this avoids duplicating the same code.
-    redundant = {identifier for identifier, body in bodies.items() if identifier not in witnesses
-                 and any(path == body["path"] and start <= body["start_line"] <= body["end_line"] <= end and identifier != root_id
-                         for path, start, end, root_id in root_spans)}
+    # Root-contained callback source is already visible in the root body. Keep
+    # its identity for recorded incoming calls even when its duplicate body is
+    # omitted; implementation callers can carry callback/environment behavior.
+    root_callbacks = {identifier: root_id for identifier, body in bodies.items()
+                      for path, start, end, root_id in root_spans
+                      if path == body["path"] and start <= body["start_line"] <= body["end_line"] <= end
+                      and identifier != root_id}
+    redundant = set(root_callbacks) - witnesses
     eligible = {identifier for identifier in bodies if identifier not in redundant
                 and (identifier not in distance or distance[identifier] <= max_depth
                      or (max_depth > 0 and distance[identifier] <= max_depth + 4 and relevance[identifier] > 0)
@@ -643,6 +646,8 @@ def build_context(project: Path, trace: dict, *, max_chars: int = 24000,
                          "max_depth": max_depth, "semantic_depth_extension": 4, "trace_function_cap": 256,
                          "max_state_sources": 10, "max_state_call_hops": 2, "max_state_source_bytes": max_chars // 2,
                          "max_read_only_helpers": 2, "max_read_only_helper_bytes": 1600, "max_read_only_source_bytes": 2400,
+                         "max_callback_invokers": 2, "max_callback_body_chars": min(5000, max_chars // 3),
+                         "max_callback_source_chars": max_chars // 4,
                          "max_exception_anchors": 2, "max_exception_sources": 8, "max_exception_source_bytes": max_chars // 3},
               "truncation": {"truncated": False, "reasons": [], "omitted_function_count": 0,
                              "omitted_functions": [], "omitted_events": 0, "omitted_call_edges": 0},
@@ -683,13 +688,15 @@ def build_context(project: Path, trace: dict, *, max_chars: int = 24000,
         reasons.add("failure_projection_limit")
         refresh()
     source_ceiling = max_chars - min(2400, max_chars // 10)
-    def try_add(identifier, *, mandatory=False, neighbor_of=None, permit_full_budget=False):
+    def try_add(identifier, *, mandatory=False, neighbor_of=None, permit_full_budget=False, provenance=None):
         if identifier in selected:
             return True
         if identifier not in eligible or len(selected) >= max_functions:
             return False
         selected.append(identifier)
-        if neighbor_of is not None:
+        if provenance is not None:
+            bodies[identifier]["selection_provenance"] = provenance
+        elif neighbor_of is not None:
             bodies[identifier]["selection_provenance"] = {"observed_neighbor_of": compact[neighbor_of]}
         refresh()
         if _json_size(result) <= (max_chars if mandatory or permit_full_budget else source_ceiling):
@@ -722,6 +729,42 @@ def build_context(project: Path, trace: dict, *, max_chars: int = 24000,
         if identifier in bodies:
             try_add(identifier, mandatory=True)
     lifecycle = {"__init__", "__new__", "__enter__", "__exit__", "__aenter__", "__aexit__", "close", "aclose"}
+    # Reserve actual implementation callers of callbacks whose complete source
+    # is contained in a failing test. An assertion reader may be later/cheaper,
+    # but it must not spend every seed slot before a recorded callback invoker.
+    # This is a source selection relation, not a claim about causality or args.
+    callback_edges = [edge for edge in edges if edge["callee"] in root_callbacks
+                      and root_callbacks[edge["callee"]] in selected
+                      and bodies[root_callbacks[edge["callee"]]]["complete"]
+                      and edge["caller"] in eligible and edge["caller"] not in roots
+                      and not _test_path(by_id[edge["caller"]]["path"])
+                      and by_id[edge["caller"]]["symbol"].rsplit(".", 1)[-1] not in lifecycle]
+    callback_edges.sort(key=lambda edge: (distance.get(edge["caller"], max_depth + 1),
+                                          -edge["count"], body_cost[edge["caller"]],
+                                          compact[edge["caller"]], compact[edge["callee"]], edge["line"]))
+    callback_admissions, callback_chars = 0, 0
+    callback_seen = set()
+    for edge in callback_edges:
+        identifier = edge["caller"]
+        if identifier in callback_seen:
+            continue
+        callback_seen.add(identifier)
+        if identifier in selected:
+            continue
+        if (callback_admissions >= 2 or body_cost[identifier] > min(5000, max_chars // 3)
+                or callback_chars + body_cost[identifier] > max_chars // 4):
+            continue
+        callback = edge["callee"]
+        provenance = {"relation": "observed_call_to_root_contained_callback",
+                      "callback_function_id": compact[callback],
+                      "callback_symbol": by_id[callback]["symbol"],
+                      "callback_source_container": compact[root_callbacks[callback]],
+                      "observed_call_line": edge["line"], "causality_established": False}
+        if try_add(identifier, provenance=provenance):
+            callback_admissions += 1
+            callback_chars += body_cost[identifier]
+    result["coverage"]["selected_callback_invokers"] = callback_admissions
+    result["coverage"]["callback_source_chars"] = callback_chars
     connected_admissions = 0
     producer_admissions, producer_bytes = 0, 0
     state_admissions, state_bytes = 0, 0
@@ -826,7 +869,6 @@ def build_context(project: Path, trace: dict, *, max_chars: int = 24000,
     exception_candidates = [identifier for identifier in eligible & exception_events
                             if _executed_exception_scope(function_nodes[identifier], set(by_id[identifier]["executed_lines"]))]
     related_handlers = {edge["caller"] for edge in edges if edge["callee"] in failure_state}
-    exception_candidates.sort(key=lambda identifier: (identifier not in related_handlers, body_cost[identifier], compact[identifier]))
     exception_ids = failure_state & set(selected)
     exception_sources, exception_bytes, exception_anchors = 0, 0, 0
     def add_exception_source(identifier):
@@ -844,16 +886,35 @@ def build_context(project: Path, trace: dict, *, max_chars: int = 24000,
         exception_ids.add(identifier)
         return True
     covered_tests = set()
-    for anchor in exception_candidates:
-        tests = set(by_id[anchor]["test_ids"]) & failed_tests
-        if exception_anchors >= 2:
-            break
-        if exception_anchors and tests <= covered_tests and anchor not in related_handlers:
-            continue
+    admitted_exception_anchors = []
+    while exception_candidates and exception_anchors < 2:
+        # Prefer additional failed-test coverage, then use any remaining slot
+        # for a distinct recorded scope even when its coverage is identical.
+        anchor = min(exception_candidates, key=lambda identifier: (identifier not in related_handlers,
+                      -len((set(by_id[identifier]["test_ids"]) & failed_tests) - covered_tests),
+                      body_cost[identifier], compact[identifier]))
+        exception_candidates.remove(anchor)
+        # Distinct executed handler/raise scopes can transform an exception in
+        # one test invocation. Shared test IDs do not make their source bodies
+        # interchangeable; the existing anchor/source/character caps bound it.
         if not add_exception_source(anchor):
             continue
         exception_anchors += 1
-        covered_tests |= tests
+        covered_tests.update(set(by_id[anchor]["test_ids"]) & failed_tests)
+        admitted_exception_anchors.append(anchor)
+    # Complete both anchors' small outgoing source bundles before wrappers
+    # spend the shared reservation. A second transformation's observed helper
+    # is not interchangeable with another caller of the first transformation.
+    for anchor in admitted_exception_anchors:
+        outgoing = {edge["callee"] for edge in edges if edge["caller"] == anchor and edge["callee"] in eligible}
+        for child in sorted(outgoing, key=lambda identifier: (body_cost[identifier], compact[identifier]))[:2]:
+            if not add_exception_source(child):
+                continue
+            if by_id[child]["symbol"].rsplit(".", 1)[-1] == "__init__":
+                grandchildren = {edge["callee"] for edge in edges if edge["caller"] == child and edge["callee"] in eligible}
+                for grandchild in sorted(grandchildren, key=lambda identifier: (body_cost[identifier], compact[identifier]))[:2]:
+                    add_exception_source(grandchild)
+    for anchor in admitted_exception_anchors:
         # Incoming callers are actual recorded paths; diversify by failing-test
         # association so an early source branch cannot hide a later mode.
         incoming = {edge["caller"] for edge in edges if edge["callee"] == anchor and edge["caller"] in eligible}
@@ -866,14 +927,6 @@ def build_context(project: Path, trace: dict, *, max_chars: int = 24000,
             incoming.remove(caller)
             if add_exception_source(caller):
                 caller_coverage.update(set(by_id[caller]["test_ids"]) & failed_tests)
-        outgoing = {edge["callee"] for edge in edges if edge["caller"] == anchor and edge["callee"] in eligible}
-        for child in sorted(outgoing, key=lambda identifier: (body_cost[identifier], compact[identifier]))[:2]:
-            if not add_exception_source(child):
-                continue
-            if by_id[child]["symbol"].rsplit(".", 1)[-1] == "__init__":
-                grandchildren = {edge["callee"] for edge in edges if edge["caller"] == child and edge["callee"] in eligible}
-                for grandchild in sorted(grandchildren, key=lambda identifier: (body_cost[identifier], compact[identifier]))[:2]:
-                    add_exception_source(grandchild)
     result["coverage"]["selected_exception_anchors"] = exception_anchors
     result["coverage"]["selected_exception_sources"] = exception_sources
     # Reserve actual test-to-implementation call paths before generic small

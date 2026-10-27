@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 from decilist import triage_hypothesis_v6 as legacy
 
-VERSION = "evidence_absolute_lines_verbatim.2"
+VERSION = "evidence_absolute_lines_verbatim.3"
 MAX_CONTEXT_CHARS = 24000
 MAX_EDIT_LINES = 16
 
@@ -20,7 +20,7 @@ class LineEdit(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
     source_evidence_id: str = Field(min_length=1, max_length=2048)
     start_line: int = Field(ge=1, le=100000000)
-    end_line: int = Field(ge=1, le=100000000)
+    line_count: int = Field(ge=1, le=MAX_EDIT_LINES)
     replacement: str = Field(max_length=1200)
 
 
@@ -115,7 +115,7 @@ def project_context(context: dict, *, max_chars=MAX_CONTEXT_CHARS) -> Projection
         row.pop("source_numbered", None)
         row["editable_lines"] = "\n".join(f"{source['start_line'] + index} | {line.removesuffix(_eol(line)) if _eol(line) else line}" for index, line in enumerate(lines))
         row["edit_indent_contract"] = "replacement uses exact displayed indentation; no prefixing or dedent"
-    model["line_edit_protocol"] = {"version": VERSION, "range": "inclusive absolute physical lines", "max_lines": MAX_EDIT_LINES,
+    model["line_edit_protocol"] = {"version": VERSION, "range": "absolute start_line plus physical line_count", "max_lines": MAX_EDIT_LINES,
         "indentation": "Replacement uses exact displayed tabs/spaces on every line. No whitespace is added, removed or inferred.",
         "line_endings": "Model text uses LF; original uniform LF/CRLF and required final line terminator are reconstructed."}
     model["source_projection"] = "Editable bodies are numbered; exact canonical originals stay private. Read-only bodies are unchanged."
@@ -167,9 +167,10 @@ def generation_schema(projection: Projection) -> dict:
     for evidence_id, row in sorted(projection.sources.items()):
         numbers = list(range(row["start_line"], row["end_line"] + 1))
         variants.append({"type": "object", "additionalProperties": False,
-            "required": ["source_evidence_id", "start_line", "end_line", "replacement"],
+            "required": ["source_evidence_id", "start_line", "line_count", "replacement"],
             "properties": {"source_evidence_id": {"type": "string", "const": evidence_id},
-                "start_line": {"type": "integer", "enum": numbers}, "end_line": {"type": "integer", "enum": numbers},
+                "start_line": {"type": "integer", "enum": numbers},
+                "line_count": {"type": "integer", "enum": list(range(1, min(MAX_EDIT_LINES, len(numbers)) + 1))},
                 "replacement": {"type": "string", "maxLength": 1200}}})
     if variants:
         schema["properties"]["edits"]["items"] = {"anyOf": variants}
@@ -190,15 +191,14 @@ def reconstruct(raw: dict, projection: Projection):
         row = projection.sources.get(edit.source_evidence_id)
         if row is None:
             raise ValueError("Each line edit needs its visible editable source citation")
-        if not row["start_line"] <= edit.start_line <= edit.end_line <= row["end_line"]:
+        end_line = edit.start_line + edit.line_count - 1
+        if not row["start_line"] <= edit.start_line <= end_line <= row["end_line"]:
             raise ValueError("Absolute edit lines must stay inside cited source")
-        if edit.end_line - edit.start_line + 1 > MAX_EDIT_LINES:
-            raise ValueError("Choose at most16 contiguous lines per edit")
-        if any(path == row["path"] and edit.start_line <= end and start <= edit.end_line for path, start, end in occupied):
+        if any(path == row["path"] and edit.start_line <= end and start <= end_line for path, start, end in occupied):
             raise ValueError("Absolute line edits overlap")
-        occupied.append((row["path"], edit.start_line, edit.end_line))
+        occupied.append((row["path"], edit.start_line, end_line))
         lines = physical_lines(row["source"])
-        start, end = edit.start_line - row["start_line"], edit.end_line - row["start_line"] + 1
+        start, end = edit.start_line - row["start_line"], end_line - row["start_line"] + 1
         for token in _string_tokens(row["source"]):
             if (token.start[0] < start + 1 <= token.end[0]) or (token.start[0] <= end < token.end[0]):
                 raise ValueError("Line edits may not cut a multiline literal token")

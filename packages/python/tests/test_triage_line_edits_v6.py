@@ -25,7 +25,7 @@ def context(source="def compute(value):\n    return value + 1\n", *, start=10, p
 def candidate(start=11, end=None, replacement="    return value", source_id="s1"):
     return {"hypothesis": "The calculation increases the amount before returning it.", "failure_evidence_id":"failure1", "evidence_ids": [],
         "expected_test_behavior": "The visible assertion would receive the unmodified amount.",
-        "edits": [{"source_evidence_id": source_id, "start_line": start, "end_line": start if end is None else end, "replacement": replacement}]}
+        "edits": [{"source_evidence_id": source_id, "start_line": start, "line_count": 1 if end is None else end - start + 1, "replacement": replacement}]}
 
 
 def test_numbered_projection_private_canonical_and_reconstruction():
@@ -61,7 +61,7 @@ def test_explicit_failure_and_edit_references_construct_bounded_canonical_citati
     supplied["events"]=[{"evidence_id":key,"kind":"line"} for key in events]
     supplied["evidence_ids"] += ["s2",*events]
     raw=candidate();raw["evidence_ids"]=events
-    raw["edits"].append({"source_evidence_id":"s2","start_line":21,"end_line":21,"replacement":"    return value"})
+    raw["edits"].append({"source_evidence_id":"s2","start_line":21,"line_count":1,"replacement":"    return value"})
     result=reconstruct(raw,project_context(supplied))
     assert result.evidence_ids == ["failure1",*events,"s1","s2"] and len(result.evidence_ids)==8
     raw["evidence_ids"]=["failure1","s1","s1"]
@@ -143,7 +143,7 @@ def test_unicode_line_separator_is_data_not_an_absolute_source_line():
 def test_independent_edits_preserve_old_new_literals_and_reject_overlap(tmp_path):
     supplied = context('def compute(value):\n    first = "old-a"\n    second = "old-b"\n    return first + second\n')
     raw = candidate(11,replacement='    first = "new-b"')
-    raw["edits"].append({"source_evidence_id":"s1","start_line":12,"end_line":12,"replacement":'    second = "old-a"'})
+    raw["edits"].append({"source_evidence_id":"s1","start_line":12,"line_count":1,"replacement":'    second = "old-a"'})
     result = reconstruct(raw,project_context(supplied))
     assert result.replacements[0].old == '    first = "old-a"\n'
     assert result.replacements[0].new == '    first = "new-b"\n'
@@ -203,7 +203,8 @@ def test_schema_uses_finite_per_source_absolute_line_enums():
     variant=schema["properties"]["edits"]["items"]["anyOf"][0]
     assert variant["properties"]["source_evidence_id"]["const"] == "s1"
     assert variant["properties"]["start_line"]["enum"] == [10,11]
-    assert variant["properties"]["end_line"]["enum"] == [10,11]
+    assert variant["properties"]["line_count"]["enum"] == [1,2]
+    assert "end_line" not in variant["properties"]
     assert "old" not in json.dumps(variant) and "path" not in variant["properties"]
 
 
@@ -239,7 +240,7 @@ def test_removed_constructor_also_removes_helper_payload_and_citation_permission
 
 def test_more_than_sixteen_lines_missing_failure_and_legacy_old_new_are_rejected():
     source="def compute(value):\n" + "    value += 1\n"*18 + "    return value\n"
-    with pytest.raises(ValueError,match="at most16"):
+    with pytest.raises(ValueError,match="line_count"):
         reconstruct(candidate(11,27,"value += 2"),project_context(context(source)))
     raw=candidate();raw["failure_evidence_id"]="s1"
     with pytest.raises(ValueError):reconstruct(raw,project_context(context()))
@@ -247,3 +248,81 @@ def test_more_than_sixteen_lines_missing_failure_and_legacy_old_new_are_rejected
     with pytest.raises(ValueError):reconstruct(raw,project_context(context()))
     assert specification()["system"] != legacy.specification()["system"]
     assert specification()["schema"]["properties"].get("edits")
+
+
+@pytest.mark.parametrize("count", [0, -1, 17, True, False, 1.5, "1"])
+def test_count_wire_rejects_invalid_or_noninteger_counts(count):
+    raw = candidate()
+    raw["edits"][0]["line_count"] = count
+    with pytest.raises(ValueError, match="line_count"):
+        reconstruct(raw, project_context(context()))
+
+
+@pytest.mark.parametrize("old_end", [False, True])
+def test_count_wire_does_not_silently_accept_old_endpoint_shape(old_end):
+    raw = candidate()
+    raw["edits"][0]["end_line"] = 11
+    if old_end:
+        raw["edits"][0].pop("line_count")
+    with pytest.raises(ValueError, match="end_line"):
+        reconstruct(raw, project_context(context()))
+
+
+def test_sixteen_count_preserves_exact_canonical_span_and_inputs():
+    body = [f"    value += {number}\n" for number in range(1, 21)]
+    source = "def compute(value):\n" + "".join(body) + "    return value\n"
+    supplied = context(source, start=100)
+    raw = candidate(101, replacement="".join(f"    value += {number + 1}\n" for number in range(1, 17)))
+    raw["edits"][0]["line_count"] = 16
+    original_raw, original_context = copy.deepcopy(raw), copy.deepcopy(supplied)
+    result = reconstruct(raw, project_context(supplied))
+    assert result.replacements[0].old == "".join(body[:16])
+    assert result.replacements[0].new == raw["edits"][0]["replacement"]
+    assert result.evidence_ids == ["failure1", "s1"]
+    assert raw == original_raw and supplied == original_context
+    raw["edits"][0]["line_count"] = 17
+    with pytest.raises(ValueError, match="line_count"):
+        reconstruct(raw, project_context(supplied))
+
+
+def test_count_tail_overrun_rejects_without_clamping_or_mutation():
+    supplied = context("def compute(value):\n    value += 1\n    return value\n", start=100)
+    raw = candidate(102, replacement="    return value + 2")
+    raw["edits"][0]["line_count"] = 2
+    original = copy.deepcopy(raw)
+    with pytest.raises(ValueError, match="inside cited source"):
+        reconstruct(raw, project_context(supplied))
+    assert raw == original
+    raw["edits"][0]["line_count"] = 1
+    assert reconstruct(raw, project_context(supplied)).replacements[0].old == "    return value\n"
+
+
+@pytest.mark.parametrize("ending", ["\n", "\r\n"])
+def test_count_preserves_literal_indentation_and_eol_and_rejects_partial_literal(ending):
+    source = 'def compute(value):\n\ttext = """old\n  literal\n  tail"""\n\treturn text\n'.replace("\n", ending)
+    replacement = '\ttext = """new\n  λ literal\n  tail"""'
+    raw = candidate(41, replacement=replacement)
+    raw["edits"][0]["line_count"] = 3
+    result = reconstruct(raw, project_context(context(source, start=40)))
+    assert result.replacements[0].old == ending.join(['\ttext = """old', '  literal', '  tail"""', ''])
+    assert result.replacements[0].new == replacement.replace("\n", ending) + ending
+    partial = candidate(42, replacement="  changed literal")
+    with pytest.raises(ValueError, match="multiline literal"):
+        reconstruct(partial, project_context(context(source, start=40)))
+
+
+@pytest.mark.parametrize("replacement,code", [
+    ("    return value + 1", "no_op_replacement"),
+    ("    return value + 1 # same behavior", "no_ast_change"),
+])
+def test_count_wire_keeps_canonical_noop_rejection(replacement, code):
+    with pytest.raises(legacy.GenerationValidationError) as caught:
+        reconstruct(candidate(replacement=replacement), project_context(context()))
+    assert caught.value.code == code
+
+
+def test_count_wire_keeps_two_edit_budget():
+    raw = candidate()
+    raw["edits"] *= 3
+    with pytest.raises(ValueError, match="edits"):
+        reconstruct(raw, project_context(context()))

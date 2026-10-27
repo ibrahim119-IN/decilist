@@ -89,10 +89,23 @@ def _directory(value, lab) -> Path:
 
 def _write(directory: Path, state: dict) -> None:
     target = directory / f".trial-{uuid4().hex}.tmp"
-    with target.open("x", encoding="utf-8") as output:
-        json.dump(state, output, indent=2, ensure_ascii=False, allow_nan=False)
-        output.write("\n")
-    os.replace(target, directory / "trial.json")
+    created = False
+    try:
+        with target.open("x", encoding="utf-8") as output:
+            created = True
+            json.dump(state, output, indent=2, ensure_ascii=False, allow_nan=False)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        os.replace(target, directory / "trial.json")
+        created = False
+    finally:
+        if created:
+            try:
+                target.unlink()
+            except OSError:
+                # Keep the original write/replace error if cleanup is unavailable.
+                pass
 
 
 @contextmanager

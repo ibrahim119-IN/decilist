@@ -46,7 +46,7 @@ class NativeStub:
             row=next(r for r in view["functions"] if "editable_lines" in r)
             number=next(int(line.split(" | ",1)[0]) for line in row["editable_lines"].splitlines() if "return 3" in line or "return value + 1" in line)
             count=sum(p=="/completion" for p,_ in self.calls)-1
-            raw={"hypothesis":"The selected branch returns a smaller amount than the visible assertion expects.","failure_evidence_id":view["failures"][0]["evidence_id"],"evidence_ids":[],"expected_test_behavior":"The selected assertion would observe the requested amount.","edits":[{"source_evidence_id":row["evidence_id"],"start_line":number,"end_line":number,"replacement":self.replacements[min(count,len(self.replacements)-1)]}]}
+            raw={"hypothesis":"The selected branch returns a smaller amount than the visible assertion expects.","failure_evidence_id":view["failures"][0]["evidence_id"],"evidence_ids":[],"expected_test_behavior":"The selected assertion would observe the requested amount.","edits":[{"source_evidence_id":row["evidence_id"],"start_line":number,"line_count":1,"replacement":self.replacements[min(count,len(self.replacements)-1)]}]}
             result={"model":"line-stub","content":json.dumps(raw),"truncated":False,"tokens_predicted":130,"tokens_evaluated":600,"stop":True,"stop_type":"eos","stopped_limit":False,"timings":{"predicted_ms":1}}
         else:raise AssertionError(path)
         return httpx.Response(200,json=result)
@@ -146,7 +146,7 @@ def test_measurement_resolves_the_selected_executed_specification_without_case_a
     assert measurement._workflow_module() is selected
     spec = measurement._specification()
     assert spec["hypothesis"] == lines.specification()
-    assert spec["hypothesis"]["version"] == "evidence_absolute_lines_verbatim.2"
+    assert spec["hypothesis"]["version"] == "evidence_absolute_lines_verbatim.3"
     assert "edits" in spec["hypothesis"]["schema"]["properties"]
     assert "replacements" not in spec["hypothesis"]["schema"]["properties"]
     assert spec["workflow_version"] == selected.VERSION
@@ -264,3 +264,48 @@ def test_selected_cli_uses_explicit_workflow_seam_and_legacy_main_stays_availabl
 def test_selected_workflow_rejects_external_generator_override():
     with pytest.raises(TypeError, match="owns its per-run generator"):
         asyncio.run(selected.run_triage_v6(_generator=lambda: None))
+
+
+def test_supported_empty_count_edits_stay_no_safe_intervention():
+    class NoEditStub(NativeStub):
+        def handle(self, request):
+            response = super().handle(request)
+            if request.url.path == "/completion":
+                data = response.json()
+                raw = json.loads(data["content"])
+                raw["edits"] = []
+                data["content"] = json.dumps(raw)
+                return httpx.Response(200, json=data)
+            return response
+    async def exercise():
+        native = NoEditStub()
+        async with native.provider() as provider:
+            report = await lines.LineEditGenerator().generate_hypothesis(context(), provider=provider)
+        assert report["status"] == "needs_review" and report["reason"] == "no_safe_intervention"
+        assert report["result"]["replacements"] == [] and report["line_result"]["edits"] == []
+        assert sum(path == "/completion" for path, _ in native.calls) == 1
+    asyncio.run(exercise())
+
+
+@pytest.mark.parametrize("invalid_count", [False, True])
+def test_invalid_count_or_noop_has_no_generation_retry_or_validated_line_result(invalid_count):
+    class InvalidStub(NativeStub):
+        def handle(self, request):
+            response = super().handle(request)
+            if invalid_count and request.url.path == "/completion":
+                data = response.json()
+                raw = json.loads(data["content"])
+                raw["edits"][0]["line_count"] = 17
+                data["content"] = json.dumps(raw)
+                return httpx.Response(200, json=data)
+            return response
+    async def exercise():
+        native = InvalidStub(("    return value + 1",))
+        adapter = lines.LineEditGenerator()
+        async with native.provider() as provider:
+            report = await adapter.generate_hypothesis(context(), provider=provider)
+        expected = "schema_invalid" if invalid_count else "no_op_replacement"
+        assert report["status"] == "unavailable" and report["reason"] == expected
+        assert report["result"] is None and report["line_result"] is None and adapter.last_line is None
+        assert sum(path == "/completion" for path, _ in native.calls) == 1
+    asyncio.run(exercise())

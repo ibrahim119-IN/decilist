@@ -16,8 +16,12 @@ SYSTEM = (
     "source_evidence_id is also an explicit citation. Recorded calls, inferred state candidates and unobserved read-only helpers "
     "have distinct meanings; none proves causality or object identity. A new same-module read-only helper call needs "
     "its exact citation; helper source itself cannot be edited. Never change tests, fixtures or configuration. "
-    "Propose at most two minimal edits using source_evidence_id and inclusive ABSOLUTE start_line/end_line from "
-    "editable_lines. Select at most16 contiguous whole lines. Do not emit paths, old text or whole unchanged functions. "
+    "Trace the failed value to its computation before changing a downstream accessor. "
+    "Propose at most two minimal edits using source_evidence_id, ABSOLUTE start_line and line_count (1 to 16) from "
+    "editable_lines. Select only changed statements and required Python block structure. replacement replaces exactly "
+    "those lines; do not repeat the function header or surrounding unchanged blocks unless selected and needed. "
+    "If the proposed change is already present, re-evaluate the hypothesis; use edits:[] when no supported source "
+    "change remains. Never copy unchanged source as a placeholder. Do not emit paths or old text. "
     "replacement uses EXACT verbatim indentation from displayed source on every line. No indentation is added, "
     "removed or guessed. Do not start/end an edit inside a multiline string token. "
     "Use LF in replacement; original LF/CRLF framing is reconstructed. Preserve quotes, escapes and literal values "
@@ -32,10 +36,10 @@ SYSTEM = (
 
 
 def specification():
-    """Selected line2 model contract; provider and guards remain unchanged."""
+    """Selected line3 start/count contract; provider and guards remain unchanged."""
     result = copy.deepcopy(legacy.specification())
     result.update(version=VERSION, system=SYSTEM, schema=LineHypothesis.model_json_schema(),
-                  max_context_chars=24000, representation="source evidence ID plus absolute whole-line span",
+                  max_context_chars=24000, representation="source evidence ID plus absolute start line and physical line count",
                   indentation="exact displayed indentation; no anchoring, dedent or whitespace inference",
                   unchanged_validation="All V6 citation/source-size/AST/helper/revision and runner checks remain authoritative")
     return result
