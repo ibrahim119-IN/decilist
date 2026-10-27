@@ -1,0 +1,73 @@
+{
+  "scope": "out_of_band_semantic_audit_after_all_clocks",
+  "raw_sha256": "cc330b7f10362ea6d68a30f77ff9f04b01b6cb3a26492af72e97236bee6fc77f",
+  "protected_reports_unchanged": true,
+  "extra_behavior_change_observed": true,
+  "claim": "All protected checks passed; extra assisted manual change is not evidence of a minimal contract-preserving repair.",
+  "observations": {
+    "slot-03": {
+      "command": [
+        "[EXTERNAL]/python.exe",
+        "-I",
+        "-B",
+        "-c",
+        "import sys,json\nfrom pathlib import Path\nbase=Path(sys.argv[1]);sys.path[:0]=[str(base/'src'),str(base/'vendor')]\nimport httpx\nassert Path(httpx.__file__).resolve().is_relative_to(base.resolve())\nrows=[]\nfor value in (b'user:pass', b'user:p@ss', b'user:p%40ss'):\n try:\n  url=httpx.URL(scheme='https',host='example.invalid',userinfo=value)\n  rows.append({'input':value.decode(),'state':'accepted','value':str(url)})\n except Exception as e:rows.append({'input':value.decode(),'state':type(e).__name__,'message':str(e)})\nprint(json.dumps(rows))\n",
+        "[EXTERNAL]/case"
+      ],
+      "exit_code": 0,
+      "result": [
+        {
+          "input": "user:pass",
+          "state": "accepted",
+          "value": "https://user:pass@example.invalid",
+          "value_original_sha256": "6685d76dbf668fc2db64fad093c70ba84cbcdb7ddb7d573fb9b1d24ff6b33a10"
+        },
+        {
+          "input": "user:p@ss",
+          "state": "InvalidURL",
+          "message": "Invalid URL component 'userinfo'"
+        },
+        {
+          "input": "user:p%40ss",
+          "state": "accepted",
+          "value": "https://user:p%40ss@example.invalid",
+          "value_original_sha256": "7f8831c6cc8ce7d6091f1310be474355c170db1b1f4dd49bc0f7d9763e1f84a3"
+        }
+      ],
+      "source_unchanged": true
+    },
+    "slot-06": {
+      "command": [
+        "[EXTERNAL]/python.exe",
+        "-I",
+        "-B",
+        "-c",
+        "import sys,json\nfrom pathlib import Path\nbase=Path(sys.argv[1]);sys.path[:0]=[str(base/'src'),str(base/'vendor')]\nimport httpx\nassert Path(httpx.__file__).resolve().is_relative_to(base.resolve())\nrows=[]\nfor value in (b'user:pass', b'user:p@ss', b'user:p%40ss'):\n try:\n  url=httpx.URL(scheme='https',host='example.invalid',userinfo=value)\n  rows.append({'input':value.decode(),'state':'accepted','value':str(url)})\n except Exception as e:rows.append({'input':value.decode(),'state':type(e).__name__,'message':str(e)})\nprint(json.dumps(rows))\n",
+        "[EXTERNAL]/case"
+      ],
+      "exit_code": 0,
+      "result": [
+        {
+          "input": "user:pass",
+          "state": "accepted",
+          "value": "https://user:pass@example.invalid",
+          "value_original_sha256": "6685d76dbf668fc2db64fad093c70ba84cbcdb7ddb7d573fb9b1d24ff6b33a10"
+        },
+        {
+          "input": "user:p@ss",
+          "state": "accepted",
+          "value": "https://user:p%40ss@example.invalid",
+          "value_original_sha256": "7f8831c6cc8ce7d6091f1310be474355c170db1b1f4dd49bc0f7d9763e1f84a3"
+        },
+        {
+          "input": "user:p%40ss",
+          "state": "accepted",
+          "value": "https://user:p%40ss@example.invalid",
+          "value_original_sha256": "7f8831c6cc8ce7d6091f1310be474355c170db1b1f4dd49bc0f7d9763e1f84a3"
+        }
+      ],
+      "source_unchanged": true
+    }
+  },
+  "human_time_saved": null
+}
