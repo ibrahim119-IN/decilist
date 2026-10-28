@@ -1,0 +1,30 @@
+{
+  "id": "N04",
+  "variant": "fixed",
+  "arm": "ordinary",
+  "utc": "2026-10-28T04:21:16.939041+00:00",
+  "attempts": [
+    {
+      "attempt": 1,
+      "model_seconds": 22.230435500001477,
+      "finish_reason": "length",
+      "invalid_proposal": "Unterminated string starting at: line 1 column 830 (char 829)"
+    }
+  ],
+  "verified_repair": false,
+  "hints": null,
+  "issue": null,
+  "elapsed_seconds": 22.23170570000366,
+  "capped_task_seconds": 180.0,
+  "source_hashes_before": {
+    "index.js": "1a50d11e23c4113f44404917ee6cb621e9e720fa9556fb8682e330b51e8eda4d",
+    "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "package.json": "54c12e5c4faa9aedb3b194c409ba5a58f684c51a7247b30a67ba30dda94665b0"
+  },
+  "source_hashes_after": {
+    "index.js": "1a50d11e23c4113f44404917ee6cb621e9e720fa9556fb8682e330b51e8eda4d",
+    "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "package.json": "54c12e5c4faa9aedb3b194c409ba5a58f684c51a7247b30a67ba30dda94665b0"
+  },
+  "diff": ""
+}

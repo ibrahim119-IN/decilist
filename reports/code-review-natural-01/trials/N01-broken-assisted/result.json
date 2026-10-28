@@ -1,0 +1,128 @@
+{
+  "id": "N01",
+  "variant": "broken",
+  "arm": "assisted",
+  "utc": "2026-10-28T04:17:18.897481+00:00",
+  "attempts": [
+    {
+      "attempt": 1,
+      "model_seconds": 2.30669399999897,
+      "finish_reason": "stop",
+      "proposal": {
+        "issue": true,
+        "summary": "The `clearQueue` method attempts to create an AbortSignal with `AbortSignal.abort()` which is invalid syntax and throws a TypeError at runtime. This prevents the queue from being properly cleared when `rejectOnClear` is true.",
+        "edits": [
+          {
+            "path": "index.js",
+            "old": "\t\t\t\tconst abortError = AbortSignal.abort().reason;",
+            "new": "\t\t\t\tconst abortError = new Error('Queue cleared');"
+          }
+        ]
+      },
+      "verification": {
+        "passed": false,
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "{\"status\":\"failed\",\"checks\":2,\"name\":\"AssertionError\",\"message\":\"iteration failure must not leave orphaned mapper rejections\\n+ actual - expected\\n\\n+ [\\n+   'mapper failed',\\n+   'mapper failed'\\n+ ]\\n- []\\n\",\"stack\":\"AssertionError [ERR_ASSERTION]: iteration failure must not leave orphaned mapper rejections\\n+ actual - expected\\n\\n+ [\\n+   'mapper failed',\\n+   'mapper failed'\\n+ ]\\n- []\\n\\n    at check (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:12:53)\\n    at file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:33:9\"}\n",
+        "seconds": 0.09165239999856567
+      }
+    },
+    {
+      "attempt": 2,
+      "model_seconds": 2.904292400002305,
+      "finish_reason": "stop",
+      "proposal": {
+        "issue": true,
+        "summary": "The `map` function in pLimit can leave orphaned promise rejections when the iterable contains rejected promises, because the `enqueue` function doesn't properly handle rejections from the mapped functions before they are queued.",
+        "edits": [
+          {
+            "path": "index.js",
+            "old": "return Promise.all(promises);",
+            "new": "return Promise.all(promises).catch(error => {\n\t\t// If any promise in the map fails, we need to ensure that\n\t\t// the queue is cleared to prevent orphaned rejections.\n\t\tif (rejectOnClear) {\n\t\t\tgenerator.clearQueue();\n\t\t}\n\t\tthrow error;\n\t});"
+          }
+        ]
+      },
+      "verification": {
+        "passed": false,
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "{\"status\":\"failed\",\"checks\":2,\"name\":\"AssertionError\",\"message\":\"iteration failure must not leave orphaned mapper rejections\\n+ actual - expected\\n\\n+ [\\n+   'mapper failed',\\n+   'mapper failed'\\n+ ]\\n- []\\n\",\"stack\":\"AssertionError [ERR_ASSERTION]: iteration failure must not leave orphaned mapper rejections\\n+ actual - expected\\n\\n+ [\\n+   'mapper failed',\\n+   'mapper failed'\\n+ ]\\n- []\\n\\n    at check (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:12:53)\\n    at file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:33:9\"}\n",
+        "seconds": 0.11093370000162395
+      }
+    },
+    {
+      "attempt": 3,
+      "model_seconds": 3.6585000999984914,
+      "finish_reason": "stop",
+      "invalid_proposal": "old substring must match exactly once and change source"
+    }
+  ],
+  "verified_repair": false,
+  "hints": [
+    {
+      "path": "index.js",
+      "result": {
+        "schema_version": "code-review.1",
+        "status": "flagged",
+        "advisory": true,
+        "model": "yannelli/d1-3b-code-review-decisions",
+        "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+        "rules": [
+          "error_handling_problem",
+          "type_safety_hole",
+          "unsafe_input"
+        ],
+        "threshold": 0.9,
+        "total_lines": 132,
+        "reviewed_lines": 132,
+        "windows": [
+          {
+            "start_line": 1,
+            "end_line": 80,
+            "probabilities": {
+              "error_handling_problem": 0.9950945942942779,
+              "type_safety_hole": 0.01098694263059318,
+              "unsafe_input": 0.024423090054107213
+            }
+          },
+          {
+            "start_line": 69,
+            "end_line": 132,
+            "probabilities": {
+              "error_handling_problem": 0.011687257995694434,
+              "type_safety_hole": 0.01590639171181471,
+              "unsafe_input": 0.00433150202056399
+            }
+          }
+        ],
+        "findings": [
+          {
+            "rule": "error_handling_problem",
+            "probability": 0.9950945942942779,
+            "start_line": 1,
+            "end_line": 80
+          }
+        ],
+        "latency_ms": 464.73140000307467,
+        "error": null
+      },
+      "wall_seconds": 0.47783179999532877
+    }
+  ],
+  "issue": true,
+  "elapsed_seconds": 9.581427400000393,
+  "capped_task_seconds": 180.0,
+  "source_hashes_before": {
+    "benchmark.js": "ff4678a088f186a55d63ab51f14f02408f5f26480e5493f02385d38b55586647",
+    "index.js": "63239cd9ae80b1433e05014fe6ec501475c6fa59fad06418cb5972dbc7cc14e2",
+    "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "package.json": "b28d1f6ff207a8572d6fde695cc771c95c9debbee4be77f924b95ad13ada0bd0"
+  },
+  "source_hashes_after": {
+    "benchmark.js": "ff4678a088f186a55d63ab51f14f02408f5f26480e5493f02385d38b55586647",
+    "index.js": "e2c196b942961c63c431131f218d3f1814571ad15345bf7d73242edf3b99fa6b",
+    "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "package.json": "b28d1f6ff207a8572d6fde695cc771c95c9debbee4be77f924b95ad13ada0bd0"
+  },
+  "diff": "--- index.js\n+++ index.js\n@@ -81,7 +81,7 @@\n \t\t\t\t\treturn;\n \t\t\t\t}\n \n-\t\t\t\tconst abortError = AbortSignal.abort().reason;\n+\t\t\t\tconst abortError = new Error('Queue cleared');\n \n \t\t\t\twhile (queue.size > 0) {\n \t\t\t\t\tqueue.dequeue().reject(abortError);\n@@ -106,7 +106,14 @@\n \t\tmap: {\n \t\t\tasync value(iterable, function_) {\n \t\t\t\tconst promises = Array.from(iterable, (value, index) => generator(function_, value, index));\n-\t\t\t\treturn Promise.all(promises);\n+\t\t\t\treturn Promise.all(promises).catch(error => {\n+\t\t// If any promise in the map fails, we need to ensure that\n+\t\t// the queue is cleared to prevent orphaned rejections.\n+\t\tif (rejectOnClear) {\n+\t\t\tgenerator.clearQueue();\n+\t\t}\n+\t\tthrow error;\n+\t});\n \t\t\t},\n \t\t},\n \t});\n"
+}

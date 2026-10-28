@@ -1,0 +1,8 @@
+{
+  "name": "decilist-natural-n01",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "yocto-queue": "^1.2.1"
+  }
+}

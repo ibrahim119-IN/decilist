@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"issue\": true, \"summary\": \"The error handler incorrectly sets status code 500 when an error has a status code of 600, which should remain as 600 according to the validation feedback.\", \"edits\": [{\"path\": \"lib/error-status.js\", \"old\": \"function setErrorStatusCode (reply, err) {\\n  if (!reply[kReplyHasStatusCode] || reply.statusCode === 200) {\\n    const statusCode = err && (err.statusCode || err.status)\\n    reply.code(statusCode >= 400 ? statusCode : 500)\\n  }\\n}\", \"new\": \"function setErrorStatusCode (reply, err) {\\n  if (!reply[kReplyHasStatusCode] || reply.statusCode === 200) {\\n    const statusCode = err && (err.statusCode || err.status)\\n    reply.code(statusCode >= 400 ? statusCode : 500)\\n  }\\n}\"}]}"
+      }
+    }
+  ],
+  "created": 1793161405,
+  "model": "qwen3-coder-30b-a3b-q4km",
+  "system_fingerprint": "b11889-d854d98ba",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 205,
+    "prompt_tokens": 3086,
+    "total_tokens": 3291,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "id": "chatcmpl-0CuojqFcbkLmDMSSC83XTVL7gbG5AHP2",
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 3086,
+    "prompt_ms": 1974.573,
+    "prompt_per_token_ms": 0.639848671419313,
+    "prompt_per_second": 1562.8695419212154,
+    "predicted_n": 205,
+    "predicted_ms": 1305.912,
+    "predicted_per_token_ms": 6.401529411764706,
+    "predicted_per_second": 156.2126697664161
+  }
+}

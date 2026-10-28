@@ -1,0 +1,146 @@
+[
+  {
+    "id": "N01",
+    "variant": "broken",
+    "passed": false,
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "{\"status\":\"failed\",\"checks\":2,\"name\":\"AssertionError\",\"message\":\"iteration failure must not leave orphaned mapper rejections\\n+ actual - expected\\n\\n+ [\\n+   'mapper failed',\\n+   'mapper failed'\\n+ ]\\n- []\\n\",\"stack\":\"AssertionError [ERR_ASSERTION]: iteration failure must not leave orphaned mapper rejections\\n+ actual - expected\\n\\n+ [\\n+   'mapper failed',\\n+   'mapper failed'\\n+ ]\\n- []\\n\\n    at check (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:12:53)\\n    at file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:33:9\"}\n",
+    "seconds": 0.09983750000537839
+  },
+  {
+    "id": "N01",
+    "variant": "fixed",
+    "passed": true,
+    "returncode": 0,
+    "stdout": "{\"status\":\"passed\",\"checks\":5}\n",
+    "stderr": "",
+    "seconds": 0.10875049999594921
+  },
+  {
+    "id": "N02",
+    "variant": "broken",
+    "passed": false,
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "{\"status\":\"failed\",\"checks\":1,\"name\":\"TypeError\",\"message\":\"this is not a function\",\"stack\":\"TypeError: this is not a function\\n    at file:///L:/CodexData/Decilist/work/code-review-natural-01/N02/broken/index.js:108:65\\n    at Function.from (<anonymous>)\\n    at value (file:///L:/CodexData/Decilist/work/code-review-natural-01/N02/broken/index.js:108:28)\\n    at file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:21:19\"}\n",
+    "seconds": 0.08034309999493416
+  },
+  {
+    "id": "N02",
+    "variant": "fixed",
+    "passed": true,
+    "returncode": 0,
+    "stdout": "{\"status\":\"passed\",\"checks\":4}\n",
+    "stderr": "",
+    "seconds": 0.05329550000169547
+  },
+  {
+    "id": "N03",
+    "variant": "broken",
+    "passed": false,
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "{\"status\":\"failed\",\"checks\":1,\"name\":\"AssertionError\",\"message\":\"Missing expected rejection (TypeError).\",\"stack\":\"AssertionError [ERR_ASSERTION]: Missing expected rejection (TypeError).\\n    at async file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:44:9\"}\n",
+    "seconds": 0.06617860000551445
+  },
+  {
+    "id": "N03",
+    "variant": "fixed",
+    "passed": true,
+    "returncode": 0,
+    "stdout": "{\"status\":\"passed\",\"checks\":10}\n",
+    "stderr": "",
+    "seconds": 0.06901289999950677
+  },
+  {
+    "id": "N04",
+    "variant": "broken",
+    "passed": false,
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "{\"status\":\"failed\",\"checks\":1,\"name\":\"AssertionError\",\"message\":\"Missing expected rejection.\",\"stack\":\"AssertionError [ERR_ASSERTION]: Missing expected rejection.\\n    at async file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:53:7\"}\n",
+    "seconds": 0.08587180000176886
+  },
+  {
+    "id": "N04",
+    "variant": "fixed",
+    "passed": true,
+    "returncode": 0,
+    "stdout": "{\"status\":\"passed\",\"checks\":4}\n",
+    "stderr": "",
+    "seconds": 0.08110670000314713
+  },
+  {
+    "id": "N05",
+    "variant": "broken",
+    "passed": false,
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "{\"status\":\"failed\",\"checks\":1,\"name\":\"AssertionError\",\"message\":\"rejected interceptor preserves original error\\n\\nfalse !== true\\n\",\"stack\":\"AssertionError [ERR_ASSERTION]: rejected interceptor preserves original error\\n\\nfalse !== true\\n\\n    at check (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:12:53)\\n    at file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:75:9\"}\n",
+    "seconds": 0.17329220000101486
+  },
+  {
+    "id": "N05",
+    "variant": "fixed",
+    "passed": true,
+    "returncode": 0,
+    "stdout": "{\"status\":\"passed\",\"checks\":6}\n",
+    "stderr": "",
+    "seconds": 0.17962489999626996
+  },
+  {
+    "id": "N06",
+    "variant": "broken",
+    "passed": false,
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "{\"status\":\"failed\",\"checks\":1,\"name\":\"AssertionError\",\"message\":\"optional stack instrumentation must preserve original failure (structured)\\n\\nfalse !== true\\n\",\"stack\":\"AssertionError [ERR_ASSERTION]: optional stack instrumentation must preserve original failure (structured)\\n\\nfalse !== true\\n\\n    at check (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:12:53)\\n    at file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:94:9\"}\n",
+    "seconds": 0.13395869999658316
+  },
+  {
+    "id": "N06",
+    "variant": "fixed",
+    "passed": true,
+    "returncode": 0,
+    "stdout": "{\"status\":\"passed\",\"checks\":4}\n",
+    "stderr": "",
+    "seconds": 0.14746930000546854
+  },
+  {
+    "id": "N07",
+    "variant": "broken",
+    "passed": false,
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "{\"status\":\"failed\",\"checks\":3,\"name\":\"AssertionError\",\"message\":\"status helper validates statusCode 600\\n\\n600 !== 500\\n\",\"stack\":\"AssertionError [ERR_ASSERTION]: status helper validates statusCode 600\\n\\n600 !== 500\\n\\n    at check (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:12:53)\\n    at file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:106:11\"}\n",
+    "seconds": 0.22087720000126865
+  },
+  {
+    "id": "N07",
+    "variant": "fixed",
+    "passed": true,
+    "returncode": 0,
+    "stdout": "{\"status\":\"passed\",\"checks\":12}\n",
+    "stderr": "",
+    "seconds": 0.2655880000020261
+  },
+  {
+    "id": "N08",
+    "variant": "broken",
+    "passed": false,
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:114\n        app.addContentTypeParser(\"application/custom\",{parseAs:\"string\"},()=>{throw new Error(\"parser boom\");});\n                                                                              ^\n\nError: parser boom\n    at Parser.fn (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:114:85)\n    at Request.onEnd (L:\\CodexData\\Decilist\\work\\code-review-natural-01\\N08\\broken\\lib\\content-type-parser.js:320:27)\n    at Request.emit (node:events:519:28)\n    at endReadableNT (node:internal/streams/readable:1698:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:89:21)\n\nNode.js v22.23.1\n",
+    "seconds": 0.224014299994451
+  },
+  {
+    "id": "N08",
+    "variant": "fixed",
+    "passed": true,
+    "returncode": 0,
+    "stdout": "{\"status\":\"passed\",\"checks\":7}\n",
+    "stderr": "",
+    "seconds": 0.25407629999972414
+  }
+]

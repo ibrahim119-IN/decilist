@@ -1,0 +1,75 @@
+{
+  "task": "Limit concurrency of asynchronous function calls, with iterable mapping and queue counters.",
+  "files": [
+    {
+      "path": "index.js",
+      "numbered_source": "1: import Queue from 'yocto-queue';\n2: \n3: export default function pLimit(concurrency) {\n4: \tlet rejectOnClear = false;\n5: \n6: \tif (typeof concurrency === 'object') {\n7: \t\t({concurrency, rejectOnClear = false} = concurrency);\n8: \t}\n9: \n10: \tvalidateConcurrency(concurrency);\n11: \n12: \tif (typeof rejectOnClear !== 'boolean') {\n13: \t\tthrow new TypeError('Expected `rejectOnClear` to be a boolean');\n14: \t}\n15: \n16: \tconst queue = new Queue();\n17: \tlet activeCount = 0;\n18: \n19: \tconst resumeNext = () => {\n20: \t\t// Process the next queued function if we're under the concurrency limit\n21: \t\tif (activeCount < concurrency && queue.size > 0) {\n22: \t\t\tactiveCount++;\n23: \t\t\tqueue.dequeue().run();\n24: \t\t}\n25: \t};\n26: \n27: \tconst next = () => {\n28: \t\tactiveCount--;\n29: \t\tresumeNext();\n30: \t};\n31: \n32: \tconst run = async (function_, resolve, arguments_) => {\n33: \t\t// Execute the function and capture the result promise\n34: \t\tconst result = (async () => function_(...arguments_))();\n35: \n36: \t\t// Resolve immediately with the promise (don't wait for completion)\n37: \t\tresolve(result);\n38: \n39: \t\t// Wait for the function to complete (success or failure)\n40: \t\t// We catch errors here to prevent unhandled rejections,\n41: \t\t// but the original promise rejection is preserved for the caller\n42: \t\ttry {\n43: \t\t\tawait result;\n44: \t\t} catch {}\n45: \n46: \t\t// Decrement active count and process next queued function\n47: \t\tnext();\n48: \t};\n49: \n50: \tconst enqueue = (function_, resolve, reject, arguments_) => {\n51: \t\tconst queueItem = {reject};\n52: \n53: \t\t// Queue the internal resolve function instead of the run function\n54: \t\t// to preserve the asynchronous execution context.\n55: \t\tnew Promise(internalResolve => { // eslint-disable-line promise/param-names\n56: \t\t\tqueueItem.run = internalResolve;\n57: \t\t\tqueue.enqueue(queueItem);\n58: \t\t}).then(run.bind(undefined, function_, resolve, arguments_)); // eslint-disable-line promise/prefer-await-to-then\n59: \n60: \t\t// Start processing immediately if we haven't reached the concurrency limit\n61: \t\tif (activeCount < concurrency) {\n62: \t\t\tresumeNext();\n63: \t\t}\n64: \t};\n65: \n66: \tconst generator = (function_, ...arguments_) => new Promise((resolve, reject) => {\n67: \t\tenqueue(function_, resolve, reject, arguments_);\n68: \t});\n69: \n70: \tObject.defineProperties(generator, {\n71: \t\tactiveCount: {\n72: \t\t\tget: () => activeCount,\n73: \t\t},\n74: \t\tpendingCount: {\n75: \t\t\tget: () => queue.size,\n76: \t\t},\n77: \t\tclearQueue: {\n78: \t\t\tvalue() {\n79: \t\t\t\tif (!rejectOnClear) {\n80: \t\t\t\t\tqueue.clear();\n81: \t\t\t\t\treturn;\n82: \t\t\t\t}\n83: \n84: \t\t\t\tconst abortError = new Error('Queue cleared');\n85: \n86: \t\t\t\twhile (queue.size > 0) {\n87: \t\t\t\t\tqueue.dequeue().reject(abortError);\n88: \t\t\t\t}\n89: \t\t\t},\n90: \t\t},\n91: \t\tconcurrency: {\n92: \t\t\tget: () => concurrency,\n93: \n94: \t\t\tset(newConcurrency) {\n95: \t\t\t\tvalidateConcurrency(newConcurrency);\n96: \t\t\t\tconcurrency = newConcurrency;\n97: \n98: \t\t\t\tqueueMicrotask(() => {\n99: \t\t\t\t\t// eslint-disable-next-line no-unmodified-loop-condition\n100: \t\t\t\t\twhile (activeCount < concurrency && queue.size > 0) {\n101: \t\t\t\t\t\tresumeNext();\n102: \t\t\t\t\t}\n103: \t\t\t\t});\n104: \t\t\t},\n105: \t\t},\n106: \t\tmap: {\n107: \t\t\tasync value(iterable, function_) {\n108: \t\t\t\tconst promises = Array.from(iterable, (value, index) => generator(function_, value, index));\n109: \t\t\t\treturn Promise.all(promises).catch(error => {\n110: \t\t// If any promise in the map fails, we need to ensure that\n111: \t\t// the queue is cleared to prevent orphaned rejections.\n112: \t\tif (rejectOnClear) {\n113: \t\t\tgenerator.clearQueue();\n114: \t\t}\n115: \t\tthrow error;\n116: \t});\n117: \t\t\t},\n118: \t\t},\n119: \t});\n120: \n121: \treturn generator;\n122: }\n123: \n124: export function limitFunction(function_, options) {\n125: \tconst limit = pLimit(options);\n126: \n127: \tconst limitedFunction = (...arguments_) => limit(() => function_(...arguments_));\n128: \tObject.defineProperty(limitedFunction, 'clearQueue', {\n129: \t\tvalue: limit.clearQueue,\n130: \t});\n131: \n132: \treturn limitedFunction;\n133: }\n134: \n135: function validateConcurrency(concurrency) {\n136: \tif (!((Number.isInteger(concurrency) || concurrency === Number.POSITIVE_INFINITY) && concurrency > 0)) {\n137: \t\tthrow new TypeError('Expected `concurrency` to be a number from 1 and up');\n138: \t}\n139: }"
+    }
+  ],
+  "lint_diagnostics": [
+    {
+      "path": "index.js",
+      "ruleId": "no-empty",
+      "message": "Empty block statement.",
+      "line": 44,
+      "endLine": 44,
+      "column": 11,
+      "severity": 2
+    }
+  ],
+  "advisory_review": [
+    {
+      "path": "index.js",
+      "result": {
+        "schema_version": "code-review.1",
+        "status": "flagged",
+        "advisory": true,
+        "model": "yannelli/d1-3b-code-review-decisions",
+        "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+        "rules": [
+          "error_handling_problem",
+          "type_safety_hole",
+          "unsafe_input"
+        ],
+        "threshold": 0.9,
+        "total_lines": 132,
+        "reviewed_lines": 132,
+        "windows": [
+          {
+            "start_line": 1,
+            "end_line": 80,
+            "probabilities": {
+              "error_handling_problem": 0.9950945942942779,
+              "type_safety_hole": 0.01098694263059318,
+              "unsafe_input": 0.024423090054107213
+            }
+          },
+          {
+            "start_line": 69,
+            "end_line": 132,
+            "probabilities": {
+              "error_handling_problem": 0.011687257995694434,
+              "type_safety_hole": 0.01590639171181471,
+              "unsafe_input": 0.00433150202056399
+            }
+          }
+        ],
+        "findings": [
+          {
+            "rule": "error_handling_problem",
+            "probability": 0.9950945942942779,
+            "start_line": 1,
+            "end_line": 80
+          }
+        ],
+        "latency_ms": 464.73140000307467,
+        "error": null
+      },
+      "wall_seconds": 0.47783179999532877
+    }
+  ],
+  "validation_feedback": {
+    "message": "Protected behavioral validation failed.",
+    "output": "{\"status\":\"failed\",\"checks\":2,\"name\":\"AssertionError\",\"message\":\"iteration failure must not leave orphaned mapper rejections\\n+ actual - expected\\n\\n+ [\\n+   'mapper failed',\\n+   'mapper failed'\\n+ ]\\n- []\\n\",\"stack\":\"AssertionError [ERR_ASSERTION]: iteration failure must not leave orphaned mapper rejections\\n+ actual - expected\\n\\n+ [\\n+   'mapper failed',\\n+   'mapper failed'\\n+ ]\\n- []\\n\\n    at check (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:12:53)\\n    at file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:33:9\"}\n"
+  }
+}

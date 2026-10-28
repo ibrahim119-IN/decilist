@@ -6,6 +6,8 @@ Decilist's original code is Apache-2.0. Dependencies and optional model artifact
 | --- | --- | --- |
 | Pydantic, FastAPI, Starlette, httpx, Uvicorn | Permissive upstream licenses (MIT/BSD variants); consult installed package metadata | Dependency declarations only |
 | HTTPX 0.28.1 triage fixtures | BSD-3-Clause; [retained license](benchmarks/licenses/httpx-LICENSE.md) | Fixture mutations/tests; the lab copies pinned installed source only into isolated work directories and retains its license |
+| p-limit / p-retry historical regression adaptations | MIT; [p-limit license](benchmarks/licenses/p-limit-LICENSE.txt), [p-retry license](benchmarks/licenses/p-retry-LICENSE.txt) | Adapted protected probes, patches and selected production files in captured requests; full project snapshots downloaded separately |
+| Axios / Fastify historical regression adaptations | MIT; [Axios license](benchmarks/licenses/axios-LICENSE.txt), [Fastify license](benchmarks/licenses/fastify-LICENSE.txt) | Adapted protected probes, patches and selected production files in captured requests; full project snapshots downloaded separately |
 | Zod, TypeScript, Node.js types | MIT / Apache-2.0 upstream licenses | Dependency declarations and npm lockfile |
 | ESLint, @eslint/js, typescript-eslint | MIT upstream licenses | Separate benchmark dependency declarations and lockfile; no copied implementation and no SDK runtime dependency |
 | LiquidAI/d1-3B weights and vendor code | [LFM Open License v1.0](https://huggingface.co/LiquidAI/d1-3B/blob/main/LICENSE), pinned revision in adapter | No |

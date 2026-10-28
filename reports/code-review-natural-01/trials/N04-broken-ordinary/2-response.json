@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"issue\": true, \"summary\": \"The `retriesConsumed` variable is incorrectly reset to 0 when `onAttemptFailure` returns false, which can cause retry logic to behave incorrectly after a non-retriable error.\", \"edits\": [{\"path\": \"index.js\", \"old\": \"\\t\\t\\t} else {\\n\\t\\t\\t\\tretriesConsumed = 0;\\n\\t\\t\\t}\", \"new\": \"\\t\\t\\t} else {\\n\\t\\t\\t\\t// Do not reset retriesConsumed when retry is not consumed\\n\\t\\t\\t}\"}]}"
+      }
+    }
+  ],
+  "created": 1793161273,
+  "model": "qwen3-coder-30b-a3b-q4km",
+  "system_fingerprint": "b11889-d854d98ba",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 122,
+    "prompt_tokens": 3515,
+    "total_tokens": 3637,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "id": "chatcmpl-CuyPH3tMzqX9gkGOvjcl1c6tWumPPZTS",
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 3515,
+    "prompt_ms": 2219.793,
+    "prompt_per_token_ms": 0.6315200568990043,
+    "prompt_per_second": 1583.4809822357308,
+    "predicted_n": 122,
+    "predicted_ms": 769.249,
+    "predicted_per_token_ms": 6.357429752066116,
+    "predicted_per_second": 157.29627207835173
+  }
+}

@@ -1,0 +1,362 @@
+{
+  "summary": {
+    "ordinary": {
+      "verified_repairs": 1,
+      "cases": 8,
+      "capped_median_seconds": 180.0,
+      "actual_total_seconds": 165.61180800000875,
+      "control_categories": {
+        "confirmed_false_runtime": 4,
+        "unresolved_contract_claim": 1,
+        "unusable_response": 1,
+        "style_only": 2
+      },
+      "accepted_repairs_after_additional_checks": 0,
+      "model_requests": 31,
+      "truncated_responses": 4,
+      "invalid_proposals": 10
+    },
+    "assisted": {
+      "verified_repairs": 1,
+      "cases": 8,
+      "capped_median_seconds": 180.0,
+      "actual_total_seconds": 165.09693700001662,
+      "control_categories": {
+        "confirmed_false_runtime": 5,
+        "unusable_response": 1,
+        "style_only": 2
+      },
+      "accepted_repairs_after_additional_checks": 0,
+      "model_requests": 31,
+      "truncated_responses": 4,
+      "invalid_proposals": 17
+    },
+    "human_time_measured": false,
+    "assisted_faster_capped_pairs": 0,
+    "capped_median_reduction_fraction": 0.0,
+    "engineering_gate_passed": false,
+    "gate_failures": [
+      "at least 20% capped-median reduction",
+      "at least half pairs faster",
+      "no increase in confirmed false runtime claims",
+      "no unresolved control claims"
+    ],
+    "timed_protocol_changed_after_exposure": false,
+    "specialist": {
+      "file_calls": 18,
+      "unavailable": 0,
+      "broken_cases_with_any_flag": 2,
+      "broken_cases_with_changed_hunk_flag": 0,
+      "corrected_cases_flagged": 3,
+      "median_task_hint_seconds": 0.749095249997481,
+      "window_false_positive_rate": null
+    },
+    "lint": {
+      "profile": "ESLint 10.13.0 / @eslint/js 10.0.1 recommended JS; module type from original package; declared Node/browser globals; inline config disabled",
+      "target_defects_detected": 0,
+      "all_diagnostics": 8,
+      "median_all_variants_seconds": 0.009480500000000575,
+      "first_call_seconds": 1.8492269000000006,
+      "reason": "Only unchanged no-empty / no-unused-vars messages; none identifies the historical defects."
+    }
+  },
+  "pairs": [
+    {
+      "id": "N01",
+      "ordinary": {
+        "verified_repair": false,
+        "elapsed_seconds": 8.59965120000561,
+        "capped_task_seconds": 180.0
+      },
+      "assisted": {
+        "verified_repair": false,
+        "elapsed_seconds": 9.581427400000393,
+        "capped_task_seconds": 180.0
+      }
+    },
+    {
+      "id": "N02",
+      "ordinary": {
+        "verified_repair": true,
+        "elapsed_seconds": 5.071106799994595,
+        "capped_task_seconds": 5.071106799994595
+      },
+      "assisted": {
+        "verified_repair": true,
+        "elapsed_seconds": 5.773771500003932,
+        "capped_task_seconds": 5.773771500003932
+      }
+    },
+    {
+      "id": "N03",
+      "ordinary": {
+        "verified_repair": false,
+        "elapsed_seconds": 75.84580809999898,
+        "capped_task_seconds": 180.0
+      },
+      "assisted": {
+        "verified_repair": false,
+        "elapsed_seconds": 77.2464603000044,
+        "capped_task_seconds": 180.0
+      }
+    },
+    {
+      "id": "N04",
+      "ordinary": {
+        "verified_repair": false,
+        "elapsed_seconds": 11.277858199995535,
+        "capped_task_seconds": 180.0
+      },
+      "assisted": {
+        "verified_repair": false,
+        "elapsed_seconds": 12.315930800003116,
+        "capped_task_seconds": 180.0
+      }
+    },
+    {
+      "id": "N05",
+      "ordinary": {
+        "verified_repair": false,
+        "elapsed_seconds": 16.96395029999985,
+        "capped_task_seconds": 180.0
+      },
+      "assisted": {
+        "verified_repair": false,
+        "elapsed_seconds": 17.15862680000282,
+        "capped_task_seconds": 180.0
+      }
+    },
+    {
+      "id": "N06",
+      "ordinary": {
+        "verified_repair": false,
+        "elapsed_seconds": 17.839962800004287,
+        "capped_task_seconds": 180.0
+      },
+      "assisted": {
+        "verified_repair": false,
+        "elapsed_seconds": 12.409565699999803,
+        "capped_task_seconds": 180.0
+      }
+    },
+    {
+      "id": "N07",
+      "ordinary": {
+        "verified_repair": false,
+        "elapsed_seconds": 11.788365600004909,
+        "capped_task_seconds": 180.0
+      },
+      "assisted": {
+        "verified_repair": false,
+        "elapsed_seconds": 10.805120899996837,
+        "capped_task_seconds": 180.0
+      }
+    },
+    {
+      "id": "N08",
+      "ordinary": {
+        "verified_repair": false,
+        "elapsed_seconds": 18.225105000004987,
+        "capped_task_seconds": 180.0
+      },
+      "assisted": {
+        "verified_repair": false,
+        "elapsed_seconds": 19.80603360000532,
+        "capped_task_seconds": 180.0
+      }
+    }
+  ],
+  "localization": [
+    {
+      "id": "N01",
+      "flag_in_changed_hunk": false,
+      "any_file_flag": true
+    },
+    {
+      "id": "N02",
+      "flag_in_changed_hunk": false,
+      "any_file_flag": true
+    },
+    {
+      "id": "N03",
+      "flag_in_changed_hunk": false,
+      "any_file_flag": false
+    },
+    {
+      "id": "N04",
+      "flag_in_changed_hunk": false,
+      "any_file_flag": false
+    },
+    {
+      "id": "N05",
+      "flag_in_changed_hunk": false,
+      "any_file_flag": false
+    },
+    {
+      "id": "N06",
+      "flag_in_changed_hunk": false,
+      "any_file_flag": false
+    },
+    {
+      "id": "N07",
+      "flag_in_changed_hunk": false,
+      "any_file_flag": false
+    },
+    {
+      "id": "N08",
+      "flag_in_changed_hunk": false,
+      "any_file_flag": false
+    }
+  ],
+  "adjudication": {
+    "method": "Post-trial adjudication by the same primary evaluator, not independent or blinded. Categories apply to the first control response. Unparseable responses remain unusable even when their partial prose suggests a claim. Additional executable checks are diagnostic only and never retroactively inserted into the frozen timed protocol.",
+    "controls": [
+      {
+        "id": "N01",
+        "arm": "ordinary",
+        "category": "confirmed_false_runtime",
+        "reason": "The caller already observes the original rejected promise. The internal catch prevents an orphaned rejection. Original passes caller/queue checks; proposed rethrow creates an unhandled rejection.",
+        "evidence": "code_review_control_checks.mjs N01"
+      },
+      {
+        "id": "N01",
+        "arm": "assisted",
+        "category": "confirmed_false_runtime",
+        "reason": "AbortSignal.abort() is valid in the tested Node runtime and returns AbortError. Original queue clearing works; replacing it with Error changes the existing rejection contract.",
+        "evidence": "code_review_control_checks.mjs N01"
+      },
+      {
+        "id": "N02",
+        "arm": "ordinary",
+        "category": "confirmed_false_runtime",
+        "reason": "Same internal-catch allegation as N01; caller-visible rejection and queue checks pass on original and fail after proposed change.",
+        "evidence": "code_review_control_checks.mjs N02"
+      },
+      {
+        "id": "N02",
+        "arm": "assisted",
+        "category": "confirmed_false_runtime",
+        "reason": "Same invalid-AbortSignal allegation as N01; the claimed TypeError does not occur and proposal changes AbortError to Error.",
+        "evidence": "code_review_control_checks.mjs N02"
+      },
+      {
+        "id": "N03",
+        "arm": "ordinary",
+        "category": "unresolved_contract_claim",
+        "reason": "Claim concerns the documented meaning of retryDelay after exhaustion, not the historical fractional-count defect. The patch does not match source. No independent contract adjudication is claimed.",
+        "evidence": "N03-fixed-ordinary/1-response.json"
+      },
+      {
+        "id": "N03",
+        "arm": "assisted",
+        "category": "unusable_response",
+        "reason": "Token-limit truncation while repeating escaped tabs in an edit string; no complete JSON proposal.",
+        "evidence": "N03-fixed-assisted/1-response.json"
+      },
+      {
+        "id": "N04",
+        "arm": "ordinary",
+        "category": "unusable_response",
+        "reason": "Token-limit truncation; no complete JSON proposal. The partial claim is not counted as an accepted finding.",
+        "evidence": "N04-fixed-ordinary/1-response.json"
+      },
+      {
+        "id": "N04",
+        "arm": "assisted",
+        "category": "confirmed_false_runtime",
+        "reason": "Non-consuming retries are an explicit existing policy. A bounded sequence of failures followed by success works on original; the proposed immediate throw breaks it.",
+        "evidence": "code_review_control_checks.mjs N04"
+      },
+      {
+        "id": "N05",
+        "arm": "ordinary",
+        "category": "style_only",
+        "reason": "Unused catch binding is a real lint diagnostic, not a demonstrated runtime defect. Removing the unused binding does not repair the hidden target.",
+        "evidence": "N05-fixed-ordinary/1-response.json and lint.json"
+      },
+      {
+        "id": "N05",
+        "arm": "assisted",
+        "category": "style_only",
+        "reason": "Rephrases the unused catch-binding lint message. No runtime defect is identified; exact proposed replacement does not match.",
+        "evidence": "N05-fixed-assisted/1-response.json and lint.json"
+      },
+      {
+        "id": "N06",
+        "arm": "ordinary",
+        "category": "style_only",
+        "reason": "Renames an unused catch binding to another unused binding, with only a hypothetical future-use concern.",
+        "evidence": "N06-fixed-ordinary/1-response.json and lint.json"
+      },
+      {
+        "id": "N06",
+        "arm": "assisted",
+        "category": "style_only",
+        "reason": "Renames an unused catch binding; no current runtime defect is identified and exact replacement does not match.",
+        "evidence": "N06-fixed-assisted/1-response.json and lint.json"
+      },
+      {
+        "id": "N07",
+        "arm": "ordinary",
+        "category": "confirmed_false_runtime",
+        "reason": "The built handler prototype chain terminates and a throwing custom handler produces a normal 500. Proposed handler-chain change causes timeout in protected validation.",
+        "evidence": "code_review_control_checks.mjs N07 and timed result"
+      },
+      {
+        "id": "N07",
+        "arm": "assisted",
+        "category": "confirmed_false_runtime",
+        "reason": "Factory uses Object.create and JS rejects a cyclic prototype assignment. Original throwing handler works; proposed null sentinel restarts error handling and times out in protected validation.",
+        "evidence": "code_review_control_checks.mjs N07 and timed result"
+      },
+      {
+        "id": "N08",
+        "arm": "ordinary",
+        "category": "confirmed_false_runtime",
+        "reason": "Regex parser keys are stored as strings. Original registration, lookup and cached lookup work; replacing the string lookup with a RegExp object breaks matching requests.",
+        "evidence": "code_review_control_checks.mjs N08"
+      },
+      {
+        "id": "N08",
+        "arm": "assisted",
+        "category": "confirmed_false_runtime",
+        "reason": "Same false regex-key allegation as ordinary. Original passes actual requests and proposed change fails them.",
+        "evidence": "code_review_control_checks.mjs N08"
+      }
+    ],
+    "protected_success_audit": [
+      {
+        "id": "N02",
+        "arm": "ordinary",
+        "accepted": false,
+        "reason": "Repairs detached map but retains an unrelated rethrow that creates an unhandled rejection on ordinary failed calls."
+      },
+      {
+        "id": "N02",
+        "arm": "assisted",
+        "accepted": false,
+        "reason": "Repairs detached map but also changes clearQueue rejection from AbortError to Error on a false API-validity premise."
+      }
+    ],
+    "specialist_control_alerts": [
+      {
+        "id": "N01",
+        "region": "index.js:1-80",
+        "category": "unsupported_window_warning",
+        "reason": "Identical warning before/after; misses the historical map defect at line 108. Caller rejection/queue checks establish that the internal error handling criticized by the ordinary model is correct. The classifier provides no exact allegation; do not label an entire window defect-free."
+      },
+      {
+        "id": "N02",
+        "region": "index.js:1-80",
+        "category": "unsupported_window_warning",
+        "reason": "Same unchanged warning; detached-map target lies outside it. The fixed file also contains the later N01 defect, so whole-file clean labels would be invalid."
+      },
+      {
+        "id": "N06",
+        "region": "lib/core/Axios.js:69-148",
+        "category": "unresolved_window_warning",
+        "reason": "Warning appears only after the known stack-hook repair. No localized classifier explanation is available; broad-window truth is unresolved."
+      }
+    ]
+  }
+}

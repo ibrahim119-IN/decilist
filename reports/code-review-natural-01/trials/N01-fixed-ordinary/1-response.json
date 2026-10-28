@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"issue\": true, \"summary\": \"The `catch` block on line 44 is empty and silently swallows all promise rejections, which can mask errors and prevent proper error handling in the calling code.\", \"edits\": [{\"path\": \"index.js\", \"old\": \"\\t\\ttry {\\n\\t\\t\\tawait result;\\n\\t\\t} catch {}\\n\\n\\t\\t// Decrement active count and process next queued function\", \"new\": \"\\t\\ttry {\\n\\t\\t\\tawait result;\\n\\t\\t} catch (error) {\\n\\t\\t\\tnext();\\n\\t\\t\\tthrow error;\\n\\t\\t}\\n\\n\\t\\t// Decrement active count and process next queued function\"}]}"
+      }
+    }
+  ],
+  "created": 1793161054,
+  "model": "qwen3-coder-30b-a3b-q4km",
+  "system_fingerprint": "b11889-d854d98ba",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 151,
+    "prompt_tokens": 2168,
+    "total_tokens": 2319,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "id": "chatcmpl-iGDbAcYjtdpdC4AzIkWRDIIDLSQNpj2a",
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 2168,
+    "prompt_ms": 1399.868,
+    "prompt_per_token_ms": 0.6456955719557196,
+    "prompt_per_second": 1548.717450502476,
+    "predicted_n": 151,
+    "predicted_ms": 1182.138,
+    "predicted_per_token_ms": 7.88092,
+    "predicted_per_second": 126.88873887820203
+  }
+}

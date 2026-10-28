@@ -1,0 +1,141 @@
+[
+  {
+    "id": "N01",
+    "candidate": "original",
+    "passed": true,
+    "stdout": "{\"status\":\"passed\",\"facts\":[\"AbortSignal.abort() is valid and produces an aborted signal\",\"caller observes original rejection; internal catch prevents orphaned rejection; queue proceeds\",\"clearQueue rejects queued calls with AbortError\"]}\n",
+    "stderr": ""
+  },
+  {
+    "id": "N01",
+    "candidate": "ordinary",
+    "passed": false,
+    "stdout": "",
+    "stderr": "node:internal/modules/run_main:123\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   'caller-visible failure'\n+ ]\n- []\n\n    at file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_control_checks.mjs:23:12 {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: [ 'caller-visible failure' ],\n  expected: [],\n  operator: 'deepStrictEqual',\n  diff: 'simple'\n}\n\nNode.js v22.23.1\n"
+  },
+  {
+    "id": "N01",
+    "candidate": "assisted",
+    "passed": false,
+    "stdout": "",
+    "stderr": "node:internal/modules/run_main:123\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'Error'\n- 'AbortError'\n\n    at file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_control_checks.mjs:33:12 {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: 'Error',\n  expected: 'AbortError',\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v22.23.1\n"
+  },
+  {
+    "id": "N02",
+    "candidate": "original",
+    "passed": true,
+    "stdout": "{\"status\":\"passed\",\"facts\":[\"AbortSignal.abort() is valid and produces an aborted signal\",\"caller observes original rejection; internal catch prevents orphaned rejection; queue proceeds\",\"clearQueue rejects queued calls with AbortError\"]}\n",
+    "stderr": ""
+  },
+  {
+    "id": "N02",
+    "candidate": "ordinary",
+    "passed": false,
+    "stdout": "",
+    "stderr": "node:internal/modules/run_main:123\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   'caller-visible failure'\n+ ]\n- []\n\n    at file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_control_checks.mjs:23:12 {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: [ 'caller-visible failure' ],\n  expected: [],\n  operator: 'deepStrictEqual',\n  diff: 'simple'\n}\n\nNode.js v22.23.1\n"
+  },
+  {
+    "id": "N02",
+    "candidate": "assisted",
+    "passed": false,
+    "stdout": "",
+    "stderr": "node:internal/modules/run_main:123\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'Error'\n- 'AbortError'\n\n    at file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_control_checks.mjs:33:12 {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: 'Error',\n  expected: 'AbortError',\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v22.23.1\n"
+  },
+  {
+    "id": "N03",
+    "candidate": "original",
+    "passed": true,
+    "stdout": "{\"status\":\"passed\",\"facts\":[\"one consumed retry produces exactly two attempts with consistent counters\",\"non-consuming policy permits repeated failures followed by success\",\"zero remaining retries aborts even with non-consuming policy\"]}\n",
+    "stderr": ""
+  },
+  {
+    "id": "N03",
+    "candidate": "ordinary",
+    "passed": true,
+    "stdout": "{\"status\":\"passed\",\"facts\":[\"one consumed retry produces exactly two attempts with consistent counters\",\"non-consuming policy permits repeated failures followed by success\",\"zero remaining retries aborts even with non-consuming policy\"]}\n",
+    "stderr": ""
+  },
+  {
+    "id": "N03",
+    "candidate": "assisted",
+    "passed": true,
+    "stdout": "{\"status\":\"passed\",\"facts\":[\"one consumed retry produces exactly two attempts with consistent counters\",\"non-consuming policy permits repeated failures followed by success\",\"zero remaining retries aborts even with non-consuming policy\"]}\n",
+    "stderr": ""
+  },
+  {
+    "id": "N04",
+    "candidate": "original",
+    "passed": true,
+    "stdout": "{\"status\":\"passed\",\"facts\":[\"one consumed retry produces exactly two attempts with consistent counters\",\"non-consuming policy permits repeated failures followed by success\",\"zero remaining retries aborts even with non-consuming policy\"]}\n",
+    "stderr": ""
+  },
+  {
+    "id": "N04",
+    "candidate": "ordinary",
+    "passed": true,
+    "stdout": "{\"status\":\"passed\",\"facts\":[\"one consumed retry produces exactly two attempts with consistent counters\",\"non-consuming policy permits repeated failures followed by success\",\"zero remaining retries aborts even with non-consuming policy\"]}\n",
+    "stderr": ""
+  },
+  {
+    "id": "N04",
+    "candidate": "assisted",
+    "passed": false,
+    "stdout": "",
+    "stderr": "file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_control_checks.mjs:41\n  const failure=new Error('transient');\n                ^\n\nError: transient\n    at file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_control_checks.mjs:41:17\n\nNode.js v22.23.1\n"
+  },
+  {
+    "id": "N02",
+    "candidate": "broken-repair-ordinary",
+    "passed": false,
+    "stdout": "",
+    "stderr": "node:internal/modules/run_main:123\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   'caller-visible failure'\n+ ]\n- []\n\n    at file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_control_checks.mjs:23:12 {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: [ 'caller-visible failure' ],\n  expected: [],\n  operator: 'deepStrictEqual',\n  diff: 'simple'\n}\n\nNode.js v22.23.1\n"
+  },
+  {
+    "id": "N02",
+    "candidate": "broken-repair-assisted",
+    "passed": false,
+    "stdout": "",
+    "stderr": "node:internal/modules/run_main:123\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'Error'\n- 'AbortError'\n\n    at file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_control_checks.mjs:33:12 {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: 'Error',\n  expected: 'AbortError',\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v22.23.1\n"
+  },
+  {
+    "id": "N07",
+    "candidate": "original",
+    "passed": true,
+    "stdout": "{\"status\":\"passed\",\"facts\":[\"built error handler chain is finite; JS rejects a cyclic prototype assignment\",\"throwing custom error handler terminates in a normal 500 response\"]}\n",
+    "stderr": ""
+  },
+  {
+    "id": "N07",
+    "candidate": "ordinary",
+    "passed": false,
+    "stdout": "",
+    "stderr": "L:\\CodexData\\Decilist\\work\\code-review-natural-01\\N07\\trials\\N07-fixed-ordinary\\project\\lib\\reply.js:109\n    get () {\n        ^\n\nRangeError: Maximum call stack size exceeded\n    at Reply.get [as sent] (L:\\CodexData\\Decilist\\work\\code-review-natural-01\\N07\\trials\\N07-fixed-ordinary\\project\\lib\\reply.js:109:9)\n    at Reply.send (L:\\CodexData\\Decilist\\work\\code-review-natural-01\\N07\\trials\\N07-fixed-ordinary\\project\\lib\\reply.js:161:12)\n    at handleError (L:\\CodexData\\Decilist\\work\\code-review-natural-01\\N07\\trials\\N07-fixed-ordinary\\project\\lib\\error-handler.js:74:11)\n    at onErrorHook (L:\\CodexData\\Decilist\\work\\code-review-natural-01\\N07\\trials\\N07-fixed-ordinary\\project\\lib\\reply.js:971:5)\n    at Reply.send (L:\\CodexData\\Decilist\\work\\code-review-natural-01\\N07\\trials\\N07-fixed-ordinary\\project\\lib\\reply.js:168:5)\n    at handleError (L:\\CodexData\\Decilist\\work\\code-review-natural-01\\N07\\trials\\N07-fixed-ordinary\\project\\lib\\error-handler.js:74:11)\n    at onErrorHook (L:\\CodexData\\Decilist\\work\\code-review-natural-01\\N07\\trials\\N07-fixed-ordinary\\project\\lib\\reply.js:971:5)\n    at Reply.send (L:\\CodexData\\Decilist\\work\\code-review-natural-01\\N07\\trials\\N07-fixed-ordinary\\project\\lib\\reply.js:168:5)\n    at handleError (L:\\CodexData\\Decilist\\work\\code-review-natural-01\\N07\\trials\\N07-fixed-ordinary\\project\\lib\\error-handler.js:74:11)\n    at onErrorHook (L:\\CodexData\\Decilist\\work\\code-review-natural-01\\N07\\trials\\N07-fixed-ordinary\\project\\lib\\reply.js:971:5)\n\nNode.js v22.23.1\n"
+  },
+  {
+    "id": "N07",
+    "candidate": "assisted",
+    "passed": false,
+    "timeout": true
+  },
+  {
+    "id": "N08",
+    "candidate": "original",
+    "passed": true,
+    "stdout": "{\"status\":\"passed\",\"facts\":[\"regex parser registration, string-key lookup and cached lookup all work\"]}\n",
+    "stderr": ""
+  },
+  {
+    "id": "N08",
+    "candidate": "ordinary",
+    "passed": false,
+    "stdout": "",
+    "stderr": "node:internal/modules/run_main:123\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n415 !== 200\n\n    at file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_control_checks.mjs:81:14\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: 415,\n  expected: 200,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v22.23.1\n"
+  },
+  {
+    "id": "N08",
+    "candidate": "assisted",
+    "passed": false,
+    "stdout": "",
+    "stderr": "node:internal/modules/run_main:123\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n415 !== 200\n\n    at file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_control_checks.mjs:81:14\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: 415,\n  expected: 200,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v22.23.1\n"
+  }
+]

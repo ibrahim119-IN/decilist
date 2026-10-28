@@ -6,3 +6,5 @@ reports/liquid-smoke-2026-10-25.json -text
 reports/provenance/triage-v5-development01-*.py.txt -text
 # This corpus test file is byte-pinned by the pre-evaluation fixture freeze.
 tests/test_triage_v5_lab.py -text
+# Preserve captured model responses and measured evidence hashes byte-for-byte.
+reports/code-review-natural-01/** -text

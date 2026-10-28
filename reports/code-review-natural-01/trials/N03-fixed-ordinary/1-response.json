@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"issue\": true, \"summary\": \"The `shouldConsumeRetry` option is called with a context that has `retryDelay` set to 0 when retries are exhausted, but it should be set to the actual delay that would have been used if retries were not exhausted.\", \"edits\": [{\"path\": \"index.js\", \"old\": \"const consumeRetryContext = Object.freeze({\\n\\terror: normalizedError,\\n\\tattemptNumber,\\n\\tretriesLeft,\\n\\tretriesConsumed,\\n\\tretryDelay: retriesLeft > 0 ? delayTime : 0,\\n});\", \"new\": \"const consumeRetryContext = Object.freeze({\\n\\terror: normalizedError,\\n\\tattemptNumber,\\n\\tretriesLeft,\\n\\tretriesConsumed,\\n\\tretryDelay: delayTime,\\n});\"}]}"
+      }
+    }
+  ],
+  "created": 1793161253,
+  "model": "qwen3-coder-30b-a3b-q4km",
+  "system_fingerprint": "b11889-d854d98ba",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 177,
+    "prompt_tokens": 3691,
+    "total_tokens": 3868,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "id": "chatcmpl-NymB2ZyDyf8EapVBx41Gc5wWOOOwrTF8",
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 3691,
+    "prompt_ms": 2534.077,
+    "prompt_per_token_ms": 0.6865556759685723,
+    "prompt_per_second": 1456.5461112665478,
+    "predicted_n": 177,
+    "predicted_ms": 1159.66,
+    "predicted_per_token_ms": 6.5889772727272735,
+    "predicted_per_second": 151.76862183743512
+  }
+}

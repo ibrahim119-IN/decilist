@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"issue\": true, \"summary\": \"In the `rawBody` function, when a custom parser throws an error, the error handling path does not properly preserve the original error's status code, causing incorrect HTTP response codes for client errors.\", \"edits\": [{\"path\": \"lib/content-type-parser.js\", \"old\": \"    if (err != null) {\\n      if (!(typeof err.statusCode === 'number' && err.statusCode >= 400)) {\\n        err.statusCode = 400\\n      }\\n      done(err, undefined)\\n      return\\n    }\", \"new\": \"    if (err != null) {\\n      if (!(typeof err.statusCode === 'number' && err.statusCode >= 400)) {\\n        err.statusCode = 400\\n      }\\n      done(err, undefined)\\n      return\\n    }\"}]}"
+      }
+    }
+  ],
+  "created": 1793161459,
+  "model": "qwen3-coder-30b-a3b-q4km",
+  "system_fingerprint": "b11889-d854d98ba",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 183,
+    "prompt_tokens": 6648,
+    "total_tokens": 6831,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "id": "chatcmpl-JDFwuEAxDo3vKdomE4zQQqIEKAZJZkX3",
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 6648,
+    "prompt_ms": 4475.42,
+    "prompt_per_token_ms": 0.6731979542719615,
+    "prompt_per_second": 1485.4471759075125,
+    "predicted_n": 183,
+    "predicted_ms": 1274.735,
+    "predicted_per_token_ms": 7.004038461538461,
+    "predicted_per_second": 142.77477279591446
+  }
+}

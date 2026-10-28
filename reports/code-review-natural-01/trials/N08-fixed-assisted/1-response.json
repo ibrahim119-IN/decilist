@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"issue\": true, \"summary\": \"In the `getParser` method, when a RegExp parser is matched, the code retrieves the parser using `parserRegExp.toString()` as the key, but the parser was stored with the actual RegExp object as the key in `customParsers`. This causes the lookup to fail and return undefined, leading to incorrect parser selection.\", \"edits\": [{\"path\": \"lib/content-type-parser.js\", \"old\": \"    if (parserRegExp.test(ct)) {\\n      parser = this.customParsers.get(parserRegExp.toString())\\n      this.cache.set(ct, parser)\\n      return parser\\n    }\", \"new\": \"    if (parserRegExp.test(ct)) {\\n      parser = this.customParsers.get(parserRegExp)\\n      this.cache.set(ct, parser)\\n      return parser\\n    }\"}]}"
+      }
+    }
+  ],
+  "created": 1793161496,
+  "model": "qwen3-coder-30b-a3b-q4km",
+  "system_fingerprint": "b11889-d854d98ba",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 176,
+    "prompt_tokens": 6490,
+    "total_tokens": 6666,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "id": "chatcmpl-9It7HdjHu047mkqqsbqcUUUTxsWWJGGF",
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 6490,
+    "prompt_ms": 4581.081,
+    "prompt_per_token_ms": 0.7058676425269645,
+    "prompt_per_second": 1416.6961902660091,
+    "predicted_n": 176,
+    "predicted_ms": 1284.105,
+    "predicted_per_token_ms": 7.337742857142858,
+    "predicted_per_second": 136.28169036021197
+  }
+}

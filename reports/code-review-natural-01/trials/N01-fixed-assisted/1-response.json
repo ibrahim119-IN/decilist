@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"issue\": true, \"summary\": \"The `clearQueue` method attempts to create an AbortSignal with `AbortSignal.abort()` which is invalid syntax and throws a TypeError at runtime.\", \"edits\": [{\"path\": \"index.js\", \"old\": \"\\t\\t\\t\\tconst abortError = AbortSignal.abort().reason;\", \"new\": \"\\t\\t\\t\\tconst abortError = new Error('Queue cleared');\"}]}"
+      }
+    }
+  ],
+  "created": 1793161051,
+  "model": "qwen3-coder-30b-a3b-q4km",
+  "system_fingerprint": "b11889-d854d98ba",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 88,
+    "prompt_tokens": 2616,
+    "total_tokens": 2704,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "id": "chatcmpl-qsjZyvF8y2X5UL7Yt4VXcLHQpxavjQHZ",
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 2616,
+    "prompt_ms": 1715.257,
+    "prompt_per_token_ms": 0.6556792813455657,
+    "prompt_per_second": 1525.1358834273815,
+    "predicted_n": 88,
+    "predicted_ms": 804.871,
+    "predicted_per_token_ms": 9.251390804597701,
+    "predicted_per_second": 108.09185571352428
+  }
+}

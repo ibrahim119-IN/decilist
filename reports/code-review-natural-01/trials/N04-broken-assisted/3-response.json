@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"issue\": true, \"summary\": \"The `onAttemptFailure` function does not properly handle the case where `options.shouldConsumeRetry` returns false for a non-network TypeError, causing the retry logic to incorrectly proceed when it should abort.\", \"edits\": [{\"path\": \"index.js\", \"old\": \"\\tif (normalizedError instanceof TypeError && !isNetworkError(normalizedError)) {\\n\\t\\tif (consumeRetry) {\\n\\t\\t\\tthrow normalizedError;\\n\\t\\t}\\n\\n\\toptions.signal?.throwIfAborted();\\n\\t\\treturn false;\\n\\t}\", \"new\": \"\\tif (normalizedError instanceof TypeError && !isNetworkError(normalizedError)) {\\n\\t\\tif (consumeRetry) {\\n\\t\\t\\tthrow normalizedError;\\n\\t\\t}\\n\\n\\t\\toptions.signal?.throwIfAborted();\\n\\t\\treturn false;\\n\\t}\"}]}"
+      }
+    }
+  ],
+  "created": 1793161265,
+  "model": "qwen3-coder-30b-a3b-q4km",
+  "system_fingerprint": "b11889-d854d98ba",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 191,
+    "prompt_tokens": 4030,
+    "total_tokens": 4221,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "id": "chatcmpl-m8EnB9SFwwRXlT9gDFsv1TKhPDTMqV9N",
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 4030,
+    "prompt_ms": 2542.137,
+    "prompt_per_token_ms": 0.6308032258064517,
+    "prompt_per_second": 1585.2804156502973,
+    "predicted_n": 191,
+    "predicted_ms": 1221.987,
+    "predicted_per_token_ms": 6.4315105263157895,
+    "predicted_per_second": 155.48446914738045
+  }
+}

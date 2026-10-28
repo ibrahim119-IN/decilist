@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"issue\": true, \"summary\": \"The `map` function in pLimit can leave orphaned promise rejections when the iterable contains rejected promises, because the `enqueue` function doesn't properly handle rejections from the mapped functions before they are queued.\", \"edits\": [{\"path\": \"index.js\", \"old\": \"return Promise.all(promises);\", \"new\": \"return Promise.all(promises).catch(error => {\\n\\t\\t// If any promise in the map fails, we need to ensure that\\n\\t\\t// the queue is cleared to prevent orphaned rejections.\\n\\t\\tif (rejectOnClear) {\\n\\t\\t\\tgenerator.clearQueue();\\n\\t\\t}\\n\\t\\tthrow error;\\n\\t});\"}]}"
+      }
+    }
+  ],
+  "created": 1793161044,
+  "model": "qwen3-coder-30b-a3b-q4km",
+  "system_fingerprint": "b11889-d854d98ba",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 155,
+    "prompt_tokens": 2590,
+    "total_tokens": 2745,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "id": "chatcmpl-xWAzMa7mYmDroFJ9irjXlRVksOzVpMHH",
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 2590,
+    "prompt_ms": 1713.232,
+    "prompt_per_token_ms": 0.6614795366795366,
+    "prompt_per_second": 1511.7625633889631,
+    "predicted_n": 155,
+    "predicted_ms": 1186.34,
+    "predicted_per_token_ms": 7.703506493506493,
+    "predicted_per_second": 129.81101539187756
+  }
+}

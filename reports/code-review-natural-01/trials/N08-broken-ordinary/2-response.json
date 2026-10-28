@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"issue\": true, \"summary\": \"The rawBody function does not properly handle the case where a parser throws an error during body processing, leading to unhandled exceptions and potential crashes.\", \"edits\": [{\"path\": \"lib/content-type-parser.js\", \"old\": \"    const result = parser.fn(request, body, done)\\n    if (result && typeof result.then === 'function') {\\n      result.then(body => { done(null, body) }, done)\\n    }\", \"new\": \"    try {\\n      const result = parser.fn(request, body, done)\\n      if (result && typeof result.then === 'function') {\\n        result.then(body => { done(null, body) }, done)\\n      }\\n    } catch (err) {\\n      done(err, undefined)\\n    }\"}]}"
+      }
+    }
+  ],
+  "created": 1793161477,
+  "model": "qwen3-coder-30b-a3b-q4km",
+  "system_fingerprint": "b11889-d854d98ba",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 174,
+    "prompt_tokens": 5731,
+    "total_tokens": 5905,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "id": "chatcmpl-e9IyjfFV99tiFw1LXERiZlE5PNYRy79J",
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 5731,
+    "prompt_ms": 4293.576,
+    "prompt_per_token_ms": 0.7491844355260862,
+    "prompt_per_second": 1334.784804088713,
+    "predicted_n": 174,
+    "predicted_ms": 1584.307,
+    "predicted_per_token_ms": 9.157843930635838,
+    "predicted_per_second": 109.19600809691555
+  }
+}

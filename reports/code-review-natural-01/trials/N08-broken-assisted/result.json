@@ -1,0 +1,228 @@
+{
+  "id": "N08",
+  "variant": "broken",
+  "arm": "assisted",
+  "utc": "2026-10-28T04:24:05.754148+00:00",
+  "attempts": [
+    {
+      "attempt": 1,
+      "model_seconds": 6.6117620000004536,
+      "finish_reason": "stop",
+      "proposal": {
+        "issue": true,
+        "summary": "In the `getParser` method, when a RegExp parser is matched, the code retrieves the parser using `parserRegExp.toString()` as the key, but the parser was stored with the actual RegExp object as the key in `customParsers`. This causes the lookup to fail and return undefined instead of the intended parser.",
+        "edits": [
+          {
+            "path": "lib/content-type-parser.js",
+            "old": "    if (parserRegExp.test(ct)) {\n      parser = this.customParsers.get(parserRegExp.toString())\n      this.cache.set(ct, parser)\n      return parser\n    }",
+            "new": "    if (parserRegExp.test(ct)) {\n      parser = this.customParsers.get(parserRegExp)\n      this.cache.set(ct, parser)\n      return parser\n    }"
+          }
+        ]
+      },
+      "verification": {
+        "passed": false,
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:114\n        app.addContentTypeParser(\"application/custom\",{parseAs:\"string\"},()=>{throw new Error(\"parser boom\");});\n                                                                              ^\n\nError: parser boom\n    at Parser.fn (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:114:85)\n    at Request.onEnd (L:\\CodexData\\Decilist\\work\\code-review-natural-01\\N08\\trials\\N08-broken-assisted\\project\\lib\\content-type-parser.js:320:27)\n    at Request.emit (node:events:519:28)\n    at endReadableNT (node:internal/streams/readable:1698:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:89:21)\n\nNode.js v22.23.1\n",
+        "seconds": 0.16832110000541434
+      }
+    },
+    {
+      "attempt": 2,
+      "model_seconds": 5.85459890000493,
+      "finish_reason": "stop",
+      "invalid_proposal": "old substring must match exactly once and change source"
+    },
+    {
+      "attempt": 3,
+      "model_seconds": 5.874615599997924,
+      "finish_reason": "stop",
+      "proposal": {
+        "issue": true,
+        "summary": "In the `rawBody` function, when a parser registered with a `g`/`y` flagged RegExp is used, the `parserRegExp.lastIndex` is reset before testing but not after, causing subsequent calls to incorrectly skip parts of content types.",
+        "edits": [
+          {
+            "path": "lib/content-type-parser.js",
+            "old": "    parserRegExp.lastIndex = 0\n    if (parserRegExp.test(ct)) {\n      parser = this.customParsers.get(parserRegExp)\n      this.cache.set(ct, parser)\n      return parser\n    }",
+            "new": "    parserRegExp.lastIndex = 0\n    if (parserRegExp.test(ct)) {\n      parser = this.customParsers.get(parserRegExp)\n      this.cache.set(ct, parser)\n      return parser\n    }\n    parserRegExp.lastIndex = 0"
+          }
+        ]
+      },
+      "verification": {
+        "passed": false,
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:114\n        app.addContentTypeParser(\"application/custom\",{parseAs:\"string\"},()=>{throw new Error(\"parser boom\");});\n                                                                              ^\n\nError: parser boom\n    at Parser.fn (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:114:85)\n    at Request.onEnd (L:\\CodexData\\Decilist\\work\\code-review-natural-01\\N08\\trials\\N08-broken-assisted\\project\\lib\\content-type-parser.js:321:27)\n    at Request.emit (node:events:519:28)\n    at endReadableNT (node:internal/streams/readable:1698:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:89:21)\n\nNode.js v22.23.1\n",
+        "seconds": 0.17214859999512555
+      }
+    }
+  ],
+  "verified_repair": false,
+  "hints": [
+    {
+      "path": "lib/content-type-parser.js",
+      "result": {
+        "schema_version": "code-review.1",
+        "status": "no_flags",
+        "advisory": true,
+        "model": "yannelli/d1-3b-code-review-decisions",
+        "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+        "rules": [
+          "error_handling_problem",
+          "type_safety_hole",
+          "unsafe_input"
+        ],
+        "threshold": 0.9,
+        "total_lines": 434,
+        "reviewed_lines": 434,
+        "windows": [
+          {
+            "start_line": 1,
+            "end_line": 80,
+            "probabilities": {
+              "error_handling_problem": 0.011687257995694434,
+              "type_safety_hole": 0.020332353342658753,
+              "unsafe_input": 0.02297736991002561
+            }
+          },
+          {
+            "start_line": 69,
+            "end_line": 148,
+            "probabilities": {
+              "error_handling_problem": 0.00263167397488458,
+              "type_safety_hole": 0.020332353342658753,
+              "unsafe_input": 0.37754066879814546
+            }
+          },
+          {
+            "start_line": 137,
+            "end_line": 216,
+            "probabilities": {
+              "error_handling_problem": 0.05665242530797383,
+              "type_safety_hole": 0.037326887344129464,
+              "unsafe_input": 0.03514484640079327
+            }
+          },
+          {
+            "start_line": 205,
+            "end_line": 284,
+            "probabilities": {
+              "error_handling_problem": 0.02595735719779685,
+              "type_safety_hole": 0.4378234991142019,
+              "unsafe_input": 0.23370635691404026
+            }
+          },
+          {
+            "start_line": 273,
+            "end_line": 352,
+            "probabilities": {
+              "error_handling_problem": 0.46879062662624377,
+              "type_safety_hole": 0.037326887344129464,
+              "unsafe_input": 0.06008665017400762
+            }
+          },
+          {
+            "start_line": 341,
+            "end_line": 420,
+            "probabilities": {
+              "error_handling_problem": 0.01590639171181471,
+              "type_safety_hole": 0.029312230751356316,
+              "unsafe_input": 0.11920292202211755
+            }
+          },
+          {
+            "start_line": 409,
+            "end_line": 434,
+            "probabilities": {
+              "error_handling_problem": 0.0446808702726502,
+              "type_safety_hole": 0.019124036750888904,
+              "unsafe_input": 0.029312230751356316
+            }
+          }
+        ],
+        "findings": [],
+        "latency_ms": 1086.3640999959898,
+        "error": null
+      },
+      "wall_seconds": 1.0890279000013834
+    }
+  ],
+  "issue": true,
+  "elapsed_seconds": 19.80603360000532,
+  "capped_task_seconds": 180.0,
+  "source_hashes_before": {
+    "eslint.config.js": "2e9dcbd115d19adb08872a187938249f04a7e145a1f3cfd5615fe14d2d693013",
+    "fastify.js": "5add794a377ebe58962363b1ca59ade93e404ba3b82ef37fc7434ddeb993af53",
+    "lib/config-validator.js": "ebb8a69d00399315492e67fe3588c65fca047ee784f931d13f7f5970b30285ed",
+    "lib/content-type-parser.js": "225fe5654bd7973e87166b02017cfdda625aec8dd7928f5f69cf720b21b29c32",
+    "lib/content-type.js": "9f1d4fe80f7430b843169ee4a8b2737f8c03271399016f310c2971bd8a236901",
+    "lib/context.js": "4423cb19341514978364a3496d8b9a4da370d7680fca7f0f07607a40e4a1d62a",
+    "lib/decorate.js": "8b33c5fb73b04c6c95483277c5aad87ede9257af040e273f9b0df6ea1b7ab339",
+    "lib/error-handler.js": "2de5817324cdf5888bd89314127959c83e36f8db87fe26f2830c6a4de316965d",
+    "lib/error-serializer.js": "086d2389e9d108f793c2102cfc2e639a1fe1fd200245602d31832328c92f8568",
+    "lib/error-status.js": "4e0ac99c6510ed858dd0c08114de273653dc3ad7d579ff087391f3987aaf28bf",
+    "lib/errors.js": "2ad05656e637f9e136df780138a4d34ee81bbbe563b5f778997c9d7b82d46e94",
+    "lib/four-oh-four.js": "65877583e3ade09a818a762ff76d829ca431450f7d46bdbd692f56b341add44f",
+    "lib/handle-request.js": "14f3c8b213ab287131f54b03710a5c4afaad59a267b1580f9f694667cfc952dc",
+    "lib/head-route.js": "442e4f45ee8bbd57325f0daa4a968cfe9bbd4d1ed087b43b615eaabcc2efb23b",
+    "lib/hooks.js": "02b428780d90101e5329e693121ebaf8bfe4a88f506ed1ae0d63687a774d5d67",
+    "lib/initial-config-validation.js": "14426e4b89d806cf924fd412ea267b27801d1bb61c6ac9ebdc94be5866f1c82f",
+    "lib/log-controller.js": "b8a7659984a16a8a3cc6ec72be4be8085d2018ed7de85abfc2ffbff509c6adb8",
+    "lib/logger-factory.js": "43a7fa4ae7590921f3a8ef8b25fe0465cf0a7dd4ac253b935873f3ff76240c6c",
+    "lib/logger-pino.js": "51ecedc135fa6a9cd44e66c1edb032f41b633e83f146f502e483d31b77e3e881",
+    "lib/noop-set.js": "d55aa7e5cb106bdf2a2eeb9bc6d38361481e284aa499e0a1dab191656e3a4c67",
+    "lib/plugin-override.js": "1718ff0f184e29bf57a15494c84406943f4e8dd35800447514b129910b7deb21",
+    "lib/plugin-utils.js": "ce48d076b27d298042e5050a473165fd82225e0f0a1132765df10439c49cf516",
+    "lib/reply.js": "1090e81f35f34d2cd885e8fb248693ebcb0ab4c1b565d4373b53a2d2264e1f03",
+    "lib/req-id-gen-factory.js": "87d0a1ed81f313ba12d57c90efbfbac721651f2b0852405e5d1e9cf53c59b373",
+    "lib/request.js": "0cb858105fda2eef2358d3209fb4f4a0190217756e662765ab60eb73eed33dce",
+    "lib/route.js": "cde91dcdc6709d7b8b1c0204ac28ba5819fe54c4fbff4793199cff731b41cf8a",
+    "lib/schema-controller.js": "3be70596efc88bf028022cf9d4a77dfef31c2970f608a21d346a6a438c576559",
+    "lib/schemas.js": "6e47ddae7fd37e8b443ebe18732669c5ade3ee523d3ed07dc7e4ff42ff876509",
+    "lib/server.js": "c43b6db5ae74e51a24996a0819f93985620e67d1155a58936c34e642d9a4ce3a",
+    "lib/symbols.js": "bddfadc6be13b7c28869ac052d499b0f400c6dacddc667500e3097cd7e6a4a6c",
+    "lib/validation.js": "c694443b5bd2dd0045272d20e133fa0b923398b6b4667639d6ecc5647011de2d",
+    "lib/warnings.js": "b0437ff744c5bfb820b9902d4763c28f2a988032f960fd1864aaa5a5a4da89cd",
+    "lib/wrap-thenable.js": "23e41424f4a19f947c0fe58cb21ee3fa97d15917d7d6dc668f375d71d8bf786b",
+    "LICENSE": "23c91863859171455a536380991b4160fee4e19e2d8dc353ecf7143cc4e53ca2",
+    "package.json": "cb34c719fdbca3ee9d9e191202d9e9a038224f79e747ff77c6ea1b6b9e92901f"
+  },
+  "source_hashes_after": {
+    "eslint.config.js": "2e9dcbd115d19adb08872a187938249f04a7e145a1f3cfd5615fe14d2d693013",
+    "fastify.js": "5add794a377ebe58962363b1ca59ade93e404ba3b82ef37fc7434ddeb993af53",
+    "lib/config-validator.js": "ebb8a69d00399315492e67fe3588c65fca047ee784f931d13f7f5970b30285ed",
+    "lib/content-type-parser.js": "085ea8ff7f50098b789ef2f246353939e3fe33e16933958d78b7740b9fe6ca95",
+    "lib/content-type.js": "9f1d4fe80f7430b843169ee4a8b2737f8c03271399016f310c2971bd8a236901",
+    "lib/context.js": "4423cb19341514978364a3496d8b9a4da370d7680fca7f0f07607a40e4a1d62a",
+    "lib/decorate.js": "8b33c5fb73b04c6c95483277c5aad87ede9257af040e273f9b0df6ea1b7ab339",
+    "lib/error-handler.js": "2de5817324cdf5888bd89314127959c83e36f8db87fe26f2830c6a4de316965d",
+    "lib/error-serializer.js": "086d2389e9d108f793c2102cfc2e639a1fe1fd200245602d31832328c92f8568",
+    "lib/error-status.js": "4e0ac99c6510ed858dd0c08114de273653dc3ad7d579ff087391f3987aaf28bf",
+    "lib/errors.js": "2ad05656e637f9e136df780138a4d34ee81bbbe563b5f778997c9d7b82d46e94",
+    "lib/four-oh-four.js": "65877583e3ade09a818a762ff76d829ca431450f7d46bdbd692f56b341add44f",
+    "lib/handle-request.js": "14f3c8b213ab287131f54b03710a5c4afaad59a267b1580f9f694667cfc952dc",
+    "lib/head-route.js": "442e4f45ee8bbd57325f0daa4a968cfe9bbd4d1ed087b43b615eaabcc2efb23b",
+    "lib/hooks.js": "02b428780d90101e5329e693121ebaf8bfe4a88f506ed1ae0d63687a774d5d67",
+    "lib/initial-config-validation.js": "14426e4b89d806cf924fd412ea267b27801d1bb61c6ac9ebdc94be5866f1c82f",
+    "lib/log-controller.js": "b8a7659984a16a8a3cc6ec72be4be8085d2018ed7de85abfc2ffbff509c6adb8",
+    "lib/logger-factory.js": "43a7fa4ae7590921f3a8ef8b25fe0465cf0a7dd4ac253b935873f3ff76240c6c",
+    "lib/logger-pino.js": "51ecedc135fa6a9cd44e66c1edb032f41b633e83f146f502e483d31b77e3e881",
+    "lib/noop-set.js": "d55aa7e5cb106bdf2a2eeb9bc6d38361481e284aa499e0a1dab191656e3a4c67",
+    "lib/plugin-override.js": "1718ff0f184e29bf57a15494c84406943f4e8dd35800447514b129910b7deb21",
+    "lib/plugin-utils.js": "ce48d076b27d298042e5050a473165fd82225e0f0a1132765df10439c49cf516",
+    "lib/reply.js": "1090e81f35f34d2cd885e8fb248693ebcb0ab4c1b565d4373b53a2d2264e1f03",
+    "lib/req-id-gen-factory.js": "87d0a1ed81f313ba12d57c90efbfbac721651f2b0852405e5d1e9cf53c59b373",
+    "lib/request.js": "0cb858105fda2eef2358d3209fb4f4a0190217756e662765ab60eb73eed33dce",
+    "lib/route.js": "cde91dcdc6709d7b8b1c0204ac28ba5819fe54c4fbff4793199cff731b41cf8a",
+    "lib/schema-controller.js": "3be70596efc88bf028022cf9d4a77dfef31c2970f608a21d346a6a438c576559",
+    "lib/schemas.js": "6e47ddae7fd37e8b443ebe18732669c5ade3ee523d3ed07dc7e4ff42ff876509",
+    "lib/server.js": "c43b6db5ae74e51a24996a0819f93985620e67d1155a58936c34e642d9a4ce3a",
+    "lib/symbols.js": "bddfadc6be13b7c28869ac052d499b0f400c6dacddc667500e3097cd7e6a4a6c",
+    "lib/validation.js": "c694443b5bd2dd0045272d20e133fa0b923398b6b4667639d6ecc5647011de2d",
+    "lib/warnings.js": "b0437ff744c5bfb820b9902d4763c28f2a988032f960fd1864aaa5a5a4da89cd",
+    "lib/wrap-thenable.js": "23e41424f4a19f947c0fe58cb21ee3fa97d15917d7d6dc668f375d71d8bf786b",
+    "LICENSE": "23c91863859171455a536380991b4160fee4e19e2d8dc353ecf7143cc4e53ca2",
+    "package.json": "cb34c719fdbca3ee9d9e191202d9e9a038224f79e747ff77c6ea1b6b9e92901f"
+  },
+  "diff": "--- lib/content-type-parser.js\n+++ lib/content-type-parser.js\n@@ -151,10 +151,11 @@\n     // next content type and match inconsistently. Reset it before testing.\n     parserRegExp.lastIndex = 0\n     if (parserRegExp.test(ct)) {\n-      parser = this.customParsers.get(parserRegExp.toString())\n+      parser = this.customParsers.get(parserRegExp)\n       this.cache.set(ct, parser)\n       return parser\n     }\n+    parserRegExp.lastIndex = 0\n   }\n \n   return this.customParsers.get('')\n"
+}

@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"issue\": true, \"summary\": \"In handleError function, when an error handler throws, the code incorrectly sets reply[kReplyNextErrorHandler] to Object.getPrototypeOf(errorHandler) which can lead to infinite recursion or incorrect error handling flow. The assignment should preserve the original error handler chain.\", \"edits\": [{\"path\": \"lib/error-handler.js\", \"old\": \"  // In case the error handler throws, we set the next errorHandler so we can error again\\n  reply[kReplyNextErrorHandler] = Object.getPrototypeOf(errorHandler)\", \"new\": \"  // In case the error handler throws, we set the next errorHandler so we can error again\\n  reply[kReplyNextErrorHandler] = errorHandler\"}]}"
+      }
+    }
+  ],
+  "created": 1793161430,
+  "model": "qwen3-coder-30b-a3b-q4km",
+  "system_fingerprint": "b11889-d854d98ba",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 145,
+    "prompt_tokens": 2174,
+    "total_tokens": 2319,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "id": "chatcmpl-T7ELD0tknaDeUh2CmeGWXZsk0YiwlYVE",
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 2174,
+    "prompt_ms": 1639.595,
+    "prompt_per_token_ms": 0.7541835326586936,
+    "prompt_per_second": 1325.9371979055802,
+    "predicted_n": 145,
+    "predicted_ms": 938.428,
+    "predicted_per_token_ms": 6.516861111111111,
+    "predicted_per_second": 153.44810683398194
+  }
+}

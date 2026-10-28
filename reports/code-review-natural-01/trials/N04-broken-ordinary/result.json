@@ -1,0 +1,76 @@
+{
+  "id": "N04",
+  "variant": "broken",
+  "arm": "ordinary",
+  "utc": "2026-10-28T04:21:05.647747+00:00",
+  "attempts": [
+    {
+      "attempt": 1,
+      "model_seconds": 4.655709799997567,
+      "finish_reason": "stop",
+      "proposal": {
+        "issue": true,
+        "summary": "The `retriesConsumed` variable is incremented after a retry attempt fails and before the next attempt begins, but it's not reset when an attempt succeeds. This causes the retry count to be incorrectly tracked across multiple successful attempts in a row, potentially leading to early termination of retries when they should continue.",
+        "edits": [
+          {
+            "path": "index.js",
+            "old": "\t\ttry {\n\t\t\toptions.signal?.throwIfAborted();\n\n\t\t\tconst result = await input(attemptNumber);\n\n\t\t\toptions.signal?.throwIfAborted();\n\n\t\t\treturn result;\n\t\t} catch (error) {\n\t\t\tif (await onAttemptFailure({\n\t\t\t\terror,\n\t\t\t\tattemptNumber,\n\t\t\t\tretriesConsumed,\n\t\t\t\tstartTime,\n\t\t\t\toptions,\n\t\t\t})) {\n\t\t\t\tretriesConsumed++;\n\t\t\t}\n\t\t}",
+            "new": "\t\ttry {\n\t\t\toptions.signal?.throwIfAborted();\n\n\t\t\tconst result = await input(attemptNumber);\n\n\t\t\toptions.signal?.throwIfAborted();\n\n\t\t\treturn result;\n\t\t} catch (error) {\n\t\t\tif (await onAttemptFailure({\n\t\t\t\terror,\n\t\t\t\tattemptNumber,\n\t\t\t\tretriesConsumed,\n\t\t\t\tstartTime,\n\t\t\t\toptions,\n\t\t\t})) {\n\t\t\t\tretriesConsumed++;\n\t\t\t} else {\n\t\t\t\tretriesConsumed = 0;\n\t\t\t}\n\t\t}"
+          }
+        ]
+      },
+      "verification": {
+        "passed": false,
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "{\"status\":\"failed\",\"checks\":1,\"name\":\"AssertionError\",\"message\":\"Missing expected rejection.\",\"stack\":\"AssertionError [ERR_ASSERTION]: Missing expected rejection.\\n    at async file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:53:7\"}\n",
+        "seconds": 0.0469364999953541
+      }
+    },
+    {
+      "attempt": 2,
+      "model_seconds": 2.9932036000027438,
+      "finish_reason": "stop",
+      "proposal": {
+        "issue": true,
+        "summary": "The `retriesConsumed` variable is incorrectly reset to 0 when `onAttemptFailure` returns false, which can cause retry logic to behave incorrectly after a non-retriable error.",
+        "edits": [
+          {
+            "path": "index.js",
+            "old": "\t\t\t} else {\n\t\t\t\tretriesConsumed = 0;\n\t\t\t}",
+            "new": "\t\t\t} else {\n\t\t\t\t// Do not reset retriesConsumed when retry is not consumed\n\t\t\t}"
+          }
+        ]
+      },
+      "verification": {
+        "passed": false,
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "{\"status\":\"failed\",\"checks\":1,\"name\":\"AssertionError\",\"message\":\"Missing expected rejection.\",\"stack\":\"AssertionError [ERR_ASSERTION]: Missing expected rejection.\\n    at async file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:53:7\"}\n",
+        "seconds": 0.044725499996275175
+      }
+    },
+    {
+      "attempt": 3,
+      "model_seconds": 3.510964100001729,
+      "finish_reason": "stop",
+      "invalid_proposal": "old substring must match exactly once and change source"
+    }
+  ],
+  "verified_repair": false,
+  "hints": null,
+  "issue": true,
+  "elapsed_seconds": 11.277858199995535,
+  "capped_task_seconds": 180.0,
+  "source_hashes_before": {
+    "index.js": "9ff2dc6e322bb244b1084339ec6fb3390315e7ebc5c07f3fc19b0dcfb23a462f",
+    "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "package.json": "54c12e5c4faa9aedb3b194c409ba5a58f684c51a7247b30a67ba30dda94665b0"
+  },
+  "source_hashes_after": {
+    "index.js": "55533fa10810f4a7abc752c4677e38f7b42fe850f91d32d23bbca659bbad0878",
+    "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "package.json": "54c12e5c4faa9aedb3b194c409ba5a58f684c51a7247b30a67ba30dda94665b0"
+  },
+  "diff": "--- index.js\n+++ index.js\n@@ -232,6 +232,8 @@\n \t\t\t\toptions,\n \t\t\t})) {\n \t\t\t\tretriesConsumed++;\n+\t\t\t} else {\n+\t\t\t\t// Do not reset retriesConsumed when retry is not consumed\n \t\t\t}\n \t\t}\n \t}\n"
+}

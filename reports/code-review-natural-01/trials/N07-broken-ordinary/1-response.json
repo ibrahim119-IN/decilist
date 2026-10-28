@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"issue\": true, \"summary\": \"In `handleError`, when `errorHandler.func` throws, the code calls `reply.send(err)` which may trigger another error handler cycle, but the `nextErrorHandler` is set to the prototype of the current handler, potentially causing infinite recursion or incorrect error handling flow.\", \"edits\": [{\"path\": \"lib/error-handler.js\", \"old\": \"  // In case the error handler throws, we set the next errorHandler so we can error again\\n  reply[kReplyNextErrorHandler] = Object.getPrototypeOf(errorHandler)\\n\\n  // we need to remove content-type to allow content-type guessing for serialization\\n  delete reply[kReplyHeaders]['content-type']\\n  delete reply[kReplyHeaders]['content-length']\\n\\n  const func = errorHandler.func\\n\\n  if (!func) {\\n    reply[kReplyNextErrorHandler] = false\\n    fallbackErrorHandler(error, reply, cb)\\n    return\\n  }\\n\\n  try {\\n    const result = func(error, reply.request, reply)\\n    if (result !== undefined) {\\n      if (result !== null && typeof result.then === 'function') {\\n        const store = reply[kDiagnosticsStore] || null\\n        wrapThenable(result, reply, store)\\n      } else {\\n        reply.send(result)\\n      }\\n    }\\n  } catch (err) {\\n    reply.send(err)\\n  }\", \"new\": \"  // In case the error handler throws, we set the next errorHandler so we can error again\\n  reply[kReplyNextErrorHandler] = Object.getPrototypeOf(errorHandler)\\n\\n  // we need to remove content-type to allow content-type guessing for serialization\\n  delete reply[kReplyHeaders]['content-type']\\n  delete reply[kReplyHeaders]['content-length']\\n\\n  const func = errorHandler.func\\n\\n  if (!func) {\\n    reply[kReplyNextErrorHandler] = false\\n    fallbackErrorHandler(error, reply, cb)\\n    return\\n  }\\n\\n  try {\\n    const result = func(error, reply.request, reply)\\n    if (result !== undefined) {\\n      if (result !== null && typeof result.then === 'function') {\\n        const store = reply[kDiagnosticsStore] || null\\n        wrapThenable(result, reply, store)\\n      } else {\\n        reply.send(result)\\n      }\\n    }\\n  } catch (err) {\\n    // Prevent infinite recursion by setting nextErrorHandler to false\\n    reply[kReplyNextErrorHandler] = false\\n    reply.send(err)\\n  }\"}]}"
+      }
+    }
+  ],
+  "created": 1793161391,
+  "model": "qwen3-coder-30b-a3b-q4km",
+  "system_fingerprint": "b11889-d854d98ba",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 547,
+    "prompt_tokens": 2111,
+    "total_tokens": 2658,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "id": "chatcmpl-aspYN3VLiriSiJqcZpA7CoFECtrKQOPp",
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 2111,
+    "prompt_ms": 1613.527,
+    "prompt_per_token_ms": 0.76434249171009,
+    "prompt_per_second": 1308.3140226348862,
+    "predicted_n": 547,
+    "predicted_ms": 3927.253,
+    "predicted_per_token_ms": 7.1927710622710626,
+    "predicted_per_second": 139.0284761384102
+  }
+}

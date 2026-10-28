@@ -14,6 +14,8 @@ Current repair development adds observed producer retrieval and checked module-l
 
 The optional [local JS/TS reviewer](docs/code-review.md) integrates an existing specialist model with `sdk.review(existingSource, { task })`, Python, HTTP, and a terminal command. It returns advisory findings with explicit coverage and failure states. In an 18-snippet authored pilot it detected all nine target issues and flagged one valid snippet, versus three issues detected by the selected ESLint configuration. This is preliminary quality evidence, not a developer time-saving measurement. No new form or decision definition is required.
 
+The subsequent [eight-defect historical trial](docs/code-review-natural-results.md) on p-limit, p-retry, Axios and Fastify **failed the time-saving gate**. Ordinary and assisted local-model review each passed the initial protected checks on one defect, but both repairs introduced other behavioral regressions. No repair was accepted after the additional audit. Confirmed false runtime claims appeared on 4/8 corrected controls without assistance and 5/8 with it. This experiment does not support automatic fixes or a human productivity claim; the specialist remains optional and advisory.
+
 Calling a model is one step. A developer still needs to decide what counts as a valid answer, when to abstain, which fallback may receive the input, and whether a new provider actually improves their workload.
 
 Decilist's intended value is that complete development loop:

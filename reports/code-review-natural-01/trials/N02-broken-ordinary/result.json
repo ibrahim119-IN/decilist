@@ -1,0 +1,73 @@
+{
+  "id": "N02",
+  "variant": "broken",
+  "arm": "ordinary",
+  "utc": "2026-10-28T04:17:40.187746+00:00",
+  "attempts": [
+    {
+      "attempt": 1,
+      "model_seconds": 2.3247769000008702,
+      "finish_reason": "stop",
+      "proposal": {
+        "issue": true,
+        "summary": "The `catch` block on line 44 is empty and silently swallows all promise rejections, which can hide runtime errors and prevent proper error handling in asynchronous function calls.",
+        "edits": [
+          {
+            "path": "index.js",
+            "old": "\t\ttry {\n\t\t\tawait result;\n\t\t} catch {}\n\n\t\t// Decrement active count and process next queued function\n\t\tnext();",
+            "new": "\t\ttry {\n\t\t\tawait result;\n\t\t} catch (error) {\n\t\t\tnext();\n\t\t\tthrow error;\n\t\t}\n\n\t\t// Decrement active count and process next queued function\n\t\tnext();"
+          }
+        ]
+      },
+      "verification": {
+        "passed": false,
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "{\"status\":\"failed\",\"checks\":1,\"name\":\"TypeError\",\"message\":\"this is not a function\",\"stack\":\"TypeError: this is not a function\\n    at file:///L:/CodexData/Decilist/work/code-review-natural-01/N02/trials/N02-broken-ordinary/project/index.js:111:65\\n    at Function.from (<anonymous>)\\n    at value (file:///L:/CodexData/Decilist/work/code-review-natural-01/N02/trials/N02-broken-ordinary/project/index.js:111:28)\\n    at file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:21:19\"}\n",
+        "seconds": 0.0530092999979388
+      }
+    },
+    {
+      "attempt": 2,
+      "model_seconds": 2.6102117000045837,
+      "finish_reason": "stop",
+      "proposal": {
+        "issue": true,
+        "summary": "The 'map' method on the returned generator function incorrectly uses 'this' which is not bound to the generator, causing a TypeError when calling Array.from with the iterable.",
+        "edits": [
+          {
+            "path": "index.js",
+            "old": "\t\t\tasync value(iterable, function_) {\n\t\t\t\tconst promises = Array.from(iterable, (value, index) => this(function_, value, index));\n\t\t\t\treturn Promise.all(promises);\n\t\t\t},",
+            "new": "\t\t\tasync value(iterable, function_) {\n\t\t\t\tconst promises = Array.from(iterable, (value, index) => generator(function_, value, index));\n\t\t\t\treturn Promise.all(promises);\n\t\t\t},"
+          }
+        ]
+      },
+      "verification": {
+        "passed": true,
+        "returncode": 0,
+        "stdout": "{\"status\":\"passed\",\"checks\":4}\n",
+        "stderr": "",
+        "seconds": 0.052101900000707246
+      }
+    }
+  ],
+  "verified_repair": true,
+  "hints": null,
+  "issue": true,
+  "control_regression_passed": false,
+  "elapsed_seconds": 5.071106799994595,
+  "capped_task_seconds": 5.071106799994595,
+  "source_hashes_before": {
+    "benchmark.js": "ff4678a088f186a55d63ab51f14f02408f5f26480e5493f02385d38b55586647",
+    "index.js": "4b746004871ebd0afc82c435ca99e52dde072b2bce6003e84c052eb05145620b",
+    "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "package.json": "fc7374c233cc38b92f5534df5912786a43cd667bbd950c0b09f235eae85b23e4"
+  },
+  "source_hashes_after": {
+    "benchmark.js": "ff4678a088f186a55d63ab51f14f02408f5f26480e5493f02385d38b55586647",
+    "index.js": "be1522517eec8296c19ca32f5381108826c29d29f7e170182f4079880a1b6b13",
+    "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "package.json": "fc7374c233cc38b92f5534df5912786a43cd667bbd950c0b09f235eae85b23e4"
+  },
+  "diff": "--- index.js\n+++ index.js\n@@ -41,7 +41,10 @@\n \t\t// but the original promise rejection is preserved for the caller\n \t\ttry {\n \t\t\tawait result;\n-\t\t} catch {}\n+\t\t} catch (error) {\n+\t\t\tnext();\n+\t\t\tthrow error;\n+\t\t}\n \n \t\t// Decrement active count and process next queued function\n \t\tnext();\n@@ -105,7 +108,7 @@\n \t\t},\n \t\tmap: {\n \t\t\tasync value(iterable, function_) {\n-\t\t\t\tconst promises = Array.from(iterable, (value, index) => this(function_, value, index));\n+\t\t\t\tconst promises = Array.from(iterable, (value, index) => generator(function_, value, index));\n \t\t\t\treturn Promise.all(promises);\n \t\t\t},\n \t\t},\n"
+}

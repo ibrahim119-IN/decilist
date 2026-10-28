@@ -1,0 +1,49 @@
+{
+  "id": "N01",
+  "variant": "fixed",
+  "arm": "ordinary",
+  "utc": "2026-10-28T04:17:31.698156+00:00",
+  "attempts": [
+    {
+      "attempt": 1,
+      "model_seconds": 2.5860519999987446,
+      "finish_reason": "stop",
+      "proposal": {
+        "issue": true,
+        "summary": "The `catch` block on line 44 is empty and silently swallows all promise rejections, which can mask errors and prevent proper error handling in the calling code.",
+        "edits": [
+          {
+            "path": "index.js",
+            "old": "\t\ttry {\n\t\t\tawait result;\n\t\t} catch {}\n\n\t\t// Decrement active count and process next queued function",
+            "new": "\t\ttry {\n\t\t\tawait result;\n\t\t} catch (error) {\n\t\t\tnext();\n\t\t\tthrow error;\n\t\t}\n\n\t\t// Decrement active count and process next queued function"
+          }
+        ]
+      },
+      "verification": {
+        "passed": false,
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "{\"status\":\"failed\",\"checks\":2,\"name\":\"AssertionError\",\"message\":\"iteration failure must not leave orphaned mapper rejections\\n+ actual - expected\\n\\n+ [\\n+   'mapper failed',\\n+   'mapper failed'\\n+ ]\\n- []\\n\",\"stack\":\"AssertionError [ERR_ASSERTION]: iteration failure must not leave orphaned mapper rejections\\n+ actual - expected\\n\\n+ [\\n+   'mapper failed',\\n+   'mapper failed'\\n+ ]\\n- []\\n\\n    at check (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:12:53)\\n    at file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:33:9\"}\n",
+        "seconds": 0.08386810000229161
+      }
+    }
+  ],
+  "verified_repair": false,
+  "hints": null,
+  "issue": true,
+  "elapsed_seconds": 2.6849111999981687,
+  "capped_task_seconds": 180.0,
+  "source_hashes_before": {
+    "benchmark.js": "ff4678a088f186a55d63ab51f14f02408f5f26480e5493f02385d38b55586647",
+    "index.js": "edde12a4a4dbdbe8d27161cdd0853db0bab435d5dc6c15f9f4dedc27ee9bca60",
+    "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "package.json": "b28d1f6ff207a8572d6fde695cc771c95c9debbee4be77f924b95ad13ada0bd0"
+  },
+  "source_hashes_after": {
+    "benchmark.js": "ff4678a088f186a55d63ab51f14f02408f5f26480e5493f02385d38b55586647",
+    "index.js": "039ed2615187fb17ea63a48ba192c981e8fdc61f41402253bef441d097c30a8a",
+    "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "package.json": "b28d1f6ff207a8572d6fde695cc771c95c9debbee4be77f924b95ad13ada0bd0"
+  },
+  "diff": "--- index.js\n+++ index.js\n@@ -41,7 +41,10 @@\n \t\t// but the original promise rejection is preserved for the caller\n \t\ttry {\n \t\t\tawait result;\n-\t\t} catch {}\n+\t\t} catch (error) {\n+\t\t\tnext();\n+\t\t\tthrow error;\n+\t\t}\n \n \t\t// Decrement active count and process next queued function\n \t\tnext();\n"
+}

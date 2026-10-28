@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"issue\": true, \"summary\": \"When a mapper function fails during iteration, the queue's pending items are not properly rejected, leading to orphaned rejections that cause validation failures.\", \"edits\": [{\"path\": \"index.js\", \"old\": \"while (queue.size > 0) {\\n\\t\\t\\t\\t\\tqueue.dequeue().reject(abortError);\\n\\t\\t\\t\\t}\", \"new\": \"while (queue.size > 0) {\\n\\t\\t\\t\\t\\tconst item = queue.dequeue();\\n\\t\\t\\t\\t\\tif (typeof item.reject === 'function') {\\n\\t\\t\\t\\t\\t\\titem.reject(abortError);\\n\\t\\t\\t\\t\\t}\\n\\t\\t\\t\\t}\"}]}"
+      }
+    }
+  ],
+  "created": 1793161035,
+  "model": "qwen3-coder-30b-a3b-q4km",
+  "system_fingerprint": "b11889-d854d98ba",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 153,
+    "prompt_tokens": 2208,
+    "total_tokens": 2361,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "id": "chatcmpl-SOBIKM02aNpvbVdTasvMYs8FiXDUQuYa",
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 2208,
+    "prompt_ms": 1419.812,
+    "prompt_per_token_ms": 0.6430307971014493,
+    "prompt_per_second": 1555.1354686395102,
+    "predicted_n": 153,
+    "predicted_ms": 1068.744,
+    "predicted_per_token_ms": 7.031210526315789,
+    "predicted_per_second": 142.22302066725055
+  }
+}

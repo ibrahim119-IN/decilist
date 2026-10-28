@@ -1,0 +1,50 @@
+{
+  "id": "N02",
+  "variant": "fixed",
+  "arm": "ordinary",
+  "utc": "2026-10-28T04:17:45.284096+00:00",
+  "attempts": [
+    {
+      "attempt": 1,
+      "model_seconds": 2.4223108000005595,
+      "finish_reason": "stop",
+      "proposal": {
+        "issue": true,
+        "summary": "The `catch` block on line 44 is empty and silently swallows all promise rejections, which can hide runtime errors and prevent proper error handling in asynchronous function calls.",
+        "edits": [
+          {
+            "path": "index.js",
+            "old": "\t\ttry {\n\t\t\tawait result;\n\t\t} catch {}\n\n\t\t// Decrement active count and process next queued function\n\t\tnext();",
+            "new": "\t\ttry {\n\t\t\tawait result;\n\t\t} catch (error) {\n\t\t\tnext();\n\t\t\tthrow error;\n\t\t}\n\n\t\t// Decrement active count and process next queued function\n\t\tnext();"
+          }
+        ]
+      },
+      "verification": {
+        "passed": true,
+        "returncode": 0,
+        "stdout": "{\"status\":\"passed\",\"checks\":4}\n",
+        "stderr": "",
+        "seconds": 0.06625480000366224
+      }
+    }
+  ],
+  "verified_repair": false,
+  "hints": null,
+  "issue": true,
+  "control_regression_passed": true,
+  "elapsed_seconds": 2.4912541000012425,
+  "capped_task_seconds": 180.0,
+  "source_hashes_before": {
+    "benchmark.js": "ff4678a088f186a55d63ab51f14f02408f5f26480e5493f02385d38b55586647",
+    "index.js": "30fa94b6aebe7f044f7383feee7931fc7c1a4912affadac97539cda67c14057d",
+    "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "package.json": "fc7374c233cc38b92f5534df5912786a43cd667bbd950c0b09f235eae85b23e4"
+  },
+  "source_hashes_after": {
+    "benchmark.js": "ff4678a088f186a55d63ab51f14f02408f5f26480e5493f02385d38b55586647",
+    "index.js": "be1522517eec8296c19ca32f5381108826c29d29f7e170182f4079880a1b6b13",
+    "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "package.json": "fc7374c233cc38b92f5534df5912786a43cd667bbd950c0b09f235eae85b23e4"
+  },
+  "diff": "--- index.js\n+++ index.js\n@@ -41,7 +41,10 @@\n \t\t// but the original promise rejection is preserved for the caller\n \t\ttry {\n \t\t\tawait result;\n-\t\t} catch {}\n+\t\t} catch (error) {\n+\t\t\tnext();\n+\t\t\tthrow error;\n+\t\t}\n \n \t\t// Decrement active count and process next queued function\n \t\tnext();\n"
+}

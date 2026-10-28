@@ -1,0 +1,181 @@
+{
+  "profile": "ESLint 10.13.0 / @eslint/js 10.0.1 recommended JS; module type from original package; declared Node/browser globals; inline config disabled",
+  "rows": [
+    {
+      "id": "N01",
+      "variant": "broken",
+      "latency_ms": 1849.2269000000006,
+      "diagnostics": [
+        {
+          "path": "index.js",
+          "ruleId": "no-empty",
+          "message": "Empty block statement.",
+          "line": 44,
+          "endLine": 44,
+          "column": 11,
+          "severity": 2
+        }
+      ]
+    },
+    {
+      "id": "N01",
+      "variant": "fixed",
+      "latency_ms": 7.528599999999642,
+      "diagnostics": [
+        {
+          "path": "index.js",
+          "ruleId": "no-empty",
+          "message": "Empty block statement.",
+          "line": 44,
+          "endLine": 44,
+          "column": 11,
+          "severity": 2
+        }
+      ]
+    },
+    {
+      "id": "N02",
+      "variant": "broken",
+      "latency_ms": 7.16359999999986,
+      "diagnostics": [
+        {
+          "path": "index.js",
+          "ruleId": "no-empty",
+          "message": "Empty block statement.",
+          "line": 44,
+          "endLine": 44,
+          "column": 11,
+          "severity": 2
+        }
+      ]
+    },
+    {
+      "id": "N02",
+      "variant": "fixed",
+      "latency_ms": 9.178200000000288,
+      "diagnostics": [
+        {
+          "path": "index.js",
+          "ruleId": "no-empty",
+          "message": "Empty block statement.",
+          "line": 44,
+          "endLine": 44,
+          "column": 11,
+          "severity": 2
+        }
+      ]
+    },
+    {
+      "id": "N03",
+      "variant": "broken",
+      "latency_ms": 17.698699999999917,
+      "diagnostics": []
+    },
+    {
+      "id": "N03",
+      "variant": "fixed",
+      "latency_ms": 10.218399999999747,
+      "diagnostics": []
+    },
+    {
+      "id": "N04",
+      "variant": "broken",
+      "latency_ms": 10.972799999999552,
+      "diagnostics": []
+    },
+    {
+      "id": "N04",
+      "variant": "fixed",
+      "latency_ms": 6.913700000000063,
+      "diagnostics": []
+    },
+    {
+      "id": "N05",
+      "variant": "broken",
+      "latency_ms": 10.843499999999949,
+      "diagnostics": [
+        {
+          "path": "lib/core/Axios.js",
+          "ruleId": "no-unused-vars",
+          "message": "'e' is defined but never used.",
+          "line": 73,
+          "endLine": 73,
+          "column": 18,
+          "severity": 2
+        }
+      ]
+    },
+    {
+      "id": "N05",
+      "variant": "fixed",
+      "latency_ms": 9.782800000000861,
+      "diagnostics": [
+        {
+          "path": "lib/core/Axios.js",
+          "ruleId": "no-unused-vars",
+          "message": "'e' is defined but never used.",
+          "line": 73,
+          "endLine": 73,
+          "column": 18,
+          "severity": 2
+        }
+      ]
+    },
+    {
+      "id": "N06",
+      "variant": "broken",
+      "latency_ms": 8.640700000000834,
+      "diagnostics": [
+        {
+          "path": "lib/core/Axios.js",
+          "ruleId": "no-unused-vars",
+          "message": "'e' is defined but never used.",
+          "line": 73,
+          "endLine": 73,
+          "column": 18,
+          "severity": 2
+        }
+      ]
+    },
+    {
+      "id": "N06",
+      "variant": "fixed",
+      "latency_ms": 7.749900000000707,
+      "diagnostics": [
+        {
+          "path": "lib/core/Axios.js",
+          "ruleId": "no-unused-vars",
+          "message": "'e' is defined but never used.",
+          "line": 73,
+          "endLine": 73,
+          "column": 18,
+          "severity": 2
+        }
+      ]
+    },
+    {
+      "id": "N07",
+      "variant": "broken",
+      "latency_ms": 6.645199999999932,
+      "diagnostics": []
+    },
+    {
+      "id": "N07",
+      "variant": "fixed",
+      "latency_ms": 8.12039999999979,
+      "diagnostics": []
+    },
+    {
+      "id": "N08",
+      "variant": "broken",
+      "latency_ms": 15.298400000000584,
+      "diagnostics": []
+    },
+    {
+      "id": "N08",
+      "variant": "fixed",
+      "latency_ms": 15.270899999999529,
+      "diagnostics": []
+    }
+  ]
+}

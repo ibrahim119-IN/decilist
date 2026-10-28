@@ -4,6 +4,8 @@ Decilist can reuse Ryan Yannelli's fine-tuned d1-3B reviewer through Python, Typ
 
 This is an experimental **advisory** integration. It neither edits code nor approves a change. It is separate from the Python test-debugging experiment, whose overall time-saving gate failed.
 
+**Historical transfer update, 28 October 2026:** eight real defects from p-limit, p-retry, Axios and Fastify did not reproduce the authored pilot's promising result. Neither ordinary local-model review nor Decilist-assisted review produced a repair accepted after additional behavioral checks; both had a 180-second failure-penalized median. Confirmed false runtime allegations occurred on 4/8 corrected controls without assistance and 5/8 with it. These are agent trials, not human time measurements. See the [complete historical results and evidence](code-review-natural-results.md) before interpreting the older snippet pilot.
+
 ## Set up once
 
 From the repository, with a Python environment activated:

@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"issue\": true, \"summary\": \"When a mapper function fails during iteration, the queue clearing logic doesn't properly reject queued items, leading to orphaned rejections that are not handled by the caller.\", \"edits\": [{\"path\": \"index.js\", \"old\": \"while (queue.size > 0) {\\n\\t\\t\\t\\t\\tconst item = queue.dequeue();\\n\\t\\t\\t\\t\\tif (typeof item.reject === 'function') {\\n\\t\\t\\t\\t\\t\\titem.reject(abortError);\\n\\t\\t\\t\\t\\t}\\n\\t\\t\\t\\t}\", \"new\": \"while (queue.size > 0) {\\n\\t\\t\\t\\t\\tconst item = queue.dequeue();\\n\\t\\t\\t\\t\\tif (typeof item.reject === 'function') {\\n\\t\\t\\t\\t\\t\\titem.reject(abortError);\\n\\t\\t\\t\\t\\t} else if (typeof item.run === 'function') {\\n\\t\\t\\t\\t\\t\\t// Handle the case where an item is queued but not yet executed\\n\\t\\t\\t\\t\\t\\titem.run(); // This ensures the promise chain continues\\n\\t\\t\\t\\t\\t}\\n\\t\\t\\t\\t}\"}]}"
+      }
+    }
+  ],
+  "created": 1793161038,
+  "model": "qwen3-coder-30b-a3b-q4km",
+  "system_fingerprint": "b11889-d854d98ba",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 247,
+    "prompt_tokens": 2258,
+    "total_tokens": 2505,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "id": "chatcmpl-YnwOBq01H9D0Eof9kgKTQps13uxvsWim",
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 2258,
+    "prompt_ms": 1486.222,
+    "prompt_per_token_ms": 0.6582028343666961,
+    "prompt_per_second": 1519.2885046783051,
+    "predicted_n": 247,
+    "predicted_ms": 1711.335,
+    "predicted_per_token_ms": 6.956646341463415,
+    "predicted_per_second": 143.7474252557214
+  }
+}

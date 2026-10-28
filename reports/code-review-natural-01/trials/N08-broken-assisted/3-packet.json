@@ -1,0 +1,103 @@
+{
+  "task": "Process web framework requests and errors while preserving response status and parser behavior.",
+  "files": [
+    {
+      "path": "lib/content-type-parser.js",
+      "numbered_source": "1: 'use strict'\n2: \n3: const { AsyncResource } = require('node:async_hooks')\n4: const { FifoMap: Fifo } = require('toad-cache')\n5: const { parse: secureJsonParse } = require('secure-json-parse')\n6: const ContentType = require('./content-type')\n7: const {\n8:   kDefaultJsonParse,\n9:   kContentTypeParser,\n10:   kBodyLimit,\n11:   kRequestPayloadStream,\n12:   kState,\n13:   kTestInternals,\n14:   kReplyIsError,\n15:   kRouteContext\n16: } = require('./symbols')\n17: \n18: const {\n19:   FST_ERR_CTP_INVALID_TYPE,\n20:   FST_ERR_CTP_EMPTY_TYPE,\n21:   FST_ERR_CTP_ALREADY_PRESENT,\n22:   FST_ERR_CTP_INVALID_HANDLER,\n23:   FST_ERR_CTP_INVALID_PARSE_TYPE,\n24:   FST_ERR_CTP_BODY_TOO_LARGE,\n25:   FST_ERR_CTP_INVALID_MEDIA_TYPE,\n26:   FST_ERR_CTP_INVALID_CONTENT_LENGTH,\n27:   FST_ERR_CTP_EMPTY_JSON_BODY,\n28:   FST_ERR_CTP_INSTANCE_ALREADY_STARTED,\n29:   FST_ERR_CTP_INVALID_JSON_BODY\n30: } = require('./errors')\n31: const { FSTSEC001 } = require('./warnings')\n32: \n33: function ContentTypeParser (bodyLimit, onProtoPoisoning, onConstructorPoisoning) {\n34:   this[kDefaultJsonParse] = getDefaultJsonParser(onProtoPoisoning, onConstructorPoisoning)\n35:   // using a map instead of a plain object to avoid prototype hijack attacks\n36:   this.customParsers = new Map()\n37:   this.customParsers.set('application/json', new Parser(true, false, bodyLimit, this[kDefaultJsonParse]))\n38:   this.customParsers.set('text/plain', new Parser(true, false, bodyLimit, defaultPlainTextParser))\n39:   this.parserList = ['application/json', 'text/plain']\n40:   this.parserRegExpList = []\n41:   this.cache = new Fifo(100)\n42: }\n43: \n44: ContentTypeParser.prototype.add = function (contentType, opts, parserFn) {\n45:   const contentTypeIsString = typeof contentType === 'string'\n46: \n47:   if (contentTypeIsString) {\n48:     contentType = contentType.trim().toLowerCase()\n49:     if (contentType.length === 0) throw new FST_ERR_CTP_EMPTY_TYPE()\n50:   } else if (!(contentType instanceof RegExp)) {\n51:     throw new FST_ERR_CTP_INVALID_TYPE()\n52:   }\n53: \n54:   if (typeof parserFn !== 'function') {\n55:     throw new FST_ERR_CTP_INVALID_HANDLER()\n56:   }\n57: \n58:   if (this.existingParser(contentType)) {\n59:     throw new FST_ERR_CTP_ALREADY_PRESENT(contentType)\n60:   }\n61: \n62:   if (opts.parseAs !== undefined) {\n63:     if (opts.parseAs !== 'string' && opts.parseAs !== 'buffer') {\n64:       throw new FST_ERR_CTP_INVALID_PARSE_TYPE(opts.parseAs)\n65:     }\n66:   }\n67: \n68:   const parser = new Parser(\n69:     opts.parseAs === 'string',\n70:     opts.parseAs === 'buffer',\n71:     opts.bodyLimit,\n72:     parserFn\n73:   )\n74: \n75:   if (contentType === '*') {\n76:     this.customParsers.set('', parser)\n77:   } else {\n78:     if (contentTypeIsString) {\n79:       const ct = new ContentType(contentType)\n80:       if (ct.isValid === false) {\n81:         throw new FST_ERR_CTP_INVALID_TYPE()\n82:       }\n83:       const normalizedContentType = ct.toString()\n84:       this.parserList.unshift(normalizedContentType)\n85:       this.customParsers.set(normalizedContentType, parser)\n86:     } else {\n87:       validateRegExp(contentType)\n88:       this.parserRegExpList.unshift(contentType)\n89:       this.customParsers.set(contentType.toString(), parser)\n90:     }\n91:   }\n92: }\n93: \n94: ContentTypeParser.prototype.hasParser = function (contentType) {\n95:   if (typeof contentType === 'string') {\n96:     contentType = new ContentType(contentType).toString()\n97:   } else {\n98:     if (!(contentType instanceof RegExp)) throw new FST_ERR_CTP_INVALID_TYPE()\n99:     contentType = contentType.toString()\n100:   }\n101: \n102:   return this.customParsers.has(contentType)\n103: }\n104: \n105: ContentTypeParser.prototype.existingParser = function (contentType) {\n106:   if (typeof contentType === 'string') {\n107:     const ct = new ContentType(contentType).toString()\n108:     if (contentType === 'application/json' && this.customParsers.has(contentType)) {\n109:       return this.customParsers.get(ct).fn !== this[kDefaultJsonParse]\n110:     }\n111:     if (contentType === 'text/plain' && this.customParsers.has(contentType)) {\n112:       return this.customParsers.get(ct).fn !== defaultPlainTextParser\n113:     }\n114:   }\n115: \n116:   return this.hasParser(contentType)\n117: }\n118: \n119: ContentTypeParser.prototype.getParser = function (contentType) {\n120:   if (typeof contentType === 'string') {\n121:     const cached = this.cache.get(contentType)\n122:     if (cached !== undefined) return cached\n123:     contentType = new ContentType(contentType)\n124:   }\n125:   const ct = contentType.toString()\n126: \n127:   let parser = this.cache.get(ct)\n128:   if (parser !== undefined) return parser\n129:   parser = this.customParsers.get(ct)\n130:   if (parser !== undefined) {\n131:     this.cache.set(ct, parser)\n132:     return parser\n133:   }\n134: \n135:   // We have conflicting desires across our test suite. In some cases, we\n136:   // expect to get a parser by just passing the media-type. In others, we expect\n137:   // to get a parser registered under the media-type while also providing\n138:   // parameters. And in yet others, we expect to register a parser under the\n139:   // media-type and have it apply to any request with a header that starts\n140:   // with that type.\n141:   parser = this.customParsers.get(contentType.mediaType)\n142:   if (parser !== undefined) {\n143:     this.cache.set(ct, parser)\n144:     return parser\n145:   }\n146: \n147:   for (let j = 0; j !== this.parserRegExpList.length; ++j) {\n148:     const parserRegExp = this.parserRegExpList[j]\n149:     // A parser registered with a `g`/`y` flagged RegExp keeps a mutable\n150:     // lastIndex between calls, so a plain `.test()` would skip part of the\n151:     // next content type and match inconsistently. Reset it before testing.\n152:     parserRegExp.lastIndex = 0\n153:     if (parserRegExp.test(ct)) {\n154:       parser = this.customParsers.get(parserRegExp)\n155:       this.cache.set(ct, parser)\n156:       return parser\n157:     }\n158:   }\n159: \n160:   return this.customParsers.get('')\n161: }\n162: \n163: ContentTypeParser.prototype.removeAll = function () {\n164:   this.customParsers = new Map()\n165:   this.parserRegExpList = []\n166:   this.parserList = []\n167:   this.cache = new Fifo(100)\n168: }\n169: \n170: ContentTypeParser.prototype.remove = function (contentType) {\n171:   let parsers\n172: \n173:   if (typeof contentType === 'string') {\n174:     contentType = new ContentType(contentType).toString()\n175:     parsers = this.parserList\n176:   } else {\n177:     if (!(contentType instanceof RegExp)) throw new FST_ERR_CTP_INVALID_TYPE()\n178:     contentType = contentType.toString()\n179:     parsers = this.parserRegExpList\n180:   }\n181: \n182:   const removed = this.customParsers.delete(contentType)\n183:   const idx = parsers.findIndex(ct => ct.toString() === contentType)\n184: \n185:   if (idx > -1) {\n186:     parsers.splice(idx, 1)\n187:   }\n188: \n189:   return removed || idx > -1\n190: }\n191: \n192: ContentTypeParser.prototype.run = function (contentType, handler, request, reply) {\n193:   const parser = this.getParser(contentType)\n194: \n195:   if (parser === undefined) {\n196:     if (request.is404 === true) {\n197:       handler(request, reply)\n198:       return\n199:     }\n200: \n201:     reply[kReplyIsError] = true\n202:     reply.send(new FST_ERR_CTP_INVALID_MEDIA_TYPE())\n203:     return\n204:   }\n205: \n206:   const resource = new AsyncResource('content-type-parser:run', request)\n207: \n208:   // Preserve the request's async context without the per-request function\n209:   // properties and wrappers created by AsyncResource.bind().\n210:   function done (error, body) {\n211:     resource.runInAsyncScope(onDone, undefined, error, body)\n212:   }\n213: \n214:   if (parser.asString === true || parser.asBuffer === true) {\n215:     rawBody(\n216:       request,\n217:       reply,\n218:       reply[kRouteContext]._parserOptions,\n219:       parser,\n220:       done\n221:     )\n222:     return\n223:   }\n224: \n225:   const result = parser.fn(request, request[kRequestPayloadStream], done)\n226:   if (result && typeof result.then === 'function') {\n227:     result.then(body => { done(null, body) }, done)\n228:   }\n229: \n230:   function onDone (error, body) {\n231:     resource.emitDestroy()\n232:     if (error != null) {\n233:       // We must close the connection as the client may\n234:       // send more data\n235:       reply.header('connection', 'close')\n236:       reply[kReplyIsError] = true\n237:       reply.send(error)\n238:       return\n239:     }\n240:     request.body = body\n241:     handler(request, reply)\n242:   }\n243: }\n244: \n245: function rawBody (request, reply, options, parser, done) {\n246:   const asString = parser.asString === true\n247:   const limit = options.limit === null ? parser.bodyLimit : options.limit\n248:   const contentLength = Number(request.headers['content-length'])\n249: \n250:   if (contentLength > limit) {\n251:     done(new FST_ERR_CTP_BODY_TOO_LARGE(), undefined)\n252:     return\n253:   }\n254: \n255:   let receivedLength = 0\n256:   const chunks = []\n257:   const payload = request[kRequestPayloadStream] || request.raw\n258: \n259:   // Always read raw Buffers and decode once at the end: setEncoding() would\n260:   // allocate a StringDecoder per request and force a Buffer.byteLength()\n261:   // rescan of every decoded chunk just to enforce the byte limit.\n262: \n263:   payload.on('data', onData)\n264:   payload.on('end', onEnd)\n265:   payload.on('error', onEnd)\n266:   payload.resume()\n267: \n268:   function onData (chunk) {\n269:     // A custom preParsing stream may still emit strings\n270:     if (typeof chunk === 'string') {\n271:       chunk = Buffer.from(chunk)\n272:     }\n273:     receivedLength += chunk.length\n274:     const { receivedEncodedLength = 0 } = payload\n275:     // The resulting body length must not exceed bodyLimit (see \"zip bomb\").\n276:     // The case when encoded length is larger than received length is rather theoretical,\n277:     // unless the stream returned by preParsing hook is broken and reports wrong value.\n278:     if (receivedLength > limit || receivedEncodedLength > limit) {\n279:       payload.removeListener('data', onData)\n280:       payload.removeListener('end', onEnd)\n281:       payload.removeListener('error', onEnd)\n282:       done(new FST_ERR_CTP_BODY_TOO_LARGE(), undefined)\n283:       return\n284:     }\n285: \n286:     chunks.push(chunk)\n287:   }\n288: \n289:   function onEnd (err) {\n290:     payload.removeListener('data', onData)\n291:     payload.removeListener('end', onEnd)\n292:     payload.removeListener('error', onEnd)\n293: \n294:     if (err != null) {\n295:       if (!(typeof err.statusCode === 'number' && err.statusCode >= 400)) {\n296:         err.statusCode = 400\n297:       }\n298:       done(err, undefined)\n299:       return\n300:     }\n301: \n302:     if (!Number.isNaN(contentLength) && (payload.receivedEncodedLength || receivedLength) !== contentLength) {\n303:       done(new FST_ERR_CTP_INVALID_CONTENT_LENGTH(), undefined)\n304:       return\n305:     }\n306: \n307:     let body\n308:     if (asString) {\n309:       // Decoding the whole body at once also keeps multi-byte characters\n310:       // split across chunks intact\n311:       body = chunks.length === 1\n312:         ? chunks[0].toString('utf8')\n313:         : Buffer.concat(chunks, receivedLength).toString('utf8')\n314:     } else {\n315:       // Always copy so the parser never receives a view over the shared\n316:       // socket read buffer\n317:       body = Buffer.concat(chunks, receivedLength)\n318:     }\n319: \n320:     const result = parser.fn(request, body, done)\n321:     if (result && typeof result.then === 'function') {\n322:       result.then(body => { done(null, body) }, done)\n323:     }\n324:   }\n325: }\n326: \n327: function getDefaultJsonParser (onProtoPoisoning, onConstructorPoisoning) {\n328:   const parseOptions = { protoAction: onProtoPoisoning, constructorAction: onConstructorPoisoning }\n329: \n330:   return defaultJsonParser\n331: \n332:   function defaultJsonParser (req, body, done) {\n333:     if (body.length === 0) {\n334:       done(new FST_ERR_CTP_EMPTY_JSON_BODY(), undefined)\n335:       return\n336:     }\n337:     try {\n338:       done(null, secureJsonParse(body, parseOptions))\n339:     } catch {\n340:       done(new FST_ERR_CTP_INVALID_JSON_BODY(), undefined)\n341:     }\n342:   }\n343: }\n344: \n345: function defaultPlainTextParser (req, body, done) {\n346:   done(null, body)\n347: }\n348: \n349: function Parser (asString, asBuffer, bodyLimit, fn) {\n350:   this.asString = asString\n351:   this.asBuffer = asBuffer\n352:   this.bodyLimit = bodyLimit\n353:   this.fn = fn\n354: }\n355: \n356: function buildContentTypeParser (c) {\n357:   const contentTypeParser = new ContentTypeParser()\n358:   contentTypeParser[kDefaultJsonParse] = c[kDefaultJsonParse]\n359:   contentTypeParser.customParsers = new Map(c.customParsers.entries())\n360:   contentTypeParser.parserList = c.parserList.slice()\n361:   contentTypeParser.parserRegExpList = c.parserRegExpList.slice()\n362:   return contentTypeParser\n363: }\n364: \n365: function addContentTypeParser (contentType, opts, parser) {\n366:   if (this[kState].started) {\n367:     throw new FST_ERR_CTP_INSTANCE_ALREADY_STARTED('addContentTypeParser')\n368:   }\n369: \n370:   if (typeof opts === 'function') {\n371:     parser = opts\n372:     opts = {}\n373:   }\n374: \n375:   if (!opts) opts = {}\n376:   if (!opts.bodyLimit) opts.bodyLimit = this[kBodyLimit]\n377: \n378:   if (Array.isArray(contentType)) {\n379:     contentType.forEach((type) => this[kContentTypeParser].add(type, opts, parser))\n380:   } else {\n381:     this[kContentTypeParser].add(contentType, opts, parser)\n382:   }\n383: \n384:   return this\n385: }\n386: \n387: function hasContentTypeParser (contentType) {\n388:   return this[kContentTypeParser].hasParser(contentType)\n389: }\n390: \n391: function removeContentTypeParser (contentType) {\n392:   if (this[kState].started) {\n393:     throw new FST_ERR_CTP_INSTANCE_ALREADY_STARTED('removeContentTypeParser')\n394:   }\n395: \n396:   if (Array.isArray(contentType)) {\n397:     for (const type of contentType) {\n398:       this[kContentTypeParser].remove(type)\n399:     }\n400:   } else {\n401:     this[kContentTypeParser].remove(contentType)\n402:   }\n403: }\n404: \n405: function removeAllContentTypeParsers () {\n406:   if (this[kState].started) {\n407:     throw new FST_ERR_CTP_INSTANCE_ALREADY_STARTED('removeAllContentTypeParsers')\n408:   }\n409: \n410:   this[kContentTypeParser].removeAll()\n411: }\n412: \n413: function validateRegExp (regexp) {\n414:   // RegExp should either start with ^ or include ;?\n415:   // It can ensure the user is properly detect the essence\n416:   // MIME types.\n417:   if (regexp.source[0] !== '^' && regexp.source.includes(';?') === false) {\n418:     FSTSEC001(regexp.source)\n419:   }\n420: }\n421: \n422: module.exports = ContentTypeParser\n423: module.exports.helpers = {\n424:   buildContentTypeParser,\n425:   addContentTypeParser,\n426:   hasContentTypeParser,\n427:   removeContentTypeParser,\n428:   removeAllContentTypeParsers\n429: }\n430: module.exports.defaultParsers = {\n431:   getDefaultJsonParser,\n432:   defaultTextParser: defaultPlainTextParser\n433: }\n434: module.exports[kTestInternals] = { rawBody }"
+    }
+  ],
+  "lint_diagnostics": [],
+  "advisory_review": [
+    {
+      "path": "lib/content-type-parser.js",
+      "result": {
+        "schema_version": "code-review.1",
+        "status": "no_flags",
+        "advisory": true,
+        "model": "yannelli/d1-3b-code-review-decisions",
+        "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+        "rules": [
+          "error_handling_problem",
+          "type_safety_hole",
+          "unsafe_input"
+        ],
+        "threshold": 0.9,
+        "total_lines": 434,
+        "reviewed_lines": 434,
+        "windows": [
+          {
+            "start_line": 1,
+            "end_line": 80,
+            "probabilities": {
+              "error_handling_problem": 0.011687257995694434,
+              "type_safety_hole": 0.020332353342658753,
+              "unsafe_input": 0.02297736991002561
+            }
+          },
+          {
+            "start_line": 69,
+            "end_line": 148,
+            "probabilities": {
+              "error_handling_problem": 0.00263167397488458,
+              "type_safety_hole": 0.020332353342658753,
+              "unsafe_input": 0.37754066879814546
+            }
+          },
+          {
+            "start_line": 137,
+            "end_line": 216,
+            "probabilities": {
+              "error_handling_problem": 0.05665242530797383,
+              "type_safety_hole": 0.037326887344129464,
+              "unsafe_input": 0.03514484640079327
+            }
+          },
+          {
+            "start_line": 205,
+            "end_line": 284,
+            "probabilities": {
+              "error_handling_problem": 0.02595735719779685,
+              "type_safety_hole": 0.4378234991142019,
+              "unsafe_input": 0.23370635691404026
+            }
+          },
+          {
+            "start_line": 273,
+            "end_line": 352,
+            "probabilities": {
+              "error_handling_problem": 0.46879062662624377,
+              "type_safety_hole": 0.037326887344129464,
+              "unsafe_input": 0.06008665017400762
+            }
+          },
+          {
+            "start_line": 341,
+            "end_line": 420,
+            "probabilities": {
+              "error_handling_problem": 0.01590639171181471,
+              "type_safety_hole": 0.029312230751356316,
+              "unsafe_input": 0.11920292202211755
+            }
+          },
+          {
+            "start_line": 409,
+            "end_line": 434,
+            "probabilities": {
+              "error_handling_problem": 0.0446808702726502,
+              "type_safety_hole": 0.019124036750888904,
+              "unsafe_input": 0.029312230751356316
+            }
+          }
+        ],
+        "findings": [],
+        "latency_ms": 1086.3640999959898,
+        "error": null
+      },
+      "wall_seconds": 1.0890279000013834
+    }
+  ],
+  "validation_feedback": {
+    "message": "Proposal could not be applied.",
+    "output": "old substring must match exactly once and change source"
+  }
+}

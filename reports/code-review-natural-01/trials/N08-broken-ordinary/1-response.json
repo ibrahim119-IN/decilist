@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"issue\": true, \"summary\": \"In the `getParser` method, when a parser is found via regex matching (lines 153-157), it retrieves the parser using `parserRegExp.toString()` as the key. However, `RegExp.prototype.toString()` returns the regex pattern in `/pattern/flags` format, which doesn't match the keys used to store parsers for regex patterns (which are stored as the RegExp object itself). This causes the method to return undefined instead of the matched parser.\", \"edits\": [{\"path\": \"lib/content-type-parser.js\", \"old\": \"    if (parserRegExp.test(ct)) {\\n      parser = this.customParsers.get(parserRegExp.toString())\\n      this.cache.set(ct, parser)\\n      return parser\\n    }\", \"new\": \"    if (parserRegExp.test(ct)) {\\n      parser = this.customParsers.get(parserRegExp)\\n      this.cache.set(ct, parser)\\n      return parser\\n    }\"}]}"
+      }
+    }
+  ],
+  "created": 1793161471,
+  "model": "qwen3-coder-30b-a3b-q4km",
+  "system_fingerprint": "b11889-d854d98ba",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 207,
+    "prompt_tokens": 5471,
+    "total_tokens": 5678,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "id": "chatcmpl-Beyr9GFtiaoz8ekqVu90LEBKp0y7SZDI",
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 5471,
+    "prompt_ms": 4031.031,
+    "prompt_per_token_ms": 0.736799670992506,
+    "prompt_per_second": 1357.2210186426253,
+    "predicted_n": 207,
+    "predicted_ms": 1593.256,
+    "predicted_per_token_ms": 7.734252427184466,
+    "predicted_per_second": 129.29497833367645
+  }
+}

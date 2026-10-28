@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"issue\": true, \"summary\": \"Unused variable 'e' in catch block on line 73 shadows the actual error variable, potentially causing confusion and incorrect stack trace handling\", \"edits\": [{\"path\": \"lib/core/Axios.js\", \"old\": \"      } catch (e) {\\n        // ignore the case where \\\"stack\\\" is an un-writable property\\n      }\", \"new\": \"      } catch (_) {\\n        // ignore the case where \\\"stack\\\" is an un-writable property\\n      }\"}]}"
+      }
+    }
+  ],
+  "created": 1793161359,
+  "model": "qwen3-coder-30b-a3b-q4km",
+  "system_fingerprint": "b11889-d854d98ba",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 114,
+    "prompt_tokens": 4406,
+    "total_tokens": 4520,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "id": "chatcmpl-MCAz7DX21m7DTaOZtCxxymOv3KymXXEp",
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 4406,
+    "prompt_ms": 2880.488,
+    "prompt_per_token_ms": 0.6537648660916932,
+    "prompt_per_second": 1529.6019285621048,
+    "predicted_n": 114,
+    "predicted_ms": 787.294,
+    "predicted_per_token_ms": 6.967203539823009,
+    "predicted_per_second": 143.52960901518367
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "id": "N03",
+  "variant": "broken",
+  "arm": "assisted",
+  "utc": "2026-10-28T04:19:06.474258+00:00",
+  "attempts": [
+    {
+      "attempt": 1,
+      "model_seconds": 26.259823399996094,
+      "finish_reason": "length",
+      "invalid_proposal": "Unterminated string starting at: line 1 column 390 (char 389)"
+    },
+    {
+      "attempt": 2,
+      "model_seconds": 24.1984764000008,
+      "finish_reason": "length",
+      "invalid_proposal": "Unterminated string starting at: line 1 column 704 (char 703)"
+    },
+    {
+      "attempt": 3,
+      "model_seconds": 26.0610033999983,
+      "finish_reason": "length",
+      "invalid_proposal": "Unterminated string starting at: line 1 column 819 (char 818)"
+    }
+  ],
+  "verified_repair": false,
+  "hints": [
+    {
+      "path": "index.js",
+      "result": {
+        "schema_version": "code-review.1",
+        "status": "no_flags",
+        "advisory": true,
+        "model": "yannelli/d1-3b-code-review-decisions",
+        "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+        "rules": [
+          "error_handling_problem",
+          "type_safety_hole",
+          "unsafe_input"
+        ],
+        "threshold": 0.9,
+        "total_lines": 267,
+        "reviewed_lines": 267,
+        "windows": [
+          {
+            "start_line": 1,
+            "end_line": 80,
+            "probabilities": {
+              "error_handling_problem": 0.005554924703691103,
+              "type_safety_hole": 0.019124036750888904,
+              "unsafe_input": 0.031143830534778462
+            }
+          },
+          {
+            "start_line": 69,
+            "end_line": 148,
+            "probabilities": {
+              "error_handling_problem": 0.02595735719779685,
+              "type_safety_hole": 0.031143830534778462,
+              "unsafe_input": 0.04742587317756679
+            }
+          },
+          {
+            "start_line": 137,
+            "end_line": 216,
+            "probabilities": {
+              "error_handling_problem": 0.03514484640079327,
+              "type_safety_hole": 0.03514484640079327,
+              "unsafe_input": 0.20181322226037882
+            }
+          },
+          {
+            "start_line": 205,
+            "end_line": 267,
+            "probabilities": {
+              "error_handling_problem": 0.29421497216298875,
+              "type_safety_hole": 0.04208772791561884,
+              "unsafe_input": 0.011687257995694434
+            }
+          }
+        ],
+        "findings": [],
+        "latency_ms": 720.6999999980326,
+        "error": null
+      },
+      "wall_seconds": 0.7230095999984769
+    }
+  ],
+  "issue": null,
+  "elapsed_seconds": 77.2464603000044,
+  "capped_task_seconds": 180.0,
+  "source_hashes_before": {
+    "index.js": "56233d1d87da3899c15639a0dc5756546184f311ddcd7e3e6de91450bed7c55c",
+    "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "package.json": "d42f86b65c142997c38450a9512ed0525d84fdac96b9673a6d3a62c6e7114118"
+  },
+  "source_hashes_after": {
+    "index.js": "56233d1d87da3899c15639a0dc5756546184f311ddcd7e3e6de91450bed7c55c",
+    "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "package.json": "d42f86b65c142997c38450a9512ed0525d84fdac96b9673a6d3a62c6e7114118"
+  },
+  "diff": ""
+}

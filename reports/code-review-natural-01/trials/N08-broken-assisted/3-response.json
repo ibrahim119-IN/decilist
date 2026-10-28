@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"issue\": true, \"summary\": \"In the `rawBody` function, when a parser registered with a `g`/`y` flagged RegExp is used, the `parserRegExp.lastIndex` is reset before testing but not after, causing subsequent calls to incorrectly skip parts of content types.\", \"edits\": [{\"path\": \"lib/content-type-parser.js\", \"old\": \"    parserRegExp.lastIndex = 0\\n    if (parserRegExp.test(ct)) {\\n      parser = this.customParsers.get(parserRegExp)\\n      this.cache.set(ct, parser)\\n      return parser\\n    }\", \"new\": \"    parserRegExp.lastIndex = 0\\n    if (parserRegExp.test(ct)) {\\n      parser = this.customParsers.get(parserRegExp)\\n      this.cache.set(ct, parser)\\n      return parser\\n    }\\n    parserRegExp.lastIndex = 0\"}]}"
+      }
+    }
+  ],
+  "created": 1793161465,
+  "model": "qwen3-coder-30b-a3b-q4km",
+  "system_fingerprint": "b11889-d854d98ba",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 188,
+    "prompt_tokens": 6413,
+    "total_tokens": 6601,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "id": "chatcmpl-NgxXfMr5vodIulA10VmaahtcLIpufBpJ",
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 6413,
+    "prompt_ms": 4568.055,
+    "prompt_per_token_ms": 0.7123117105878685,
+    "prompt_per_second": 1403.8797693985732,
+    "predicted_n": 188,
+    "predicted_ms": 1301.04,
+    "predicted_per_token_ms": 6.9574331550802135,
+    "predicted_per_second": 143.73116891102504
+  }
+}

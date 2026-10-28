@@ -1,0 +1,72 @@
+{
+  "task": "Retry asynchronous operations according to configured retry counts, error hooks and timing policies.",
+  "files": [
+    {
+      "path": "index.js",
+      "numbered_source": "1: import isNetworkError from 'is-network-error';\n2: \n3: function validateRetries(retries) {\n4: \tif (typeof retries === 'number') {\n5: \t\tif (retries < 0) {\n6: \t\t\tthrow new TypeError('Expected `retries` to be a non-negative number.');\n7: \t\t}\n8: \n9: \t\tif (Number.isNaN(retries)) {\n10: \t\t\tthrow new TypeError('Expected `retries` to be a valid number or Infinity, got NaN.');\n11: \t\t}\n12: \t} else if (retries !== undefined) {\n13: \t\tthrow new TypeError('Expected `retries` to be a number or Infinity.');\n14: \t}\n15: }\n16: \n17: function validateNumberOption(name, value, {min = 0, allowInfinity = false} = {}) {\n18: \tif (value === undefined) {\n19: \t\treturn;\n20: \t}\n21: \n22: \tif (typeof value !== 'number' || Number.isNaN(value)) {\n23: \t\tthrow new TypeError(`Expected \\`${name}\\` to be a number${allowInfinity ? ' or Infinity' : ''}.`);\n24: \t}\n25: \n26: \tif (!allowInfinity && !Number.isFinite(value)) {\n27: \t\tthrow new TypeError(`Expected \\`${name}\\` to be a finite number.`);\n28: \t}\n29: \n30: \tif (value < min) {\n31: \t\tthrow new TypeError(`Expected \\`${name}\\` to be \\u2265 ${min}.`);\n32: \t}\n33: }\n34: \n35: export class AbortError extends Error {\n36: \tconstructor(message) {\n37: \t\tsuper();\n38: \n39: \t\tif (message instanceof Error) {\n40: \t\t\tthis.originalError = message;\n41: \t\t\t({message} = message);\n42: \t\t} else {\n43: \t\t\tthis.originalError = new Error(message);\n44: \t\t\tthis.originalError.stack = this.stack;\n45: \t\t}\n46: \n47: \t\tthis.name = 'AbortError';\n48: \t\tthis.message = message;\n49: \t}\n50: }\n51: \n52: function calculateDelay(retriesConsumed, options) {\n53: \tconst attempt = Math.max(1, retriesConsumed + 1);\n54: \tconst random = options.randomize ? (Math.random() + 1) : 1;\n55: \n56: \tlet timeout = Math.round(random * options.minTimeout * (options.factor ** (attempt - 1)));\n57: \ttimeout = Math.min(timeout, options.maxTimeout);\n58: \n59: \treturn timeout;\n60: }\n61: \n62: function calculateRemainingTime(start, max) {\n63: \tif (!Number.isFinite(max)) {\n64: \t\treturn max;\n65: \t}\n66: \n67: \treturn max - (performance.now() - start);\n68: }\n69: \n70: async function onAttemptFailure({error, attemptNumber, retriesConsumed, startTime, options}) {\n71: \tconst normalizedError = error instanceof Error\n72: \t\t? error\n73: \t\t: new TypeError(`Non-error was thrown: \"${error}\". You should only throw errors.`);\n74: \n75: \tif (normalizedError instanceof AbortError) {\n76: \t\tthrow normalizedError.originalError;\n77: \t}\n78: \n79: \tconst retriesLeft = Number.isFinite(options.retries)\n80: \t\t? Math.max(0, options.retries - retriesConsumed)\n81: \t\t: options.retries;\n82: \n83: \tconst maxRetryTime = options.maxRetryTime ?? Number.POSITIVE_INFINITY;\n84: \tconst delayTime = calculateDelay(retriesConsumed, options);\n85: \tconst remainingTimeBeforeCallbacks = calculateRemainingTime(startTime, maxRetryTime);\n86: \n87: \tif (remainingTimeBeforeCallbacks <= 0) {\n88: \t\tconst context = Object.freeze({\n89: \t\t\terror: normalizedError,\n90: \t\t\tattemptNumber,\n91: \t\t\tretriesLeft,\n92: \t\t\tretriesConsumed,\n93: \t\t\tretryDelay: 0,\n94: \t\t});\n95: \n96: \t\tawait options.onFailedAttempt(context);\n97: \n98: \t\tthrow normalizedError;\n99: \t}\n100: \n101: \tconst consumeRetryContext = Object.freeze({\n102: \t\terror: normalizedError,\n103: \t\tattemptNumber,\n104: \t\tretriesLeft,\n105: \t\tretriesConsumed,\n106: \t\tretryDelay: retriesLeft > 0 ? delayTime : 0,\n107: \t});\n108: \n109: \tconst consumeRetry = await options.shouldConsumeRetry(consumeRetryContext);\n110: \tconst effectiveDelay = consumeRetry && retriesLeft > 0 ? delayTime : 0;\n111: \tconst context = Object.freeze({\n112: \t\terror: normalizedError,\n113: \t\tattemptNumber,\n114: \t\tretriesLeft,\n115: \t\tretriesConsumed,\n116: \t\tretryDelay: effectiveDelay,\n117: \t});\n118: \n119: \tawait options.onFailedAttempt(context);\n120: \n121: \tif (calculateRemainingTime(startTime, maxRetryTime) <= 0) {\n122: \t\tthrow normalizedError;\n123: \t}\n124: \n125: \tconst remainingTime = calculateRemainingTime(startTime, maxRetryTime);\n126: \n127: \tif (remainingTime <= 0 || retriesLeft <= 0) {\n128: \t\tthrow normalizedError;\n129: \t}\n130: \n131: \tif (normalizedError instanceof TypeError && !isNetworkError(normalizedError)) {\n132: \t\tif (consumeRetry) {\n133: \t\t\tthrow normalizedError;\n134: \t\t}\n135: \n136: \t\toptions.signal?.throwIfAborted();\n137: \t\treturn false;\n138: \t}\n139: \n140: \tif (!await options.shouldRetry(context)) {\n141: \t\tthrow normalizedError;\n142: \t}\n143: \n144: \tif (!consumeRetry) {\n145: \t\toptions.signal?.throwIfAborted();\n146: \t\treturn false;\n147: \t}\n148: \n149: \tconst finalDelay = Math.min(effectiveDelay, remainingTime);\n150: \n151: \toptions.signal?.throwIfAborted();\n152: \n153: \tif (finalDelay > 0) {\n154: \t\tawait new Promise((resolve, reject) => {\n155: \t\t\tconst onAbort = () => {\n156: \t\t\t\tclearTimeout(timeoutToken);\n157: \t\t\t\toptions.signal?.removeEventListener('abort', onAbort);\n158: \t\t\t\treject(options.signal.reason);\n159: \t\t\t};\n160: \n161: \t\t\tconst timeoutToken = setTimeout(() => {\n162: \t\t\t\toptions.signal?.removeEventListener('abort', onAbort);\n163: \t\t\t\tresolve();\n164: \t\t\t}, finalDelay);\n165: \n166: \t\t\tif (options.unref) {\n167: \t\t\t\ttimeoutToken.unref?.();\n168: \t\t\t}\n169: \n170: \t\t\toptions.signal?.addEventListener('abort', onAbort, {once: true});\n171: \t\t});\n172: \t}\n173: \n174: \toptions.signal?.throwIfAborted();\n175: \n176: \treturn true;\n177: }\n178: \n179: export default async function pRetry(input, options = {}) {\n180: \toptions = {...options};\n181: \n182: \tvalidateRetries(options.retries);\n183: \n184: \tif (Object.hasOwn(options, 'forever')) {\n185: \t\tthrow new Error('The `forever` option is no longer supported. For many use-cases, you can set `retries: Infinity` instead.');\n186: \t}\n187: \n188: \toptions.retries ??= 10;\n189: \toptions.factor ??= 2;\n190: \toptions.minTimeout ??= 1000;\n191: \toptions.maxTimeout ??= Number.POSITIVE_INFINITY;\n192: \toptions.maxRetryTime ??= Number.POSITIVE_INFINITY;\n193: \toptions.randomize ??= false;\n194: \toptions.onFailedAttempt ??= () => {};\n195: \toptions.shouldRetry ??= () => true;\n196: \toptions.shouldConsumeRetry ??= () => true;\n197: \n198: \t// Validate numeric options and normalize edge cases\n199: \tvalidateNumberOption('factor', options.factor, {min: 0, allowInfinity: false});\n200: \tvalidateNumberOption('minTimeout', options.minTimeout, {min: 0, allowInfinity: false});\n201: \tvalidateNumberOption('maxTimeout', options.maxTimeout, {min: 0, allowInfinity: true});\n202: \tvalidateNumberOption('maxRetryTime', options.maxRetryTime, {min: 0, allowInfinity: true});\n203: \n204: \t// Treat non-positive factor as 1 to avoid zero backoff or negative behavior\n205: \tif (!(options.factor > 0)) {\n206: \t\toptions.factor = 1;\n207: \t}\n208: \n209: \toptions.signal?.throwIfAborted();\n210: \n211: \tlet attemptNumber = 0;\n212: \tlet retriesConsumed = 0;\n213: \tconst startTime = performance.now();\n214: \n215: \twhile (Number.isFinite(options.retries) ? retriesConsumed <= options.retries : true) {\n216: \t\tattemptNumber++;\n217: \n218: \t\ttry {\n219: \t\t\toptions.signal?.throwIfAborted();\n220: \n221: \t\t\tconst result = await input(attemptNumber);\n222: \n223: \t\t\toptions.signal?.throwIfAborted();\n224: \n225: \t\t\treturn result;\n226: \t\t} catch (error) {\n227: \t\t\tif (await onAttemptFailure({\n228: \t\t\t\terror,\n229: \t\t\t\tattemptNumber,\n230: \t\t\t\tretriesConsumed,\n231: \t\t\t\tstartTime,\n232: \t\t\t\toptions,\n233: \t\t\t})) {\n234: \t\t\t\tretriesConsumed++;\n235: \t\t\t}\n236: \t\t}\n237: \t}\n238: \n239: \t// Should not reach here, but in case it does, throw an error\n240: \tthrow new Error('Retry attempts exhausted without throwing an error.');\n241: }\n242: \n243: export function makeRetriable(function_, options) {\n244: \treturn function (...arguments_) {\n245: \t\treturn pRetry(() => function_.apply(this, arguments_), options);\n246: \t};\n247: }"
+    }
+  ],
+  "lint_diagnostics": [],
+  "advisory_review": [
+    {
+      "path": "index.js",
+      "result": {
+        "schema_version": "code-review.1",
+        "status": "no_flags",
+        "advisory": true,
+        "model": "yannelli/d1-3b-code-review-decisions",
+        "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+        "rules": [
+          "error_handling_problem",
+          "type_safety_hole",
+          "unsafe_input"
+        ],
+        "threshold": 0.9,
+        "total_lines": 247,
+        "reviewed_lines": 247,
+        "windows": [
+          {
+            "start_line": 1,
+            "end_line": 80,
+            "probabilities": {
+              "error_handling_problem": 0.014063627043245474,
+              "type_safety_hole": 0.029312230751356316,
+              "unsafe_input": 0.039638839100970026
+            }
+          },
+          {
+            "start_line": 69,
+            "end_line": 148,
+            "probabilities": {
+              "error_handling_problem": 0.21206880435710532,
+              "type_safety_hole": 0.04208772791561884,
+              "unsafe_input": 0.053403329799824234
+            }
+          },
+          {
+            "start_line": 137,
+            "end_line": 216,
+            "probabilities": {
+              "error_handling_problem": 0.10087862273005653,
+              "type_safety_hole": 0.0446808702726502,
+              "unsafe_input": 0.020332353342658753
+            }
+          },
+          {
+            "start_line": 205,
+            "end_line": 247,
+            "probabilities": {
+              "error_handling_problem": 0.22270013882530884,
+              "type_safety_hole": 0.053403329799824234,
+              "unsafe_input": 0.039638839100970026
+            }
+          }
+        ],
+        "findings": [],
+        "latency_ms": 775.7928999999422,
+        "error": null
+      },
+      "wall_seconds": 0.788415699993493
+    }
+  ]
+}

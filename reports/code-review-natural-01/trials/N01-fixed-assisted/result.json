@@ -1,0 +1,100 @@
+{
+  "id": "N01",
+  "variant": "fixed",
+  "arm": "assisted",
+  "utc": "2026-10-28T04:17:28.496562+00:00",
+  "attempts": [
+    {
+      "attempt": 1,
+      "model_seconds": 2.58997499999532,
+      "finish_reason": "stop",
+      "proposal": {
+        "issue": true,
+        "summary": "The `clearQueue` method attempts to create an AbortSignal with `AbortSignal.abort()` which is invalid syntax and throws a TypeError at runtime.",
+        "edits": [
+          {
+            "path": "index.js",
+            "old": "\t\t\t\tconst abortError = AbortSignal.abort().reason;",
+            "new": "\t\t\t\tconst abortError = new Error('Queue cleared');"
+          }
+        ]
+      },
+      "verification": {
+        "passed": true,
+        "returncode": 0,
+        "stdout": "{\"status\":\"passed\",\"checks\":5}\n",
+        "stderr": "",
+        "seconds": 0.09574780000548344
+      }
+    }
+  ],
+  "verified_repair": false,
+  "hints": [
+    {
+      "path": "index.js",
+      "result": {
+        "schema_version": "code-review.1",
+        "status": "flagged",
+        "advisory": true,
+        "model": "yannelli/d1-3b-code-review-decisions",
+        "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+        "rules": [
+          "error_handling_problem",
+          "type_safety_hole",
+          "unsafe_input"
+        ],
+        "threshold": 0.9,
+        "total_lines": 148,
+        "reviewed_lines": 148,
+        "windows": [
+          {
+            "start_line": 1,
+            "end_line": 80,
+            "probabilities": {
+              "error_handling_problem": 0.9950945942942779,
+              "type_safety_hole": 0.01098694263059318,
+              "unsafe_input": 0.024423090054107213
+            }
+          },
+          {
+            "start_line": 69,
+            "end_line": 148,
+            "probabilities": {
+              "error_handling_problem": 0.6926419831347361,
+              "type_safety_hole": 0.014063627043245474,
+              "unsafe_input": 0.004070137715896127
+            }
+          }
+        ],
+        "findings": [
+          {
+            "rule": "error_handling_problem",
+            "probability": 0.9950945942942779,
+            "start_line": 1,
+            "end_line": 80
+          }
+        ],
+        "latency_ms": 490.3961000018171,
+        "error": null
+      },
+      "wall_seconds": 0.4931284000049345
+    }
+  ],
+  "issue": true,
+  "control_regression_passed": true,
+  "elapsed_seconds": 3.194749200003571,
+  "capped_task_seconds": 180.0,
+  "source_hashes_before": {
+    "benchmark.js": "ff4678a088f186a55d63ab51f14f02408f5f26480e5493f02385d38b55586647",
+    "index.js": "edde12a4a4dbdbe8d27161cdd0853db0bab435d5dc6c15f9f4dedc27ee9bca60",
+    "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "package.json": "b28d1f6ff207a8572d6fde695cc771c95c9debbee4be77f924b95ad13ada0bd0"
+  },
+  "source_hashes_after": {
+    "benchmark.js": "ff4678a088f186a55d63ab51f14f02408f5f26480e5493f02385d38b55586647",
+    "index.js": "cc294ad0b51858fd81cd7b9659e1db6bff5ccb37951e31c345715f592e94f92c",
+    "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "package.json": "b28d1f6ff207a8572d6fde695cc771c95c9debbee4be77f924b95ad13ada0bd0"
+  },
+  "diff": "--- index.js\n+++ index.js\n@@ -81,7 +81,7 @@\n \t\t\t\t\treturn;\n \t\t\t\t}\n \n-\t\t\t\tconst abortError = AbortSignal.abort().reason;\n+\t\t\t\tconst abortError = new Error('Queue cleared');\n \n \t\t\t\twhile (queue.size > 0) {\n \t\t\t\t\tqueue.dequeue().reject(abortError);\n"
+}

@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"issue\": true, \"summary\": \"The 'map' method on the returned generator function incorrectly uses 'this' which is not bound to the generator, causing a TypeError when calling Array.from with the iterable.\", \"edits\": [{\"path\": \"index.js\", \"old\": \"\\t\\t\\tasync value(iterable, function_) {\\n\\t\\t\\t\\tconst promises = Array.from(iterable, (value, index) => this(function_, value, index));\\n\\t\\t\\t\\treturn Promise.all(promises);\\n\\t\\t\\t},\", \"new\": \"\\t\\t\\tasync value(iterable, function_) {\\n\\t\\t\\t\\tconst promises = Array.from(iterable, (value, index) => generator(function_, value, index));\\n\\t\\t\\t\\treturn Promise.all(promises);\\n\\t\\t\\t},\"}]}"
+      }
+    }
+  ],
+  "created": 1793161065,
+  "model": "qwen3-coder-30b-a3b-q4km",
+  "system_fingerprint": "b11889-d854d98ba",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 174,
+    "prompt_tokens": 2086,
+    "total_tokens": 2260,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "id": "chatcmpl-rYyZcqucABOjENbkflBV0vzFkDLobzzY",
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 2086,
+    "prompt_ms": 1352.525,
+    "prompt_per_token_ms": 0.6483820709491851,
+    "prompt_per_second": 1542.300512005323,
+    "predicted_n": 174,
+    "predicted_ms": 1187.226,
+    "predicted_per_token_ms": 6.862578034682081,
+    "predicted_per_second": 145.71783299894037
+  }
+}

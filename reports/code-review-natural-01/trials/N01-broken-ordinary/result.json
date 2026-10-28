@@ -1,0 +1,95 @@
+{
+  "id": "N01",
+  "variant": "broken",
+  "arm": "ordinary",
+  "utc": "2026-10-28T04:17:10.291694+00:00",
+  "attempts": [
+    {
+      "attempt": 1,
+      "model_seconds": 2.5690305000025546,
+      "finish_reason": "stop",
+      "proposal": {
+        "issue": true,
+        "summary": "The `catch` block on line 44 is empty and silently swallows all promise rejections, which can mask errors and prevent proper error handling in the caller. This leads to incorrect runtime behavior where failures are not propagated correctly.",
+        "edits": [
+          {
+            "path": "index.js",
+            "old": "\t\ttry {\n\t\t\tawait result;\n\t\t} catch {}\n\n\t\t// Decrement active count and process next queued function\n\t\tnext();",
+            "new": "\t\ttry {\n\t\t\tawait result;\n\t\t} catch (error) {\n\t\t\tnext();\n\t\t\tthrow error;\n\t\t}\n\n\t\t// Decrement active count and process next queued function\n\t\tnext();"
+          }
+        ]
+      },
+      "verification": {
+        "passed": false,
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "{\"status\":\"failed\",\"checks\":2,\"name\":\"AssertionError\",\"message\":\"iteration failure must not leave orphaned mapper rejections\\n+ actual - expected\\n\\n+ [\\n+   'mapper failed',\\n+   'mapper failed',\\n+   'mapper failed',\\n+   'mapper failed'\\n+ ]\\n- []\\n\",\"stack\":\"AssertionError [ERR_ASSERTION]: iteration failure must not leave orphaned mapper rejections\\n+ actual - expected\\n\\n+ [\\n+   'mapper failed',\\n+   'mapper failed',\\n+   'mapper failed',\\n+   'mapper failed'\\n+ ]\\n- []\\n\\n    at check (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:12:53)\\n    at file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:33:9\"}\n",
+        "seconds": 0.09202709999954095
+      }
+    },
+    {
+      "attempt": 2,
+      "model_seconds": 2.532447300000058,
+      "finish_reason": "stop",
+      "proposal": {
+        "issue": true,
+        "summary": "When a mapper function fails during iteration, the queue's pending items are not properly rejected, leading to orphaned rejections that cause validation failures.",
+        "edits": [
+          {
+            "path": "index.js",
+            "old": "while (queue.size > 0) {\n\t\t\t\t\tqueue.dequeue().reject(abortError);\n\t\t\t\t}",
+            "new": "while (queue.size > 0) {\n\t\t\t\t\tconst item = queue.dequeue();\n\t\t\t\t\tif (typeof item.reject === 'function') {\n\t\t\t\t\t\titem.reject(abortError);\n\t\t\t\t\t}\n\t\t\t\t}"
+          }
+        ]
+      },
+      "verification": {
+        "passed": false,
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "{\"status\":\"failed\",\"checks\":2,\"name\":\"AssertionError\",\"message\":\"iteration failure must not leave orphaned mapper rejections\\n+ actual - expected\\n\\n+ [\\n+   'mapper failed',\\n+   'mapper failed',\\n+   'mapper failed',\\n+   'mapper failed'\\n+ ]\\n- []\\n\",\"stack\":\"AssertionError [ERR_ASSERTION]: iteration failure must not leave orphaned mapper rejections\\n+ actual - expected\\n\\n+ [\\n+   'mapper failed',\\n+   'mapper failed',\\n+   'mapper failed',\\n+   'mapper failed'\\n+ ]\\n- []\\n\\n    at check (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:12:53)\\n    at file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:33:9\"}\n",
+        "seconds": 0.0823344000018551
+      }
+    },
+    {
+      "attempt": 3,
+      "model_seconds": 3.201561399997445,
+      "finish_reason": "stop",
+      "proposal": {
+        "issue": true,
+        "summary": "When a mapper function fails during iteration, the queue clearing logic doesn't properly reject queued items, leading to orphaned rejections that are not handled by the caller.",
+        "edits": [
+          {
+            "path": "index.js",
+            "old": "while (queue.size > 0) {\n\t\t\t\t\tconst item = queue.dequeue();\n\t\t\t\t\tif (typeof item.reject === 'function') {\n\t\t\t\t\t\titem.reject(abortError);\n\t\t\t\t\t}\n\t\t\t\t}",
+            "new": "while (queue.size > 0) {\n\t\t\t\t\tconst item = queue.dequeue();\n\t\t\t\t\tif (typeof item.reject === 'function') {\n\t\t\t\t\t\titem.reject(abortError);\n\t\t\t\t\t} else if (typeof item.run === 'function') {\n\t\t\t\t\t\t// Handle the case where an item is queued but not yet executed\n\t\t\t\t\t\titem.run(); // This ensures the promise chain continues\n\t\t\t\t\t}\n\t\t\t\t}"
+          }
+        ]
+      },
+      "verification": {
+        "passed": false,
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "{\"status\":\"failed\",\"checks\":2,\"name\":\"AssertionError\",\"message\":\"iteration failure must not leave orphaned mapper rejections\\n+ actual - expected\\n\\n+ [\\n+   'mapper failed',\\n+   'mapper failed',\\n+   'mapper failed',\\n+   'mapper failed'\\n+ ]\\n- []\\n\",\"stack\":\"AssertionError [ERR_ASSERTION]: iteration failure must not leave orphaned mapper rejections\\n+ actual - expected\\n\\n+ [\\n+   'mapper failed',\\n+   'mapper failed',\\n+   'mapper failed',\\n+   'mapper failed'\\n+ ]\\n- []\\n\\n    at check (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:12:53)\\n    at file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_natural_probe.mjs:33:9\"}\n",
+        "seconds": 0.0762066999959643
+      }
+    }
+  ],
+  "verified_repair": false,
+  "hints": null,
+  "issue": true,
+  "elapsed_seconds": 8.59965120000561,
+  "capped_task_seconds": 180.0,
+  "source_hashes_before": {
+    "benchmark.js": "ff4678a088f186a55d63ab51f14f02408f5f26480e5493f02385d38b55586647",
+    "index.js": "63239cd9ae80b1433e05014fe6ec501475c6fa59fad06418cb5972dbc7cc14e2",
+    "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "package.json": "b28d1f6ff207a8572d6fde695cc771c95c9debbee4be77f924b95ad13ada0bd0"
+  },
+  "source_hashes_after": {
+    "benchmark.js": "ff4678a088f186a55d63ab51f14f02408f5f26480e5493f02385d38b55586647",
+    "index.js": "c103e00487d1d48244977aeb537dd779f6bfee87d7888684ffcccb9af4279414",
+    "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "package.json": "b28d1f6ff207a8572d6fde695cc771c95c9debbee4be77f924b95ad13ada0bd0"
+  },
+  "diff": "--- index.js\n+++ index.js\n@@ -41,7 +41,10 @@\n \t\t// but the original promise rejection is preserved for the caller\n \t\ttry {\n \t\t\tawait result;\n-\t\t} catch {}\n+\t\t} catch (error) {\n+\t\t\tnext();\n+\t\t\tthrow error;\n+\t\t}\n \n \t\t// Decrement active count and process next queued function\n \t\tnext();\n@@ -84,7 +87,13 @@\n \t\t\t\tconst abortError = AbortSignal.abort().reason;\n \n \t\t\t\twhile (queue.size > 0) {\n-\t\t\t\t\tqueue.dequeue().reject(abortError);\n+\t\t\t\t\tconst item = queue.dequeue();\n+\t\t\t\t\tif (typeof item.reject === 'function') {\n+\t\t\t\t\t\titem.reject(abortError);\n+\t\t\t\t\t} else if (typeof item.run === 'function') {\n+\t\t\t\t\t\t// Handle the case where an item is queued but not yet executed\n+\t\t\t\t\t\titem.run(); // This ensures the promise chain continues\n+\t\t\t\t\t}\n \t\t\t\t}\n \t\t\t},\n \t\t},\n"
+}

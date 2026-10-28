@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"issue\": true, \"summary\": \"In the `getParser` method, when a parser is found via regex matching, it retrieves the parser using `parserRegExp.toString()` as the key instead of the actual RegExp object, which can cause cache misses and incorrect parser selection.\", \"edits\": [{\"path\": \"lib/content-type-parser.js\", \"old\": \"    if (parserRegExp.test(ct)) {\\n      parser = this.customParsers.get(parserRegExp.toString())\\n      this.cache.set(ct, parser)\\n      return parser\\n    }\", \"new\": \"    if (parserRegExp.test(ct)) {\\n      parser = this.customParsers.get(parserRegExp)\\n      this.cache.set(ct, parser)\\n      return parser\\n    }\"}]}"
+      }
+    }
+  ],
+  "created": 1793161489,
+  "model": "qwen3-coder-30b-a3b-q4km",
+  "system_fingerprint": "b11889-d854d98ba",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 158,
+    "prompt_tokens": 5575,
+    "total_tokens": 5733,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "id": "chatcmpl-p0mT4IfQP19vPkZXz4b7e9KwKJaB7Wk8",
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 5575,
+    "prompt_ms": 3966.786,
+    "prompt_per_token_ms": 0.7115311210762332,
+    "prompt_per_second": 1405.4199041743116,
+    "predicted_n": 158,
+    "predicted_ms": 1211.349,
+    "predicted_per_token_ms": 7.715598726114649,
+    "predicted_per_second": 129.6075697424937
+  }
+}

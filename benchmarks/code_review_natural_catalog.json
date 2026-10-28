@@ -1,0 +1,121 @@
+{
+  "schema_version": "review-natural-corpus.1",
+  "cases": [
+    {
+      "id": "N01",
+      "repository": "sindresorhus/p-limit",
+      "fixed": "9df0d27f82ab3cb6d7e1087f5bda94ce911d33ca",
+      "broken": "783068bb9e967fd7bea8642e1bf5a3627fe38bdf",
+      "url": "https://github.com/sindresorhus/p-limit/commit/9df0d27f82ab3cb6d7e1087f5bda94ce911d33ca",
+      "title": "Fix unhandled rejections in `limit.map()` when the iterable throws",
+      "source_files": [
+        {
+          "path": "index.js",
+          "patch": "@@ -105,7 +105,23 @@ export default function pLimit(concurrency) {\n \t\t},\n \t\tmap: {\n \t\t\tasync value(iterable, function_) {\n-\t\t\t\tconst promises = Array.from(iterable, (value, index) => generator(function_, value, index));\n+\t\t\t\tconst promises = [];\n+\n+\t\t\t\ttry {\n+\t\t\t\t\tArray.from(iterable, (value, index) => {\n+\t\t\t\t\t\tconst promise = generator(function_, value, index);\n+\t\t\t\t\t\tpromises.push(promise);\n+\t\t\t\t\t\treturn promise;\n+\t\t\t\t\t});\n+\t\t\t\t} catch (error) {\n+\t\t\t\t\t// The iterable threw, so `Promise.all` never observes the already scheduled promises. Observe them here to avoid unhandled rejections.\n+\t\t\t\t\tfor (const promise of promises) {\n+\t\t\t\t\t\tpromise.catch(() => {}); // eslint-disable-line promise/prefer-await-to-then\n+\t\t\t\t\t}\n+\n+\t\t\t\t\tthrow error;\n+\t\t\t\t}\n+\n \t\t\t\treturn Promise.all(promises);\n \t\t\t},\n \t\t},"
+        }
+      ]
+    },
+    {
+      "id": "N02",
+      "repository": "sindresorhus/p-limit",
+      "fixed": "ef37eb2f372d385883d113803c98ba0bf3828ad1",
+      "broken": "42599ebbbb1228a5bdab381fcf8f4ac20eb8d551",
+      "url": "https://github.com/sindresorhus/p-limit/commit/ef37eb2f372d385883d113803c98ba0bf3828ad1",
+      "title": "Fix detached limit.map calls (#108)",
+      "source_files": [
+        {
+          "path": "index.js",
+          "patch": "@@ -105,7 +105,7 @@ export default function pLimit(concurrency) {\n \t\t},\n \t\tmap: {\n \t\t\tasync value(iterable, function_) {\n-\t\t\t\tconst promises = Array.from(iterable, (value, index) => this(function_, value, index));\n+\t\t\t\tconst promises = Array.from(iterable, (value, index) => generator(function_, value, index));\n \t\t\t\treturn Promise.all(promises);\n \t\t\t},\n \t\t},"
+        }
+      ]
+    },
+    {
+      "id": "N03",
+      "repository": "sindresorhus/p-retry",
+      "fixed": "3c220355c7a60e563947049ea4f5fd38e113172f",
+      "broken": "35681f6c70f8ca2bdcb9542281147679184269fa",
+      "url": "https://github.com/sindresorhus/p-retry/commit/3c220355c7a60e563947049ea4f5fd38e113172f",
+      "title": "Fix error for invalid fractional retry counts",
+      "source_files": [
+        {
+          "path": "index.js",
+          "patch": "@@ -9,6 +9,10 @@ function validateRetries(retries) {\n \t\tif (Number.isNaN(retries)) {\n \t\t\tthrow new TypeError('Expected `retries` to be a valid number or Infinity, got NaN.');\n \t\t}\n+\n+\t\tif (Number.isFinite(retries) && !Number.isInteger(retries)) {\n+\t\t\tthrow new TypeError('Expected `retries` to be a non-negative integer or Infinity.');\n+\t\t}\n \t} else if (retries !== undefined) {\n \t\tthrow new TypeError('Expected `retries` to be a number or Infinity.');\n \t}"
+        }
+      ]
+    },
+    {
+      "id": "N04",
+      "repository": "sindresorhus/p-retry",
+      "fixed": "f011d2e837166f1bea3e739e59754caed4a2dde6",
+      "broken": "85cdece1c48f3c3fe09d995d86bf59c0d0e4b44f",
+      "url": "https://github.com/sindresorhus/p-retry/commit/f011d2e837166f1bea3e739e59754caed4a2dde6",
+      "title": "Fix `TypeError` retry handling",
+      "source_files": [
+        {
+          "path": "index.js",
+          "patch": "@@ -129,12 +129,7 @@ async function onAttemptFailure({error, attemptNumber, retriesConsumed, startTim\n \t}\n \n \tif (normalizedError instanceof TypeError && !isNetworkError(normalizedError)) {\n-\t\tif (consumeRetry) {\n-\t\t\tthrow normalizedError;\n-\t\t}\n-\n-\t\toptions.signal?.throwIfAborted();\n-\t\treturn false;\n+\t\tthrow normalizedError;\n \t}\n \n \tif (!await options.shouldRetry(context)) {"
+        }
+      ]
+    },
+    {
+      "id": "N05",
+      "repository": "axios/axios",
+      "fixed": "a092bae50d1884782151b2fcea12974d6da6e376",
+      "broken": "3041b8fd1daf17404d1bad1f9d94026ea5ab400b",
+      "url": "https://github.com/axios/axios/commit/a092bae50d1884782151b2fcea12974d6da6e376",
+      "title": "fix(core): synchronous interceptors swallow errors and proceed with request (#11071)",
+      "source_files": [
+        {
+          "path": "lib/core/Axios.js",
+          "patch": "@@ -209,17 +209,35 @@ class Axios {\n       const onFulfilled = requestInterceptorChain[i++];\n       const onRejected = requestInterceptorChain[i++];\n       try {\n-        newConfig = onFulfilled(newConfig);\n+        newConfig = onFulfilled ? onFulfilled(newConfig) : newConfig;\n       } catch (error) {\n-        onRejected.call(this, error);\n+        if (!onRejected) {\n+          promise = Promise.reject(error);\n+          break;\n+        }\n+\n+        try {\n+          const rejectedResult = onRejected.call(this, error);\n+\n+          if (utils.isThenable(rejectedResult)) {\n+            promise = Promise.resolve(rejectedResult).then(() =>\n+              dispatchRequest.call(this, newConfig)\n+            );\n+          }\n+        } catch (rejectedError) {\n+          promise = Promise.reject(rejectedError);\n+        }\n+\n         break;\n       }\n     }\n \n-    try {\n-      promise = dispatchRequest.call(this, newConfig);\n-    } catch (error) {\n-      return Promise.reject(error);\n+    if (!promise) {\n+      try {\n+        promise = dispatchRequest.call(this, newConfig);\n+      } catch (error) {\n+        promise = Promise.reject(error);\n+      }\n     }\n \n     i = 0;"
+        }
+      ]
+    },
+    {
+      "id": "N06",
+      "repository": "axios/axios",
+      "fixed": "a75bf44647e5132e39b778730394b0a2b983265c",
+      "broken": "712e02373f1c5ac72fdf5da16f04838338ba817e",
+      "url": "https://github.com/axios/axios/commit/a75bf44647e5132e39b778730394b0a2b983265c",
+      "title": "fix(core): tolerate non-string stack when decorating request errors (#11109)",
+      "source_files": [
+        {
+          "path": "lib/core/Axios.js",
+          "patch": "@@ -41,21 +41,21 @@ class Axios {\n       return await this._request(configOrUrl, config);\n     } catch (err) {\n       if (err instanceof Error) {\n-        let dummy = {};\n+        try {\n+          let dummy = {};\n \n-        Error.captureStackTrace ? Error.captureStackTrace(dummy) : (dummy = new Error());\n+          Error.captureStackTrace ? Error.captureStackTrace(dummy) : (dummy = new Error());\n \n-        // slice off the Error: ... line\n-        const stack = (() => {\n-          if (!dummy.stack) {\n-            return '';\n-          }\n+          const dummyStack = dummy.stack;\n+          let stack = '';\n \n-          const firstNewlineIndex = dummy.stack.indexOf('\\n');\n+          // slice off the Error: ... line\n+          if (typeof dummyStack === 'string') {\n+            const firstNewlineIndex = dummyStack.indexOf('\\n');\n+\n+            stack = firstNewlineIndex === -1 ? '' : dummyStack.slice(firstNewlineIndex + 1);\n+          }\n \n-          return firstNewlineIndex === -1 ? '' : dummy.stack.slice(firstNewlineIndex + 1);\n-        })();\n-        try {\n           if (!err.stack) {\n             err.stack = stack;\n             // match without the 2 top stack lines\n@@ -71,7 +71,7 @@ class Axios {\n             }\n           }\n         } catch (e) {\n-          // ignore the case where \"stack\" is an un-writable property\n+          // Ignore failures from custom stack hooks or un-writable stack properties.\n         }\n       }\n "
+        }
+      ]
+    },
+    {
+      "id": "N07",
+      "repository": "fastify/fastify",
+      "fixed": "9e9f61a6bf092bbd3cf8d10b792432aa8be085af",
+      "broken": "f736849a10a9b2ca57fb09437feb8294cda76234",
+      "url": "https://github.com/fastify/fastify/commit/9e9f61a6bf092bbd3cf8d10b792432aa8be085af",
+      "title": "fix: clamp error statusCode between 400 and 599 with 500 fallback (#7089)",
+      "source_files": [
+        {
+          "path": "lib/error-handler.js",
+          "patch": "@@ -134,16 +134,16 @@ function buildErrorHandler (parent = rootErrorHandler, func) {\n function setErrorHeaders (error, reply) {\n   const res = reply.raw\n   let statusCode = res.statusCode\n-  statusCode = (statusCode >= 400) ? statusCode : 500\n+  statusCode = (statusCode >= 400 && statusCode <= 599) ? statusCode : 500\n   // treat undefined and null as same\n   if (error != null) {\n     if (error.headers !== undefined) {\n       reply.headers(error.headers)\n     }\n-    if (error.status >= 400) {\n-      statusCode = error.status\n-    } else if (error.statusCode >= 400) {\n+    if (error.statusCode >= 400 && error.statusCode <= 599) {\n       statusCode = error.statusCode\n+    } else if (error.status >= 400 && error.status <= 599) {\n+      statusCode = error.status\n     }\n   }\n   res.statusCode = statusCode"
+        },
+        {
+          "path": "lib/error-status.js",
+          "patch": "@@ -6,8 +6,10 @@ const {\n \n function setErrorStatusCode (reply, err) {\n   if (!reply[kReplyHasStatusCode] || reply.statusCode === 200) {\n-    const statusCode = err && (err.statusCode || err.status)\n-    reply.code(statusCode >= 400 ? statusCode : 500)\n+    let statusCode = 500\n+    if (err?.statusCode >= 400 && err.statusCode <= 599) statusCode = err.statusCode\n+    else if (err?.status >= 400 && err.status <= 599) statusCode = err.status\n+    reply.code(statusCode)\n   }\n }\n "
+        }
+      ]
+    },
+    {
+      "id": "N08",
+      "repository": "fastify/fastify",
+      "fixed": "37df44a421817e7bb048fce834bf691abb0999d6",
+      "broken": "9e9f61a6bf092bbd3cf8d10b792432aa8be085af",
+      "url": "https://github.com/fastify/fastify/commit/37df44a421817e7bb048fce834bf691abb0999d6",
+      "title": "fix: contain synchronous throws from custom content type parsers (#7118)",
+      "source_files": [
+        {
+          "path": "lib/content-type-parser.js",
+          "patch": "@@ -222,7 +222,13 @@ ContentTypeParser.prototype.run = function (contentType, handler, request, reply\n     return\n   }\n \n-  const result = parser.fn(request, request[kRequestPayloadStream], done)\n+  let result\n+  try {\n+    result = parser.fn(request, request[kRequestPayloadStream], done)\n+  } catch (error) {\n+    done(error, undefined)\n+    return\n+  }\n   if (result && typeof result.then === 'function') {\n     result.then(body => { done(null, body) }, done)\n   }\n@@ -317,7 +323,13 @@ function rawBody (request, reply, options, parser, done) {\n       body = Buffer.concat(chunks, receivedLength)\n     }\n \n-    const result = parser.fn(request, body, done)\n+    let result\n+    try {\n+      result = parser.fn(request, body, done)\n+    } catch (error) {\n+      done(error, undefined)\n+      return\n+    }\n     if (result && typeof result.then === 'function') {\n       result.then(body => { done(null, body) }, done)\n     }"
+        }
+      ]
+    }
+  ]
+}

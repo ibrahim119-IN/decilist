@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"issue\": true, \"summary\": \"Unused variable 'e' in catch block at line 73 shadows the error parameter, potentially causing confusion and incorrect stack trace handling\", \"edits\": [{\"path\": \"lib/core/Axios.js\", \"old\": \"    } catch (err) {\\n      if (err instanceof Error) {\\n        let dummy = {};\\n\\n        Error.captureStackTrace ? Error.captureStackTrace(dummy) : (dummy = new Error());\\n\\n        // slice off the Error: ... line\\n        const stack = (() => {\\n          if (!dummy.stack) {\\n            return '';\\n          }\\n\\n          const firstNewlineIndex = dummy.stack.indexOf('\\\\n');\\n\\n          return firstNewlineIndex === -1 ? '' : dummy.stack.slice(firstNewlineIndex + 1);\\n        })();\\n        try {\\n          if (!err.stack) {\\n            err.stack = stack;\\n            // match without the 2 top stack lines\\n          } else if (stack) {\\n            const firstNewlineIndex = stack.indexOf('\\\\n');\\n            const secondNewlineIndex =\\n              firstNewlineIndex === -1 ? -1 : stack.indexOf('\\\\n', firstNewlineIndex + 1);\\n            const stackWithoutTwoTopLines =\\n              secondNewlineIndex === -1 ? '' : stack.slice(secondNewlineIndex + 1);\\n\\n            if (!String(err.stack).endsWith(stackWithoutTwoTopLines)) {\\n              err.stack += '\\\\n' + stack;\\n            }\\n          }\\n        } catch (_) {\\n          // ignore the case where \\\"stack\\\" is an un-writable property\\n        }\\n      }\\n\\n      throw err;\\n    }\", \"new\": \"    } catch (err) {\\n      if (err instanceof Error) {\\n        let dummy = {};\\n\\n        Error.captureStackTrace ? Error.captureStackTrace(dummy) : (dummy = new Error());\\n\\n        // slice off the Error: ... line\\n        const stack = (() => {\\n          if (!dummy.stack) {\\n            return '';\\n          }\\n\\n          const firstNewlineIndex = dummy.stack.indexOf('\\\\n');\\n\\n          return firstNewlineIndex === -1 ? '' : dummy.stack.slice(firstNewlineIndex + 1);\\n        })();\\n        try {\\n          if (!err.stack) {\\n            err.stack = stack;\\n            // match without the 2 top stack lines\\n          } else if (stack) {\\n            const firstNewlineIndex = stack.indexOf('\\\\n');\\n            const secondNewlineIndex =\\n              firstNewlineIndex === -1 ? -1 : stack.indexOf('\\\\n', firstNewlineIndex + 1);\\n            const stackWithoutTwoTopLines =\\n              secondNewlineIndex === -1 ? '' : stack.slice(secondNewlineIndex + 1);\\n\\n            if (!String(err.stack).endsWith(stackWithoutTwoTopLines)) {\\n              err.stack += '\\\\n' + stack;\\n            }\\n          }\\n        } catch (_) {\\n          // ignore the case where \\\"stack\\\" is an un-writable property\\n        }\\n      }\\n\\n      throw err;\\n    }\"}]}"
+      }
+    }
+  ],
+  "created": 1793161338,
+  "model": "qwen3-coder-30b-a3b-q4km",
+  "system_fingerprint": "b11889-d854d98ba",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 693,
+    "prompt_tokens": 4110,
+    "total_tokens": 4803,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "id": "chatcmpl-yCwNYJZW2U886prF1MvGDQQmTcgpWx9U",
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 4110,
+    "prompt_ms": 2645.643,
+    "prompt_per_token_ms": 0.6437087591240876,
+    "prompt_per_second": 1553.4975807393514,
+    "predicted_n": 693,
+    "predicted_ms": 4556.204,
+    "predicted_per_token_ms": 6.584109826589595,
+    "predicted_per_second": 151.88082008619457
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"issue\": true, \"summary\": \"The `retriesConsumed` variable is incremented after a retry attempt fails and before the next attempt begins, but it's not reset when an attempt succeeds. This causes the retry count to be incorrectly tracked across multiple successful attempts in a row, potentially leading to early termination of retries when they should continue.\", \"edits\": [{\"path\": \"index.js\", \"old\": \"\\t\\ttry {\\n\\t\\t\\toptions.signal?.throwIfAborted();\\n\\n\\t\\t\\tconst result = await input(attemptNumber);\\n\\n\\t\\t\\toptions.signal?.throwIfAborted();\\n\\n\\t\\t\\treturn result;\\n\\t\\t} catch (error) {\\n\\t\\t\\tif (await onAttemptFailure({\\n\\t\\t\\t\\terror,\\n\\t\\t\\t\\tattemptNumber,\\n\\t\\t\\t\\tretriesConsumed,\\n\\t\\t\\t\\tstartTime,\\n\\t\\t\\t\\toptions,\\n\\t\\t\\t})) {\\n\\t\\t\\t\\tretriesConsumed++;\\n\\t\\t\\t}\\n\\t\\t}\", \"new\": \"\\t\\ttry {\\n\\t\\t\\toptions.signal?.throwIfAborted();\\n\\n\\t\\t\\tconst result = await input(attemptNumber);\\n\\n\\t\\t\\toptions.signal?.throwIfAborted();\\n\\n\\t\\t\\treturn result;\\n\\t\\t} catch (error) {\\n\\t\\t\\tif (await onAttemptFailure({\\n\\t\\t\\t\\terror,\\n\\t\\t\\t\\tattemptNumber,\\n\\t\\t\\t\\tretriesConsumed,\\n\\t\\t\\t\\tstartTime,\\n\\t\\t\\t\\toptions,\\n\\t\\t\\t})) {\\n\\t\\t\\t\\tretriesConsumed++;\\n\\t\\t\\t} else {\\n\\t\\t\\t\\tretriesConsumed = 0;\\n\\t\\t\\t}\\n\\t\\t}\"}]}"
+      }
+    }
+  ],
+  "created": 1793161270,
+  "model": "qwen3-coder-30b-a3b-q4km",
+  "system_fingerprint": "b11889-d854d98ba",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 396,
+    "prompt_tokens": 3394,
+    "total_tokens": 3790,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "id": "chatcmpl-f9czit59VltQJIVJ2Ua4TGzIKttqxwwY",
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 3394,
+    "prompt_ms": 2160.751,
+    "prompt_per_token_ms": 0.636638479670006,
+    "prompt_per_second": 1570.750169732653,
+    "predicted_n": 396,
+    "predicted_ms": 2490.879,
+    "predicted_per_token_ms": 6.306022784810127,
+    "predicted_per_second": 158.5785580110475
+  }
+}

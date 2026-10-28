@@ -1,0 +1,30 @@
+{
+  "method": "Post-trial adjudication by the same primary evaluator, not independent or blinded. Categories apply to the first control response. Unparseable responses remain unusable even when their partial prose suggests a claim. Additional executable checks are diagnostic only and never retroactively inserted into the frozen timed protocol.",
+  "controls": [
+    {"id":"N01","arm":"ordinary","category":"confirmed_false_runtime","reason":"The caller already observes the original rejected promise. The internal catch prevents an orphaned rejection. Original passes caller/queue checks; proposed rethrow creates an unhandled rejection.","evidence":"code_review_control_checks.mjs N01"},
+    {"id":"N01","arm":"assisted","category":"confirmed_false_runtime","reason":"AbortSignal.abort() is valid in the tested Node runtime and returns AbortError. Original queue clearing works; replacing it with Error changes the existing rejection contract.","evidence":"code_review_control_checks.mjs N01"},
+    {"id":"N02","arm":"ordinary","category":"confirmed_false_runtime","reason":"Same internal-catch allegation as N01; caller-visible rejection and queue checks pass on original and fail after proposed change.","evidence":"code_review_control_checks.mjs N02"},
+    {"id":"N02","arm":"assisted","category":"confirmed_false_runtime","reason":"Same invalid-AbortSignal allegation as N01; the claimed TypeError does not occur and proposal changes AbortError to Error.","evidence":"code_review_control_checks.mjs N02"},
+    {"id":"N03","arm":"ordinary","category":"unresolved_contract_claim","reason":"Claim concerns the documented meaning of retryDelay after exhaustion, not the historical fractional-count defect. The patch does not match source. No independent contract adjudication is claimed.","evidence":"N03-fixed-ordinary/1-response.json"},
+    {"id":"N03","arm":"assisted","category":"unusable_response","reason":"Token-limit truncation while repeating escaped tabs in an edit string; no complete JSON proposal.","evidence":"N03-fixed-assisted/1-response.json"},
+    {"id":"N04","arm":"ordinary","category":"unusable_response","reason":"Token-limit truncation; no complete JSON proposal. The partial claim is not counted as an accepted finding.","evidence":"N04-fixed-ordinary/1-response.json"},
+    {"id":"N04","arm":"assisted","category":"confirmed_false_runtime","reason":"Non-consuming retries are an explicit existing policy. A bounded sequence of failures followed by success works on original; the proposed immediate throw breaks it.","evidence":"code_review_control_checks.mjs N04"},
+    {"id":"N05","arm":"ordinary","category":"style_only","reason":"Unused catch binding is a real lint diagnostic, not a demonstrated runtime defect. Removing the unused binding does not repair the hidden target.","evidence":"N05-fixed-ordinary/1-response.json and lint.json"},
+    {"id":"N05","arm":"assisted","category":"style_only","reason":"Rephrases the unused catch-binding lint message. No runtime defect is identified; exact proposed replacement does not match.","evidence":"N05-fixed-assisted/1-response.json and lint.json"},
+    {"id":"N06","arm":"ordinary","category":"style_only","reason":"Renames an unused catch binding to another unused binding, with only a hypothetical future-use concern.","evidence":"N06-fixed-ordinary/1-response.json and lint.json"},
+    {"id":"N06","arm":"assisted","category":"style_only","reason":"Renames an unused catch binding; no current runtime defect is identified and exact replacement does not match.","evidence":"N06-fixed-assisted/1-response.json and lint.json"},
+    {"id":"N07","arm":"ordinary","category":"confirmed_false_runtime","reason":"The built handler prototype chain terminates and a throwing custom handler produces a normal 500. Proposed handler-chain change causes timeout in protected validation.","evidence":"code_review_control_checks.mjs N07 and timed result"},
+    {"id":"N07","arm":"assisted","category":"confirmed_false_runtime","reason":"Factory uses Object.create and JS rejects a cyclic prototype assignment. Original throwing handler works; proposed null sentinel restarts error handling and times out in protected validation.","evidence":"code_review_control_checks.mjs N07 and timed result"},
+    {"id":"N08","arm":"ordinary","category":"confirmed_false_runtime","reason":"Regex parser keys are stored as strings. Original registration, lookup and cached lookup work; replacing the string lookup with a RegExp object breaks matching requests.","evidence":"code_review_control_checks.mjs N08"},
+    {"id":"N08","arm":"assisted","category":"confirmed_false_runtime","reason":"Same false regex-key allegation as ordinary. Original passes actual requests and proposed change fails them.","evidence":"code_review_control_checks.mjs N08"}
+  ],
+  "protected_success_audit": [
+    {"id":"N02","arm":"ordinary","accepted":false,"reason":"Repairs detached map but retains an unrelated rethrow that creates an unhandled rejection on ordinary failed calls."},
+    {"id":"N02","arm":"assisted","accepted":false,"reason":"Repairs detached map but also changes clearQueue rejection from AbortError to Error on a false API-validity premise."}
+  ],
+  "specialist_control_alerts": [
+    {"id":"N01","region":"index.js:1-80","category":"unsupported_window_warning","reason":"Identical warning before/after; misses the historical map defect at line 108. Caller rejection/queue checks establish that the internal error handling criticized by the ordinary model is correct. The classifier provides no exact allegation; do not label an entire window defect-free."},
+    {"id":"N02","region":"index.js:1-80","category":"unsupported_window_warning","reason":"Same unchanged warning; detached-map target lies outside it. The fixed file also contains the later N01 defect, so whole-file clean labels would be invalid."},
+    {"id":"N06","region":"lib/core/Axios.js:69-148","category":"unresolved_window_warning","reason":"Warning appears only after the known stack-hook repair. No localized classifier explanation is available; broad-window truth is unresolved."}
+  ]
+}

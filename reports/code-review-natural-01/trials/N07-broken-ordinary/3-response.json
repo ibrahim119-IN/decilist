@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"issue\": true, \"summary\": \"In handleError function, line 49 sets reply[kReplyNextErrorHandler] to Object.getPrototypeOf(errorHandler), which can lead to incorrect error handling chain traversal when the errorHandler is a custom function that doesn't have a proper prototype chain, causing potential infinite recursion or skipped error handlers.\", \"edits\": [{\"path\": \"lib/error-handler.js\", \"old\": \"  // In case the error handler throws, we set the next errorHandler so we can error again\\n  reply[kReplyNextErrorHandler] = Object.getPrototypeOf(errorHandler)\", \"new\": \"  // In case the error handler throws, we set the next errorHandler so we can error again\\n  reply[kReplyNextErrorHandler] = errorHandler.func || null\"}]}"
+      }
+    }
+  ],
+  "created": 1793161397,
+  "model": "qwen3-coder-30b-a3b-q4km",
+  "system_fingerprint": "b11889-d854d98ba",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 155,
+    "prompt_tokens": 2168,
+    "total_tokens": 2323,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "id": "chatcmpl-IGchDMYdhNPS6FtRsoENsi3Gv7myAyTM",
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 2168,
+    "prompt_ms": 1345.128,
+    "prompt_per_token_ms": 0.6204464944649446,
+    "prompt_per_second": 1611.74252561838,
+    "predicted_n": 155,
+    "predicted_ms": 986.85,
+    "predicted_per_token_ms": 6.408116883116883,
+    "predicted_per_second": 156.052084916654
+  }
+}

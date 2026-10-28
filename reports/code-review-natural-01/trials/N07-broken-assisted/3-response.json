@@ -1,0 +1,36 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"issue\": true, \"summary\": \"In handleError function, when an error handler throws, the code attempts to set reply[kReplyNextErrorHandler] to errorHandler.func ? Object.getPrototypeOf(errorHandler) : false, but Object.getPrototypeOf(errorHandler) may return null or undefined, leading to incorrect error handling flow.\", \"edits\": [{\"path\": \"lib/error-handler.js\", \"old\": \"  // In case the error handler throws, we set the next errorHandler so we can error again\\n  reply[kReplyNextErrorHandler] = errorHandler.func ? Object.getPrototypeOf(errorHandler) : false\", \"new\": \"  // In case the error handler throws, we set the next errorHandler so we can error again\\n  reply[kReplyNextErrorHandler] = errorHandler.func ? (Object.getPrototypeOf(errorHandler) || null) : false\"}]}"
+      }
+    }
+  ],
+  "created": 1793161408,
+  "model": "qwen3-coder-30b-a3b-q4km",
+  "system_fingerprint": "b11889-d854d98ba",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 170,
+    "prompt_tokens": 2946,
+    "total_tokens": 3116,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "id": "chatcmpl-HnnPhfW9npQkraN5p3NPQmV3xMMAvonT",
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 2946,
+    "prompt_ms": 1850.848,
+    "prompt_per_token_ms": 0.6282579769178547,
+    "prompt_per_second": 1591.702830270233,
+    "predicted_n": 170,
+    "predicted_ms": 1141.176,
+    "predicted_per_token_ms": 6.752520710059171,
+    "predicted_per_second": 148.0928445743689
+  }
+}
