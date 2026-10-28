@@ -1,0 +1,22 @@
+{
+  "id": "H01",
+  "variant": "fixed",
+  "arm": "proof",
+  "utc": "2026-10-28T07:59:46.103793+00:00",
+  "specialist": null,
+  "verified_target_repair": false,
+  "result": {
+    "schema_version": "review-repair.1",
+    "status": "invalid",
+    "reason": "prohibited_reproduction",
+    "source_sha256": "ffe0c3f59b3ec806f50c4b7713943d7c8c2d60297ccdc57fef277a368950c509",
+    "attempts": [],
+    "candidate_workspace": null,
+    "latency_ms": 13214.280500003952,
+    "human_time_claim": "not_measured",
+    "contract_validation": "not_performed",
+    "review_required": true
+  },
+  "elapsed_seconds": 13.214635299998918,
+  "capped_task_seconds": 180
+}

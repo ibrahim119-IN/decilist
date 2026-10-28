@@ -1,0 +1,2145 @@
+{
+  "freeze_sha256": "ae1fc36e441c1f83259243e92dae794b4c32d17141f89aa1d6a0bb584a5ed413",
+  "summary": {
+    "ordinary": {
+      "verified_repairs": 0,
+      "cases": 6,
+      "capped_median_seconds": 180.0,
+      "actual_total_seconds": 28.722308899989002
+    },
+    "proof": {
+      "verified_repairs": 0,
+      "cases": 6,
+      "capped_median_seconds": 180.0,
+      "actual_total_seconds": 44.999590599982184
+    },
+    "proof_d1": {
+      "verified_repairs": 0,
+      "cases": 6,
+      "capped_median_seconds": 180.0,
+      "actual_total_seconds": 37.2143707999785
+    }
+  },
+  "rows": [
+    {
+      "id": "P01",
+      "variant": "broken",
+      "arm": "ordinary",
+      "utc": "2026-10-28T06:56:58.630072+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "29a49109dc0ac4f67038b3c0a19feac39a6be459eec9e9ffc11f139d4cab01a0",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "The pMap function does not properly handle the case where a mapper returns pMapSkip for an item that has already been processed and skipped, leading to incorrect result ordering when multiple items are skipped.",
+              "path": "index.js",
+              "start_line": 105,
+              "end_line": 113,
+              "evidence": "for (const [index, value] of result.entries()) {\n\t\t\t\tif (skippedIndexesMap.get(index) === pMapSkip) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\n\t\t\t\tpureResult.push(value);\n\t\t\t}",
+              "reproduction": {
+                "code": "const {default: pMap, pMapSkip} = await load('./index.js');\n\nasync function mapper(value, index) {\n  if (index === 1) {\n    return pMapSkip;\n  }\n  return value * 2;\n}\n\nconst input = [1, 2, 3];\nconst result = await pMap(input, mapper);\nassert.deepStrictEqual(result, [2, 6]);",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 8981.254500002251,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 8.981648499990115,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P01",
+      "variant": "broken",
+      "arm": "proof",
+      "utc": "2026-10-28T06:57:07.622298+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "29a49109dc0ac4f67038b3c0a19feac39a6be459eec9e9ffc11f139d4cab01a0",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "The pMap function does not properly handle the case where a mapper returns pMapSkip for an item that has already been processed and skipped, leading to incorrect result ordering when multiple items are skipped.",
+              "path": "index.js",
+              "start_line": 105,
+              "end_line": 113,
+              "evidence": "for (const [index, value] of result.entries()) {\n\t\t\t\tif (skippedIndexesMap.get(index) === pMapSkip) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\n\t\t\t\tpureResult.push(value);\n\t\t\t}",
+              "reproduction": {
+                "code": "const {default: pMap, pMapSkip} = await load('./index.js');\n\nasync function mapper(value, index) {\n  if (index === 1) {\n    return pMapSkip;\n  }\n  return value * 2;\n}\n\nconst input = [1, 2, 3];\nconst result = await pMap(input, mapper);\nassert.deepStrictEqual(result, [2, 6]);",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 12551.81389999052,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 12.55205840000417,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P01",
+      "variant": "broken",
+      "arm": "proof_d1",
+      "utc": "2026-10-28T06:57:20.187927+00:00",
+      "specialist": {
+        "wall_seconds": 3.0698944000032498,
+        "rows": [
+          {
+            "path": "index.js",
+            "review": {
+              "schema_version": "code-review.1",
+              "status": "flagged",
+              "advisory": true,
+              "model": "yannelli/d1-3b-code-review-decisions",
+              "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+              "rules": [
+                "error_handling_problem",
+                "type_safety_hole",
+                "unsafe_input"
+              ],
+              "threshold": 0.9,
+              "total_lines": 322,
+              "reviewed_lines": 322,
+              "windows": [
+                {
+                  "start_line": 1,
+                  "end_line": 80,
+                  "probabilities": {
+                    "error_handling_problem": 0.06371499425196533,
+                    "type_safety_hole": 0.02297736991002561,
+                    "unsafe_input": 0.004609572179374208
+                  }
+                },
+                {
+                  "start_line": 69,
+                  "end_line": 148,
+                  "probabilities": {
+                    "error_handling_problem": 0.020332353342658753,
+                    "type_safety_hole": 0.033085978388704126,
+                    "unsafe_input": 0.01098694263059318
+                  }
+                },
+                {
+                  "start_line": 137,
+                  "end_line": 216,
+                  "probabilities": {
+                    "error_handling_problem": 0.19193278644723683,
+                    "type_safety_hole": 0.027585282226789985,
+                    "unsafe_input": 0.004070137715896127
+                  }
+                },
+                {
+                  "start_line": 205,
+                  "end_line": 284,
+                  "probabilities": {
+                    "error_handling_problem": 0.0446808702726502,
+                    "type_safety_hole": 0.027585282226789985,
+                    "unsafe_input": 0.00912563738918052
+                  }
+                },
+                {
+                  "start_line": 273,
+                  "end_line": 322,
+                  "probabilities": {
+                    "error_handling_problem": 0.9933071490757153,
+                    "type_safety_hole": 0.031143830534778462,
+                    "unsafe_input": 0.005554924703691103
+                  }
+                }
+              ],
+              "findings": [
+                {
+                  "rule": "error_handling_problem",
+                  "probability": 0.9933071490757153,
+                  "start_line": 273,
+                  "end_line": 322
+                }
+              ],
+              "latency_ms": 2301.598500009277,
+              "error": null
+            }
+          }
+        ]
+      },
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "29a49109dc0ac4f67038b3c0a19feac39a6be459eec9e9ffc11f139d4cab01a0",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "pMap does not properly handle the case where a mapper returns pMapSkip for an item that is processed after the iterable has been marked as done, leading to incorrect result ordering.",
+              "path": "index.js",
+              "start_line": 130,
+              "end_line": 140,
+              "evidence": "const value = await mapper(element, index);\n\n                    // Use Map to stage the index of the element.\n                    if (value === pMapSkip) {\n                        skippedIndexesMap.set(index, value);\n                    }\n\n                    result[index] = value;",
+              "reproduction": {
+                "code": "const {default: pMap, pMapSkip} = await load('./index.js');\n\nasync function* asyncIterable() {\n  yield Promise.resolve(1);\n  yield Promise.resolve(2);\n  yield Promise.resolve(3);\n}\n\nconst mapper = async (value, index) => {\n  if (index === 1) {\n    return pMapSkip;\n  }\n  return value * 2;\n};\n\nconst result = await pMap(asyncIterable(), mapper);\nassert.deepStrictEqual(result, [2, 6]);",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 8193.932299996959,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 11.264065999988816,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P01",
+      "variant": "fixed",
+      "arm": "proof_d1",
+      "utc": "2026-10-28T06:57:31.453873+00:00",
+      "specialist": {
+        "wall_seconds": 1.622855099994922,
+        "rows": [
+          {
+            "path": "index.js",
+            "review": {
+              "schema_version": "code-review.1",
+              "status": "flagged",
+              "advisory": true,
+              "model": "yannelli/d1-3b-code-review-decisions",
+              "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+              "rules": [
+                "error_handling_problem",
+                "type_safety_hole",
+                "unsafe_input"
+              ],
+              "threshold": 0.9,
+              "total_lines": 323,
+              "reviewed_lines": 323,
+              "windows": [
+                {
+                  "start_line": 1,
+                  "end_line": 80,
+                  "probabilities": {
+                    "error_handling_problem": 0.07585818002124356,
+                    "type_safety_hole": 0.02297736991002561,
+                    "unsafe_input": 0.0038244836446372104
+                  }
+                },
+                {
+                  "start_line": 69,
+                  "end_line": 148,
+                  "probabilities": {
+                    "error_handling_problem": 0.020332353342658753,
+                    "type_safety_hole": 0.029312230751356316,
+                    "unsafe_input": 0.009708476481474066
+                  }
+                },
+                {
+                  "start_line": 137,
+                  "end_line": 216,
+                  "probabilities": {
+                    "error_handling_problem": 0.20181322226037882,
+                    "type_safety_hole": 0.027585282226789985,
+                    "unsafe_input": 0.0038244836446372104
+                  }
+                },
+                {
+                  "start_line": 205,
+                  "end_line": 284,
+                  "probabilities": {
+                    "error_handling_problem": 0.039638839100970026,
+                    "type_safety_hole": 0.027585282226789985,
+                    "unsafe_input": 0.008577485413711986
+                  }
+                },
+                {
+                  "start_line": 273,
+                  "end_line": 323,
+                  "probabilities": {
+                    "error_handling_problem": 0.9940889311437562,
+                    "type_safety_hole": 0.031143830534778462,
+                    "unsafe_input": 0.005554924703691103
+                  }
+                }
+              ],
+              "findings": [
+                {
+                  "rule": "error_handling_problem",
+                  "probability": 0.9940889311437562,
+                  "start_line": 273,
+                  "end_line": 323
+                }
+              ],
+              "latency_ms": 898.6523000057787,
+              "error": null
+            }
+          }
+        ]
+      },
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "054fda8339dec447e0225a939de37666aa9a61aa3379f8938143bb2b12baf71b",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "The pMap function does not properly handle the case where a mapper returns pMapSkip for an item at index 0, causing that item to be omitted from the result even when it should be included.",
+              "path": "index.js",
+              "start_line": 133,
+              "end_line": 140,
+              "evidence": "if (value === pMapSkip) {\n\t\t\tskippedIndexesMap.set(index, value);\n\t\t}\n\n\t\tresult[index] = value;",
+              "reproduction": {
+                "code": "const {default: pMap, pMapSkip} = await load('./index.js');\nconst input = [1, 2, 3];\nconst mapper = async (value, index) => {\n  if (index === 0) {\n    return pMapSkip;\n  }\n  return value * 2;\n};\nconst result = await pMap(input, mapper);\nassert.deepEqual(result, [4, 6]);",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 5995.189599998412,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 7.618276099994546,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P01",
+      "variant": "fixed",
+      "arm": "proof",
+      "utc": "2026-10-28T06:57:39.074612+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "054fda8339dec447e0225a939de37666aa9a61aa3379f8938143bb2b12baf71b",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "pMap does not properly handle the case where a mapper returns pMapSkip for an item at index 0, causing that item to be omitted from the result even though it should be included in order.",
+              "path": "index.js",
+              "start_line": 133,
+              "end_line": 140,
+              "evidence": "if (value === pMapSkip) {\n\t\t\tskippedIndexesMap.set(index, value);\n\t\t}\n\n\t\tresult[index] = value;",
+              "reproduction": {
+                "code": "const {default: pMap, pMapSkip} = await load('./index.js');\nconst input = [1, 2, 3];\nconst mapper = (value, index) => {\n  if (index === 0) {\n    return pMapSkip;\n  }\n  return value * 2;\n};\nconst result = await pMap(input, mapper);\nassert.deepEqual(result, [4, 6]);",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 11400.105700013228,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 11.400279900000896,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P01",
+      "variant": "fixed",
+      "arm": "ordinary",
+      "utc": "2026-10-28T06:57:50.500989+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "054fda8339dec447e0225a939de37666aa9a61aa3379f8938143bb2b12baf71b",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "pMap does not properly handle the case where a mapper returns pMapSkip for an item at index 0, causing that item to be omitted from the result even though it should be included in order.",
+              "path": "index.js",
+              "start_line": 133,
+              "end_line": 140,
+              "evidence": "if (value === pMapSkip) {\n\t\t\tskippedIndexesMap.set(index, value);\n\t\t}\n\n\t\tresult[index] = value;",
+              "reproduction": {
+                "code": "const {default: pMap, pMapSkip} = await load('./index.js');\nconst input = [1, 2, 3];\nconst mapper = (value, index) => {\n  if (index === 0) {\n    return pMapSkip;\n  }\n  return value * 2;\n};\nconst result = await pMap(input, mapper);\nassert.deepEqual(result, [4, 6]);",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 9903.883599996334,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 9.904091499993228,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P02",
+      "variant": "broken",
+      "arm": "proof",
+      "utc": "2026-10-28T06:58:00.413926+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "221740752eec8653a91c5af4b3ea444a9c21c5c39c7a715f6111f9874e43dfbc",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "The pMap function does not properly handle the case where a mapper returns pMapSkip for an item that is processed after the iterable has been marked as done, leading to incorrect result ordering.",
+              "path": "index.js",
+              "start_line": 110,
+              "end_line": 132,
+              "evidence": "result[index] = value;\n\n\t\t\tresolvingCount--;\n\t\t\tawait next();",
+              "reproduction": {
+                "code": "const {default: pMap, pMapSkip} = await load('./index.js');\n\nasync function* asyncIterable() {\n  yield Promise.resolve(1);\n  yield Promise.resolve(2);\n  yield Promise.resolve(3);\n}\n\nconst result = await pMap(asyncIterable(), async (value, index) => {\n  if (index === 1) {\n    return pMapSkip;\n  }\n  return value * 2;\n}, {concurrency: 1});\n\nassert.deepEqual(result, [2, 6]);",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 12707.074499994633,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 12.707282399991527,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P02",
+      "variant": "broken",
+      "arm": "proof_d1",
+      "utc": "2026-10-28T06:58:13.122644+00:00",
+      "specialist": {
+        "wall_seconds": 1.1666480999992928,
+        "rows": [
+          {
+            "path": "index.js",
+            "review": {
+              "schema_version": "code-review.1",
+              "status": "no_flags",
+              "advisory": true,
+              "model": "yannelli/d1-3b-code-review-decisions",
+              "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+              "rules": [
+                "error_handling_problem",
+                "type_safety_hole",
+                "unsafe_input"
+              ],
+              "threshold": 0.9,
+              "total_lines": 283,
+              "reviewed_lines": 283,
+              "windows": [
+                {
+                  "start_line": 1,
+                  "end_line": 80,
+                  "probabilities": {
+                    "error_handling_problem": 0.05033063259747688,
+                    "type_safety_hole": 0.024423090054107213,
+                    "unsafe_input": 0.0038244836446372104
+                  }
+                },
+                {
+                  "start_line": 69,
+                  "end_line": 148,
+                  "probabilities": {
+                    "error_handling_problem": 0.03514484640079327,
+                    "type_safety_hole": 0.024423090054107213,
+                    "unsafe_input": 0.008577485413711986
+                  }
+                },
+                {
+                  "start_line": 137,
+                  "end_line": 216,
+                  "probabilities": {
+                    "error_handling_problem": 0.22270013882530884,
+                    "type_safety_hole": 0.02595735719779685,
+                    "unsafe_input": 0.0035936025814200896
+                  }
+                },
+                {
+                  "start_line": 205,
+                  "end_line": 283,
+                  "probabilities": {
+                    "error_handling_problem": 0.017986209962091555,
+                    "type_safety_hole": 0.01691491326672651,
+                    "unsafe_input": 0.004070137715896127
+                  }
+                }
+              ],
+              "findings": [],
+              "latency_ms": 911.4687999972375,
+              "error": null
+            }
+          }
+        ]
+      },
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "221740752eec8653a91c5af4b3ea444a9c21c5c39c7a715f6111f9874e43dfbc",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "pMap does not properly handle the case where a mapper returns pMapSkip for an item that is processed after the iterable has been marked as done, leading to incorrect result ordering.",
+              "path": "index.js",
+              "start_line": 110,
+              "end_line": 132,
+              "evidence": "resolvingCount++;\n\n\t\t\t// Intentionally detached\n\t\t\t(async () => {\n\t\t\t\ttry {\n\t\t\t\t\tconst element = await nextItem.value;\n\n\t\t\t\t\tif (isResolved) {\n\t\t\t\t\t\treturn;\n\t\t\t\t\t}\n\n\t\t\t\t\tconst value = await mapper(element, index);\n\n\t\t\t\t\t// Use Map to stage the index of the element.\n\t\t\t\t\tif (value === pMapSkip) {\n\t\t\t\t\t\tskippedIndexesMap.set(index, value);\n\t\t\t\t\t}\n\n\t\t\t\t\tresult[index] = value;\n\n\t\t\t\t\tresolvingCount--;\n\t\t\t\t\tawait next();\n\t\t\t\t} catch (error) {\n\t\t\t\t\tif (stopOnError) {\n\t\t\t\t\t\treject(error);\n\t\t\t\t\t} else {\n\t\t\t\t\t\terrors.push(error);\n\t\t\t\t\t\tresolvingCount--;\n\n\t\t\t\t\t\t// In that case we can't really continue regardless of `stopOnError` state\n\t\t\t\t\t\t// since an iterable is likely to continue throwing after it throws once.\n\t\t\t\t\t\t// If we continue calling `next()` indefinitely we will likely end up\n\t\t\t\t\t\t// in an infinite loop of failed iteration.\n\t\t\t\t\t\ttry {\n\t\t\t\t\t\t\tawait next();\n\t\t\t\t\t\t} catch (error) {\n\t\t\t\t\t\t\treject(error);\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t})();",
+              "reproduction": {
+                "code": "const {default: pMap, pMapSkip} = await load('./index.js');\n\nasync function* asyncIterable() {\n  yield Promise.resolve(1);\n  yield Promise.resolve(2);\n  // Simulate a slow iterable that finishes after some items are processed\n  await new Promise(resolve => setTimeout(resolve, 10));\n  yield Promise.resolve(3);\n}\n\nconst result = await pMap(asyncIterable(), async (value, index) => {\n  if (index === 1) {\n    // Return pMapSkip for the second item\n    return pMapSkip;\n  }\n  return value * 2;\n}, {concurrency: 2});\n\nassert.deepEqual(result, [2, 6]);",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 8189.744000002975,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 9.356624199994258,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P02",
+      "variant": "broken",
+      "arm": "ordinary",
+      "utc": "2026-10-28T06:58:22.481711+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "221740752eec8653a91c5af4b3ea444a9c21c5c39c7a715f6111f9874e43dfbc",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "The pMap function does not properly handle the case where a mapper returns pMapSkip for an item that is processed after the iterable has been marked as done, leading to incorrect result ordering.",
+              "path": "index.js",
+              "start_line": 110,
+              "end_line": 132,
+              "evidence": "result[index] = value;\n\n\t\t\tresolvingCount--;\n\t\t\tawait next();",
+              "reproduction": {
+                "code": "const {default: pMap, pMapSkip} = await load('./index.js');\n\nasync function* asyncIterable() {\n  yield Promise.resolve(1);\n  yield Promise.resolve(2);\n  yield Promise.resolve(3);\n}\n\nconst result = await pMap(asyncIterable(), async (value, index) => {\n  if (index === 1) {\n    return pMapSkip;\n  }\n  return value * 2;\n}, {concurrency: 1});\n\nassert.deepEqual(result, [2, 6]);",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 4597.389300004579,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 4.597711700000218,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P02",
+      "variant": "fixed",
+      "arm": "ordinary",
+      "utc": "2026-10-28T06:58:27.080882+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "27802cf836c301ed4423ba7a5a3f0f968de9a756c287ddb4c7b0700d0a924090",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "The pMap function does not properly handle the case where a mapper returns pMapSkip for an item at index 0, causing that item to be omitted from the result even though it should be included in order.",
+              "path": "index.js",
+              "start_line": 123,
+              "end_line": 130,
+              "evidence": "if (value === pMapSkip) {\n\t\t\tskippedIndexesMap.set(index, value);\n\t\t}\n\n\t\tresult[index] = value;",
+              "reproduction": {
+                "code": "const {default: pMap, pMapSkip} = await load('./index.js');\nconst input = [1, 2, 3];\nconst mapper = (value, index) => {\n  if (index === 0) return pMapSkip;\n  return value * 2;\n};\nconst result = await pMap(input, mapper);\nassert.deepEqual(result, [4, 6]);",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 9810.475199992652,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 9.8106373000046,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P02",
+      "variant": "fixed",
+      "arm": "proof_d1",
+      "utc": "2026-10-28T06:58:36.907517+00:00",
+      "specialist": {
+        "wall_seconds": 1.4914201000065077,
+        "rows": [
+          {
+            "path": "index.js",
+            "review": {
+              "schema_version": "code-review.1",
+              "status": "no_flags",
+              "advisory": true,
+              "model": "yannelli/d1-3b-code-review-decisions",
+              "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+              "rules": [
+                "error_handling_problem",
+                "type_safety_hole",
+                "unsafe_input"
+              ],
+              "threshold": 0.9,
+              "total_lines": 284,
+              "reviewed_lines": 284,
+              "windows": [
+                {
+                  "start_line": 1,
+                  "end_line": 80,
+                  "probabilities": {
+                    "error_handling_problem": 0.05033063259747688,
+                    "type_safety_hole": 0.024423090054107213,
+                    "unsafe_input": 0.0038244836446372104
+                  }
+                },
+                {
+                  "start_line": 69,
+                  "end_line": 148,
+                  "probabilities": {
+                    "error_handling_problem": 0.03514484640079327,
+                    "type_safety_hole": 0.024423090054107213,
+                    "unsafe_input": 0.008577485413711986
+                  }
+                },
+                {
+                  "start_line": 137,
+                  "end_line": 216,
+                  "probabilities": {
+                    "error_handling_problem": 0.22270013882530884,
+                    "type_safety_hole": 0.02595735719779685,
+                    "unsafe_input": 0.0035936025814200896
+                  }
+                },
+                {
+                  "start_line": 205,
+                  "end_line": 284,
+                  "probabilities": {
+                    "error_handling_problem": 0.017986209962091555,
+                    "type_safety_hole": 0.017986209962091555,
+                    "unsafe_input": 0.0038244836446372104
+                  }
+                }
+              ],
+              "findings": [],
+              "latency_ms": 727.5552999926731,
+              "error": null
+            }
+          }
+        ]
+      },
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "27802cf836c301ed4423ba7a5a3f0f968de9a756c287ddb4c7b0700d0a924090",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "pMap does not properly handle the case where mapper returns pMapSkip for items at indices that are not sequential, leading to incorrect result ordering when skipped items are interspersed with non-skipped items.",
+              "path": "index.js",
+              "start_line": 120,
+              "end_line": 130,
+              "evidence": "const value = await mapper(element, index);\n\n                    // Use Map to stage the index of the element.\n                    if (value === pMapSkip) {\n                        skippedIndexesMap.set(index, value);\n                    }\n\n                    result[index] = value;",
+              "reproduction": {
+                "code": "const {default: pMap, pMapSkip} = await load('./index.js');\n\nasync function test() {\n  const input = [1, 2, 3, 4];\n  const mapper = async (value, index) => {\n    if (index === 1) return pMapSkip; // Skip second item\n    return value * 2;\n  };\n\n  const result = await pMap(input, mapper);\n  console.log(result); // Should be [2, 6, 8] but may be incorrect due to index handling\n  \n  // Assert correct behavior: [2, 6, 8]\n  assert.deepEqual(result, [2, 6, 8]);\n}\n\ntest();",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 11681.26110000594,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 13.172910900000716,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P02",
+      "variant": "fixed",
+      "arm": "proof",
+      "utc": "2026-10-28T06:58:50.090068+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "27802cf836c301ed4423ba7a5a3f0f968de9a756c287ddb4c7b0700d0a924090",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "The pMap function does not properly handle the case where a mapper returns pMapSkip for an item at index 0, causing that item to be omitted from the result even though it should be included in order.",
+              "path": "index.js",
+              "start_line": 123,
+              "end_line": 130,
+              "evidence": "if (value === pMapSkip) {\n\t\t\tskippedIndexesMap.set(index, value);\n\t\t}\n\n\t\tresult[index] = value;",
+              "reproduction": {
+                "code": "const {default: pMap, pMapSkip} = await load('./index.js');\nconst input = [1, 2, 3];\nconst mapper = (value, index) => {\n  if (index === 0) return pMapSkip;\n  return value * 2;\n};\nconst result = await pMap(input, mapper);\nassert.deepEqual(result, [4, 6]);",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 7038.750099993194,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 7.038923300002352,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P03",
+      "variant": "broken",
+      "arm": "proof_d1",
+      "utc": "2026-10-28T06:58:57.131049+00:00",
+      "specialist": {
+        "wall_seconds": 0.6384036000090418,
+        "rows": [
+          {
+            "path": "index.js",
+            "review": {
+              "schema_version": "code-review.1",
+              "status": "no_flags",
+              "advisory": true,
+              "model": "yannelli/d1-3b-code-review-decisions",
+              "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+              "rules": [
+                "error_handling_problem",
+                "type_safety_hole",
+                "unsafe_input"
+              ],
+              "threshold": 0.9,
+              "total_lines": 95,
+              "reviewed_lines": 95,
+              "windows": [
+                {
+                  "start_line": 1,
+                  "end_line": 80,
+                  "probabilities": {
+                    "error_handling_problem": 0.024423090054107213,
+                    "type_safety_hole": 0.027585282226789985,
+                    "unsafe_input": 0.005911068856243796
+                  }
+                },
+                {
+                  "start_line": 69,
+                  "end_line": 95,
+                  "probabilities": {
+                    "error_handling_problem": 0.019124036750888904,
+                    "type_safety_hole": 0.02595735719779685,
+                    "unsafe_input": 0.00912563738918052
+                  }
+                }
+              ],
+              "findings": [],
+              "latency_ms": 489.75040001096204,
+              "error": null
+            }
+          }
+        ]
+      },
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "b7394ceeab7a549add9f2f15262b111e094bcefc169ddbd26b4fd20899316e06",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "The timeout timer is not cleared when the input promise is already settled before the timeout duration expires, leading to a potential memory leak or spurious timeout behavior.",
+              "path": "index.js",
+              "start_line": 80,
+              "end_line": 95,
+              "evidence": "const cancelablePromise = wrappedPromise.finally(() => {\n\tcancelablePromise.clear();\n\tif (abortHandler && signal) {\n\t\tsignal.removeEventListener('abort', abortHandler);\n\t}\n});",
+              "reproduction": {
+                "code": "const {default: pTimeout, TimeoutError} = await load('./index.js');\n\nconst slowPromise = new Promise(resolve => setTimeout(() => resolve('slow'), 100));\nconst decorated = pTimeout(slowPromise, {milliseconds: 50});\n\n// This should resolve immediately without timeout\nconst result = await decorated;\nassert.equal(result, 'slow');",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 3209.4126000010874,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 3.8480971999961184,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P03",
+      "variant": "broken",
+      "arm": "ordinary",
+      "utc": "2026-10-28T06:59:00.981596+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "b7394ceeab7a549add9f2f15262b111e094bcefc169ddbd26b4fd20899316e06",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "When a promise with a cancel method times out and fallback is provided, the fallback function is called but its result is not used to resolve the decorated promise.",
+              "path": "index.js",
+              "start_line": 55,
+              "end_line": 63,
+              "evidence": "if (fallback) {\n\t\t\ttry {\n\t\t\t\tresolve(fallback());\n\t\t\t} catch (error) {\n\t\t\t\treject(error);\n\t\t\t}\n\n\t\t\treturn;\n\t\t}",
+              "reproduction": {
+                "code": "const {default: pTimeout, TimeoutError} = await load('./index.js');\n\nconst slowPromise = new Promise(() => {});\nslowPromise.cancel = () => {\n  throw new Error('cancel called');\n};\n\nconst decorated = pTimeout(slowPromise, {\n  milliseconds: 1,\n  fallback: () => 'fallback value'\n});\n\nsetTimeout(async () => {\n  try {\n    const result = await decorated;\n    console.log(result); // Should be 'fallback value' but will be undefined due to bug\n  } catch (error) {\n    console.error(error);\n  }\n}, 10);",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 3325.7308000029298,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 3.325894800000242,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P03",
+      "variant": "broken",
+      "arm": "proof",
+      "utc": "2026-10-28T06:59:04.309335+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "b7394ceeab7a549add9f2f15262b111e094bcefc169ddbd26b4fd20899316e06",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "When a promise with a cancel method times out and fallback is provided, the fallback function is called but its result is not used to resolve the decorated promise.",
+              "path": "index.js",
+              "start_line": 55,
+              "end_line": 63,
+              "evidence": "if (fallback) {\n\t\t\ttry {\n\t\t\t\tresolve(fallback());\n\t\t\t} catch (error) {\n\t\t\t\treject(error);\n\t\t\t}\n\n\t\t\treturn;\n\t\t}",
+              "reproduction": {
+                "code": "const {default: pTimeout, TimeoutError} = await load('./index.js');\n\nconst slowPromise = new Promise(() => {});\nslowPromise.cancel = () => {\n  throw new Error('cancel called');\n};\n\nconst decorated = pTimeout(slowPromise, {\n  milliseconds: 1,\n  fallback: () => 'fallback value'\n});\n\nsetTimeout(async () => {\n  try {\n    const result = await decorated;\n    console.log(result); // Should be 'fallback value' but will be undefined due to bug\n  } catch (error) {\n    console.error(error);\n  }\n}, 10);",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 7170.329000000493,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 7.170503999994253,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P03",
+      "variant": "fixed",
+      "arm": "proof",
+      "utc": "2026-10-28T06:59:11.502253+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "infrastructure_failure",
+        "reason": "provider_error",
+        "source_sha256": "2f42c1f7b8f33c2e1e55a1be0d2cde3e45a593335f9393255a064d502d8d2d7d",
+        "attempts": [],
+        "candidate_workspace": null,
+        "latency_ms": 6611.954299994977,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 6.612200400006259,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P03",
+      "variant": "fixed",
+      "arm": "ordinary",
+      "utc": "2026-10-28T06:59:18.115920+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "infrastructure_failure",
+        "reason": "provider_error",
+        "source_sha256": "2f42c1f7b8f33c2e1e55a1be0d2cde3e45a593335f9393255a064d502d8d2d7d",
+        "attempts": [],
+        "candidate_workspace": null,
+        "latency_ms": 4683.3000000042375,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 4.683453499994357,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P03",
+      "variant": "fixed",
+      "arm": "proof_d1",
+      "utc": "2026-10-28T06:59:22.801403+00:00",
+      "specialist": {
+        "wall_seconds": 0.5575602000026265,
+        "rows": [
+          {
+            "path": "index.js",
+            "review": {
+              "schema_version": "code-review.1",
+              "status": "no_flags",
+              "advisory": true,
+              "model": "yannelli/d1-3b-code-review-decisions",
+              "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+              "rules": [
+                "error_handling_problem",
+                "type_safety_hole",
+                "unsafe_input"
+              ],
+              "threshold": 0.9,
+              "total_lines": 98,
+              "reviewed_lines": 98,
+              "windows": [
+                {
+                  "start_line": 1,
+                  "end_line": 80,
+                  "probabilities": {
+                    "error_handling_problem": 0.033085978388704126,
+                    "type_safety_hole": 0.02595735719779685,
+                    "unsafe_input": 0.005554924703691103
+                  }
+                },
+                {
+                  "start_line": 69,
+                  "end_line": 98,
+                  "probabilities": {
+                    "error_handling_problem": 0.01691491326672651,
+                    "type_safety_hole": 0.029312230751356316,
+                    "unsafe_input": 0.008061991528271641
+                  }
+                }
+              ],
+              "findings": [],
+              "latency_ms": 434.7064000030514,
+              "error": null
+            }
+          }
+        ]
+      },
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "infrastructure_failure",
+        "reason": "provider_error",
+        "source_sha256": "2f42c1f7b8f33c2e1e55a1be0d2cde3e45a593335f9393255a064d502d8d2d7d",
+        "attempts": [],
+        "candidate_workspace": null,
+        "latency_ms": 6126.712700002827,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 6.6845816999993986,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P04",
+      "variant": "broken",
+      "arm": "ordinary",
+      "utc": "2026-10-28T06:59:29.486750+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "9b9b3617db3dd174c1576b566acc6d1f19e74a3aab0c9bda4f9da0f9dbe3638f",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "When a promise with a cancel method times out and fallback is not provided, the cancel method is called before rejecting with TimeoutError",
+              "path": "index.js",
+              "start_line": 70,
+              "end_line": 82,
+              "evidence": "if (typeof promise.cancel === 'function') {\n\t\t\tpromise.cancel();\n\t\t}\n\n\t\tif (message === false) {\n\t\t\tresolve();\n\t\t} else if (message instanceof Error) {\n\t\t\treject(message);\n\t\t} else {\n\t\t\ttimeoutError.message = message ?? `Promise timed out after ${milliseconds} milliseconds`;\n\t\t\treject(timeoutError);\n\t\t}",
+              "reproduction": {
+                "code": "const {default: pTimeout, TimeoutError} = await load('./index.js');\n\nconst cancelSpy = jest.fn();\nconst inputPromise = Promise.resolve('success');\ninputPromise.cancel = cancelSpy;\n\nconst decoratedPromise = pTimeout(inputPromise, {milliseconds: 10});\n\nsetTimeout(() => {\n  decoratedPromise.clear();\n}, 5);\n\ntry {\n  await decoratedPromise;\n} catch (error) {\n  assert.ok(error instanceof TimeoutError);\n  assert.equal(cancelSpy.mock.calls.length, 1);\n}",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 3406.0829999943962,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 3.4062493999954313,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P04",
+      "variant": "broken",
+      "arm": "proof",
+      "utc": "2026-10-28T06:59:32.894829+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "9b9b3617db3dd174c1576b566acc6d1f19e74a3aab0c9bda4f9da0f9dbe3638f",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "When a promise with a cancel method times out and fallback is not provided, the cancel method is called before rejecting with TimeoutError",
+              "path": "index.js",
+              "start_line": 70,
+              "end_line": 82,
+              "evidence": "if (typeof promise.cancel === 'function') {\n\t\t\tpromise.cancel();\n\t\t}\n\n\t\tif (message === false) {\n\t\t\tresolve();\n\t\t} else if (message instanceof Error) {\n\t\t\treject(message);\n\t\t} else {\n\t\t\ttimeoutError.message = message ?? `Promise timed out after ${milliseconds} milliseconds`;\n\t\t\treject(timeoutError);\n\t\t}",
+              "reproduction": {
+                "code": "const {default: pTimeout, TimeoutError} = await load('./index.js');\n\nconst cancelSpy = jest.fn();\nconst inputPromise = Promise.resolve('success');\ninputPromise.cancel = cancelSpy;\n\nconst decoratedPromise = pTimeout(inputPromise, {milliseconds: 10});\n\nsetTimeout(() => {\n  decoratedPromise.clear();\n}, 5);\n\ntry {\n  await decoratedPromise;\n} catch (error) {\n  assert.ok(error instanceof TimeoutError);\n  assert.equal(cancelSpy.mock.calls.length, 1);\n}",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 3731.730899991817,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 3.7318768999975873,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P04",
+      "variant": "broken",
+      "arm": "proof_d1",
+      "utc": "2026-10-28T06:59:36.629148+00:00",
+      "specialist": {
+        "wall_seconds": 0.5368723999999929,
+        "rows": [
+          {
+            "path": "index.js",
+            "review": {
+              "schema_version": "code-review.1",
+              "status": "no_flags",
+              "advisory": true,
+              "model": "yannelli/d1-3b-code-review-decisions",
+              "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+              "rules": [
+                "error_handling_problem",
+                "type_safety_hole",
+                "unsafe_input"
+              ],
+              "threshold": 0.9,
+              "total_lines": 104,
+              "reviewed_lines": 104,
+              "windows": [
+                {
+                  "start_line": 1,
+                  "end_line": 80,
+                  "probabilities": {
+                    "error_handling_problem": 0.03514484640079327,
+                    "type_safety_hole": 0.027585282226789985,
+                    "unsafe_input": 0.005220125693558397
+                  }
+                },
+                {
+                  "start_line": 69,
+                  "end_line": 104,
+                  "probabilities": {
+                    "error_handling_problem": 0.01590639171181471,
+                    "type_safety_hole": 0.02297736991002561,
+                    "unsafe_input": 0.01098694263059318
+                  }
+                }
+              ],
+              "findings": [],
+              "latency_ms": 413.3254000043962,
+              "error": null
+            }
+          }
+        ]
+      },
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "infrastructure_failure",
+        "reason": "provider_error",
+        "source_sha256": "9b9b3617db3dd174c1576b566acc6d1f19e74a3aab0c9bda4f9da0f9dbe3638f",
+        "attempts": [],
+        "candidate_workspace": null,
+        "latency_ms": 3552.430199997616,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 4.08953090000432,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P04",
+      "variant": "fixed",
+      "arm": "proof_d1",
+      "utc": "2026-10-28T06:59:40.719801+00:00",
+      "specialist": {
+        "wall_seconds": 0.6149832000082824,
+        "rows": [
+          {
+            "path": "index.js",
+            "review": {
+              "schema_version": "code-review.1",
+              "status": "no_flags",
+              "advisory": true,
+              "model": "yannelli/d1-3b-code-review-decisions",
+              "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+              "rules": [
+                "error_handling_problem",
+                "type_safety_hole",
+                "unsafe_input"
+              ],
+              "threshold": 0.9,
+              "total_lines": 109,
+              "reviewed_lines": 109,
+              "windows": [
+                {
+                  "start_line": 1,
+                  "end_line": 80,
+                  "probabilities": {
+                    "error_handling_problem": 0.08035746882220708,
+                    "type_safety_hole": 0.027585282226789985,
+                    "unsafe_input": 0.007121428745735101
+                  }
+                },
+                {
+                  "start_line": 69,
+                  "end_line": 109,
+                  "probabilities": {
+                    "error_handling_problem": 0.037326887344129464,
+                    "type_safety_hole": 0.02595735719779685,
+                    "unsafe_input": 0.008061991528271641
+                  }
+                }
+              ],
+              "findings": [],
+              "latency_ms": 490.0828999961959,
+              "error": null
+            }
+          }
+        ]
+      },
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "5b19904e683ecc975786841b78678f26a948f8f528664796703183758ee16179",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "When milliseconds is Infinity, the timeout timer is still created and will fire after the maximumDelay, causing unexpected behavior.",
+              "path": "index.js",
+              "start_line": 56,
+              "end_line": 87,
+              "evidence": "if (milliseconds > maximumDelay) {\n\t\t\treturn;\n\t\t}\n\n\t\t// We create the error outside of `setTimeout` to preserve the stack trace.\n\t\tconst timeoutError = new TimeoutError();\n\n\t\t// `.call(undefined, ...)` is needed for custom timers to avoid context issues\n\t\ttimer = customTimers.setTimeout.call(undefined, () => {\n\t\t\tif (fallback) {\n\t\t\t\ttry {\n\t\t\t\t\tresolve(ffallback());\n\t\t\t\t} catch (error) {\n\t\t\t\t\treject(error);\n\t\t\t\t}\n\n\t\t\t\treturn;\n\t\t\t}\n\n\t\t\tif (typeof promise.cancel === 'function') {\n\t\t\t\tpromise.cancel();\n\t\t\t}\n\n\t\t\tif (message === false) {\n\t\t\t\tresolve();\n\t\t\t} else if (message instanceof Error) {\n\t\t\t\treject(message);\n\t\t\t} else {\n\t\t\t\ttimeoutError.message = message ?? `Promise timed out after ${milliseconds} milliseconds`;\n\t\t\t\treject(timeoutError);\n\t\t\t}\n\t\t}, milliseconds);",
+              "reproduction": {
+                "code": "const {default: pTimeout, TimeoutError} = await load('./index.js');\n\nasync function test() {\n  const slowPromise = new Promise(resolve => setTimeout(() => resolve('slow'), 1000));\n  const decorated = pTimeout(slowPromise, { milliseconds: Infinity });\n  try {\n    await decorated;\n    throw new Error('Should have timed out');\n  } catch (error) {\n    if (error instanceof TimeoutError) {\n      // This should not happen with Infinity\n      throw new Error('Unexpected timeout with Infinity');\n    }\n  }\n}\n\nawait test();",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 4987.26650000026,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 5.602473099992494,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P04",
+      "variant": "fixed",
+      "arm": "proof",
+      "utc": "2026-10-28T06:59:46.324606+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "edit_range",
+        "source_sha256": "5b19904e683ecc975786841b78678f26a948f8f528664796703183758ee16179",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "When milliseconds is Infinity, the timeout timer is still created and will fire after the maximumDelay, causing unexpected behavior.",
+              "path": "index.js",
+              "start_line": 56,
+              "end_line": 87,
+              "evidence": "if (milliseconds > maximumDelay) {\n\t\t\treturn;\n\t\t}\n\n\t\t// We create the error outside of `setTimeout` to preserve the stack trace.\n\t\tconst timeoutError = new TimeoutError();\n\n\t\t// `.call(undefined, ...)` is needed for custom timers to avoid context issues\n\t\ttimer = customTimers.setTimeout.call(undefined, () => {",
+              "reproduction": {
+                "code": "const {default: pTimeout, TimeoutError} = await load('./index.js');\nconst promise = new Promise(() => {});\nconst decorated = pTimeout(promise, { milliseconds: Infinity });\n\n// The timer should not be set up for Infinity\nassert.equal(decorated.clear, undefined);",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "edit_range",
+            "baseline_reproduction": {
+              "outcome": "assertion_failure",
+              "assertions": 1,
+              "evidence": "Expected values to be strictly equal:\n+ actual - expected\n\n+ [Function (anonymous)]\n- undefined\n"
+            },
+            "baseline_regression": {
+              "outcome": "pass",
+              "assertions": 25,
+              "evidence": "{\"status\":\"passed\",\"mode\":\"regression\",\"checks\":25}\n"
+            },
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {
+              "baseline_regression": 101.86879998946097,
+              "baseline_reproduction": 111.12010000215378,
+              "repair": 3936.3581000070553
+            }
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 7862.360900006024,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 7.862540399990394,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P04",
+      "variant": "fixed",
+      "arm": "ordinary",
+      "utc": "2026-10-28T06:59:54.188631+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "edit_range",
+        "source_sha256": "5b19904e683ecc975786841b78678f26a948f8f528664796703183758ee16179",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "When milliseconds is Infinity, the timeout timer is still created and will fire after the maximumDelay, causing unexpected behavior.",
+              "path": "index.js",
+              "start_line": 56,
+              "end_line": 87,
+              "evidence": "if (milliseconds > maximumDelay) {\n\t\t\treturn;\n\t\t}\n\n\t\t// We create the error outside of `setTimeout` to preserve the stack trace.\n\t\tconst timeoutError = new TimeoutError();\n\n\t\t// `.call(undefined, ...)` is needed for custom timers to avoid context issues\n\t\ttimer = customTimers.setTimeout.call(undefined, () => {",
+              "reproduction": {
+                "code": "const {default: pTimeout, TimeoutError} = await load('./index.js');\nconst promise = new Promise(() => {});\nconst decorated = pTimeout(promise, { milliseconds: Infinity });\n\n// The timer should not be set up for Infinity\nassert.equal(decorated.clear, undefined);",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "edit_range",
+            "baseline_reproduction": null,
+            "baseline_regression": {
+              "outcome": "pass",
+              "assertions": 25,
+              "evidence": "{\"status\":\"passed\",\"mode\":\"regression\",\"checks\":25}\n"
+            },
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {
+              "baseline_regression": 60.95610000193119,
+              "repair": 3010.2224000002025
+            }
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 6192.682300010347,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 6.192870500002755,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P05",
+      "variant": "broken",
+      "arm": "proof",
+      "utc": "2026-10-28T07:00:00.383060+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "edit_range",
+        "source_sha256": "2091965f718bcd743acd4e1c6766a9f42ea2507fc7136d598262da8d41606429",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "The function does not properly handle the case where count equals the number of input items and all inputs are rejected, causing it to reject with AggregateError instead of waiting for eligible values.",
+              "path": "index.js",
+              "start_line": 15,
+              "end_line": 20,
+              "evidence": "let maxErrors = -options.count + 1;\n\tlet maxFiltered = -options.count + 1;\n\tlet isDone = false;",
+              "reproduction": {
+                "code": "const {default: pSome} = await load('./index.js');\nconst promise1 = Promise.reject('error1');\nconst promise2 = Promise.reject('error2');\ntry {\n  await pSome([promise1, promise2], {count: 2});\n  assert.fail('Should have rejected');\n} catch (error) {\n  assert.ok(error instanceof AggregateError);\n}",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "edit_range",
+            "baseline_reproduction": {
+              "outcome": "assertion_failure",
+              "assertions": 1,
+              "evidence": "The expression evaluated to a falsy value:\n\n  nodeAssert[name](...args)\n"
+            },
+            "baseline_regression": {
+              "outcome": "pass",
+              "assertions": 11,
+              "evidence": "{\"status\":\"passed\",\"mode\":\"regression\",\"checks\":11}\n"
+            },
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {
+              "baseline_regression": 79.39410000108182,
+              "baseline_reproduction": 104.76559998642188,
+              "repair": 2138.52219999535
+            }
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 5248.737699992489,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 5.248920799989719,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P05",
+      "variant": "broken",
+      "arm": "proof_d1",
+      "utc": "2026-10-28T07:00:05.634403+00:00",
+      "specialist": {
+        "wall_seconds": 0.685652600004687,
+        "rows": [
+          {
+            "path": "index.js",
+            "review": {
+              "schema_version": "code-review.1",
+              "status": "no_flags",
+              "advisory": true,
+              "model": "yannelli/d1-3b-code-review-decisions",
+              "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+              "rules": [
+                "error_handling_problem",
+                "type_safety_hole",
+                "unsafe_input"
+              ],
+              "threshold": 0.9,
+              "total_lines": 102,
+              "reviewed_lines": 102,
+              "windows": [
+                {
+                  "start_line": 1,
+                  "end_line": 80,
+                  "probabilities": {
+                    "error_handling_problem": 0.01590639171181471,
+                    "type_safety_hole": 0.024423090054107213,
+                    "unsafe_input": 0.017986209962091555
+                  }
+                },
+                {
+                  "start_line": 69,
+                  "end_line": 102,
+                  "probabilities": {
+                    "error_handling_problem": 0.012431650853185818,
+                    "type_safety_hole": 0.01590639171181471,
+                    "unsafe_input": 0.0446808702726502
+                  }
+                }
+              ],
+              "findings": [],
+              "latency_ms": 493.73359998571686,
+              "error": null
+            }
+          }
+        ]
+      },
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "unproven",
+        "reason": "baseline_not_assertion_failure",
+        "source_sha256": "2091965f718bcd743acd4e1c6766a9f42ea2507fc7136d598262da8d41606429",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "The function fails to properly handle the case where the count of eligible values is exactly met, causing it to resolve with an array that may contain more elements than requested.",
+              "path": "index.js",
+              "start_line": 56,
+              "end_line": 59,
+              "evidence": "if (--options.count === 0) {\n\t\t\tisDone = true;\n\t\t\tresolve(values);\n\t\t}",
+              "reproduction": {
+                "code": "const {default: pSome} = await load('./index.js');\nconst result = await pSome([1, 2, 3], {count: 2, filter: x => x < 3});\nassert.equal(result.length, 2);\nassert.deepStrictEqual(result, [1, 2]);",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "unproven",
+            "reason": "baseline_not_assertion_failure",
+            "baseline_reproduction": {
+              "outcome": "pass",
+              "assertions": 2,
+              "evidence": "reproduction completed"
+            },
+            "baseline_regression": {
+              "outcome": "pass",
+              "assertions": 11,
+              "evidence": "{\"status\":\"passed\",\"mode\":\"regression\",\"checks\":11}\n"
+            },
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {
+              "baseline_regression": 64.17149999469984,
+              "baseline_reproduction": 91.69989998918027
+            }
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 3207.2066999971867,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 3.89314449999074,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P05",
+      "variant": "broken",
+      "arm": "ordinary",
+      "utc": "2026-10-28T07:00:09.528401+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "edit_range",
+        "source_sha256": "2091965f718bcd743acd4e1c6766a9f42ea2507fc7136d598262da8d41606429",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "The function does not properly handle the case where count equals the number of input items and all inputs are rejected, causing it to reject with AggregateError instead of waiting for eligible values.",
+              "path": "index.js",
+              "start_line": 15,
+              "end_line": 20,
+              "evidence": "let maxErrors = -options.count + 1;\n\tlet maxFiltered = -options.count + 1;\n\tlet isDone = false;",
+              "reproduction": {
+                "code": "const {default: pSome} = await load('./index.js');\nconst promise1 = Promise.reject('error1');\nconst promise2 = Promise.reject('error2');\ntry {\n  await pSome([promise1, promise2], {count: 2});\n  assert.fail('Should have rejected');\n} catch (error) {\n  assert.ok(error instanceof AggregateError);\n}",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "edit_range",
+            "baseline_reproduction": null,
+            "baseline_regression": {
+              "outcome": "pass",
+              "assertions": 11,
+              "evidence": "{\"status\":\"passed\",\"mode\":\"regression\",\"checks\":11}\n"
+            },
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {
+              "baseline_regression": 60.65050000324845,
+              "repair": 1903.2944000064163
+            }
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 4723.813400007202,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 4.724006400007056,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P05",
+      "variant": "fixed",
+      "arm": "ordinary",
+      "utc": "2026-10-28T07:00:14.254534+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "infrastructure_failure",
+        "reason": "provider_error",
+        "source_sha256": "8bdf60c62ddcd152ba477cdc47fec80be588f4153625dbdaa99dafd702e0a388",
+        "attempts": [],
+        "candidate_workspace": null,
+        "latency_ms": 2790.389200003119,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 2.790554899998824,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P05",
+      "variant": "fixed",
+      "arm": "proof_d1",
+      "utc": "2026-10-28T07:00:17.046489+00:00",
+      "specialist": {
+        "wall_seconds": 0.6423431000002893,
+        "rows": [
+          {
+            "path": "index.js",
+            "review": {
+              "schema_version": "code-review.1",
+              "status": "no_flags",
+              "advisory": true,
+              "model": "yannelli/d1-3b-code-review-decisions",
+              "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+              "rules": [
+                "error_handling_problem",
+                "type_safety_hole",
+                "unsafe_input"
+              ],
+              "threshold": 0.9,
+              "total_lines": 81,
+              "reviewed_lines": 81,
+              "windows": [
+                {
+                  "start_line": 1,
+                  "end_line": 80,
+                  "probabilities": {
+                    "error_handling_problem": 0.033085978388704126,
+                    "type_safety_hole": 0.021615332762647654,
+                    "unsafe_input": 0.01098694263059318
+                  }
+                },
+                {
+                  "start_line": 69,
+                  "end_line": 81,
+                  "probabilities": {
+                    "error_handling_problem": 0.008577485413711986,
+                    "type_safety_hole": 0.029312230751356316,
+                    "unsafe_input": 0.01495708659314999
+                  }
+                }
+              ],
+              "findings": [],
+              "latency_ms": 517.7232999994885,
+              "error": null
+            }
+          }
+        ]
+      },
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "8bdf60c62ddcd152ba477cdc47fec80be588f4153625dbdaa99dafd702e0a388",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "The function does not properly handle the case where the filter function throws an error, causing eligible values to be incorrectly rejected and potentially preventing fulfillment even when enough eligible values are available.",
+              "path": "index.js",
+              "start_line": 54,
+              "end_line": 67,
+              "evidence": "if (!filter(value)) {\n\t\t\tthrow new FilterError('Value does not satisfy filter');\n\t\t}\n\n\t\tvalues.push(value);",
+              "reproduction": {
+                "code": "const {default: pSome} = await load('./index.js');\nconst result = await pSome([\n  Promise.resolve(1),\n  Promise.resolve(2),\n  Promise.resolve(3)\n], {\n  count: 2,\n  filter: (value) => {\n    if (value === 2) throw new Error('Filter error');\n    return true;\n  }\n});\nassert.equal(result.length, 2);\nassert.equal(result[0], 1);\nassert.equal(result[1], 3);",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 3348.156199994264,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 3.9907291999988956,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P05",
+      "variant": "fixed",
+      "arm": "proof",
+      "utc": "2026-10-28T07:00:21.038995+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "infrastructure_failure",
+        "reason": "provider_error",
+        "source_sha256": "8bdf60c62ddcd152ba477cdc47fec80be588f4153625dbdaa99dafd702e0a388",
+        "attempts": [],
+        "candidate_workspace": null,
+        "latency_ms": 2907.8224999975646,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 2.907992299995385,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P06",
+      "variant": "broken",
+      "arm": "proof_d1",
+      "utc": "2026-10-28T07:00:23.955418+00:00",
+      "specialist": {
+        "wall_seconds": 0.5068286000023363,
+        "rows": [
+          {
+            "path": "index.js",
+            "review": {
+              "schema_version": "code-review.1",
+              "status": "no_flags",
+              "advisory": true,
+              "model": "yannelli/d1-3b-code-review-decisions",
+              "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+              "rules": [
+                "error_handling_problem",
+                "type_safety_hole",
+                "unsafe_input"
+              ],
+              "threshold": 0.9,
+              "total_lines": 71,
+              "reviewed_lines": 71,
+              "windows": [
+                {
+                  "start_line": 1,
+                  "end_line": 71,
+                  "probabilities": {
+                    "error_handling_problem": 0.008577485413711986,
+                    "type_safety_hole": 0.02297736991002561,
+                    "unsafe_input": 0.00433150202056399
+                  }
+                }
+              ],
+              "findings": [],
+              "latency_ms": 368.9705999859143,
+              "error": null
+            }
+          }
+        ]
+      },
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "1902304df1718764796ba75159f073b425f5757787f5d10c6dc527397ca34519",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "The delay.clear() method does not properly handle the case where the timer has already fired before clear is called, leading to a potential race condition where the promise settles twice.",
+              "path": "index.js",
+              "start_line": 51,
+              "end_line": 55,
+              "evidence": "delayPromise.clear = () => {\n\tclear(timeoutId);\n\ttimeoutId = null;\n\tsettle();\n};",
+              "reproduction": {
+                "code": "const {default: delay} = await load('./index.js');\nconst signal = new AbortController().signal;\nconst promise = delay(10, {signal});\nsetTimeout(() => {\n  promise.clear();\n}, 5);\nlet settled = false;\npromise.then(() => {\n  if (settled) throw new Error('Settled twice');\n  settled = true;\n}).catch(() => {\n  if (settled) throw new Error('Settled twice');\n  settled = true;\n});\nawait new Promise(resolve => setTimeout(resolve, 20));\nif (!settled) throw new Error('Never settled');",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          },
+          {
+            "hypothesis": {
+              "claim": "The delay.range function does not properly handle the case where minimum equals maximum, which should resolve immediately with the specified value.",
+              "path": "index.js",
+              "start_line": 62,
+              "end_line": 62,
+              "evidence": "delay.range = (minimum, maximum, options) => delay(randomInteger(minimum, maximum), options);",
+              "reproduction": {
+                "code": "const {default: delay} = await load('./index.js');\nconst result = await delay.range(5, 5, {value: 'test'});\nif (result !== 'test') throw new Error('Expected test value');",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "unproven",
+            "reason": "baseline_not_assertion_failure",
+            "baseline_reproduction": {
+              "outcome": "pass",
+              "assertions": 0,
+              "evidence": "reproduction completed"
+            },
+            "baseline_regression": {
+              "outcome": "pass",
+              "assertions": 12,
+              "evidence": "{\"status\":\"passed\",\"mode\":\"regression\",\"checks\":12}\n"
+            },
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {
+              "baseline_regression": 57.594199999584816,
+              "baseline_reproduction": 57.38140000903513
+            }
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 4255.800400002045,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 4.762908000004245,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P06",
+      "variant": "broken",
+      "arm": "ordinary",
+      "utc": "2026-10-28T07:00:28.719078+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "1902304df1718764796ba75159f073b425f5757787f5d10c6dc527397ca34519",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "The delay.clear() method does not properly handle the case where the timer has already fired, causing a potential race condition that may lead to inconsistent promise resolution behavior.",
+              "path": "index.js",
+              "start_line": 51,
+              "end_line": 55,
+              "evidence": "delayPromise.clear = () => {\n\tclear(timeoutId);\n\ttimeoutId = null;\n\tsettle();\n};",
+              "reproduction": {
+                "code": "const {default: delay} = await load('./index.js');\nconst controller = new AbortController();\nconst promise = delay(10, {signal: controller.signal});\nsetTimeout(() => controller.abort(), 5);\nawait promise.catch(e => assert.equal(e.name, 'AbortError'));\n",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 3686.6316000086954,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 3.68679809999594,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P06",
+      "variant": "broken",
+      "arm": "proof",
+      "utc": "2026-10-28T07:00:32.419233+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "1902304df1718764796ba75159f073b425f5757787f5d10c6dc527397ca34519",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "The delay.clear() method does not properly handle the case where the timer has already fired, causing a potential race condition that may lead to inconsistent promise resolution behavior.",
+              "path": "index.js",
+              "start_line": 51,
+              "end_line": 55,
+              "evidence": "delayPromise.clear = () => {\n\tclear(timeoutId);\n\ttimeoutId = null;\n\tsettle();\n};",
+              "reproduction": {
+                "code": "const {default: delay} = await load('./index.js');\nconst controller = new AbortController();\nconst promise = delay(10, {signal: controller.signal});\nsetTimeout(() => controller.abort(), 5);\nawait promise.catch(e => assert.equal(e.name, 'AbortError'));\n",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 3588.7258000002475,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 3.5889481000049273,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P06",
+      "variant": "fixed",
+      "arm": "proof",
+      "utc": "2026-10-28T07:00:36.009456+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "da2ce120d8dfff2822ed500ddce41033a829e7de3fdb1cb43bef1bf3e8c21f34",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "The delay.clear() method does not properly handle the case where the timer has already fired, causing it to attempt to settle the promise twice and potentially throw an error.",
+              "path": "index.js",
+              "start_line": 51,
+              "end_line": 55,
+              "evidence": "delayPromise.clear = () => {\n\tclear(timeoutId);\n\ttimeoutId = null;\n\tsettle();\n};",
+              "reproduction": {
+                "code": "const {default: delay} = await load('./index.js');\nconst signal = new AbortController().signal;\nconst promise = delay(10, {signal});\nsetTimeout(() => {\n  promise.clear();\n}, 5);\nawait promise;",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 3465.711500000907,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 3.4658647000032943,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P06",
+      "variant": "fixed",
+      "arm": "ordinary",
+      "utc": "2026-10-28T07:00:39.489672+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "da2ce120d8dfff2822ed500ddce41033a829e7de3fdb1cb43bef1bf3e8c21f34",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "The delay.clear() method does not properly handle the case where the timer has already fired, causing it to attempt to settle the promise twice and potentially throw an error.",
+              "path": "index.js",
+              "start_line": 51,
+              "end_line": 55,
+              "evidence": "delayPromise.clear = () => {\n\tclear(timeoutId);\n\ttimeoutId = null;\n\tsettle();\n};",
+              "reproduction": {
+                "code": "const {default: delay} = await load('./index.js');\nconst signal = new AbortController().signal;\nconst promise = delay(10, {signal});\nsetTimeout(() => {\n  promise.clear();\n}, 5);\nawait promise;",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 3628.7660999951186,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 3.628948700003093,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "P06",
+      "variant": "fixed",
+      "arm": "proof_d1",
+      "utc": "2026-10-28T07:00:43.119910+00:00",
+      "specialist": {
+        "wall_seconds": 0.729525000002468,
+        "rows": [
+          {
+            "path": "index.js",
+            "review": {
+              "schema_version": "code-review.1",
+              "status": "no_flags",
+              "advisory": true,
+              "model": "yannelli/d1-3b-code-review-decisions",
+              "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+              "rules": [
+                "error_handling_problem",
+                "type_safety_hole",
+                "unsafe_input"
+              ],
+              "threshold": 0.9,
+              "total_lines": 72,
+              "reviewed_lines": 72,
+              "windows": [
+                {
+                  "start_line": 1,
+                  "end_line": 72,
+                  "probabilities": {
+                    "error_handling_problem": 0.008577485413711986,
+                    "type_safety_hole": 0.02297736991002561,
+                    "unsafe_input": 0.005554924703691103
+                  }
+                }
+              ],
+              "findings": [],
+              "latency_ms": 363.7672000040766,
+              "error": null
+            }
+          }
+        ]
+      },
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "da2ce120d8dfff2822ed500ddce41033a829e7de3fdb1cb43bef1bf3e8c21f34",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "The delay.clear() method does not properly handle the case where the timer has already fired before clear is called, leading to a potential race condition where the promise settles twice.",
+              "path": "index.js",
+              "start_line": 51,
+              "end_line": 55,
+              "evidence": "delayPromise.clear = () => {\n\tclear(timeoutId);\n\ttimeoutId = null;\n\tsettle();\n};",
+              "reproduction": {
+                "code": "const {default: delay} = await load('./index.js');\nconst signal = new AbortController().signal;\nconst d = delay(1, {signal});\nsetTimeout(() => {\n  d.clear();\n}, 0);\nlet settled = false;\nd.then(() => { settled = true; }).catch(() => { settled = true; });\nawait new Promise(r => setTimeout(r, 5));\nassert.equal(settled, true);",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          },
+          {
+            "hypothesis": {
+              "claim": "The delay.range() function does not properly handle the case where minimum equals maximum, causing it to call randomInteger with invalid parameters.",
+              "path": "index.js",
+              "start_line": 63,
+              "end_line": 63,
+              "evidence": "delay.range = (minimum, maximum, options) => delay(randomInteger(minimum, maximum), options);",
+              "reproduction": {
+                "code": "const {default: delay} = await load('./index.js');\nconst result = await delay.range(5, 5, {value: 'test'});\nassert.equal(result, 'test');",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "unproven",
+            "reason": "baseline_not_assertion_failure",
+            "baseline_reproduction": {
+              "outcome": "pass",
+              "assertions": 1,
+              "evidence": "reproduction completed"
+            },
+            "baseline_regression": {
+              "outcome": "pass",
+              "assertions": 12,
+              "evidence": "{\"status\":\"passed\",\"mode\":\"regression\",\"checks\":12}\n"
+            },
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {
+              "baseline_regression": 206.8126999947708,
+              "baseline_reproduction": 190.5105000041658
+            }
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 6523.944300002768,
+        "human_time_claim": "not_measured"
+      },
+      "elapsed_seconds": 7.253748000002815,
+      "capped_task_seconds": 180
+    }
+  ],
+  "human_time_measured": false
+}

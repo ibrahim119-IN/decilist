@@ -1,0 +1,121 @@
+{
+  "id": "P01",
+  "variant": "broken",
+  "arm": "proof_d1",
+  "utc": "2026-10-28T06:57:20.187927+00:00",
+  "specialist": {
+    "wall_seconds": 3.0698944000032498,
+    "rows": [
+      {
+        "path": "index.js",
+        "review": {
+          "schema_version": "code-review.1",
+          "status": "flagged",
+          "advisory": true,
+          "model": "yannelli/d1-3b-code-review-decisions",
+          "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+          "rules": [
+            "error_handling_problem",
+            "type_safety_hole",
+            "unsafe_input"
+          ],
+          "threshold": 0.9,
+          "total_lines": 322,
+          "reviewed_lines": 322,
+          "windows": [
+            {
+              "start_line": 1,
+              "end_line": 80,
+              "probabilities": {
+                "error_handling_problem": 0.06371499425196533,
+                "type_safety_hole": 0.02297736991002561,
+                "unsafe_input": 0.004609572179374208
+              }
+            },
+            {
+              "start_line": 69,
+              "end_line": 148,
+              "probabilities": {
+                "error_handling_problem": 0.020332353342658753,
+                "type_safety_hole": 0.033085978388704126,
+                "unsafe_input": 0.01098694263059318
+              }
+            },
+            {
+              "start_line": 137,
+              "end_line": 216,
+              "probabilities": {
+                "error_handling_problem": 0.19193278644723683,
+                "type_safety_hole": 0.027585282226789985,
+                "unsafe_input": 0.004070137715896127
+              }
+            },
+            {
+              "start_line": 205,
+              "end_line": 284,
+              "probabilities": {
+                "error_handling_problem": 0.0446808702726502,
+                "type_safety_hole": 0.027585282226789985,
+                "unsafe_input": 0.00912563738918052
+              }
+            },
+            {
+              "start_line": 273,
+              "end_line": 322,
+              "probabilities": {
+                "error_handling_problem": 0.9933071490757153,
+                "type_safety_hole": 0.031143830534778462,
+                "unsafe_input": 0.005554924703691103
+              }
+            }
+          ],
+          "findings": [
+            {
+              "rule": "error_handling_problem",
+              "probability": 0.9933071490757153,
+              "start_line": 273,
+              "end_line": 322
+            }
+          ],
+          "latency_ms": 2301.598500009277,
+          "error": null
+        }
+      }
+    ]
+  },
+  "verified_target_repair": false,
+  "result": {
+    "schema_version": "review-repair.1",
+    "status": "invalid",
+    "reason": "evidence_content",
+    "source_sha256": "29a49109dc0ac4f67038b3c0a19feac39a6be459eec9e9ffc11f139d4cab01a0",
+    "attempts": [
+      {
+        "hypothesis": {
+          "claim": "pMap does not properly handle the case where a mapper returns pMapSkip for an item that is processed after the iterable has been marked as done, leading to incorrect result ordering.",
+          "path": "index.js",
+          "start_line": 130,
+          "end_line": 140,
+          "evidence": "const value = await mapper(element, index);\n\n                    // Use Map to stage the index of the element.\n                    if (value === pMapSkip) {\n                        skippedIndexesMap.set(index, value);\n                    }\n\n                    result[index] = value;",
+          "reproduction": {
+            "code": "const {default: pMap, pMapSkip} = await load('./index.js');\n\nasync function* asyncIterable() {\n  yield Promise.resolve(1);\n  yield Promise.resolve(2);\n  yield Promise.resolve(3);\n}\n\nconst mapper = async (value, index) => {\n  if (index === 1) {\n    return pMapSkip;\n  }\n  return value * 2;\n};\n\nconst result = await pMap(asyncIterable(), mapper);\nassert.deepStrictEqual(result, [2, 6]);",
+            "filename": "reproduction.cjs"
+          }
+        },
+        "status": "invalid",
+        "reason": "evidence_content",
+        "baseline_reproduction": null,
+        "baseline_regression": null,
+        "candidate_reproduction": null,
+        "candidate_regression": null,
+        "edits": [],
+        "timings_ms": {}
+      }
+    ],
+    "candidate_workspace": null,
+    "latency_ms": 8193.932299996959,
+    "human_time_claim": "not_measured"
+  },
+  "elapsed_seconds": 11.264065999988816,
+  "capped_task_seconds": 180
+}

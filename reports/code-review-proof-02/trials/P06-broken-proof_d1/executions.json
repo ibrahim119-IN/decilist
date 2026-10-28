@@ -1,0 +1,25 @@
+[
+  {
+    "stage": "regression",
+    "workspace": "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P06\\trial-work\\P06-broken-proof_d1\\review-repair-baseline-yjymso2y",
+    "passed": true,
+    "returncode": 0,
+    "observed": {
+      "status": "passed",
+      "mode": "regression",
+      "checks": 12
+    },
+    "output": "{\"status\":\"passed\",\"mode\":\"regression\",\"checks\":12}\n",
+    "seconds": 0.05695670000568498
+  },
+  {
+    "stage": "reproduction",
+    "workspace": "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P06\\trial-work\\P06-broken-proof_d1\\review-repair-baseline-yjymso2y",
+    "seconds": 0.056734900004812516,
+    "result": {
+      "outcome": "pass",
+      "assertions": 0,
+      "evidence": "reproduction completed"
+    }
+  }
+]

@@ -1,0 +1,87 @@
+{
+  "id": "P03",
+  "variant": "broken",
+  "arm": "proof_d1",
+  "utc": "2026-10-28T06:58:57.131049+00:00",
+  "specialist": {
+    "wall_seconds": 0.6384036000090418,
+    "rows": [
+      {
+        "path": "index.js",
+        "review": {
+          "schema_version": "code-review.1",
+          "status": "no_flags",
+          "advisory": true,
+          "model": "yannelli/d1-3b-code-review-decisions",
+          "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+          "rules": [
+            "error_handling_problem",
+            "type_safety_hole",
+            "unsafe_input"
+          ],
+          "threshold": 0.9,
+          "total_lines": 95,
+          "reviewed_lines": 95,
+          "windows": [
+            {
+              "start_line": 1,
+              "end_line": 80,
+              "probabilities": {
+                "error_handling_problem": 0.024423090054107213,
+                "type_safety_hole": 0.027585282226789985,
+                "unsafe_input": 0.005911068856243796
+              }
+            },
+            {
+              "start_line": 69,
+              "end_line": 95,
+              "probabilities": {
+                "error_handling_problem": 0.019124036750888904,
+                "type_safety_hole": 0.02595735719779685,
+                "unsafe_input": 0.00912563738918052
+              }
+            }
+          ],
+          "findings": [],
+          "latency_ms": 489.75040001096204,
+          "error": null
+        }
+      }
+    ]
+  },
+  "verified_target_repair": false,
+  "result": {
+    "schema_version": "review-repair.1",
+    "status": "invalid",
+    "reason": "evidence_content",
+    "source_sha256": "b7394ceeab7a549add9f2f15262b111e094bcefc169ddbd26b4fd20899316e06",
+    "attempts": [
+      {
+        "hypothesis": {
+          "claim": "The timeout timer is not cleared when the input promise is already settled before the timeout duration expires, leading to a potential memory leak or spurious timeout behavior.",
+          "path": "index.js",
+          "start_line": 80,
+          "end_line": 95,
+          "evidence": "const cancelablePromise = wrappedPromise.finally(() => {\n\tcancelablePromise.clear();\n\tif (abortHandler && signal) {\n\t\tsignal.removeEventListener('abort', abortHandler);\n\t}\n});",
+          "reproduction": {
+            "code": "const {default: pTimeout, TimeoutError} = await load('./index.js');\n\nconst slowPromise = new Promise(resolve => setTimeout(() => resolve('slow'), 100));\nconst decorated = pTimeout(slowPromise, {milliseconds: 50});\n\n// This should resolve immediately without timeout\nconst result = await decorated;\nassert.equal(result, 'slow');",
+            "filename": "reproduction.cjs"
+          }
+        },
+        "status": "invalid",
+        "reason": "evidence_content",
+        "baseline_reproduction": null,
+        "baseline_regression": null,
+        "candidate_reproduction": null,
+        "candidate_regression": null,
+        "edits": [],
+        "timings_ms": {}
+      }
+    ],
+    "candidate_workspace": null,
+    "latency_ms": 3209.4126000010874,
+    "human_time_claim": "not_measured"
+  },
+  "elapsed_seconds": 3.8480971999961184,
+  "capped_task_seconds": 180
+}

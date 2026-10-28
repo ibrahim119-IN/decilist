@@ -1,0 +1,1 @@
+{"status":"failed","mode":"target","checks":0,"name":"TypeError","message":"custom.range is not a function","stack":"TypeError: custom.range is not a function\n    at target (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:235:29)\n    at async file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:249:26"}

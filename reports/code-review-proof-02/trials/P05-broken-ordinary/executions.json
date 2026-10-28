@@ -1,0 +1,15 @@
+[
+  {
+    "stage": "regression",
+    "workspace": "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P05\\trial-work\\P05-broken-ordinary\\review-repair-baseline-nutueb__",
+    "passed": true,
+    "returncode": 0,
+    "observed": {
+      "status": "passed",
+      "mode": "regression",
+      "checks": 11
+    },
+    "output": "{\"status\":\"passed\",\"mode\":\"regression\",\"checks\":11}\n",
+    "seconds": 0.059970200003590435
+  }
+]

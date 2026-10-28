@@ -1,0 +1,351 @@
+{
+  "schema_version": "review-proof-corpus.1",
+  "visibility": "private-host-catalog; expose only source files, purpose, public_docs, and entry_points to participants",
+  "cases": [
+    {
+      "id": "P01",
+      "repository": "sindresorhus/p-map",
+      "fixed": "7c5cee7db0c6b2e3355e5598e05caaa9a02c7872",
+      "date": "2026-09-12T21:45:38Z",
+      "url": "https://github.com/sindresorhus/p-map/commit/7c5cee7db0c6b2e3355e5598e05caaa9a02c7872",
+      "title": "Fix `pMap` hanging on a source that blocks in `next()` after it is exhausted",
+      "source_files": [
+        {
+          "path": "index.js",
+          "patch": "@@ -72,7 +72,8 @@ export default async function pMap(\n \t\t\t\treturn;\n \t\t\t}\n \n-\t\t\tconst nextItem = await iterator.next();\n+\t\t\t// Once the source reported `done`, don't pull again like `for await`. A source like a queue may block in `next()` after it is exhausted, which would hang the completion below.\n+\t\t\tconst nextItem = isIterableDone ? {done: true} : await iterator.next();\n \n \t\t\tconst index = currentIndex;\n \t\t\tcurrentIndex++;"
+        }
+      ],
+      "metadata_files": [
+        "package.json"
+      ],
+      "package_entry": "index.js",
+      "broken": "669fdc68b8443f153184916f9deba226cd7e6a38",
+      "purpose": "Map an iterable through asynchronous work with configured concurrency and ordered results.",
+      "public_docs": "Module: await load('./index.js'); default export pMap, named exports pMapIterable and pMapSkip.\npMap(input, mapper, options?) returns a Promise of mapped values in input order. Inputs may be synchronous or asynchronous iterables and contain values or promises. Mapper receives (resolvedValue, inputIndex), and may return a value or promise. concurrency is an integer >=1 or Infinity (default Infinity). Empty input yields []. Returning pMapSkip omits that item. With stopOnError=true (default), an input or mapper rejection rejects the result; false waits for mapper work and aggregates mapper errors. A supplied AbortSignal cancels the operation using its reason.\npMapIterable(input, mapper, options?) returns an async iterable yielding mapped values in input order. concurrency bounds simultaneous mapper work; backpressure (default concurrency) bounds buffered results and must be >=concurrency. Mapper receives the resolved value and its input index. Mapper failures propagate to the consumer. pMapSkip omits an item.\nKeep iteration, error propagation, ordering, and configured work limits consistent for ordinary values, promise inputs, and async sources.",
+      "entry_points": [
+        "index.js"
+      ],
+      "module_format": "module",
+      "retained_files": [
+        "index.js",
+        "package.json",
+        "readme.md",
+        "license"
+      ],
+      "variants": {
+        "broken": {
+          "revision": "669fdc68b8443f153184916f9deba226cd7e6a38",
+          "files": {
+            "index.js": "c8cb7879197638a20bcea60fd033960c026de318b86861a75a44ddbaeb1d9f5b",
+            "package.json": "af22b8076c87aada54240ff924e0bb76291401c3f4e0d1ce715c5ce5d6bb6ada",
+            "readme.md": "df3cabe97595f6460012ab9afe236473d5089100b638b835cb6fc1753568b0f8",
+            "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+          },
+          "archive_sha256": "b5e11c0048bf3a2857f0cdcd8cef1e096d236a14721bd83427d6a5020d096c1e"
+        },
+        "fixed": {
+          "revision": "7c5cee7db0c6b2e3355e5598e05caaa9a02c7872",
+          "files": {
+            "index.js": "61a6bed5112eff7a88bc7814e11a3454b06e24a896baf948648a787fada1b62e",
+            "package.json": "af22b8076c87aada54240ff924e0bb76291401c3f4e0d1ce715c5ce5d6bb6ada",
+            "readme.md": "df3cabe97595f6460012ab9afe236473d5089100b638b835cb6fc1753568b0f8",
+            "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+          },
+          "archive_sha256": "ff3d6066c50f62ed3e53a8012054d4e4148ededbe40cc22946e2f0ef6846833f"
+        }
+      },
+      "runtime_dependencies": {},
+      "upstream_readme_url": "https://github.com/sindresorhus/p-map/blob/669fdc68b8443f153184916f9deba226cd7e6a38/readme.md",
+      "license": "MIT",
+      "license_file": "benchmarks/licenses/p-map-LICENSE.txt"
+    },
+    {
+      "id": "P02",
+      "repository": "sindresorhus/p-map",
+      "fixed": "1af51b57534b284ead73cca65f26b56bb9390768",
+      "date": "2026-06-29T22:22:19Z",
+      "url": "https://github.com/sindresorhus/p-map/commit/1af51b57534b284ead73cca65f26b56bb9390768",
+      "title": "Fix `pMapIterable` mapper index for out-of-order promise inputs (#88)",
+      "source_files": [
+        {
+          "path": "index.js",
+          "patch": "@@ -226,7 +226,8 @@ export function pMapIterable(\n \t\t\t\t\ttrySpawn();\n \n \t\t\t\t\ttry {\n-\t\t\t\t\t\tconst returnValue = await mapper(await value, index++);\n+\t\t\t\t\t\tconst currentIndex = index++;\n+\t\t\t\t\t\tconst returnValue = await mapper(await value, currentIndex);\n \n \t\t\t\t\t\tpendingPromisesCount--;\n "
+        }
+      ],
+      "metadata_files": [
+        "package.json"
+      ],
+      "package_entry": "index.js",
+      "broken": "65aaa8f4d7e757a5254a146c4c39403efa9e2139",
+      "purpose": "Map an iterable through asynchronous work with configured concurrency and ordered results.",
+      "public_docs": "Module: await load('./index.js'); default export pMap, named exports pMapIterable and pMapSkip.\npMap(input, mapper, options?) returns a Promise of mapped values in input order. Inputs may be synchronous or asynchronous iterables and contain values or promises. Mapper receives (resolvedValue, inputIndex), and may return a value or promise. concurrency is an integer >=1 or Infinity (default Infinity). Empty input yields []. Returning pMapSkip omits that item. With stopOnError=true (default), an input or mapper rejection rejects the result; false waits for mapper work and aggregates mapper errors. A supplied AbortSignal cancels the operation using its reason.\npMapIterable(input, mapper, options?) returns an async iterable yielding mapped values in input order. concurrency bounds simultaneous mapper work; backpressure (default concurrency) bounds buffered results and must be >=concurrency. Mapper receives the resolved value and its input index. Mapper failures propagate to the consumer. pMapSkip omits an item.\nKeep iteration, error propagation, ordering, and configured work limits consistent for ordinary values, promise inputs, and async sources.",
+      "entry_points": [
+        "index.js"
+      ],
+      "module_format": "module",
+      "retained_files": [
+        "index.js",
+        "package.json",
+        "readme.md",
+        "license"
+      ],
+      "variants": {
+        "broken": {
+          "revision": "65aaa8f4d7e757a5254a146c4c39403efa9e2139",
+          "files": {
+            "index.js": "26bed8e9161d2a1215cf8ab12950ca3c00991f27e00e81e7122c0181d86d0de1",
+            "package.json": "3869a3eed147c70e77d2faece50ee97e7e55b851e8f46428fe71e218a349237f",
+            "readme.md": "df3cabe97595f6460012ab9afe236473d5089100b638b835cb6fc1753568b0f8",
+            "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+          },
+          "archive_sha256": "9ee737abcd58814439c7a13f30f85bd5a07a95952c94b92a253a2402eb3a376a"
+        },
+        "fixed": {
+          "revision": "1af51b57534b284ead73cca65f26b56bb9390768",
+          "files": {
+            "index.js": "c1e5b90ea5de621dcce97ebdfdc89e88bdcef9f639e6dae32d00b732af05d851",
+            "package.json": "3869a3eed147c70e77d2faece50ee97e7e55b851e8f46428fe71e218a349237f",
+            "readme.md": "df3cabe97595f6460012ab9afe236473d5089100b638b835cb6fc1753568b0f8",
+            "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+          },
+          "archive_sha256": "8762953e38e17aa2806247d81080a9e307003a72cd4ddffd603587811d761f39"
+        }
+      },
+      "runtime_dependencies": {},
+      "upstream_readme_url": "https://github.com/sindresorhus/p-map/blob/65aaa8f4d7e757a5254a146c4c39403efa9e2139/readme.md",
+      "license": "MIT",
+      "license_file": "benchmarks/licenses/p-map-LICENSE.txt"
+    },
+    {
+      "id": "P03",
+      "repository": "sindresorhus/p-timeout",
+      "fixed": "15fc4daa8b075b44b041dcc48804c20811d0c264",
+      "date": "2026-09-12T16:13:51Z",
+      "url": "https://github.com/sindresorhus/p-timeout/commit/15fc4daa8b075b44b041dcc48804c20811d0c264",
+      "title": "Fix: Handle input rejections when already aborted (#46)",
+      "source_files": [
+        {
+          "path": "index.js",
+          "patch": "@@ -28,6 +28,9 @@ export default function pTimeout(promise, options) {\n \n \t\tif (signal?.aborted) {\n \t\t\treject(getAbortedReason(signal));\n+\t\t\t// The input still needs a rejection handler even though cancellation won.\n+\t\t\t// eslint-disable-next-line promise/prefer-await-to-then, promise/prefer-catch\n+\t\t\tpromise.then(resolve, reject);\n \t\t\treturn;\n \t\t}\n "
+        }
+      ],
+      "metadata_files": [
+        "package.json"
+      ],
+      "package_entry": "index.js",
+      "broken": "245066ef7daa5e74024d5b6a188ae599a1b7bfdf",
+      "purpose": "Decorate a promise with timeout, fallback, and cancellation behavior.",
+      "public_docs": "Module: await load('./index.js'); default export pTimeout, named export TimeoutError.\npTimeout(inputPromise, options) returns a decorated promise with .clear() to cancel its timeout. milliseconds is a positive number; Infinity disables timeout. Before timeout, it adopts the input fulfillment or rejection. When timeout expires, default behavior rejects with TimeoutError; message may be a string, an Error to reject with, or false to resolve undefined. A fallback function can provide a value/promise instead, and exceptions from fallback reject the decorated promise. Cancelable input promises have their .cancel() method called on ordinary timeout.\ncustomTimers supplies {setTimeout, clearTimeout} for controlled timing. The functions follow timer callback/delay and timer-handle conventions. A supplied AbortSignal cancels using its reason, including when already aborted. Settled operations clean up active timers and abort listeners. The input remains a promise whose rejection must be handled.",
+      "entry_points": [
+        "index.js"
+      ],
+      "module_format": "module",
+      "retained_files": [
+        "index.js",
+        "package.json",
+        "readme.md",
+        "license"
+      ],
+      "variants": {
+        "broken": {
+          "revision": "245066ef7daa5e74024d5b6a188ae599a1b7bfdf",
+          "files": {
+            "index.js": "abf97d3629c06bbff31aa73162440032b63baf746e9d2570539c03d43ff2c0fa",
+            "package.json": "0dbc308956ccecea7ce20449fce2121c1ea77ae8f68f7d2f9aeb502da1174681",
+            "readme.md": "ee62dc27d431ad507e1db4e57ebce479ac177033fb5f295755fb1eb63b0993d4",
+            "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+          },
+          "archive_sha256": "ad241d7e835f76f10d5dbba9b63a596519a09ad2d7e5e4b90c7db1094583b35e"
+        },
+        "fixed": {
+          "revision": "15fc4daa8b075b44b041dcc48804c20811d0c264",
+          "files": {
+            "index.js": "f4cbad71c756c73e63c5ad8b98c60955498b4a82a4cb63dd818d9139e28232a6",
+            "package.json": "0dbc308956ccecea7ce20449fce2121c1ea77ae8f68f7d2f9aeb502da1174681",
+            "readme.md": "ee62dc27d431ad507e1db4e57ebce479ac177033fb5f295755fb1eb63b0993d4",
+            "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+          },
+          "archive_sha256": "0856709dd46a01533be740b1edd03893395bc724099417111210399461849224"
+        }
+      },
+      "runtime_dependencies": {},
+      "upstream_readme_url": "https://github.com/sindresorhus/p-timeout/blob/245066ef7daa5e74024d5b6a188ae599a1b7bfdf/readme.md",
+      "license": "MIT",
+      "license_file": "benchmarks/licenses/p-timeout-LICENSE.txt"
+    },
+    {
+      "id": "P04",
+      "repository": "sindresorhus/p-timeout",
+      "fixed": "727380244f6da2c01e8913fbbcd7fa04c1730fb4",
+      "date": "2026-10-15T12:07:35Z",
+      "url": "https://github.com/sindresorhus/p-timeout/commit/727380244f6da2c01e8913fbbcd7fa04c1730fb4",
+      "title": "Fix timeouts above 2 ** 31 - 1 milliseconds firing immediately",
+      "source_files": [
+        {
+          "path": "index.js",
+          "patch": "@@ -11,6 +11,9 @@ export class TimeoutError extends Error {\n \n const getAbortedReason = signal => signal.reason ?? new DOMException('This operation was aborted.', 'AbortError');\n \n+// `setTimeout` stores its delay in a 32-bit signed integer, so this is the largest delay it can represent.\n+const maximumDelay = (2 ** 31) - 1;\n+\n export default function pTimeout(promise, options) {\n \tconst {\n \t\tmilliseconds,\n@@ -48,7 +51,9 @@ export default function pTimeout(promise, options) {\n \t\t// eslint-disable-next-line unicorn/prefer-then-catch\n \t\tpromise.then(resolve, reject);\n \n-\t\tif (milliseconds === Infinity) {\n+\t\t// A delay that `setTimeout` cannot represent never elapses, so there is nothing to time out. Without\n+\t\t// this, `setTimeout` silently clamps anything above 2 ** 31 - 1 to 1ms and the timeout fires at once.\n+\t\tif (milliseconds > maximumDelay) {\n \t\t\treturn;\n \t\t}\n \n@@ -90,7 +95,7 @@ export default function pTimeout(promise, options) {\n \t});\n \n \tcancelablePromise.clear = () => {\n-\t\t// An infinite timeout never creates one, and a custom `clearTimeout` is entitled to reject `undefined`.\n+\t\t// A timeout that never elapses creates no timer, and a custom `clearTimeout` is entitled to reject `undefined`.\n \t\tif (timer === undefined) {\n \t\t\treturn;\n \t\t}"
+        }
+      ],
+      "metadata_files": [
+        "package.json"
+      ],
+      "package_entry": "index.js",
+      "broken": "c633f8fbb32390dc5af40317a05cb45fe3a0cfc7",
+      "purpose": "Decorate a promise with timeout, fallback, and cancellation behavior.",
+      "public_docs": "Module: await load('./index.js'); default export pTimeout, named export TimeoutError.\npTimeout(inputPromise, options) returns a decorated promise with .clear() to cancel its timeout. milliseconds is a positive number; Infinity disables timeout. Before timeout, it adopts the input fulfillment or rejection. When timeout expires, default behavior rejects with TimeoutError; message may be a string, an Error to reject with, or false to resolve undefined. A fallback function can provide a value/promise instead, and exceptions from fallback reject the decorated promise. Cancelable input promises have their .cancel() method called on ordinary timeout.\ncustomTimers supplies {setTimeout, clearTimeout} for controlled timing. The functions follow timer callback/delay and timer-handle conventions. A supplied AbortSignal cancels using its reason, including when already aborted. Settled operations clean up active timers and abort listeners. The input remains a promise whose rejection must be handled.",
+      "entry_points": [
+        "index.js"
+      ],
+      "module_format": "module",
+      "retained_files": [
+        "index.js",
+        "package.json",
+        "readme.md",
+        "license"
+      ],
+      "variants": {
+        "broken": {
+          "revision": "c633f8fbb32390dc5af40317a05cb45fe3a0cfc7",
+          "files": {
+            "index.js": "e25c423dd9bf275fd88db24df61e17d6d7e6d2d7f5cc85b93252736c0415180c",
+            "package.json": "f81e73069fbee25e33b5fcd44a831b606722db4f100a1e8c904c1dfde3ea3872",
+            "readme.md": "ee62dc27d431ad507e1db4e57ebce479ac177033fb5f295755fb1eb63b0993d4",
+            "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+          },
+          "archive_sha256": "c665fe844a9294a9fe86f5938cdaa883a370eceac22172432c40daa4f5f8e736"
+        },
+        "fixed": {
+          "revision": "727380244f6da2c01e8913fbbcd7fa04c1730fb4",
+          "files": {
+            "index.js": "736241dc8e68fd3bb925dda7496e142010e3732b6f804dcc6bfee273d08aadda",
+            "package.json": "f81e73069fbee25e33b5fcd44a831b606722db4f100a1e8c904c1dfde3ea3872",
+            "readme.md": "fd6895b074a198687ea8b8563b097dcef840d1f636a314c33544396b24078164",
+            "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+          },
+          "archive_sha256": "442376fd69b79c2c0acbb5d521ec009688d8ceb08f95bd0e2805d65cdef08f23"
+        }
+      },
+      "runtime_dependencies": {},
+      "upstream_readme_url": "https://github.com/sindresorhus/p-timeout/blob/c633f8fbb32390dc5af40317a05cb45fe3a0cfc7/readme.md",
+      "license": "MIT",
+      "license_file": "benchmarks/licenses/p-timeout-LICENSE.txt"
+    },
+    {
+      "id": "P05",
+      "repository": "sindresorhus/p-some",
+      "fixed": "d16eb8febd742cf8a028c5cf1c720ca6a3733c90",
+      "date": "2020-02-19T12:03:27Z",
+      "url": "https://github.com/sindresorhus/p-some/commit/d16eb8febd742cf8a028c5cf1c720ca6a3733c90",
+      "title": "Fix the promise not fulfilling if the count is unachievable (#5)",
+      "source_files": [
+        {
+          "path": "index.js",
+          "patch": "@@ -2,96 +2,74 @@\n const AggregateError = require('aggregate-error');\n const PCancelable = require('p-cancelable');\n \n+class FilterError extends Error { }\n+\n const pSome = (iterable, options) => new PCancelable((resolve, reject, onCancel) => {\n-\toptions = {\n-\t\tfilter: () => true,\n-\t\t...options\n-\t};\n+\tconst {count, filter = () => true} = options;\n \n-\tif (!Number.isFinite(options.count)) {\n-\t\tthrow new TypeError(`Expected a finite number, got ${typeof options.count}`);\n+\tif (!Number.isFinite(count)) {\n+\t\treject(new TypeError(`Expected a finite number, got ${typeof options.count}`));\n+\t\treturn;\n \t}\n \n \tconst values = [];\n \tconst errors = [];\n \tlet elementCount = 0;\n-\tlet maxErrors = -options.count + 1;\n-\tlet maxFiltered = -options.count + 1;\n-\tlet isDone = false;\n+\tlet isSettled = false;\n \n \tconst completed = new Set();\n-\tconst cancelPendingIfDone = () => {\n-\t\tif (!isDone) {\n-\t\t\treturn;\n+\tconst maybeSettle = () => {\n+\t\tif (values.length === count) {\n+\t\t\tresolve(values);\n+\t\t\tisSettled = true;\n \t\t}\n \n-\t\tfor (const promise of iterable) {\n-\t\t\tif (!completed.has(promise) && typeof promise.cancel === 'function') {\n-\t\t\t\tpromise.cancel();\n-\t\t\t}\n+\t\tif (elementCount - errors.length < count) {\n+\t\t\treject(new AggregateError(errors));\n+\t\t\tisSettled = true;\n \t\t}\n-\t};\n-\n-\tonCancel(() => {\n-\t\tisDone = true;\n-\t\tcancelPendingIfDone();\n-\t});\n \n-\tconst fulfilled = value => {\n-\t\tif (isDone) {\n-\t\t\treturn;\n-\t\t}\n+\t\treturn isSettled;\n+\t};\n \n-\t\tif (!options.filter(value)) {\n-\t\t\tif (--maxFiltered === 0) {\n-\t\t\t\tisDone = true;\n-\t\t\t\treject(new RangeError('Not enough values pass the `filter` option'));\n+\tconst cancelPending = () => {\n+\t\tfor (const promise of iterable) {\n+\t\t\tif (!completed.has(promise) && typeof promise.cancel === 'function') {\n+\t\t\t\tpromise.cancel();\n \t\t\t}\n-\n-\t\t\treturn;\n-\t\t}\n-\n-\t\tvalues.push(value);\n-\n-\t\tif (--options.count === 0) {\n-\t\t\tisDone = true;\n-\t\t\tresolve(values);\n \t\t}\n \t};\n \n-\tconst rejected = error => {\n-\t\tif (isDone) {\n-\t\t\treturn;\n-\t\t}\n-\n-\t\terrors.push(error);\n-\n-\t\tif (--maxErrors === 0) {\n-\t\t\tisDone = true;\n-\t\t\treject(new AggregateError(errors));\n-\t\t}\n-\t};\n+\tonCancel(cancelPending);\n \n \tfor (const element of iterable) {\n-\t\tmaxErrors++;\n-\t\tmaxFiltered++;\n \t\telementCount++;\n-\n \t\t(async () => {\n \t\t\ttry {\n-\t\t\t\tconst value = await Promise.resolve(element);\n-\t\t\t\tfulfilled(value);\n+\t\t\t\tconst value = await element;\n+\t\t\t\tif (isSettled) {\n+\t\t\t\t\treturn;\n+\t\t\t\t}\n+\n+\t\t\t\tif (!filter(value)) {\n+\t\t\t\t\tthrow new FilterError('Value does not satisfy filter');\n+\t\t\t\t}\n+\n+\t\t\t\tvalues.push(value);\n \t\t\t} catch (error) {\n-\t\t\t\trejected(error);\n+\t\t\t\terrors.push(error);\n+\t\t\t} finally {\n+\t\t\t\tcompleted.add(element);\n+\t\t\t\tif (!isSettled && maybeSettle()) {\n+\t\t\t\t\tcancelPending();\n+\t\t\t\t}\n \t\t\t}\n-\n-\t\t\tcompleted.add(element);\n-\t\t\tcancelPendingIfDone();\n \t\t})();\n \t}\n \n-\tif (options.count > elementCount) {\n-\t\tthrow new RangeError(`Expected input to contain at least ${options.count} items, but contains ${elementCount} items`);\n+\tif (count > elementCount) {\n+\t\treject(new RangeError(`Expected input to contain at least ${options.count} items, but contains ${elementCount} items`));\n+\t\tcancelPending();\n \t}\n });\n \n@@ -100,3 +78,4 @@ module.exports = pSome;\n module.exports.default = pSome;\n \n module.exports.AggregateError = AggregateError;\n+module.exports.FilterError = FilterError;"
+        }
+      ],
+      "metadata_files": [
+        "package.json"
+      ],
+      "package_entry": "index.js",
+      "broken": "57614d17800711af957d5efe06becbb5a0e1373b",
+      "purpose": "Collect the first requested number of eligible fulfilled input values.",
+      "public_docs": "Module: await load('./index.js'); default export pSome (CommonJS), with pSome.AggregateError.\npSome(input, {count, filter?}) returns a cancelable Promise. input is an iterable of promises or ordinary values. It fulfills once count eligible values have fulfilled, with an array in fulfillment order. count is a finite number with minimum 1 and cannot exceed the number of input items. The optional synchronous filter(value) determines whether a fulfilled value is eligible; omitted filter accepts all values. If count becomes impossible, the operation rejects rather than waiting indefinitely. Rejected input errors are represented by AggregateError. Inputs that are still pending and have a .cancel() method are canceled when the operation settles; calling .cancel() on the result cancels pending inputs too.",
+      "entry_points": [
+        "index.js"
+      ],
+      "module_format": "commonjs",
+      "retained_files": [
+        "index.js",
+        "package.json",
+        "readme.md",
+        "license"
+      ],
+      "variants": {
+        "broken": {
+          "revision": "57614d17800711af957d5efe06becbb5a0e1373b",
+          "files": {
+            "index.js": "f408b32f467db2f3b44e17662fc5bbbbe6847207aad9bc6740f1098995365077",
+            "package.json": "657a8865c1f5f14ca59062d89407044b102f2931a645b02aefc76f1b0f1830ab",
+            "readme.md": "54c46f9daf7eedb5f70e1ac160b711d18350effece4220409a8e9058f44263f3",
+            "license": "48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0"
+          },
+          "archive_sha256": "fff1e4248dd931ecb2201ce5c8a55a240617ffd0a25f783bb28766ecb3f9d552"
+        },
+        "fixed": {
+          "revision": "d16eb8febd742cf8a028c5cf1c720ca6a3733c90",
+          "files": {
+            "index.js": "e9ca07e039e7d7d91058228002b7dfaf5d2c7905799e598ac677cb730125ec95",
+            "package.json": "657a8865c1f5f14ca59062d89407044b102f2931a645b02aefc76f1b0f1830ab",
+            "readme.md": "54c46f9daf7eedb5f70e1ac160b711d18350effece4220409a8e9058f44263f3",
+            "license": "48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0"
+          },
+          "archive_sha256": "868ae71b47db49f1656d18a810d08587af0dd13a5d4a4f02263272311e87202c"
+        }
+      },
+      "runtime_dependencies": {
+        "aggregate-error": "3.1.0",
+        "p-cancelable": "2.1.1"
+      },
+      "upstream_readme_url": "https://github.com/sindresorhus/p-some/blob/57614d17800711af957d5efe06becbb5a0e1373b/readme.md",
+      "license": "MIT",
+      "license_file": "benchmarks/licenses/p-some-LICENSE.txt"
+    },
+    {
+      "id": "P06",
+      "repository": "sindresorhus/delay",
+      "fixed": "f3c7542b416b034242950ffb7d85fe38b2094432",
+      "date": "2021-02-01T15:23:24Z",
+      "url": "https://github.com/sindresorhus/delay/commit/f3c7542b416b034242950ffb7d85fe38b2094432",
+      "title": "Fix missing `range()` in `createWithTimers()` return value & require Node.js 10 (#55)",
+      "source_files": [
+        {
+          "path": "index.js",
+          "patch": "@@ -57,15 +57,16 @@ const createDelay = ({clearTimeout: defaultClear, setTimeout: set, willResolve})\n \treturn delayPromise;\n };\n \n-const delay = createDelay({willResolve: true});\n-delay.reject = createDelay({willResolve: false});\n-delay.range = (minimum, maximum, options) => delay(randomInteger(minimum, maximum), options);\n-delay.createWithTimers = ({clearTimeout, setTimeout}) => {\n-\tconst delay = createDelay({clearTimeout, setTimeout, willResolve: true});\n-\tdelay.reject = createDelay({clearTimeout, setTimeout, willResolve: false});\n+const createWithTimers = clearAndSet => {\n+\tconst delay = createDelay({...clearAndSet, willResolve: true});\n+\tdelay.reject = createDelay({...clearAndSet, willResolve: false});\n+\tdelay.range = (minimum, maximum, options) => delay(randomInteger(minimum, maximum), options);\n \treturn delay;\n };\n \n+const delay = createWithTimers();\n+delay.createWithTimers = createWithTimers;\n+\n module.exports = delay;\n // TODO: Remove this for the next major release\n module.exports.default = delay;"
+        }
+      ],
+      "metadata_files": [
+        "package.json"
+      ],
+      "package_entry": "index.js",
+      "broken": "7e47ec87f745828afd495b45697111f6ab823415",
+      "purpose": "Create controllable promise delays with optional values, ranges, rejection, and cancellation.",
+      "public_docs": "Module: await load('./index.js'); default export delay (CommonJS).\ndelay(milliseconds, {value?, signal?}?) creates a promise resolving after the delay with value. delay.reject(milliseconds, options?) rejects with the supplied value after the delay. delay.range(minimum, maximum, options?) resolves after a random integer number of milliseconds in the inclusive range, using the same value and signal options. Returned delay promises have .clear(), which cancels the timer and settles immediately according to the selected resolve/reject operation. An aborted signal rejects with an Error named AbortError.\ndelay.createWithTimers({setTimeout, clearTimeout}) creates an independent delay instance using the supplied timer functions. This instance provides the delay operations with the same API. Timers receive (callback, milliseconds), return a handle, and clearTimeout receives that handle.",
+      "entry_points": [
+        "index.js"
+      ],
+      "module_format": "commonjs",
+      "retained_files": [
+        "index.js",
+        "package.json",
+        "readme.md",
+        "license"
+      ],
+      "variants": {
+        "broken": {
+          "revision": "7e47ec87f745828afd495b45697111f6ab823415",
+          "files": {
+            "index.js": "3c312e4e7947a271550666c840c4e0c1e166e63dd85d677ccd591ec1e5dfc079",
+            "package.json": "fbf56c244f218a2c42257cbc31a6cecee5ae68a403f88c0385c938dc7c39b20b",
+            "readme.md": "dd672909c470d3517924088f18c007c085535a7ea33c146a414eccc9ba80c5e7",
+            "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+          },
+          "archive_sha256": "dc47d30edead094291e3474f3a5c4f1f321ae8d071f7700f5a1574bf7afdba75"
+        },
+        "fixed": {
+          "revision": "f3c7542b416b034242950ffb7d85fe38b2094432",
+          "files": {
+            "index.js": "2275459e0342d965bef3bf218e3f66ee192be0ceb054070eefa63278d9ecd1ef",
+            "package.json": "c36fad0f20d18cbf84adfc339f7fd10d4e34007c3aa0383a72922de53f137d42",
+            "readme.md": "dd672909c470d3517924088f18c007c085535a7ea33c146a414eccc9ba80c5e7",
+            "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+          },
+          "archive_sha256": "734778521f2358836a14f942ce8d087eb31eead6ad832689a1478b86b4ce4f7c"
+        }
+      },
+      "runtime_dependencies": {},
+      "upstream_readme_url": "https://github.com/sindresorhus/delay/blob/7e47ec87f745828afd495b45697111f6ab823415/readme.md",
+      "license": "MIT",
+      "license_file": "benchmarks/licenses/delay-LICENSE.txt"
+    }
+  ]
+}

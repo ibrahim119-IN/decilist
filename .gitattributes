@@ -8,3 +8,6 @@ reports/provenance/triage-v5-development01-*.py.txt -text
 tests/test_triage_v5_lab.py -text
 # Preserve captured model responses and measured evidence hashes byte-for-byte.
 reports/code-review-natural-01/** -text
+# Frozen proof experiments retain original request, response and source bytes.
+reports/code-review-proof-02/** -text
+reports/code-review-proof-03/** -text

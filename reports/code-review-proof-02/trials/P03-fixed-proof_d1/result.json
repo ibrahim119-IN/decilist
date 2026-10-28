@@ -1,0 +1,65 @@
+{
+  "id": "P03",
+  "variant": "fixed",
+  "arm": "proof_d1",
+  "utc": "2026-10-28T06:59:22.801403+00:00",
+  "specialist": {
+    "wall_seconds": 0.5575602000026265,
+    "rows": [
+      {
+        "path": "index.js",
+        "review": {
+          "schema_version": "code-review.1",
+          "status": "no_flags",
+          "advisory": true,
+          "model": "yannelli/d1-3b-code-review-decisions",
+          "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+          "rules": [
+            "error_handling_problem",
+            "type_safety_hole",
+            "unsafe_input"
+          ],
+          "threshold": 0.9,
+          "total_lines": 98,
+          "reviewed_lines": 98,
+          "windows": [
+            {
+              "start_line": 1,
+              "end_line": 80,
+              "probabilities": {
+                "error_handling_problem": 0.033085978388704126,
+                "type_safety_hole": 0.02595735719779685,
+                "unsafe_input": 0.005554924703691103
+              }
+            },
+            {
+              "start_line": 69,
+              "end_line": 98,
+              "probabilities": {
+                "error_handling_problem": 0.01691491326672651,
+                "type_safety_hole": 0.029312230751356316,
+                "unsafe_input": 0.008061991528271641
+              }
+            }
+          ],
+          "findings": [],
+          "latency_ms": 434.7064000030514,
+          "error": null
+        }
+      }
+    ]
+  },
+  "verified_target_repair": false,
+  "result": {
+    "schema_version": "review-repair.1",
+    "status": "infrastructure_failure",
+    "reason": "provider_error",
+    "source_sha256": "2f42c1f7b8f33c2e1e55a1be0d2cde3e45a593335f9393255a064d502d8d2d7d",
+    "attempts": [],
+    "candidate_workspace": null,
+    "latency_ms": 6126.712700002827,
+    "human_time_claim": "not_measured"
+  },
+  "elapsed_seconds": 6.6845816999993986,
+  "capped_task_seconds": 180
+}

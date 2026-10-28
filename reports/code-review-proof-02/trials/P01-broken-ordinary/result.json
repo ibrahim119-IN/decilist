@@ -1,0 +1,42 @@
+{
+  "id": "P01",
+  "variant": "broken",
+  "arm": "ordinary",
+  "utc": "2026-10-28T06:56:58.630072+00:00",
+  "specialist": null,
+  "verified_target_repair": false,
+  "result": {
+    "schema_version": "review-repair.1",
+    "status": "invalid",
+    "reason": "evidence_content",
+    "source_sha256": "29a49109dc0ac4f67038b3c0a19feac39a6be459eec9e9ffc11f139d4cab01a0",
+    "attempts": [
+      {
+        "hypothesis": {
+          "claim": "The pMap function does not properly handle the case where a mapper returns pMapSkip for an item that has already been processed and skipped, leading to incorrect result ordering when multiple items are skipped.",
+          "path": "index.js",
+          "start_line": 105,
+          "end_line": 113,
+          "evidence": "for (const [index, value] of result.entries()) {\n\t\t\t\tif (skippedIndexesMap.get(index) === pMapSkip) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\n\t\t\t\tpureResult.push(value);\n\t\t\t}",
+          "reproduction": {
+            "code": "const {default: pMap, pMapSkip} = await load('./index.js');\n\nasync function mapper(value, index) {\n  if (index === 1) {\n    return pMapSkip;\n  }\n  return value * 2;\n}\n\nconst input = [1, 2, 3];\nconst result = await pMap(input, mapper);\nassert.deepStrictEqual(result, [2, 6]);",
+            "filename": "reproduction.cjs"
+          }
+        },
+        "status": "invalid",
+        "reason": "evidence_content",
+        "baseline_reproduction": null,
+        "baseline_regression": null,
+        "candidate_reproduction": null,
+        "candidate_regression": null,
+        "edits": [],
+        "timings_ms": {}
+      }
+    ],
+    "candidate_workspace": null,
+    "latency_ms": 8981.254500002251,
+    "human_time_claim": "not_measured"
+  },
+  "elapsed_seconds": 8.981648499990115,
+  "capped_task_seconds": 180
+}

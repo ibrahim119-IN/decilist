@@ -1,0 +1,42 @@
+{
+  "id": "P06",
+  "variant": "fixed",
+  "arm": "ordinary",
+  "utc": "2026-10-28T07:00:39.489672+00:00",
+  "specialist": null,
+  "verified_target_repair": false,
+  "result": {
+    "schema_version": "review-repair.1",
+    "status": "invalid",
+    "reason": "evidence_content",
+    "source_sha256": "da2ce120d8dfff2822ed500ddce41033a829e7de3fdb1cb43bef1bf3e8c21f34",
+    "attempts": [
+      {
+        "hypothesis": {
+          "claim": "The delay.clear() method does not properly handle the case where the timer has already fired, causing it to attempt to settle the promise twice and potentially throw an error.",
+          "path": "index.js",
+          "start_line": 51,
+          "end_line": 55,
+          "evidence": "delayPromise.clear = () => {\n\tclear(timeoutId);\n\ttimeoutId = null;\n\tsettle();\n};",
+          "reproduction": {
+            "code": "const {default: delay} = await load('./index.js');\nconst signal = new AbortController().signal;\nconst promise = delay(10, {signal});\nsetTimeout(() => {\n  promise.clear();\n}, 5);\nawait promise;",
+            "filename": "reproduction.cjs"
+          }
+        },
+        "status": "invalid",
+        "reason": "evidence_content",
+        "baseline_reproduction": null,
+        "baseline_regression": null,
+        "candidate_reproduction": null,
+        "candidate_regression": null,
+        "edits": [],
+        "timings_ms": {}
+      }
+    ],
+    "candidate_workspace": null,
+    "latency_ms": 3628.7660999951186,
+    "human_time_claim": "not_measured"
+  },
+  "elapsed_seconds": 3.628948700003093,
+  "capped_task_seconds": 180
+}

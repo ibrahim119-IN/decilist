@@ -1,0 +1,66 @@
+{
+  "schema_version": "review-repair.1",
+  "status": "accepted_candidate",
+  "reason": "proof_and_existing_checks_passed",
+  "source_sha256": "94119ed05071f9c0e3601703c467cd71fd07264973c06a838cd4f83f3734e9a4",
+  "attempts": [
+    {
+      "hypothesis": {
+        "claim": "within(value, min, max) returns false when value equals min, violating the contract that the interval is inclusive on both endpoints.",
+        "path": "within.mjs",
+        "start_line": 1,
+        "end_line": 3,
+        "evidence": "  return value > min && value <= max;",
+        "reproduction": {
+          "code": "const { within } = await load('within.mjs'); assert.equal(within(1, 1, 5), true);",
+          "filename": "reproduction.cjs"
+        }
+      },
+      "status": "accepted_candidate",
+      "reason": "proof_and_existing_checks_passed",
+      "baseline_reproduction": {
+        "outcome": "assertion_failure",
+        "assertions": 1,
+        "evidence": "Expected values to be strictly equal:\n\nfalse !== true\n"
+      },
+      "baseline_regression": {
+        "outcome": "pass",
+        "assertions": 4,
+        "evidence": "TAP version 13\n# Subtest: a value inside the interval is included\nok 1 - a value inside the interval is included\n  ---\n  duration_ms: 0.5982\n  type: 'test'\n  ...\n# Subtest: a value below the interval is excluded\nok 2 - a value below the interval is excluded\n  ---\n  duration_ms: 0.0807\n  type: 'test'\n  ...\n# Subtest: a value above the interval is excluded\nok 3 - a value above the interval is excluded\n  ---\n  duration_ms: 0.0524\n  type: 'test'\n  ...\n# Subtest: the upper endpoint is included\nok 4 - the upper endpoint is included\n  ---\n  duration_ms: 0.0465\n  type: 'test'\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 4\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 93.5006\n"
+      },
+      "candidate_reproduction": {
+        "outcome": "pass",
+        "assertions": 1,
+        "evidence": "reproduction completed"
+      },
+      "candidate_regression": {
+        "outcome": "pass",
+        "assertions": 4,
+        "evidence": "TAP version 13\n# Subtest: a value inside the interval is included\nok 1 - a value inside the interval is included\n  ---\n  duration_ms: 0.5143\n  type: 'test'\n  ...\n# Subtest: a value below the interval is excluded\nok 2 - a value below the interval is excluded\n  ---\n  duration_ms: 0.0786\n  type: 'test'\n  ...\n# Subtest: a value above the interval is excluded\nok 3 - a value above the interval is excluded\n  ---\n  duration_ms: 0.0515\n  type: 'test'\n  ...\n# Subtest: the upper endpoint is included\nok 4 - the upper endpoint is included\n  ---\n  duration_ms: 0.0448\n  type: 'test'\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 4\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 127.0935\n"
+      },
+      "edits": [
+        {
+          "path": "within.mjs",
+          "start_line": 2,
+          "end_line": 2,
+          "source_sha256": "609155e638fb01eeb854e69fd9d9a708b707f42a9c66e37b36c69a19abfc82bc",
+          "replacement": "  return value >= min && value <= max;"
+        }
+      ],
+      "timings_ms": {
+        "baseline_regression": 213.963899994269,
+        "baseline_reproduction": 151.76019999489654,
+        "repair": 4276.478300002054,
+        "candidate_reproduction": 192.3050999903353,
+        "candidate_regression": 227.76730000623502
+      }
+    }
+  ],
+  "candidate_workspace": "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\installed-demo\\.decilist-review\\investigate-0u7jsh8n\\workspaces\\review-repair-candidate-mt94wk_b",
+  "latency_ms": 13540.543700000853,
+  "human_time_claim": "not_measured",
+  "contract_validation": "not_performed",
+  "review_required": true,
+  "patch": "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\installed-demo\\.decilist-review\\investigate-0u7jsh8n\\candidate.patch",
+  "report": "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\installed-demo\\.decilist-review\\investigate-0u7jsh8n\\report.json"
+}

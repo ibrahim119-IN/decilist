@@ -1,0 +1,105 @@
+{
+  "id": "P02",
+  "variant": "broken",
+  "arm": "proof_d1",
+  "utc": "2026-10-28T06:58:13.122644+00:00",
+  "specialist": {
+    "wall_seconds": 1.1666480999992928,
+    "rows": [
+      {
+        "path": "index.js",
+        "review": {
+          "schema_version": "code-review.1",
+          "status": "no_flags",
+          "advisory": true,
+          "model": "yannelli/d1-3b-code-review-decisions",
+          "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+          "rules": [
+            "error_handling_problem",
+            "type_safety_hole",
+            "unsafe_input"
+          ],
+          "threshold": 0.9,
+          "total_lines": 283,
+          "reviewed_lines": 283,
+          "windows": [
+            {
+              "start_line": 1,
+              "end_line": 80,
+              "probabilities": {
+                "error_handling_problem": 0.05033063259747688,
+                "type_safety_hole": 0.024423090054107213,
+                "unsafe_input": 0.0038244836446372104
+              }
+            },
+            {
+              "start_line": 69,
+              "end_line": 148,
+              "probabilities": {
+                "error_handling_problem": 0.03514484640079327,
+                "type_safety_hole": 0.024423090054107213,
+                "unsafe_input": 0.008577485413711986
+              }
+            },
+            {
+              "start_line": 137,
+              "end_line": 216,
+              "probabilities": {
+                "error_handling_problem": 0.22270013882530884,
+                "type_safety_hole": 0.02595735719779685,
+                "unsafe_input": 0.0035936025814200896
+              }
+            },
+            {
+              "start_line": 205,
+              "end_line": 283,
+              "probabilities": {
+                "error_handling_problem": 0.017986209962091555,
+                "type_safety_hole": 0.01691491326672651,
+                "unsafe_input": 0.004070137715896127
+              }
+            }
+          ],
+          "findings": [],
+          "latency_ms": 911.4687999972375,
+          "error": null
+        }
+      }
+    ]
+  },
+  "verified_target_repair": false,
+  "result": {
+    "schema_version": "review-repair.1",
+    "status": "invalid",
+    "reason": "evidence_content",
+    "source_sha256": "221740752eec8653a91c5af4b3ea444a9c21c5c39c7a715f6111f9874e43dfbc",
+    "attempts": [
+      {
+        "hypothesis": {
+          "claim": "pMap does not properly handle the case where a mapper returns pMapSkip for an item that is processed after the iterable has been marked as done, leading to incorrect result ordering.",
+          "path": "index.js",
+          "start_line": 110,
+          "end_line": 132,
+          "evidence": "resolvingCount++;\n\n\t\t\t// Intentionally detached\n\t\t\t(async () => {\n\t\t\t\ttry {\n\t\t\t\t\tconst element = await nextItem.value;\n\n\t\t\t\t\tif (isResolved) {\n\t\t\t\t\t\treturn;\n\t\t\t\t\t}\n\n\t\t\t\t\tconst value = await mapper(element, index);\n\n\t\t\t\t\t// Use Map to stage the index of the element.\n\t\t\t\t\tif (value === pMapSkip) {\n\t\t\t\t\t\tskippedIndexesMap.set(index, value);\n\t\t\t\t\t}\n\n\t\t\t\t\tresult[index] = value;\n\n\t\t\t\t\tresolvingCount--;\n\t\t\t\t\tawait next();\n\t\t\t\t} catch (error) {\n\t\t\t\t\tif (stopOnError) {\n\t\t\t\t\t\treject(error);\n\t\t\t\t\t} else {\n\t\t\t\t\t\terrors.push(error);\n\t\t\t\t\t\tresolvingCount--;\n\n\t\t\t\t\t\t// In that case we can't really continue regardless of `stopOnError` state\n\t\t\t\t\t\t// since an iterable is likely to continue throwing after it throws once.\n\t\t\t\t\t\t// If we continue calling `next()` indefinitely we will likely end up\n\t\t\t\t\t\t// in an infinite loop of failed iteration.\n\t\t\t\t\t\ttry {\n\t\t\t\t\t\t\tawait next();\n\t\t\t\t\t\t} catch (error) {\n\t\t\t\t\t\t\treject(error);\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t})();",
+          "reproduction": {
+            "code": "const {default: pMap, pMapSkip} = await load('./index.js');\n\nasync function* asyncIterable() {\n  yield Promise.resolve(1);\n  yield Promise.resolve(2);\n  // Simulate a slow iterable that finishes after some items are processed\n  await new Promise(resolve => setTimeout(resolve, 10));\n  yield Promise.resolve(3);\n}\n\nconst result = await pMap(asyncIterable(), async (value, index) => {\n  if (index === 1) {\n    // Return pMapSkip for the second item\n    return pMapSkip;\n  }\n  return value * 2;\n}, {concurrency: 2});\n\nassert.deepEqual(result, [2, 6]);",
+            "filename": "reproduction.cjs"
+          }
+        },
+        "status": "invalid",
+        "reason": "evidence_content",
+        "baseline_reproduction": null,
+        "baseline_regression": null,
+        "candidate_reproduction": null,
+        "candidate_regression": null,
+        "edits": [],
+        "timings_ms": {}
+      }
+    ],
+    "candidate_workspace": null,
+    "latency_ms": 8189.744000002975,
+    "human_time_claim": "not_measured"
+  },
+  "elapsed_seconds": 9.356624199994258,
+  "capped_task_seconds": 180
+}

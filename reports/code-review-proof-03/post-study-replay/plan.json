@@ -1,0 +1,24 @@
+{
+  "purpose": "Post-study operational replay after compact output and safe invalid-response correction. Not fresh accuracy or comparative time evidence.",
+  "selected_before_replay": [
+    {
+      "id": "H02",
+      "variant": "broken",
+      "arm": "proof",
+      "selection_reason": "Old request timed out; verify concise output transport and preserve actual repair outcome."
+    },
+    {
+      "id": "H01",
+      "variant": "fixed",
+      "arm": "proof",
+      "selection_reason": "Old accepted claim invented a timeout-message requirement; do not assume shorter output fixes semantics."
+    }
+  ],
+  "source_hashes": {
+    "packages/python/src/decilist/review_repair.py": "29f60992c491e1634bf70862fd0b2b79c0bd8bd1709de961131a0ca3581d391a",
+    "packages/python/src/decilist/review_repair_local.py": "e6c8bc028e98ca1768255711c36c2c206b79d1c16d023709c2eaf6a003108574",
+    "packages/python/src/decilist/data/review_proof_runner.mjs": "552f5f8231c79309b78136824ce1993ad90831a07c93a32bb43865f55917ff3e",
+    "benchmarks/run_code_review_proof.py": "ecdb4286d5ef15f65214f7f65b67ca65e5ccae0a3ead496642b75ea78442f48c"
+  },
+  "human_time_measured": false
+}

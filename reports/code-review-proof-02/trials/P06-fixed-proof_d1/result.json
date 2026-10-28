@@ -1,0 +1,110 @@
+{
+  "id": "P06",
+  "variant": "fixed",
+  "arm": "proof_d1",
+  "utc": "2026-10-28T07:00:43.119910+00:00",
+  "specialist": {
+    "wall_seconds": 0.729525000002468,
+    "rows": [
+      {
+        "path": "index.js",
+        "review": {
+          "schema_version": "code-review.1",
+          "status": "no_flags",
+          "advisory": true,
+          "model": "yannelli/d1-3b-code-review-decisions",
+          "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+          "rules": [
+            "error_handling_problem",
+            "type_safety_hole",
+            "unsafe_input"
+          ],
+          "threshold": 0.9,
+          "total_lines": 72,
+          "reviewed_lines": 72,
+          "windows": [
+            {
+              "start_line": 1,
+              "end_line": 72,
+              "probabilities": {
+                "error_handling_problem": 0.008577485413711986,
+                "type_safety_hole": 0.02297736991002561,
+                "unsafe_input": 0.005554924703691103
+              }
+            }
+          ],
+          "findings": [],
+          "latency_ms": 363.7672000040766,
+          "error": null
+        }
+      }
+    ]
+  },
+  "verified_target_repair": false,
+  "result": {
+    "schema_version": "review-repair.1",
+    "status": "invalid",
+    "reason": "evidence_content",
+    "source_sha256": "da2ce120d8dfff2822ed500ddce41033a829e7de3fdb1cb43bef1bf3e8c21f34",
+    "attempts": [
+      {
+        "hypothesis": {
+          "claim": "The delay.clear() method does not properly handle the case where the timer has already fired before clear is called, leading to a potential race condition where the promise settles twice.",
+          "path": "index.js",
+          "start_line": 51,
+          "end_line": 55,
+          "evidence": "delayPromise.clear = () => {\n\tclear(timeoutId);\n\ttimeoutId = null;\n\tsettle();\n};",
+          "reproduction": {
+            "code": "const {default: delay} = await load('./index.js');\nconst signal = new AbortController().signal;\nconst d = delay(1, {signal});\nsetTimeout(() => {\n  d.clear();\n}, 0);\nlet settled = false;\nd.then(() => { settled = true; }).catch(() => { settled = true; });\nawait new Promise(r => setTimeout(r, 5));\nassert.equal(settled, true);",
+            "filename": "reproduction.cjs"
+          }
+        },
+        "status": "invalid",
+        "reason": "evidence_content",
+        "baseline_reproduction": null,
+        "baseline_regression": null,
+        "candidate_reproduction": null,
+        "candidate_regression": null,
+        "edits": [],
+        "timings_ms": {}
+      },
+      {
+        "hypothesis": {
+          "claim": "The delay.range() function does not properly handle the case where minimum equals maximum, causing it to call randomInteger with invalid parameters.",
+          "path": "index.js",
+          "start_line": 63,
+          "end_line": 63,
+          "evidence": "delay.range = (minimum, maximum, options) => delay(randomInteger(minimum, maximum), options);",
+          "reproduction": {
+            "code": "const {default: delay} = await load('./index.js');\nconst result = await delay.range(5, 5, {value: 'test'});\nassert.equal(result, 'test');",
+            "filename": "reproduction.cjs"
+          }
+        },
+        "status": "unproven",
+        "reason": "baseline_not_assertion_failure",
+        "baseline_reproduction": {
+          "outcome": "pass",
+          "assertions": 1,
+          "evidence": "reproduction completed"
+        },
+        "baseline_regression": {
+          "outcome": "pass",
+          "assertions": 12,
+          "evidence": "{\"status\":\"passed\",\"mode\":\"regression\",\"checks\":12}\n"
+        },
+        "candidate_reproduction": null,
+        "candidate_regression": null,
+        "edits": [],
+        "timings_ms": {
+          "baseline_regression": 206.8126999947708,
+          "baseline_reproduction": 190.5105000041658
+        }
+      }
+    ],
+    "candidate_workspace": null,
+    "latency_ms": 6523.944300002768,
+    "human_time_claim": "not_measured"
+  },
+  "elapsed_seconds": 7.253748000002815,
+  "capped_task_seconds": 180
+}

@@ -1,0 +1,20 @@
+{
+  "id": "H01",
+  "variant": "broken",
+  "arm": "proof",
+  "utc": "2026-10-28T07:31:30.898279+00:00",
+  "specialist": null,
+  "verified_target_repair": false,
+  "result": {
+    "schema_version": "review-repair.1",
+    "status": "infrastructure_failure",
+    "reason": "provider_error",
+    "source_sha256": "e7d652efa5061d71ea51c63dad1b92731242b21143effefebcd613dbcd494934",
+    "attempts": [],
+    "candidate_workspace": null,
+    "latency_ms": 25572.845600006985,
+    "human_time_claim": "not_measured"
+  },
+  "elapsed_seconds": 25.573202100000344,
+  "capped_task_seconds": 180
+}

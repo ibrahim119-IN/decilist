@@ -1,0 +1,53 @@
+{
+  "profile": "ESLint 10.13.0 / @eslint/js 10.0.1 recommended JS; original module type; declared Node/browser globals; inline config disabled",
+  "rows": [
+    {
+      "id": "H01",
+      "variant": "broken",
+      "latency_ms": 3878.1016,
+      "diagnostics": []
+    },
+    {
+      "id": "H01",
+      "variant": "fixed",
+      "latency_ms": 53.61779999999999,
+      "diagnostics": []
+    },
+    {
+      "id": "H02",
+      "variant": "broken",
+      "latency_ms": 74.17849999999999,
+      "diagnostics": []
+    },
+    {
+      "id": "H02",
+      "variant": "fixed",
+      "latency_ms": 89.47049999999945,
+      "diagnostics": []
+    },
+    {
+      "id": "H03",
+      "variant": "broken",
+      "latency_ms": 114.46520000000055,
+      "diagnostics": []
+    },
+    {
+      "id": "H03",
+      "variant": "fixed",
+      "latency_ms": 56.06240000000071,
+      "diagnostics": []
+    },
+    {
+      "id": "H04",
+      "variant": "broken",
+      "latency_ms": 9.98779999999988,
+      "diagnostics": []
+    },
+    {
+      "id": "H04",
+      "variant": "fixed",
+      "latency_ms": 61.84860000000026,
+      "diagnostics": []
+    }
+  ]
+}

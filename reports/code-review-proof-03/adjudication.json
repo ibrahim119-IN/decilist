@@ -1,0 +1,51 @@
+{
+  "scope": "Post-trial adjudication by primary evaluator; not blinded or independent. No model feedback or trial rerun.",
+  "H01-fixed": {
+    "classification": "unsupported_requirement_false_alert",
+    "arms": [
+      "ordinary",
+      "proof"
+    ],
+    "public_contract": "Module: await load('./index.js'); default export pWaitFor, named export TimeoutError.\npWaitFor(condition, options?) repeatedly calls a synchronous or asynchronous condition until it returns true. It resolves undefined, or resolves a custom value returned through pWaitFor.resolveWith(value). A false result schedules another check after interval milliseconds (default 20). before=true (default) checks immediately; before=false waits one interval first. interval is a finite non-negative number. Other condition results reject with TypeError, and exceptions/rejections from the condition propagate to the caller.\ntimeout is the number of milliseconds before rejecting with TimeoutError (default Infinity), or an object {milliseconds, message?, fallback?}. message customizes the error and may itself be an Error; fallback supplies the timeout result instead. A supplied AbortSignal cancels the wait with its reason. Preserve successful polling, errors, timeout, and cancellation behavior for both synchronous and asynchronous conditions.",
+    "unsupported_expectation": "Default numeric timeout error message must include the numeric duration.",
+    "basis": "The supplied contract requires TimeoutError and permits explicit custom message for an object timeout; it does not specify duration text in the default numeric-timeout message. Both candidates change only that message.",
+    "direct_runtime_observations": [
+      {
+        "variant": "upstream-fixed",
+        "observation": {
+          "isTimeoutError": true,
+          "message": "Promise timed out"
+        }
+      },
+      {
+        "variant": "ordinary",
+        "observation": {
+          "isTimeoutError": true,
+          "message": "Promise timed out after 10 milliseconds"
+        }
+      },
+      {
+        "variant": "proof",
+        "observation": {
+          "isTimeoutError": true,
+          "message": "Promise timed out after 10 milliseconds"
+        }
+      }
+    ],
+    "proof_gate_did_execute": true,
+    "proof_baseline": "assertion_failure, 2 assertions; message assertion failed",
+    "proof_candidate": "pass, 2 assertions",
+    "surrounding_checks_before_and_after": 27
+  },
+  "H01-broken": {
+    "classification": "invalid_execution_proposal",
+    "reason": "Both raw responses include error.constructor.name in a diagnostic message. The capability filter rejects constructor access. This is not a model abstention or proof of defect."
+  },
+  "H02-H04": {
+    "classification": "provider_timeout",
+    "assigned_tasks": 12,
+    "reason": "No completed non-streaming response within90seconds; raw request files and runtime generation/cancellation logs retained."
+  },
+  "controls_caveat": "H03 fixed still has a known unrelated falsy-rejection defect; control labels refer to each historical target, not globally bug-free code.",
+  "human_time_measured": false
+}

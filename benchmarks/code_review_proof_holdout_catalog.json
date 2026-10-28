@@ -1,0 +1,237 @@
+{
+  "schema_version": "review-proof-corpus.1",
+  "visibility": "private-host-catalog; expose only source files, purpose, public_docs, and entry_points to participants",
+  "cases": [
+    {
+      "id": "H01",
+      "repository": "sindresorhus/p-wait-for",
+      "fixed": "adc360bfa96eef6e8a0601c0592c7574453d3b9a",
+      "date": "2026-10-15T13:14:47Z",
+      "url": "https://github.com/sindresorhus/p-wait-for/commit/adc360bfa96eef6e8a0601c0592c7574453d3b9a",
+      "title": "Settle the wait on abort or timeout while the condition is pending",
+      "source_files": [
+        {
+          "path": "index.js",
+          "patch": "@@ -1,4 +1,4 @@\n-/* eslint-disable no-await-in-loop, complexity -- Polling loop: each iteration must await the previous check before sleeping again. */\n+/* eslint-disable no-await-in-loop -- Polling loop: each iteration must await the previous check before sleeping again. */\n const resolveValue = Symbol('resolveValue');\n \n const sleep = (ms, signal) => new Promise((resolve, reject) => {\n@@ -85,28 +85,15 @@ export default async function pWaitFor(condition, options = {}) {\n \t\t? AbortSignal.any([timeoutSignal, signal])\n \t\t: (timeoutSignal ?? signal);\n \n-\t// Handle initial delay\n-\tif (!before) {\n-\t\ttry {\n+\tconst poll = async () => {\n+\t\t// Handle initial delay\n+\t\tif (!before) {\n+\t\t\t// The timeout or the user abort can expire here, before `condition` ever runs. The race below handles it.\n \t\t\tawait sleep(interval, combinedSignal);\n-\t\t} catch (error) {\n-\t\t\t// The timeout or the user abort can expire here, before `condition` ever runs.\n-\t\t\tif (error === combinedSignal?.reason) {\n-\t\t\t\treturn handleAbortError(timeoutSignal, timeout, signal);\n-\t\t\t}\n-\n-\t\t\tthrow error;\n \t\t}\n-\t}\n \n-\t// Check for pre-abort\n-\tif (combinedSignal?.aborted) {\n-\t\treturn handleAbortError(timeoutSignal, timeout, signal);\n-\t}\n-\n-\t// Main loop\n-\twhile (true) {\n-\t\ttry {\n+\t\t// Main loop\n+\t\twhile (true) {\n \t\t\tconst value = await condition();\n \n \t\t\t// Check for resolveWith value\n@@ -119,20 +106,45 @@ export default async function pWaitFor(condition, options = {}) {\n \t\t\t}\n \n \t\t\tif (value === false) {\n+\t\t\t\t// The sleep observes the signal, so an orphaned poll stops here instead of calling `condition` again.\n \t\t\t\tawait sleep(interval, combinedSignal);\n \t\t\t\tcontinue;\n \t\t\t}\n \n \t\t\tthrow new TypeError('Expected condition to return a boolean');\n-\t\t} catch (error) {\n-\t\t\t// Handle timeout vs abort vs condition error\n-\t\t\tif (error === combinedSignal?.reason) {\n-\t\t\t\treturn handleAbortError(timeoutSignal, timeout, signal);\n-\t\t\t}\n+\t\t}\n+\t};\n \n-\t\t\t// Some other error from condition()\n-\t\t\tthrow error;\n+\tif (!combinedSignal) {\n+\t\treturn poll();\n+\t}\n+\n+\t// Check for pre-abort\n+\tif (combinedSignal.aborted) {\n+\t\treturn handleAbortError(timeoutSignal, timeout, signal);\n+\t}\n+\n+\t// Race the poll against the signal so an abort settles the wait even while `condition` is pending. The pending `condition` is not cancelled.\n+\tconst {promise: abortPromise, reject} = Promise.withResolvers();\n+\tconst onAbort = () => {\n+\t\treject(combinedSignal.reason);\n+\t};\n+\n+\tcombinedSignal.addEventListener('abort', onAbort, {once: true});\n+\n+\ttry {\n+\t\treturn await Promise.race([poll(), abortPromise]);\n+\t} catch (error) {\n+\t\t// Handle timeout vs abort vs condition error\n+\t\tif (combinedSignal.aborted && error === combinedSignal.reason) {\n+\t\t\treturn handleAbortError(timeoutSignal, timeout, signal);\n \t\t}\n+\n+\t\t// Some other error from condition()\n+\t\tthrow error;\n+\t} finally {\n+\t\t// `once: true` only detaches the listener when the signal aborts, so a settled wait has to remove it.\n+\t\tcombinedSignal.removeEventListener('abort', onAbort);\n \t}\n }\n "
+        }
+      ],
+      "metadata_files": [
+        "package.json"
+      ],
+      "package_entry": "index.js",
+      "broken": "cf004402e6e5c98b1f643d6857142cedfa9fbcf7",
+      "purpose": "Wait for a condition with polling, timeout, and cancellation.",
+      "public_docs": "Module: await load('./index.js'); default export pWaitFor, named export TimeoutError.\npWaitFor(condition, options?) repeatedly calls a synchronous or asynchronous condition until it returns true. It resolves undefined, or resolves a custom value returned through pWaitFor.resolveWith(value). A false result schedules another check after interval milliseconds (default 20). before=true (default) checks immediately; before=false waits one interval first. interval is a finite non-negative number. Other condition results reject with TypeError, and exceptions/rejections from the condition propagate to the caller.\ntimeout is the number of milliseconds before rejecting with TimeoutError (default Infinity), or an object {milliseconds, message?, fallback?}. message customizes the error and may itself be an Error; fallback supplies the timeout result instead. A supplied AbortSignal cancels the wait with its reason. Preserve successful polling, errors, timeout, and cancellation behavior for both synchronous and asynchronous conditions.",
+      "entry_points": [
+        "index.js"
+      ],
+      "module_format": "module",
+      "retained_files": [
+        "index.js",
+        "package.json",
+        "readme.md",
+        "license"
+      ],
+      "variants": {
+        "broken": {
+          "revision": "cf004402e6e5c98b1f643d6857142cedfa9fbcf7",
+          "files": {
+            "index.js": "165dd67c751acf2f8357268ceef9d1b05ed6720aea5e397cda2765f8bc8d2c34",
+            "package.json": "d8a164211f587453576b3fc4274540f877e016a2aaa1b24a61f9d14f9eda4152",
+            "readme.md": "185d978f238c8732e953e3841120f759a21a807b0762e0871a67c3361e78bfa0",
+            "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+          },
+          "archive_sha256": "870bc5f63a2bdd943e64a5973f928afcf9d94538ca46a6228d9d7adc89fc9db6"
+        },
+        "fixed": {
+          "revision": "adc360bfa96eef6e8a0601c0592c7574453d3b9a",
+          "files": {
+            "index.js": "d7dae0b2d37226c79548a139eadd94953f65d89dd25039a38c5d53e2f694082c",
+            "package.json": "d8a164211f587453576b3fc4274540f877e016a2aaa1b24a61f9d14f9eda4152",
+            "readme.md": "0aee76996214d3669ee8368a24d086fc2d799a2f4c7148e51a4214df8a1e0234",
+            "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+          },
+          "archive_sha256": "cbac3ec4bdcb55d5a56f5fa6174420728d59e53869944a47516432ea16a5d26b"
+        }
+      },
+      "runtime_dependencies": {},
+      "upstream_readme_url": "https://github.com/sindresorhus/p-wait-for/blob/cf004402e6e5c98b1f643d6857142cedfa9fbcf7/readme.md",
+      "license": "MIT",
+      "license_file": "benchmarks/licenses/p-wait-for-LICENSE.txt"
+    },
+    {
+      "id": "H02",
+      "repository": "sindresorhus/p-debounce",
+      "fixed": "a14c7ac6817248b8db13eb0d30474c1f82588fe6",
+      "date": "2026-09-12T15:52:11Z",
+      "url": "https://github.com/sindresorhus/p-debounce/commit/a14c7ac6817248b8db13eb0d30474c1f82588fe6",
+      "title": "Fix: Preserve falsy promise rejection reasons (#33)",
+      "source_files": [
+        {
+          "path": "index.js",
+          "patch": "@@ -110,11 +110,13 @@ pDebounce.promise = (function_, options = {}) => {\n \t\tcurrentPromise = (async () => {\n \t\t\tlet result;\n \t\t\tlet initialError;\n+\t\t\tlet didReject = false;\n \n \t\t\ttry {\n \t\t\t\tresult = await function_.apply(this, arguments_);\n \t\t\t} catch (error) {\n \t\t\t\tinitialError = error;\n+\t\t\t\tdidReject = true;\n \t\t\t}\n \n \t\t\t// Process queued calls regardless of initial result\n@@ -135,7 +137,7 @@ pDebounce.promise = (function_, options = {}) => {\n \t\t\t\t}\n \t\t\t}\n \n-\t\t\tif (initialError) {\n+\t\t\tif (didReject) {\n \t\t\t\tthrow initialError;\n \t\t\t}\n "
+        }
+      ],
+      "metadata_files": [
+        "package.json"
+      ],
+      "package_entry": "index.js",
+      "broken": "8964dd202004f49d7b814c0292b064287b70f2d8",
+      "purpose": "Combine repeated asynchronous calls by time or by pending execution.",
+      "public_docs": "Module: await load('./index.js'); default export pDebounce, with pDebounce.promise.\npDebounce(fn, wait, options?) returns a function whose calls return promises. Calls within the wait window are combined, and the function runs with the latest arguments and receiver. wait is a finite number of milliseconds. before=true runs on the leading edge; otherwise it runs after the wait. The optional AbortSignal cancels pending debounced work.\npDebounce.promise(fn, options?) calls a Promise-returning/async function unless a previous execution is still pending; concurrent calls share that execution's fulfillment or rejection. With after=true, calls made during execution queue the latest arguments and receiver for a subsequent execution, and queued callers receive its result. Function failures propagate as promise rejections. A settled execution permits later calls to execute again.",
+      "entry_points": [
+        "index.js"
+      ],
+      "module_format": "module",
+      "retained_files": [
+        "index.js",
+        "package.json",
+        "readme.md",
+        "license"
+      ],
+      "variants": {
+        "broken": {
+          "revision": "8964dd202004f49d7b814c0292b064287b70f2d8",
+          "files": {
+            "index.js": "18a7a6a1ecba326f27480d2d55212c1d202b2a81ca96687d209b271cab012a6a",
+            "package.json": "6721ecd2bee87b1f5de30b610c02a9f0e01b06e88605f4a9c8efa0dff5622177",
+            "readme.md": "60ab50d68ec211954a97c54d17e28e959152edbc3cf25e9c87eaff4fffe70bf5",
+            "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+          },
+          "archive_sha256": "21321ff88eb810709a090258331553b57b86ea59c2c5680425f9c72efcb84732"
+        },
+        "fixed": {
+          "revision": "a14c7ac6817248b8db13eb0d30474c1f82588fe6",
+          "files": {
+            "index.js": "7a519eb4afed87d7b3c7eec0800c5379eae5ca53cf3e2ba325669ecf1338eeab",
+            "package.json": "6721ecd2bee87b1f5de30b610c02a9f0e01b06e88605f4a9c8efa0dff5622177",
+            "readme.md": "60ab50d68ec211954a97c54d17e28e959152edbc3cf25e9c87eaff4fffe70bf5",
+            "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+          },
+          "archive_sha256": "4cafe55cddb182f6cc3b35317dd6859d1fec6b9cad81724a12351d57c48b667a"
+        }
+      },
+      "runtime_dependencies": {},
+      "upstream_readme_url": "https://github.com/sindresorhus/p-debounce/blob/8964dd202004f49d7b814c0292b064287b70f2d8/readme.md",
+      "license": "MIT",
+      "license_file": "benchmarks/licenses/p-debounce-LICENSE.txt"
+    },
+    {
+      "id": "H03",
+      "repository": "sindresorhus/p-memoize",
+      "fixed": "343ac6e71a77031a69f9e52bf03ea40e1cfdcbc8",
+      "date": "2021-09-19T06:34:52Z",
+      "url": "https://github.com/sindresorhus/p-memoize/commit/343ac6e71a77031a69f9e52bf03ea40e1cfdcbc8",
+      "title": "Fix consecutive non awaited calls (#25)",
+      "source_files": [
+        {
+          "path": "index.js",
+          "patch": "@@ -22,24 +22,24 @@ const pMemoize = (fn, {cachePromiseRejection = false, ...options} = {}) => {\n \t\t\treturn cacheItem.data;\n \t\t}\n \n-\t\tconst result = fn.apply(this, arguments_);\n+\t\tconst promise = fn.apply(this, arguments_);\n+\t\tcache.set(key, {\n+\t\t\tdata: promise,\n+\t\t\tmaxAge: Number.POSITIVE_INFINITY\n+\t\t});\n \n-\t\tlet resultError;\n-\t\ttry {\n-\t\t\treturn await Promise.resolve(result);\n-\t\t} catch (error) {\n-\t\t\tresultError = error;\n-\t\t\tthrow error;\n-\t\t} finally {\n+\t\tconst [{reason}] = await Promise.allSettled([promise]);\n+\t\tif (!cachePromiseRejection && reason) {\n+\t\t\tcache.delete(key);\n+\t\t} else if (maxAge) {\n+\t\t\t// Promise fulfilled, so start the timer\n \t\t\tcache.set(key, {\n-\t\t\t\tdata: result,\n-\t\t\t\tmaxAge: maxAge ? Date.now() + maxAge : Number.POSITIVE_INFINITY\n+\t\t\t\tdata: promise,\n+\t\t\t\tmaxAge: Date.now() + maxAge\n \t\t\t});\n-\n-\t\t\tif (!cachePromiseRejection && resultError) {\n-\t\t\t\tcache.delete(key);\n-\t\t\t}\n \t\t}\n+\n+\t\treturn promise;\n \t};\n \n \tmimicFn(memoized, fn);"
+        }
+      ],
+      "metadata_files": [
+        "package.json"
+      ],
+      "package_entry": "index.js",
+      "broken": "34ebc0c42721fe7be1417d774594d40d38c974d6",
+      "purpose": "Memoize Promise-returning functions with configurable cache behavior.",
+      "public_docs": "Module: await load('./index.js'); default export pMemoize (CommonJS), with pMemoize.clear.\npMemoize(fn, options?) returns a memoized version of a Promise-returning/async function. Calls with the same key reuse cached work/results. The default key is the first argument; cacheKey(argumentsArray) may select a custom key. Arguments and the receiver are passed to the original function. A custom cache may implement Map-style get, set, delete, and clear methods. maxAge is an integer duration in milliseconds; omitted maxAge retains results indefinitely, and expiry begins when the promise settles.\nRejected promises are not cached by default; cachePromiseRejection=true permits caching them. pMemoize.clear(memoized) clears cached data and rejects non-memoized functions or caches without a clear method. Preserve cached successes, error propagation, and configurable keys/cache behavior.",
+      "entry_points": [
+        "index.js"
+      ],
+      "module_format": "commonjs",
+      "retained_files": [
+        "index.js",
+        "package.json",
+        "readme.md",
+        "license"
+      ],
+      "variants": {
+        "broken": {
+          "revision": "34ebc0c42721fe7be1417d774594d40d38c974d6",
+          "files": {
+            "index.js": "bb1e394158f8eceb1c056a3c946ef3b0fde77788505495d8ead9ab745dbdf3c0",
+            "package.json": "7b799785c4dfa6bee1de782806493d96d8ed38c6c014eb67cce200e501a69b27",
+            "readme.md": "37757205f89ccc9db1d7c7f5f4641113ad2523f15f225a67575d464d5e7c1ee4",
+            "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+          },
+          "archive_sha256": "105f72c185b56f2a76cb6a64ef13b43517cd430ad675b18b0ec632bf81837afa"
+        },
+        "fixed": {
+          "revision": "343ac6e71a77031a69f9e52bf03ea40e1cfdcbc8",
+          "files": {
+            "index.js": "476c06a8056fc0d402d6e8bf0c3fc653e1342bbda8637da50e8aa83f3f7e82dd",
+            "package.json": "7b799785c4dfa6bee1de782806493d96d8ed38c6c014eb67cce200e501a69b27",
+            "readme.md": "37757205f89ccc9db1d7c7f5f4641113ad2523f15f225a67575d464d5e7c1ee4",
+            "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+          },
+          "archive_sha256": "848d75e06691eaa2b92e1d8856ca147c1ad6e90d5680ff713127de900b88e14d"
+        }
+      },
+      "runtime_dependencies": {
+        "map-age-cleaner": "0.1.3",
+        "mimic-fn": "3.1.0"
+      },
+      "upstream_readme_url": "https://github.com/sindresorhus/p-memoize/blob/34ebc0c42721fe7be1417d774594d40d38c974d6/readme.md",
+      "license": "MIT",
+      "license_file": "benchmarks/licenses/p-memoize-LICENSE.txt"
+    },
+    {
+      "id": "H04",
+      "repository": "sindresorhus/quick-lru",
+      "fixed": "e5b868b40193f26ed33c8b5037688d2c355630a9",
+      "date": "2020-02-13T13:01:12Z",
+      "url": "https://github.com/sindresorhus/quick-lru/commit/e5b868b40193f26ed33c8b5037688d2c355630a9",
+      "title": "Fix `.size` not matching the `maxSize` option (#16)",
+      "source_files": [
+        {
+          "path": "index.js",
+          "patch": "@@ -108,7 +108,7 @@ class QuickLRU {\n \t\t\t}\n \t\t}\n \n-\t\treturn this._size + oldCacheSize;\n+\t\treturn Math.min(this._size + oldCacheSize, this.maxSize);\n \t}\n }\n "
+        }
+      ],
+      "metadata_files": [
+        "package.json"
+      ],
+      "package_entry": "index.js",
+      "broken": "8d1362d99e6912b9f17579a51f604785a6060d9d",
+      "purpose": "Keep recently used key-value entries in a bounded cache.",
+      "public_docs": "Module: await load('./index.js'); default export QuickLRU (CommonJS class).\nnew QuickLRU({maxSize}) creates a least-recently-used cache. maxSize is a number greater than zero setting the cache capacity before least-recently-used items are evicted. Keys and values may have any type. set(key, value) stores an item and returns the instance. get(key) retrieves a value and marks it recently used. peek(key) retrieves without refreshing recency. has(key) reports presence. delete(key) returns whether an item was removed, and clear() removes all items.\nThe size getter reports the stored item count. The instance, keys(), and values() are iterable; repeated writes of the same key update its value. Preserve normal reads, replacement, deletion, recency, and capacity behavior.",
+      "entry_points": [
+        "index.js"
+      ],
+      "module_format": "commonjs",
+      "retained_files": [
+        "index.js",
+        "package.json",
+        "readme.md",
+        "license"
+      ],
+      "variants": {
+        "broken": {
+          "revision": "8d1362d99e6912b9f17579a51f604785a6060d9d",
+          "files": {
+            "index.js": "82a865251cf40cc0af726f985b55f17cd9fa24f240899d5cc5fcbf921f047b0b",
+            "package.json": "4677d4a271059ff0b76ddbbf328519f23b9156b3e647a46e77f86750cb2dcc2e",
+            "readme.md": "7e53440c912638473840f8ddf15e9ef60b1bc4cde5a6c7ee0161266e0216f13b",
+            "license": "48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0"
+          },
+          "archive_sha256": "62ca24061654508bbb8836d49f3ebce64068f507d2d6a390155c61b333a3c45e"
+        },
+        "fixed": {
+          "revision": "e5b868b40193f26ed33c8b5037688d2c355630a9",
+          "files": {
+            "index.js": "20e6429e227280209851b870d1b944923e48c7c21ab9a1f93c099cca85f5324a",
+            "package.json": "4677d4a271059ff0b76ddbbf328519f23b9156b3e647a46e77f86750cb2dcc2e",
+            "readme.md": "7e53440c912638473840f8ddf15e9ef60b1bc4cde5a6c7ee0161266e0216f13b",
+            "license": "48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0"
+          },
+          "archive_sha256": "2d639129b1270af3744f5b6e2b5bf2f04e1e5a0d63b56c848c4a048286699e78"
+        }
+      },
+      "runtime_dependencies": {},
+      "upstream_readme_url": "https://github.com/sindresorhus/quick-lru/blob/8d1362d99e6912b9f17579a51f604785a6060d9d/readme.md",
+      "license": "MIT",
+      "license_file": "benchmarks/licenses/quick-lru-LICENSE.txt"
+    }
+  ]
+}

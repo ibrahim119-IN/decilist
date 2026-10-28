@@ -15,4 +15,5 @@ __pycache__/
 .cache/
 /work/
 reports/local/
+.decilist-review/
 *.log

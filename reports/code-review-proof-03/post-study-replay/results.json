@@ -1,0 +1,72 @@
+{
+  "kind": "exposed-case-development-replay",
+  "human_time_measured": false,
+  "rows": [
+    {
+      "id": "H02",
+      "variant": "broken",
+      "arm": "proof",
+      "utc": "2026-10-28T07:59:29.888828+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "evidence_content",
+        "source_sha256": "c8c44a8be6aabe7594067e6f42083350ff7efd4f9b2c49253f7b4525063602bf",
+        "attempts": [
+          {
+            "hypothesis": {
+              "claim": "pDebounce.promise with after=true fails to propagate rejections from the initial execution to concurrent callers, causing them to hang indefinitely instead of rejecting.",
+              "path": "index.js",
+              "start_line": 90,
+              "end_line": 151,
+              "evidence": "if (!options.after) { return currentPromise; } ... return new Promise((resolve, reject) => { queuedCall.resolvers.push({resolve, reject}); });",
+              "reproduction": {
+                "code": "const pDebounce = (await load('./index.js')).default;\nconst fn = pDebounce.promise(async () => { throw new Error('fail'); }, { after: true });\nconst p1 = fn();\nconst p2 = fn();\ntry { await p1; assert.fail('should reject'); } catch (e) { assert.ok(e.message === 'fail'); }\ntry { await p2; assert.fail('should reject'); } catch (e) { assert.ok(e.message === 'fail'); }",
+                "filename": "reproduction.cjs"
+              }
+            },
+            "status": "invalid",
+            "reason": "evidence_content",
+            "baseline_reproduction": null,
+            "baseline_regression": null,
+            "candidate_reproduction": null,
+            "candidate_regression": null,
+            "edits": [],
+            "timings_ms": {}
+          }
+        ],
+        "candidate_workspace": null,
+        "latency_ms": 16125.18890001229,
+        "human_time_claim": "not_measured",
+        "contract_validation": "not_performed",
+        "review_required": true
+      },
+      "elapsed_seconds": 16.125597500009462,
+      "capped_task_seconds": 180
+    },
+    {
+      "id": "H01",
+      "variant": "fixed",
+      "arm": "proof",
+      "utc": "2026-10-28T07:59:46.103793+00:00",
+      "specialist": null,
+      "verified_target_repair": false,
+      "result": {
+        "schema_version": "review-repair.1",
+        "status": "invalid",
+        "reason": "prohibited_reproduction",
+        "source_sha256": "ffe0c3f59b3ec806f50c4b7713943d7c8c2d60297ccdc57fef277a368950c509",
+        "attempts": [],
+        "candidate_workspace": null,
+        "latency_ms": 13214.280500003952,
+        "human_time_claim": "not_measured",
+        "contract_validation": "not_performed",
+        "review_required": true
+      },
+      "elapsed_seconds": 13.214635299998918,
+      "capped_task_seconds": 180
+    }
+  ]
+}

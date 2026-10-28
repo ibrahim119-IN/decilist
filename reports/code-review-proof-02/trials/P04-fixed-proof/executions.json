@@ -1,0 +1,25 @@
+[
+  {
+    "stage": "regression",
+    "workspace": "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P04\\trial-work\\P04-fixed-proof\\review-repair-baseline-sds7woh5",
+    "passed": true,
+    "returncode": 0,
+    "observed": {
+      "status": "passed",
+      "mode": "regression",
+      "checks": 25
+    },
+    "output": "{\"status\":\"passed\",\"mode\":\"regression\",\"checks\":25}\n",
+    "seconds": 0.10114430000248831
+  },
+  {
+    "stage": "reproduction",
+    "workspace": "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P04\\trial-work\\P04-fixed-proof\\review-repair-baseline-sds7woh5",
+    "seconds": 0.11039549999986775,
+    "result": {
+      "outcome": "assertion_failure",
+      "assertions": 1,
+      "evidence": "Expected values to be strictly equal:\n+ actual - expected\n\n+ [Function (anonymous)]\n- undefined\n"
+    }
+  }
+]

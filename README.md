@@ -16,6 +16,8 @@ The optional [local JS/TS reviewer](docs/code-review.md) integrates an existing 
 
 The subsequent [eight-defect historical trial](docs/code-review-natural-results.md) on p-limit, p-retry, Axios and Fastify **failed the time-saving gate**. Ordinary and assisted local-model review each passed the initial protected checks on one defect, but both repairs introduced other behavioral regressions. No repair was accepted after the additional audit. Confirmed false runtime claims appeared on 4/8 corrected controls without assistance and 5/8 with it. This experiment does not support automatic fixes or a human productivity claim; the specialist remains optional and advisory.
 
+The experimental [`review investigate` command](docs/review-proof.md) now runs a proposed reproduction before editing, then validates a small isolated candidate against the identical reproduction and existing Node tests. It retains a patch for review and leaves the original project unchanged. [Fresh historical comparisons](docs/code-review-proof-results.md) retain failed attempts and timeouts. A model-written assertion can invent a requirement, so passing these checks is not proof of contract correctness or developer time saved.
+
 Calling a model is one step. A developer still needs to decide what counts as a valid answer, when to abstain, which fallback may receive the input, and whether a new provider actually improves their workload.
 
 Decilist's intended value is that complete development loop:

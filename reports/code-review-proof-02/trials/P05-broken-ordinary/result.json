@@ -1,0 +1,49 @@
+{
+  "id": "P05",
+  "variant": "broken",
+  "arm": "ordinary",
+  "utc": "2026-10-28T07:00:09.528401+00:00",
+  "specialist": null,
+  "verified_target_repair": false,
+  "result": {
+    "schema_version": "review-repair.1",
+    "status": "invalid",
+    "reason": "edit_range",
+    "source_sha256": "2091965f718bcd743acd4e1c6766a9f42ea2507fc7136d598262da8d41606429",
+    "attempts": [
+      {
+        "hypothesis": {
+          "claim": "The function does not properly handle the case where count equals the number of input items and all inputs are rejected, causing it to reject with AggregateError instead of waiting for eligible values.",
+          "path": "index.js",
+          "start_line": 15,
+          "end_line": 20,
+          "evidence": "let maxErrors = -options.count + 1;\n\tlet maxFiltered = -options.count + 1;\n\tlet isDone = false;",
+          "reproduction": {
+            "code": "const {default: pSome} = await load('./index.js');\nconst promise1 = Promise.reject('error1');\nconst promise2 = Promise.reject('error2');\ntry {\n  await pSome([promise1, promise2], {count: 2});\n  assert.fail('Should have rejected');\n} catch (error) {\n  assert.ok(error instanceof AggregateError);\n}",
+            "filename": "reproduction.cjs"
+          }
+        },
+        "status": "invalid",
+        "reason": "edit_range",
+        "baseline_reproduction": null,
+        "baseline_regression": {
+          "outcome": "pass",
+          "assertions": 11,
+          "evidence": "{\"status\":\"passed\",\"mode\":\"regression\",\"checks\":11}\n"
+        },
+        "candidate_reproduction": null,
+        "candidate_regression": null,
+        "edits": [],
+        "timings_ms": {
+          "baseline_regression": 60.65050000324845,
+          "repair": 1903.2944000064163
+        }
+      }
+    ],
+    "candidate_workspace": null,
+    "latency_ms": 4723.813400007202,
+    "human_time_claim": "not_measured"
+  },
+  "elapsed_seconds": 4.724006400007056,
+  "capped_task_seconds": 180
+}

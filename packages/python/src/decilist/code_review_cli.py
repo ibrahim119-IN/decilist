@@ -26,8 +26,13 @@ def setup(*, cache_dir: str | None = None) -> dict:
 
 
 def _main(argv: list[str] | None = None) -> int:
+    actual = list(sys.argv[1:] if argv is None else argv)
+    if actual[:1] == ["investigate"]:
+        from .review_repair_cli import main as investigate
+        return investigate(actual[1:])
     parser = argparse.ArgumentParser(prog="decilist review", description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
+    commands.add_parser("investigate", help="Prove a JS defect and retain an isolated candidate; see investigate --help")
     download = commands.add_parser("setup", help="Download the pinned 6.2 GB optional model")
     download.add_argument("--accept-model-license", action="store_true", help="Accept the upstream LFM Open License v1.0")
     download.add_argument("--cache-dir", help="Hugging Face hub directory; otherwise respects HF_HOME")

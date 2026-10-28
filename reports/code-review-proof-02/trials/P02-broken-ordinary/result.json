@@ -1,0 +1,42 @@
+{
+  "id": "P02",
+  "variant": "broken",
+  "arm": "ordinary",
+  "utc": "2026-10-28T06:58:22.481711+00:00",
+  "specialist": null,
+  "verified_target_repair": false,
+  "result": {
+    "schema_version": "review-repair.1",
+    "status": "invalid",
+    "reason": "evidence_content",
+    "source_sha256": "221740752eec8653a91c5af4b3ea444a9c21c5c39c7a715f6111f9874e43dfbc",
+    "attempts": [
+      {
+        "hypothesis": {
+          "claim": "The pMap function does not properly handle the case where a mapper returns pMapSkip for an item that is processed after the iterable has been marked as done, leading to incorrect result ordering.",
+          "path": "index.js",
+          "start_line": 110,
+          "end_line": 132,
+          "evidence": "result[index] = value;\n\n\t\t\tresolvingCount--;\n\t\t\tawait next();",
+          "reproduction": {
+            "code": "const {default: pMap, pMapSkip} = await load('./index.js');\n\nasync function* asyncIterable() {\n  yield Promise.resolve(1);\n  yield Promise.resolve(2);\n  yield Promise.resolve(3);\n}\n\nconst result = await pMap(asyncIterable(), async (value, index) => {\n  if (index === 1) {\n    return pMapSkip;\n  }\n  return value * 2;\n}, {concurrency: 1});\n\nassert.deepEqual(result, [2, 6]);",
+            "filename": "reproduction.cjs"
+          }
+        },
+        "status": "invalid",
+        "reason": "evidence_content",
+        "baseline_reproduction": null,
+        "baseline_regression": null,
+        "candidate_reproduction": null,
+        "candidate_regression": null,
+        "edits": [],
+        "timings_ms": {}
+      }
+    ],
+    "candidate_workspace": null,
+    "latency_ms": 4597.389300004579,
+    "human_time_claim": "not_measured"
+  },
+  "elapsed_seconds": 4.597711700000218,
+  "capped_task_seconds": 180
+}

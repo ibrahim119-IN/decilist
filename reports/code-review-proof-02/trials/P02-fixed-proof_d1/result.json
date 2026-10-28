@@ -1,0 +1,105 @@
+{
+  "id": "P02",
+  "variant": "fixed",
+  "arm": "proof_d1",
+  "utc": "2026-10-28T06:58:36.907517+00:00",
+  "specialist": {
+    "wall_seconds": 1.4914201000065077,
+    "rows": [
+      {
+        "path": "index.js",
+        "review": {
+          "schema_version": "code-review.1",
+          "status": "no_flags",
+          "advisory": true,
+          "model": "yannelli/d1-3b-code-review-decisions",
+          "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+          "rules": [
+            "error_handling_problem",
+            "type_safety_hole",
+            "unsafe_input"
+          ],
+          "threshold": 0.9,
+          "total_lines": 284,
+          "reviewed_lines": 284,
+          "windows": [
+            {
+              "start_line": 1,
+              "end_line": 80,
+              "probabilities": {
+                "error_handling_problem": 0.05033063259747688,
+                "type_safety_hole": 0.024423090054107213,
+                "unsafe_input": 0.0038244836446372104
+              }
+            },
+            {
+              "start_line": 69,
+              "end_line": 148,
+              "probabilities": {
+                "error_handling_problem": 0.03514484640079327,
+                "type_safety_hole": 0.024423090054107213,
+                "unsafe_input": 0.008577485413711986
+              }
+            },
+            {
+              "start_line": 137,
+              "end_line": 216,
+              "probabilities": {
+                "error_handling_problem": 0.22270013882530884,
+                "type_safety_hole": 0.02595735719779685,
+                "unsafe_input": 0.0035936025814200896
+              }
+            },
+            {
+              "start_line": 205,
+              "end_line": 284,
+              "probabilities": {
+                "error_handling_problem": 0.017986209962091555,
+                "type_safety_hole": 0.017986209962091555,
+                "unsafe_input": 0.0038244836446372104
+              }
+            }
+          ],
+          "findings": [],
+          "latency_ms": 727.5552999926731,
+          "error": null
+        }
+      }
+    ]
+  },
+  "verified_target_repair": false,
+  "result": {
+    "schema_version": "review-repair.1",
+    "status": "invalid",
+    "reason": "evidence_content",
+    "source_sha256": "27802cf836c301ed4423ba7a5a3f0f968de9a756c287ddb4c7b0700d0a924090",
+    "attempts": [
+      {
+        "hypothesis": {
+          "claim": "pMap does not properly handle the case where mapper returns pMapSkip for items at indices that are not sequential, leading to incorrect result ordering when skipped items are interspersed with non-skipped items.",
+          "path": "index.js",
+          "start_line": 120,
+          "end_line": 130,
+          "evidence": "const value = await mapper(element, index);\n\n                    // Use Map to stage the index of the element.\n                    if (value === pMapSkip) {\n                        skippedIndexesMap.set(index, value);\n                    }\n\n                    result[index] = value;",
+          "reproduction": {
+            "code": "const {default: pMap, pMapSkip} = await load('./index.js');\n\nasync function test() {\n  const input = [1, 2, 3, 4];\n  const mapper = async (value, index) => {\n    if (index === 1) return pMapSkip; // Skip second item\n    return value * 2;\n  };\n\n  const result = await pMap(input, mapper);\n  console.log(result); // Should be [2, 6, 8] but may be incorrect due to index handling\n  \n  // Assert correct behavior: [2, 6, 8]\n  assert.deepEqual(result, [2, 6, 8]);\n}\n\ntest();",
+            "filename": "reproduction.cjs"
+          }
+        },
+        "status": "invalid",
+        "reason": "evidence_content",
+        "baseline_reproduction": null,
+        "baseline_regression": null,
+        "candidate_reproduction": null,
+        "candidate_regression": null,
+        "edits": [],
+        "timings_ms": {}
+      }
+    ],
+    "candidate_workspace": null,
+    "latency_ms": 11681.26110000594,
+    "human_time_claim": "not_measured"
+  },
+  "elapsed_seconds": 13.172910900000716,
+  "capped_task_seconds": 180
+}

@@ -1,0 +1,42 @@
+{
+  "id": "P03",
+  "variant": "broken",
+  "arm": "proof",
+  "utc": "2026-10-28T06:59:04.309335+00:00",
+  "specialist": null,
+  "verified_target_repair": false,
+  "result": {
+    "schema_version": "review-repair.1",
+    "status": "invalid",
+    "reason": "evidence_content",
+    "source_sha256": "b7394ceeab7a549add9f2f15262b111e094bcefc169ddbd26b4fd20899316e06",
+    "attempts": [
+      {
+        "hypothesis": {
+          "claim": "When a promise with a cancel method times out and fallback is provided, the fallback function is called but its result is not used to resolve the decorated promise.",
+          "path": "index.js",
+          "start_line": 55,
+          "end_line": 63,
+          "evidence": "if (fallback) {\n\t\t\ttry {\n\t\t\t\tresolve(fallback());\n\t\t\t} catch (error) {\n\t\t\t\treject(error);\n\t\t\t}\n\n\t\t\treturn;\n\t\t}",
+          "reproduction": {
+            "code": "const {default: pTimeout, TimeoutError} = await load('./index.js');\n\nconst slowPromise = new Promise(() => {});\nslowPromise.cancel = () => {\n  throw new Error('cancel called');\n};\n\nconst decorated = pTimeout(slowPromise, {\n  milliseconds: 1,\n  fallback: () => 'fallback value'\n});\n\nsetTimeout(async () => {\n  try {\n    const result = await decorated;\n    console.log(result); // Should be 'fallback value' but will be undefined due to bug\n  } catch (error) {\n    console.error(error);\n  }\n}, 10);",
+            "filename": "reproduction.cjs"
+          }
+        },
+        "status": "invalid",
+        "reason": "evidence_content",
+        "baseline_reproduction": null,
+        "baseline_regression": null,
+        "candidate_reproduction": null,
+        "candidate_regression": null,
+        "edits": [],
+        "timings_ms": {}
+      }
+    ],
+    "candidate_workspace": null,
+    "latency_ms": 7170.329000000493,
+    "human_time_claim": "not_measured"
+  },
+  "elapsed_seconds": 7.170503999994253,
+  "capped_task_seconds": 180
+}

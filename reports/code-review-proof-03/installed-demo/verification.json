@@ -1,0 +1,30 @@
+{
+  "kind": "Authored teaching fixture, live local-model installed-wheel smoke test; not a historical holdout or productivity experiment.",
+  "model": "qwen36-27b-q8",
+  "wheel": "decilist-0.1.0a1-py3-none-any.whl",
+  "wheel_sha256": "29368b4d43bcf4b272f088e947908191f58d09632cbb71902441a32c9731367f",
+  "installed_module": "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\installed\\decilist\\__init__.py",
+  "result": "accepted_candidate",
+  "seconds": 13.540543700000853,
+  "before": {
+    "outcome": "assertion_failure",
+    "assertions": 1,
+    "evidence": "Expected values to be strictly equal:\n\nfalse !== true\n"
+  },
+  "after": {
+    "outcome": "pass",
+    "assertions": 1,
+    "evidence": "reproduction completed"
+  },
+  "existing_checks_before": 4,
+  "existing_checks_after": 4,
+  "primary_agent_additional_audit": {
+    "passed": true,
+    "additionalAssertions": 8
+  },
+  "changed_files": [
+    "within.mjs"
+  ],
+  "original_source_and_tests_unchanged": true,
+  "human_time_measured": false
+}

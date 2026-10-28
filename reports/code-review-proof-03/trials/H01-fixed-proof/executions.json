@@ -1,0 +1,48 @@
+[
+  {
+    "stage": "regression",
+    "workspace": "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H01\\trial-work\\H01-fixed-proof\\review-repair-baseline-htblmqzn",
+    "passed": true,
+    "returncode": 0,
+    "observed": {
+      "status": "passed",
+      "mode": "regression",
+      "checks": 27
+    },
+    "output": "{\"status\":\"passed\",\"mode\":\"regression\",\"checks\":27}\n",
+    "seconds": 0.19915350001247134
+  },
+  {
+    "stage": "reproduction",
+    "workspace": "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H01\\trial-work\\H01-fixed-proof\\review-repair-baseline-htblmqzn",
+    "seconds": 0.2398591000091983,
+    "result": {
+      "outcome": "assertion_failure",
+      "assertions": 2,
+      "evidence": "Message should include timeout duration"
+    }
+  },
+  {
+    "stage": "reproduction",
+    "workspace": "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H01\\trial-work\\H01-fixed-proof\\review-repair-candidate-pjvqbjus",
+    "seconds": 0.21625630000198726,
+    "result": {
+      "outcome": "pass",
+      "assertions": 2,
+      "evidence": "reproduction completed"
+    }
+  },
+  {
+    "stage": "regression",
+    "workspace": "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H01\\trial-work\\H01-fixed-proof\\review-repair-candidate-pjvqbjus",
+    "passed": true,
+    "returncode": 0,
+    "observed": {
+      "status": "passed",
+      "mode": "regression",
+      "checks": 27
+    },
+    "output": "{\"status\":\"passed\",\"mode\":\"regression\",\"checks\":27}\n",
+    "seconds": 0.23721119998663198
+  }
+]

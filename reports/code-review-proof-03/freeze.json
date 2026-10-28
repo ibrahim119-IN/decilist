@@ -1,0 +1,156 @@
+{
+  "utc": "2026-10-28T07:31:01.982627+00:00",
+  "study": "proof03",
+  "model": "qwen36-27b-q8",
+  "hashes": {
+    "benchmarks/code-review-lint/package-lock.json": "f05b86f9445545c7e65384b0662d06265f058df375f31cc5cd1c8b9d00c36b8b",
+    "benchmarks/code-review-lint/proof.mjs": "e4f08ad9afe12b322228b5a08cfebcfda04576bc2d5005c0cc4baf8eb1cceac1",
+    "benchmarks/code_review_no_external.cjs": "c33a07db1233b8c77b6d18bb32c2937a40ad00d0e356572d03eb07d908750716",
+    "benchmarks/code_review_proof_holdout_catalog.json": "e431002511d14c24434847e3b68dbf83565199f205dca2c3c117b304a666b81e",
+    "benchmarks/code_review_proof_holdout_probe.mjs": "9976e5d6f6969ebb75b6cc847bbe29f63ce98d9ab4f1a8029b011be90acd8805",
+    "benchmarks/prepare_code_review_proof_holdout.py": "5ffa484d0ce623245f4a6e52c1ad1a6a254d4f2bafc07a0e1affec11c872005d",
+    "benchmarks/run_code_review_proof.py": "ecdb4286d5ef15f65214f7f65b67ca65e5ccae0a3ead496642b75ea78442f48c",
+    "docs/code-review-proof-holdout-protocol.md": "de55b9fd6801aff8af69bd532bcd9ba23e64ee87a480f0ab8968bbdafc33d703",
+    "packages/python/src/decilist/__init__.py": "3cd617b1c66ea08d35079a96d91bd2667c815ad025a18200a002290843784ce2",
+    "packages/python/src/decilist/__main__.py": "307299fda7b77d22c64cb51430ec75e5f59d78e9c948786afb3b2544fe45e4b7",
+    "packages/python/src/decilist/cli.py": "0081f3e83bf810f800ce6c2158125cb1786ed36ca28ce84edffe50d0b8822a4b",
+    "packages/python/src/decilist/client.py": "c07bb8d24343b0b2915db4b582decd4be62a870b521431fb3672b0eaa398c11b",
+    "packages/python/src/decilist/code_review.py": "d11b186a32a227c384a5f431093bae9183b308cb00ba4cf808d2470045c83d4d",
+    "packages/python/src/decilist/code_review_cli.py": "148678da88927f3095c2b8afe110055da6bd46cd02b4d800e3659400efb7abd6",
+    "packages/python/src/decilist/contracts.py": "f4ac52bca894645cf392df740452ddd33f773d40119550878985be4cf74649b8",
+    "packages/python/src/decilist/data/review_proof_runner.mjs": "552f5f8231c79309b78136824ce1993ad90831a07c93a32bb43865f55917ff3e",
+    "packages/python/src/decilist/demo.py": "84e002f263fa1feb9bcbe77ba89c40f770b282ec752f2eaf83be4948723412b4",
+    "packages/python/src/decilist/engine.py": "9d9281477b8327874c733fe26e0f89bd14c5ff754a6c6cbddaf1542a93381db4",
+    "packages/python/src/decilist/evaluation.py": "a1be17b931fbf504e830c379a7144b2e71239d276224371446918af6aaa6335b",
+    "packages/python/src/decilist/llama_cpp.py": "c63b8098d2ad1f346189a75e05e4f7fba899ddad57867ff33307dbde4b8546eb",
+    "packages/python/src/decilist/providers.py": "a289056a13d9b91875bfb8b88b0a4b587482a00e4b9ef85dc6aa227274e222e6",
+    "packages/python/src/decilist/review_repair.py": "f2ace18a79c40454eb6196c34f006d01fb4579dfe64c101ad222a1335bbac1ed",
+    "packages/python/src/decilist/review_repair_cli.py": "4787754129ff0790615d60c768f25b171b06c2f2f5c480bebe033f108c195ec7",
+    "packages/python/src/decilist/review_repair_local.py": "d774e206117e1aebfee4ae7fd8dc9ca1a580cb654a6f76ccdc0d92f5c3792d19",
+    "packages/python/src/decilist/runtime.py": "7f8b1ec6d0bda03584167b6e0f6b4259c322477ea2a0957f55ed99d9f39ed59e",
+    "packages/python/src/decilist/server.py": "80ff58e67ecd39e8430edd935b9ea582dfbcfa795c978dd6658aacea6466ad55",
+    "packages/python/src/decilist/triage.py": "c246194e22da66967c88b1911a169944fc7c66f7049146cdd70435ca4c832e6f",
+    "packages/python/src/decilist/triage_actions.py": "84cf16be3b8c83e7a59e26de438eda78579c59b2a7508d5349c56d33f9283bc2",
+    "packages/python/src/decilist/triage_assistant.py": "feae88f9e73c867af1e783e956008fd064ed8370dea32eaaee31c360941e5962",
+    "packages/python/src/decilist/triage_context.py": "ab6853369a4ec67f978e57e17da56dd77f78c5f2e73480ac8d0bc8d6c7a555c7",
+    "packages/python/src/decilist/triage_context_v3.py": "6e528c85a5960411b6345e6bf1a38643e7b24b573eb73e71b0bab6145c27b9c6",
+    "packages/python/src/decilist/triage_context_v4.py": "b85a9dc1310f401f63e3a4b0f784f0f6c0d78741f47a1b5d64265de438e49b47",
+    "packages/python/src/decilist/triage_context_v5.py": "379bbb67bccb3116ca8c3a96e9738284a026a11113016bf208a9e67cd2d32e28",
+    "packages/python/src/decilist/triage_context_v6.py": "93af8da3891852a3bd400d60d93bee46b7fa805e10e0666bc3b24160080fdb3b",
+    "packages/python/src/decilist/triage_diagnostic.py": "2214ba74dce604d672f6099d184ee1092b8b6377483d14252080505f0f86e9f6",
+    "packages/python/src/decilist/triage_evidence.py": "50067926f906660380999595b207a5c7bd2082e4cd66f52f44cea24f8c2eef58",
+    "packages/python/src/decilist/triage_hypothesis_v4.py": "7480df914f3c23081d2109543a387e1bba5d6b06d3c1999340bb968101ba3b74",
+    "packages/python/src/decilist/triage_hypothesis_v5.py": "f3ed2bd0e376216d5a89717aa72fbabc90cba2e7374daef9a1a6071a0831d514",
+    "packages/python/src/decilist/triage_hypothesis_v6.py": "45cde3521618a9d8c62cfa126022573afd14120655095fe2656e2f72940d75be",
+    "packages/python/src/decilist/triage_inspect.py": "bf104ad0eaa4ee3dd176599c7903099f9fc01d6938a165e526f39a1c86b0b751",
+    "packages/python/src/decilist/triage_line_edits_v6.py": "68e43e192d45fa05e0099439cbd976e28790d5e441c16487c13d3dccb5eaee0c",
+    "packages/python/src/decilist/triage_line_hypothesis_v6.py": "b907d8940e11ecf427b35e035dd485e81b7123643b1fa4ad9fd99bd7628e492e",
+    "packages/python/src/decilist/triage_lines_v6.py": "8f2f451b30d143b41e46df4506fd1b15a59f7a9121075cc8d33ec70a1795cf5c",
+    "packages/python/src/decilist/triage_module_literals_v8.py": "0165c1f3b12d0b27ec94be9e1a53aeae9c8cdf2ea0294c38232073a29bddecc4",
+    "packages/python/src/decilist/triage_setup.py": "788397eafe5c05bbff903ecb0b4d5354cdcfdf92e9f1332cde8790de39f3678a",
+    "packages/python/src/decilist/triage_test_worker_v4.py": "738b7d21af4d3fa75d43cb33a9d24de4b877fa8d93117c2e80af94c51ba634d6",
+    "packages/python/src/decilist/triage_trace_v4.py": "38fc3de29050a1b4b7e43142cb0ccf8aeed4b8f0b96894ab1f1a4ee303358e18",
+    "packages/python/src/decilist/triage_trace_v5.py": "ff378c837adcf318a88ed641ef52ce3b8055354e844ae4f79fd9c9efb04014d7",
+    "packages/python/src/decilist/triage_v3.py": "49468e11901f05bd5dbfff6b5ffb1f8e9064923839e6114529d4f69c988c43d2",
+    "packages/python/src/decilist/triage_v4.py": "f86f7614c6611f04408760d0986ba98abc9c9ae83df69675c2ee60c6cd32c3ce",
+    "packages/python/src/decilist/triage_v5.py": "5d70f8f2aecd03e25a00f7e59d8967f26670369fd74c2d1023ea8f5adbbef0cc",
+    "packages/python/src/decilist/triage_v6.py": "e6fd69fbf7e91658afe0af0a75a219d1d0d26c4c95d8a8f48412fde715903399",
+    "packages/python/src/decilist/triage_verify_v4.py": "fdc8a34f336142423e9e8e9af46c0dcf58d610a02946e3d2af56d97c67d9d3e1",
+    "packages/python/src/decilist/triage_verify_v5.py": "8c1f41d4089502f08d00d9047177d0a0e831ea0d474282dae3519bc9a0121271",
+    "packages/python/src/decilist/triage_verify_v6.py": "4050e36a68d4ac8cf4498e347acd8cf8f001fbb40ee91d19e9f1ec0c6c5b745d",
+    "packages/python/src/decilist/web.py": "a24caf6d9f7da73abec438b821df9ad7a2429c3775af3dcf420fb21b1d49f3ae",
+    "artifact/corpus/sources.json": "5b212d5adef479cb4b7227f76a4ce9f8a44c01a497552de557aa89b70b94a267",
+    "artifact/corpus/preflight.json": "3277b6f520bcb5b83648f3b9b4ea05b5226be995d090fbeb2be9593ce38fa75a",
+    "artifact/primary-fixture-verification.json": "ff81e1fff91caae11c21dc06a1feb81f616514f6f69f7591f1b4bfeba5ce2c70",
+    "artifact/lint.json": "1fb582f8c4f9f3d093851ff04d645c52da698b240624200b1c7a94546cad013b",
+    "artifact/runtime-hashes.json": "51346bdb70b6df35449c9c567aae00799419c65df49ca5a3a2924ee68818f243",
+    "artifact/neutral-preflight.json": "bf8ef4827bdc41a9ef6688858438012a7624dffd8b93fbacc8c2d41a3a07d019"
+  },
+  "schedule": [
+    {
+      "id": "H01",
+      "variant": "broken",
+      "arm": "ordinary"
+    },
+    {
+      "id": "H01",
+      "variant": "broken",
+      "arm": "proof"
+    },
+    {
+      "id": "H01",
+      "variant": "fixed",
+      "arm": "proof"
+    },
+    {
+      "id": "H01",
+      "variant": "fixed",
+      "arm": "ordinary"
+    },
+    {
+      "id": "H02",
+      "variant": "broken",
+      "arm": "proof"
+    },
+    {
+      "id": "H02",
+      "variant": "broken",
+      "arm": "ordinary"
+    },
+    {
+      "id": "H02",
+      "variant": "fixed",
+      "arm": "ordinary"
+    },
+    {
+      "id": "H02",
+      "variant": "fixed",
+      "arm": "proof"
+    },
+    {
+      "id": "H03",
+      "variant": "broken",
+      "arm": "ordinary"
+    },
+    {
+      "id": "H03",
+      "variant": "broken",
+      "arm": "proof"
+    },
+    {
+      "id": "H03",
+      "variant": "fixed",
+      "arm": "proof"
+    },
+    {
+      "id": "H03",
+      "variant": "fixed",
+      "arm": "ordinary"
+    },
+    {
+      "id": "H04",
+      "variant": "broken",
+      "arm": "proof"
+    },
+    {
+      "id": "H04",
+      "variant": "broken",
+      "arm": "ordinary"
+    },
+    {
+      "id": "H04",
+      "variant": "fixed",
+      "arm": "ordinary"
+    },
+    {
+      "id": "H04",
+      "variant": "fixed",
+      "arm": "proof"
+    }
+  ],
+  "task_cap_seconds": 180,
+  "max_hypotheses": 2,
+  "max_edits": 2,
+  "max_changed_lines": 30,
+  "human_time_measured": false
+}

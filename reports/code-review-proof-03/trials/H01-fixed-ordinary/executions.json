@@ -1,0 +1,38 @@
+[
+  {
+    "stage": "regression",
+    "workspace": "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H01\\trial-work\\H01-fixed-ordinary\\review-repair-baseline-soilu60o",
+    "passed": true,
+    "returncode": 0,
+    "observed": {
+      "status": "passed",
+      "mode": "regression",
+      "checks": 27
+    },
+    "output": "{\"status\":\"passed\",\"mode\":\"regression\",\"checks\":27}\n",
+    "seconds": 0.24649659999704454
+  },
+  {
+    "stage": "reproduction",
+    "workspace": "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H01\\trial-work\\H01-fixed-ordinary\\review-repair-candidate-ybzg0bk9",
+    "seconds": 0.09639209999295417,
+    "result": {
+      "outcome": "pass",
+      "assertions": 2,
+      "evidence": "reproduction completed"
+    }
+  },
+  {
+    "stage": "regression",
+    "workspace": "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H01\\trial-work\\H01-fixed-ordinary\\review-repair-candidate-ybzg0bk9",
+    "passed": true,
+    "returncode": 0,
+    "observed": {
+      "status": "passed",
+      "mode": "regression",
+      "checks": 27
+    },
+    "output": "{\"status\":\"passed\",\"mode\":\"regression\",\"checks\":27}\n",
+    "seconds": 0.09351150000293273
+  }
+]

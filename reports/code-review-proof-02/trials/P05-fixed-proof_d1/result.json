@@ -1,0 +1,87 @@
+{
+  "id": "P05",
+  "variant": "fixed",
+  "arm": "proof_d1",
+  "utc": "2026-10-28T07:00:17.046489+00:00",
+  "specialist": {
+    "wall_seconds": 0.6423431000002893,
+    "rows": [
+      {
+        "path": "index.js",
+        "review": {
+          "schema_version": "code-review.1",
+          "status": "no_flags",
+          "advisory": true,
+          "model": "yannelli/d1-3b-code-review-decisions",
+          "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+          "rules": [
+            "error_handling_problem",
+            "type_safety_hole",
+            "unsafe_input"
+          ],
+          "threshold": 0.9,
+          "total_lines": 81,
+          "reviewed_lines": 81,
+          "windows": [
+            {
+              "start_line": 1,
+              "end_line": 80,
+              "probabilities": {
+                "error_handling_problem": 0.033085978388704126,
+                "type_safety_hole": 0.021615332762647654,
+                "unsafe_input": 0.01098694263059318
+              }
+            },
+            {
+              "start_line": 69,
+              "end_line": 81,
+              "probabilities": {
+                "error_handling_problem": 0.008577485413711986,
+                "type_safety_hole": 0.029312230751356316,
+                "unsafe_input": 0.01495708659314999
+              }
+            }
+          ],
+          "findings": [],
+          "latency_ms": 517.7232999994885,
+          "error": null
+        }
+      }
+    ]
+  },
+  "verified_target_repair": false,
+  "result": {
+    "schema_version": "review-repair.1",
+    "status": "invalid",
+    "reason": "evidence_content",
+    "source_sha256": "8bdf60c62ddcd152ba477cdc47fec80be588f4153625dbdaa99dafd702e0a388",
+    "attempts": [
+      {
+        "hypothesis": {
+          "claim": "The function does not properly handle the case where the filter function throws an error, causing eligible values to be incorrectly rejected and potentially preventing fulfillment even when enough eligible values are available.",
+          "path": "index.js",
+          "start_line": 54,
+          "end_line": 67,
+          "evidence": "if (!filter(value)) {\n\t\t\tthrow new FilterError('Value does not satisfy filter');\n\t\t}\n\n\t\tvalues.push(value);",
+          "reproduction": {
+            "code": "const {default: pSome} = await load('./index.js');\nconst result = await pSome([\n  Promise.resolve(1),\n  Promise.resolve(2),\n  Promise.resolve(3)\n], {\n  count: 2,\n  filter: (value) => {\n    if (value === 2) throw new Error('Filter error');\n    return true;\n  }\n});\nassert.equal(result.length, 2);\nassert.equal(result[0], 1);\nassert.equal(result[1], 3);",
+            "filename": "reproduction.cjs"
+          }
+        },
+        "status": "invalid",
+        "reason": "evidence_content",
+        "baseline_reproduction": null,
+        "baseline_regression": null,
+        "candidate_reproduction": null,
+        "candidate_regression": null,
+        "edits": [],
+        "timings_ms": {}
+      }
+    ],
+    "candidate_workspace": null,
+    "latency_ms": 3348.156199994264,
+    "human_time_claim": "not_measured"
+  },
+  "elapsed_seconds": 3.9907291999988956,
+  "capped_task_seconds": 180
+}

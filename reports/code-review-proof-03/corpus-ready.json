@@ -1,0 +1,59 @@
+{
+  "status": "ready-for-root-freeze-with-recorded-fixture-limitations",
+  "node": "v22.23.1",
+  "python": "3.12.0rc2 (tags/v3.12.0rc2:40913a5, Sep  6 2023, 08:53:07) [MSC v.1935 64 bit (AMD64)]",
+  "python_executable": "L:\\CodexData\\Decilist\\work\\.venv\\Scripts\\python.exe",
+  "cases": 4,
+  "projects": [
+    "sindresorhus/p-debounce",
+    "sindresorhus/p-memoize",
+    "sindresorhus/p-wait-for",
+    "sindresorhus/quick-lru"
+  ],
+  "preflight_all_expected": true,
+  "preflight_outcomes": 16,
+  "artifacts": {
+    "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_holdout_catalog.json": "e431002511d14c24434847e3b68dbf83565199f205dca2c3c117b304a666b81e",
+    "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_holdout_probe.mjs": "9976e5d6f6969ebb75b6cc847bbe29f63ce98d9ab4f1a8029b011be90acd8805",
+    "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\licenses\\p-debounce-LICENSE.txt": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\licenses\\p-memoize-LICENSE.txt": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\licenses\\p-wait-for-LICENSE.txt": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\licenses\\quick-lru-LICENSE.txt": "48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0",
+    "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\prepare_code_review_proof_holdout.py": "5ffa484d0ce623245f4a6e52c1ad1a6a254d4f2bafc07a0e1affec11c872005d"
+  },
+  "source_manifest_sha256": "5b212d5adef479cb4b7227f76a4ce9f8a44c01a497552de557aa89b70b94a267",
+  "preflight_sha256": "3277b6f520bcb5b83648f3b9b4ea05b5226be995d090fbeb2be9593ce38fa75a",
+  "preparation_notes_sha256": "6650c1f4d32eb1bdf98fbdf197b120ed7accf2e9588e56c68cb61c36dac6db2f",
+  "node_binary_sha256": "f8d162c0641dcee512132f3bcf8a68169c7ecb852efd8e1a46c9fec5a0f469ed",
+  "upstream_evidence": {
+    "H01-upstream-commit.json": "4f59103e0213a7879f95a9299e38317615690390e2422659a0845b6e9c74c248",
+    "H02-upstream-commit.json": "0e14ac8d2296c7274ac664d29a097fd066ecf8eadbb5f286c81f6bcea496a8cf",
+    "H03-upstream-commit.json": "c6435bd3696fe70ec6b68c52228eb34d6ad44cd2a65378ad66bec030ffa474bc",
+    "H04-upstream-commit.json": "fdba35b5ed9ae129506212f8a02741458552f46757f7a0e3bb70cdd232eff42e"
+  },
+  "complete_production_source_lines": {
+    "H01": {
+      "index.js": 158
+    },
+    "H02": {
+      "index.js": 155
+    },
+    "H03": {
+      "index.js": 65
+    },
+    "H04": {
+      "index.js": 115
+    }
+  },
+  "downloaded_archive_total_bytes": 90053,
+  "prior_proof02_artifacts_unchanged": true,
+  "prior_proof02_hash_checks": {
+    "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_catalog.json": true,
+    "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs": true,
+    "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\licenses\\delay-LICENSE.txt": true,
+    "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\licenses\\p-map-LICENSE.txt": true,
+    "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\licenses\\p-some-LICENSE.txt": true,
+    "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\licenses\\p-timeout-LICENSE.txt": true,
+    "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\prepare_code_review_proof.py": true
+  }
+}

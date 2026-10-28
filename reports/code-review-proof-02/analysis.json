@@ -1,0 +1,42 @@
+{
+  "primary_metrics": {
+    "ordinary": {
+      "verified_repairs": 0,
+      "cases": 6,
+      "capped_median_seconds": 180.0,
+      "actual_total_seconds": 28.722308899989002
+    },
+    "proof": {
+      "verified_repairs": 0,
+      "cases": 6,
+      "capped_median_seconds": 180.0,
+      "actual_total_seconds": 44.999590599982184
+    },
+    "proof_d1": {
+      "verified_repairs": 0,
+      "cases": 6,
+      "capped_median_seconds": 180.0,
+      "actual_total_seconds": 37.2143707999785
+    }
+  },
+  "statuses": {
+    "ordinary": {
+      "evidence_content": 8,
+      "provider_error": 2,
+      "edit_range": 2
+    },
+    "proof": {
+      "evidence_content": 8,
+      "provider_error": 2,
+      "edit_range": 2
+    },
+    "proof_d1": {
+      "evidence_content": 9,
+      "provider_error": 2,
+      "baseline_not_assertion_failure": 1
+    }
+  },
+  "gate_passed": false,
+  "human_time_measured": false,
+  "note": "All 36 assigned trials retained. Source-citation indentation transport blocked most hypotheses before execution; no successful repairs. Subsequent fixes/replays must not be labelled fresh on these cases."
+}

@@ -1,0 +1,284 @@
+[
+  {
+    "id": "P01",
+    "variant": "broken",
+    "mode": "regression",
+    "result": {
+      "status": "passed",
+      "mode": "regression",
+      "checks": 15
+    },
+    "returncode": 0
+  },
+  {
+    "id": "P01",
+    "variant": "broken",
+    "mode": "target",
+    "result": {
+      "status": "failed",
+      "mode": "target",
+      "checks": 1,
+      "name": "AssertionError",
+      "message": "must not pull exhausted async source\n\n1 !== 0\n",
+      "stack": "AssertionError [ERR_ASSERTION]: must not pull exhausted async source\n\n1 !== 0\n\n    at check (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:15:52)\n    at target (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:182:7)\n    at async file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:249:26"
+    },
+    "returncode": 1
+  },
+  {
+    "id": "P01",
+    "variant": "fixed",
+    "mode": "regression",
+    "result": {
+      "status": "passed",
+      "mode": "regression",
+      "checks": 15
+    },
+    "returncode": 0
+  },
+  {
+    "id": "P01",
+    "variant": "fixed",
+    "mode": "target",
+    "result": {
+      "status": "passed",
+      "mode": "target",
+      "checks": 5
+    },
+    "returncode": 0
+  },
+  {
+    "id": "P02",
+    "variant": "broken",
+    "mode": "regression",
+    "result": {
+      "status": "passed",
+      "mode": "regression",
+      "checks": 25
+    },
+    "returncode": 0
+  },
+  {
+    "id": "P02",
+    "variant": "broken",
+    "mode": "target",
+    "result": {
+      "status": "failed",
+      "mode": "target",
+      "checks": 0,
+      "name": "AssertionError",
+      "message": "promise settlement order cannot change input index\n+ actual - expected\n\n  [\n    [\n      'a',\n+     1\n-     0\n    ],\n    [\n      'b',\n+     0\n-     1\n    ],\n    [\n      'c',\n      2\n    ]\n",
+      "stack": "AssertionError [ERR_ASSERTION]: promise settlement order cannot change input index\n+ actual - expected\n\n  [\n    [\n      'a',\n+     1\n-     0\n    ],\n    [\n      'b',\n+     0\n-     1\n    ],\n    [\n      'c',\n      2\n    ]\n\n    at check (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:15:52)\n    at target (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:190:7)\n    at async file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:249:26"
+    },
+    "returncode": 1
+  },
+  {
+    "id": "P02",
+    "variant": "fixed",
+    "mode": "regression",
+    "result": {
+      "status": "passed",
+      "mode": "regression",
+      "checks": 25
+    },
+    "returncode": 0
+  },
+  {
+    "id": "P02",
+    "variant": "fixed",
+    "mode": "target",
+    "result": {
+      "status": "passed",
+      "mode": "target",
+      "checks": 3
+    },
+    "returncode": 0
+  },
+  {
+    "id": "P03",
+    "variant": "broken",
+    "mode": "regression",
+    "result": {
+      "status": "passed",
+      "mode": "regression",
+      "checks": 25
+    },
+    "returncode": 0
+  },
+  {
+    "id": "P03",
+    "variant": "broken",
+    "mode": "target",
+    "result": {
+      "status": "failed",
+      "mode": "target",
+      "checks": 2,
+      "name": "AssertionError",
+      "message": "already-aborted operation still observes input rejection\n\n2 !== 0\n",
+      "stack": "AssertionError [ERR_ASSERTION]: already-aborted operation still observes input rejection\n\n2 !== 0\n\n    at check (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:15:52)\n    at target (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:201:5)\n    at async file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:249:26"
+    },
+    "returncode": 1
+  },
+  {
+    "id": "P03",
+    "variant": "fixed",
+    "mode": "regression",
+    "result": {
+      "status": "passed",
+      "mode": "regression",
+      "checks": 25
+    },
+    "returncode": 0
+  },
+  {
+    "id": "P03",
+    "variant": "fixed",
+    "mode": "target",
+    "result": {
+      "status": "passed",
+      "mode": "target",
+      "checks": 6
+    },
+    "returncode": 0
+  },
+  {
+    "id": "P04",
+    "variant": "broken",
+    "mode": "regression",
+    "result": {
+      "status": "passed",
+      "mode": "regression",
+      "checks": 25
+    },
+    "returncode": 0
+  },
+  {
+    "id": "P04",
+    "variant": "broken",
+    "mode": "target",
+    "result": {
+      "status": "failed",
+      "mode": "target",
+      "checks": 1,
+      "name": "AssertionError",
+      "message": "unrepresentable timeout cannot schedule overflowing native timer\n\n1 !== 0\n",
+      "stack": "AssertionError [ERR_ASSERTION]: unrepresentable timeout cannot schedule overflowing native timer\n\n1 !== 0\n\n    at check (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:15:52)\n    at target (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:212:7)\n    at async file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:249:26"
+    },
+    "returncode": 1
+  },
+  {
+    "id": "P04",
+    "variant": "fixed",
+    "mode": "regression",
+    "result": {
+      "status": "passed",
+      "mode": "regression",
+      "checks": 25
+    },
+    "returncode": 0
+  },
+  {
+    "id": "P04",
+    "variant": "fixed",
+    "mode": "target",
+    "result": {
+      "status": "passed",
+      "mode": "target",
+      "checks": 15
+    },
+    "returncode": 0
+  },
+  {
+    "id": "P05",
+    "variant": "broken",
+    "mode": "regression",
+    "result": {
+      "status": "passed",
+      "mode": "regression",
+      "checks": 11
+    },
+    "returncode": 0
+  },
+  {
+    "id": "P05",
+    "variant": "broken",
+    "mode": "target",
+    "result": {
+      "status": "failed",
+      "mode": "target",
+      "checks": 0,
+      "name": "AssertionError",
+      "message": "mixed filtered and rejected values cannot leave impossible count pending\n+ actual - expected\n\n+ true\n- undefined\n",
+      "stack": "AssertionError [ERR_ASSERTION]: mixed filtered and rejected values cannot leave impossible count pending\n+ actual - expected\n\n+ true\n- undefined\n\n    at check (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:15:52)\n    at target (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:227:7)\n    at async file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:249:26"
+    },
+    "returncode": 1
+  },
+  {
+    "id": "P05",
+    "variant": "fixed",
+    "mode": "regression",
+    "result": {
+      "status": "passed",
+      "mode": "regression",
+      "checks": 11
+    },
+    "returncode": 0
+  },
+  {
+    "id": "P05",
+    "variant": "fixed",
+    "mode": "target",
+    "result": {
+      "status": "passed",
+      "mode": "target",
+      "checks": 7
+    },
+    "returncode": 0
+  },
+  {
+    "id": "P06",
+    "variant": "broken",
+    "mode": "regression",
+    "result": {
+      "status": "passed",
+      "mode": "regression",
+      "checks": 12
+    },
+    "returncode": 0
+  },
+  {
+    "id": "P06",
+    "variant": "broken",
+    "mode": "target",
+    "result": {
+      "status": "failed",
+      "mode": "target",
+      "checks": 0,
+      "name": "TypeError",
+      "message": "custom.range is not a function",
+      "stack": "TypeError: custom.range is not a function\n    at target (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:235:29)\n    at async file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:249:26"
+    },
+    "returncode": 1
+  },
+  {
+    "id": "P06",
+    "variant": "fixed",
+    "mode": "regression",
+    "result": {
+      "status": "passed",
+      "mode": "regression",
+      "checks": 12
+    },
+    "returncode": 0
+  },
+  {
+    "id": "P06",
+    "variant": "fixed",
+    "mode": "target",
+    "result": {
+      "status": "passed",
+      "mode": "target",
+      "checks": 8
+    },
+    "returncode": 0
+  }
+]

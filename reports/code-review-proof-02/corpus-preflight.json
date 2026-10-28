@@ -1,0 +1,533 @@
+{
+  "schema_version": "review-proof-preflight.1",
+  "completed_at": "2026-10-28T05:01:33.567180+00:00",
+  "node": "v22.23.1",
+  "catalog_sha256": "5e43ce12a747790386e3967f7637f8f46fe7478db8caf3910af4db03d16a12a1",
+  "probe_sha256": "9a51133dc06b0666435d7e518e551cb5b19fca24fbbcdf73151da0ec2e513dc0",
+  "preparer_sha256": "b64f332cd39b216717780eead016b98390069681e32d7090e795e6fc6530322a",
+  "results": [
+    {
+      "id": "P01",
+      "state": "broken",
+      "mode": "regression",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P01",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P01\\broken",
+        "regression"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "regression",
+        "checks": 15
+      },
+      "matches_expected": true,
+      "log_sha256": "f984242eea952f34121040def8f6f13b1490847b4c55ce1af56cf9557547cfbe"
+    },
+    {
+      "id": "P01",
+      "state": "broken",
+      "mode": "target",
+      "expected": "failed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P01",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P01\\broken",
+        "target"
+      ],
+      "returncode": 1,
+      "observed": {
+        "status": "failed",
+        "mode": "target",
+        "checks": 1,
+        "name": "AssertionError",
+        "message": "must not pull exhausted async source\n\n1 !== 0\n",
+        "stack": "AssertionError [ERR_ASSERTION]: must not pull exhausted async source\n\n1 !== 0\n\n    at check (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:15:52)\n    at target (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:182:7)\n    at async file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:249:26"
+      },
+      "matches_expected": true,
+      "log_sha256": "71e154793e14a20e7982e905ab701a1f6e6b88d09423c3401b571176c019a366"
+    },
+    {
+      "id": "P01",
+      "state": "fixed",
+      "mode": "regression",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P01",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P01\\fixed",
+        "regression"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "regression",
+        "checks": 15
+      },
+      "matches_expected": true,
+      "log_sha256": "f984242eea952f34121040def8f6f13b1490847b4c55ce1af56cf9557547cfbe"
+    },
+    {
+      "id": "P01",
+      "state": "fixed",
+      "mode": "target",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P01",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P01\\fixed",
+        "target"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "target",
+        "checks": 5
+      },
+      "matches_expected": true,
+      "log_sha256": "245ff4a0fdf7c65dfb8292ad020be5b2ccc0f3498b3d95de8ac7bee67f0f9a83"
+    },
+    {
+      "id": "P02",
+      "state": "broken",
+      "mode": "regression",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P02",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P02\\broken",
+        "regression"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "regression",
+        "checks": 25
+      },
+      "matches_expected": true,
+      "log_sha256": "5d757415149c398fd485d243be168a123d38f510c90cb6a45654a9eedeaa1f9d"
+    },
+    {
+      "id": "P02",
+      "state": "broken",
+      "mode": "target",
+      "expected": "failed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P02",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P02\\broken",
+        "target"
+      ],
+      "returncode": 1,
+      "observed": {
+        "status": "failed",
+        "mode": "target",
+        "checks": 0,
+        "name": "AssertionError",
+        "message": "promise settlement order cannot change input index\n+ actual - expected\n\n  [\n    [\n      'a',\n+     1\n-     0\n    ],\n    [\n      'b',\n+     0\n-     1\n    ],\n    [\n      'c',\n      2\n    ]\n",
+        "stack": "AssertionError [ERR_ASSERTION]: promise settlement order cannot change input index\n+ actual - expected\n\n  [\n    [\n      'a',\n+     1\n-     0\n    ],\n    [\n      'b',\n+     0\n-     1\n    ],\n    [\n      'c',\n      2\n    ]\n\n    at check (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:15:52)\n    at target (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:190:7)\n    at async file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:249:26"
+      },
+      "matches_expected": true,
+      "log_sha256": "0d182d85c3281a1780f2a8e447ed85697a7f45e2e97d1edbc9b2d1252969821d"
+    },
+    {
+      "id": "P02",
+      "state": "fixed",
+      "mode": "regression",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P02",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P02\\fixed",
+        "regression"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "regression",
+        "checks": 25
+      },
+      "matches_expected": true,
+      "log_sha256": "5d757415149c398fd485d243be168a123d38f510c90cb6a45654a9eedeaa1f9d"
+    },
+    {
+      "id": "P02",
+      "state": "fixed",
+      "mode": "target",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P02",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P02\\fixed",
+        "target"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "target",
+        "checks": 3
+      },
+      "matches_expected": true,
+      "log_sha256": "c458a90a026285dd67a31a1a058c3ee8b6b65cd6563d20336006690367c845fb"
+    },
+    {
+      "id": "P03",
+      "state": "broken",
+      "mode": "regression",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P03",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P03\\broken",
+        "regression"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "regression",
+        "checks": 25
+      },
+      "matches_expected": true,
+      "log_sha256": "5d757415149c398fd485d243be168a123d38f510c90cb6a45654a9eedeaa1f9d"
+    },
+    {
+      "id": "P03",
+      "state": "broken",
+      "mode": "target",
+      "expected": "failed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P03",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P03\\broken",
+        "target"
+      ],
+      "returncode": 1,
+      "observed": {
+        "status": "failed",
+        "mode": "target",
+        "checks": 2,
+        "name": "AssertionError",
+        "message": "already-aborted operation still observes input rejection\n\n2 !== 0\n",
+        "stack": "AssertionError [ERR_ASSERTION]: already-aborted operation still observes input rejection\n\n2 !== 0\n\n    at check (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:15:52)\n    at target (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:201:5)\n    at async file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:249:26"
+      },
+      "matches_expected": true,
+      "log_sha256": "17b7854006b8ec27ef22da711afac55694e03807a0251d94241a5ec0c28a10b8"
+    },
+    {
+      "id": "P03",
+      "state": "fixed",
+      "mode": "regression",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P03",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P03\\fixed",
+        "regression"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "regression",
+        "checks": 25
+      },
+      "matches_expected": true,
+      "log_sha256": "5d757415149c398fd485d243be168a123d38f510c90cb6a45654a9eedeaa1f9d"
+    },
+    {
+      "id": "P03",
+      "state": "fixed",
+      "mode": "target",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P03",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P03\\fixed",
+        "target"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "target",
+        "checks": 6
+      },
+      "matches_expected": true,
+      "log_sha256": "99db256e6092072ac19e9a858a2adb933b0b034014d0277f0cd5e1eee34bd59b"
+    },
+    {
+      "id": "P04",
+      "state": "broken",
+      "mode": "regression",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P04",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P04\\broken",
+        "regression"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "regression",
+        "checks": 25
+      },
+      "matches_expected": true,
+      "log_sha256": "5d757415149c398fd485d243be168a123d38f510c90cb6a45654a9eedeaa1f9d"
+    },
+    {
+      "id": "P04",
+      "state": "broken",
+      "mode": "target",
+      "expected": "failed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P04",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P04\\broken",
+        "target"
+      ],
+      "returncode": 1,
+      "observed": {
+        "status": "failed",
+        "mode": "target",
+        "checks": 1,
+        "name": "AssertionError",
+        "message": "unrepresentable timeout cannot schedule overflowing native timer\n\n1 !== 0\n",
+        "stack": "AssertionError [ERR_ASSERTION]: unrepresentable timeout cannot schedule overflowing native timer\n\n1 !== 0\n\n    at check (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:15:52)\n    at target (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:212:7)\n    at async file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:249:26"
+      },
+      "matches_expected": true,
+      "log_sha256": "bf1bef5f45a06390efc4d4474c0c8a987ab3d52356a3a5dbd99c824f5de2e614"
+    },
+    {
+      "id": "P04",
+      "state": "fixed",
+      "mode": "regression",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P04",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P04\\fixed",
+        "regression"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "regression",
+        "checks": 25
+      },
+      "matches_expected": true,
+      "log_sha256": "5d757415149c398fd485d243be168a123d38f510c90cb6a45654a9eedeaa1f9d"
+    },
+    {
+      "id": "P04",
+      "state": "fixed",
+      "mode": "target",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P04",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P04\\fixed",
+        "target"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "target",
+        "checks": 15
+      },
+      "matches_expected": true,
+      "log_sha256": "a88cff1e40ea01637ecd221d5075ae0c9467aa8681e6ef8ec011a022bb7f1e08"
+    },
+    {
+      "id": "P05",
+      "state": "broken",
+      "mode": "regression",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P05",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P05\\broken",
+        "regression"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "regression",
+        "checks": 11
+      },
+      "matches_expected": true,
+      "log_sha256": "429d3707b44999dd8f222bf75ec495f367b6ea26428b761e3b517cd8260cba76"
+    },
+    {
+      "id": "P05",
+      "state": "broken",
+      "mode": "target",
+      "expected": "failed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P05",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P05\\broken",
+        "target"
+      ],
+      "returncode": 1,
+      "observed": {
+        "status": "failed",
+        "mode": "target",
+        "checks": 0,
+        "name": "AssertionError",
+        "message": "mixed filtered and rejected values cannot leave impossible count pending\n+ actual - expected\n\n+ true\n- undefined\n",
+        "stack": "AssertionError [ERR_ASSERTION]: mixed filtered and rejected values cannot leave impossible count pending\n+ actual - expected\n\n+ true\n- undefined\n\n    at check (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:15:52)\n    at target (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:227:7)\n    at async file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:249:26"
+      },
+      "matches_expected": true,
+      "log_sha256": "5632f6b37a2b9c8849729e3dc339f099d112c6d5aa4f73b62c9b3b4b6a6c4c3d"
+    },
+    {
+      "id": "P05",
+      "state": "fixed",
+      "mode": "regression",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P05",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P05\\fixed",
+        "regression"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "regression",
+        "checks": 11
+      },
+      "matches_expected": true,
+      "log_sha256": "429d3707b44999dd8f222bf75ec495f367b6ea26428b761e3b517cd8260cba76"
+    },
+    {
+      "id": "P05",
+      "state": "fixed",
+      "mode": "target",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P05",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P05\\fixed",
+        "target"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "target",
+        "checks": 7
+      },
+      "matches_expected": true,
+      "log_sha256": "3ed65951a256c7aa15c8165e42d1ad32ee7b4c84f07b9aa2bb0002ff134c3aa5"
+    },
+    {
+      "id": "P06",
+      "state": "broken",
+      "mode": "regression",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P06",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P06\\broken",
+        "regression"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "regression",
+        "checks": 12
+      },
+      "matches_expected": true,
+      "log_sha256": "4923bae2ae68481d4a04c9ba9f8d574fc968b4d797a50c89deed52ab214f6dd8"
+    },
+    {
+      "id": "P06",
+      "state": "broken",
+      "mode": "target",
+      "expected": "failed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P06",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P06\\broken",
+        "target"
+      ],
+      "returncode": 1,
+      "observed": {
+        "status": "failed",
+        "mode": "target",
+        "checks": 0,
+        "name": "TypeError",
+        "message": "custom.range is not a function",
+        "stack": "TypeError: custom.range is not a function\n    at target (file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:235:29)\n    at async file:///L:/CodexData/Decilist/outputs/decilist/benchmarks/code_review_proof_probe.mjs:249:26"
+      },
+      "matches_expected": true,
+      "log_sha256": "f2f7148ad1d1cb8635d93d03860f3cd195d3bf375defa615e1259b10a5edd0cb"
+    },
+    {
+      "id": "P06",
+      "state": "fixed",
+      "mode": "regression",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P06",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P06\\fixed",
+        "regression"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "regression",
+        "checks": 12
+      },
+      "matches_expected": true,
+      "log_sha256": "4923bae2ae68481d4a04c9ba9f8d574fc968b4d797a50c89deed52ab214f6dd8"
+    },
+    {
+      "id": "P06",
+      "state": "fixed",
+      "mode": "target",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_probe.mjs",
+        "P06",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P06\\fixed",
+        "target"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "target",
+        "checks": 8
+      },
+      "matches_expected": true,
+      "log_sha256": "35f38c2411fa7754e0104003d5daec55165cc76f7459494ecb048666ca1b4440"
+    }
+  ],
+  "all_expected": true
+}

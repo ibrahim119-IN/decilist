@@ -1,0 +1,167 @@
+{
+  "cases": [
+    {
+      "id": "H01",
+      "variants": {
+        "broken": {
+          "revision": "cf004402e6e5c98b1f643d6857142cedfa9fbcf7",
+          "archive_sha256": "870bc5f63a2bdd943e64a5973f928afcf9d94538ca46a6228d9d7adc89fc9db6",
+          "files": {
+            "index.js": "165dd67c751acf2f8357268ceef9d1b05ed6720aea5e397cda2765f8bc8d2c34",
+            "package.json": "d8a164211f587453576b3fc4274540f877e016a2aaa1b24a61f9d14f9eda4152",
+            "readme.md": "185d978f238c8732e953e3841120f759a21a807b0762e0871a67c3361e78bfa0",
+            "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+          },
+          "source_lines": {
+            "index.js": 146
+          }
+        },
+        "fixed": {
+          "revision": "adc360bfa96eef6e8a0601c0592c7574453d3b9a",
+          "archive_sha256": "cbac3ec4bdcb55d5a56f5fa6174420728d59e53869944a47516432ea16a5d26b",
+          "files": {
+            "index.js": "d7dae0b2d37226c79548a139eadd94953f65d89dd25039a38c5d53e2f694082c",
+            "package.json": "d8a164211f587453576b3fc4274540f877e016a2aaa1b24a61f9d14f9eda4152",
+            "readme.md": "0aee76996214d3669ee8368a24d086fc2d799a2f4c7148e51a4214df8a1e0234",
+            "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+          },
+          "source_lines": {
+            "index.js": 158
+          }
+        }
+      },
+      "dependencies": {},
+      "shared_public_docs_sha256": "22f46668d2f9524ba7b785e808c52d26a65935edb4664de34a5d405aa2e5bae9",
+      "dependency_lock_sha256": "c035064076cf9e660227c580c81f7fac2e0f9ca679657c0c0a5495b679e658df",
+      "install_log_sha256": "3981d4f5c38d37ee8f348121059cf35da88f0c540a6052783f122fd42932e955",
+      "installed_dependency_files": {}
+    },
+    {
+      "id": "H02",
+      "variants": {
+        "broken": {
+          "revision": "8964dd202004f49d7b814c0292b064287b70f2d8",
+          "archive_sha256": "21321ff88eb810709a090258331553b57b86ea59c2c5680425f9c72efcb84732",
+          "files": {
+            "index.js": "18a7a6a1ecba326f27480d2d55212c1d202b2a81ca96687d209b271cab012a6a",
+            "package.json": "6721ecd2bee87b1f5de30b610c02a9f0e01b06e88605f4a9c8efa0dff5622177",
+            "readme.md": "60ab50d68ec211954a97c54d17e28e959152edbc3cf25e9c87eaff4fffe70bf5",
+            "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+          },
+          "source_lines": {
+            "index.js": 153
+          }
+        },
+        "fixed": {
+          "revision": "a14c7ac6817248b8db13eb0d30474c1f82588fe6",
+          "archive_sha256": "4cafe55cddb182f6cc3b35317dd6859d1fec6b9cad81724a12351d57c48b667a",
+          "files": {
+            "index.js": "7a519eb4afed87d7b3c7eec0800c5379eae5ca53cf3e2ba325669ecf1338eeab",
+            "package.json": "6721ecd2bee87b1f5de30b610c02a9f0e01b06e88605f4a9c8efa0dff5622177",
+            "readme.md": "60ab50d68ec211954a97c54d17e28e959152edbc3cf25e9c87eaff4fffe70bf5",
+            "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+          },
+          "source_lines": {
+            "index.js": 155
+          }
+        }
+      },
+      "dependencies": {},
+      "shared_public_docs_sha256": "f6ed5288e19b4918c7bc6bfe7d47ed7809491b86943237125a095a82e422f4a0",
+      "dependency_lock_sha256": "b8cc7ed79f7656b9d33b9b5e1669ca9d362b10c1e665932a9a795a65883c7c66",
+      "install_log_sha256": "528d50dee33b5abb917831f4bac0fbcabb50451e7fc8fe2d37a6cdfc3ec19d7f",
+      "installed_dependency_files": {}
+    },
+    {
+      "id": "H03",
+      "variants": {
+        "broken": {
+          "revision": "34ebc0c42721fe7be1417d774594d40d38c974d6",
+          "archive_sha256": "105f72c185b56f2a76cb6a64ef13b43517cd430ad675b18b0ec632bf81837afa",
+          "files": {
+            "index.js": "bb1e394158f8eceb1c056a3c946ef3b0fde77788505495d8ead9ab745dbdf3c0",
+            "package.json": "7b799785c4dfa6bee1de782806493d96d8ed38c6c014eb67cce200e501a69b27",
+            "readme.md": "37757205f89ccc9db1d7c7f5f4641113ad2523f15f225a67575d464d5e7c1ee4",
+            "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+          },
+          "source_lines": {
+            "index.js": 65
+          }
+        },
+        "fixed": {
+          "revision": "343ac6e71a77031a69f9e52bf03ea40e1cfdcbc8",
+          "archive_sha256": "848d75e06691eaa2b92e1d8856ca147c1ad6e90d5680ff713127de900b88e14d",
+          "files": {
+            "index.js": "476c06a8056fc0d402d6e8bf0c3fc653e1342bbda8637da50e8aa83f3f7e82dd",
+            "package.json": "7b799785c4dfa6bee1de782806493d96d8ed38c6c014eb67cce200e501a69b27",
+            "readme.md": "37757205f89ccc9db1d7c7f5f4641113ad2523f15f225a67575d464d5e7c1ee4",
+            "license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+          },
+          "source_lines": {
+            "index.js": 65
+          }
+        }
+      },
+      "dependencies": {
+        "map-age-cleaner": "0.1.3",
+        "mimic-fn": "3.1.0"
+      },
+      "shared_public_docs_sha256": "57734ecdd3695a0ed6cc8c2a930b5b254b7e118e3b221208086db263409b6a29",
+      "dependency_lock_sha256": "2aacd42e8d6f68069fa2d467f8347421b81c1f3fe35a5ba8b45d1af83e0ffb77",
+      "install_log_sha256": "9ac0fb91e6780f9a6c32faab72815c5ff42326fdd4a69c6afe0dc5a8a6891e4a",
+      "installed_dependency_files": {
+        "node_modules/.package-lock.json": "921564930257ec6956c52fa5ef10eec8a910cb1569ef178ece9ae9e2a9d11c45",
+        "node_modules/map-age-cleaner/dist/index.d.ts": "0625c69d7a1882e5aea9e6531fb6e2eb2880ae4927e6b70fbce22644d14cafde",
+        "node_modules/map-age-cleaner/dist/index.js": "9bc9805f6012df7b0a506de8901b64d9303f3dd06825e7de8db95d31c92aab4d",
+        "node_modules/map-age-cleaner/license": "3d3fba5375126ff321d3a51938899d744b1189896618e0f2d088d9e1ebf2822a",
+        "node_modules/map-age-cleaner/package.json": "99e359d3f1ba68fba1996dac3eae9943ee58b357e471ec3c69e781fedcd04e05",
+        "node_modules/map-age-cleaner/readme.md": "bbda60651084d67021088e408f637d57bf26e91a7b6d708cc18be9e905b348fc",
+        "node_modules/mimic-fn/index.d.ts": "7814b6eded71b2b9d196eb473b18b79946d80e5eddfba2b5715df2164cb87da2",
+        "node_modules/mimic-fn/index.js": "d4a832347a07a4df9b32a010fc5ffb1c4447c51769423cd5a3a47da0213fe5c0",
+        "node_modules/mimic-fn/license": "48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0",
+        "node_modules/mimic-fn/package.json": "71fa24afc41e43246126eaef9f0c4dd7a94047e8a67456d02c9b56924dbf0969",
+        "node_modules/mimic-fn/readme.md": "34bd638efee6163692ed1b27e47a1783488f6e20dbfa88e6546431723191952d",
+        "node_modules/p-defer/index.js": "f7b96f4bfe4046e2cbae54212017f74b555c52ac1380ad3b20fb6b4ba5e5d770",
+        "node_modules/p-defer/license": "6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c",
+        "node_modules/p-defer/package.json": "c58d15c6642b342e1266f76724d32c1a71f9158f55af20e504a458ea4b51c499",
+        "node_modules/p-defer/readme.md": "45cb6e17820ca6f52e9ce6990f6b83cc47ae74bac4fe98bd8dba849db4d20f88"
+      }
+    },
+    {
+      "id": "H04",
+      "variants": {
+        "broken": {
+          "revision": "8d1362d99e6912b9f17579a51f604785a6060d9d",
+          "archive_sha256": "62ca24061654508bbb8836d49f3ebce64068f507d2d6a390155c61b333a3c45e",
+          "files": {
+            "index.js": "82a865251cf40cc0af726f985b55f17cd9fa24f240899d5cc5fcbf921f047b0b",
+            "package.json": "4677d4a271059ff0b76ddbbf328519f23b9156b3e647a46e77f86750cb2dcc2e",
+            "readme.md": "7e53440c912638473840f8ddf15e9ef60b1bc4cde5a6c7ee0161266e0216f13b",
+            "license": "48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0"
+          },
+          "source_lines": {
+            "index.js": 115
+          }
+        },
+        "fixed": {
+          "revision": "e5b868b40193f26ed33c8b5037688d2c355630a9",
+          "archive_sha256": "2d639129b1270af3744f5b6e2b5bf2f04e1e5a0d63b56c848c4a048286699e78",
+          "files": {
+            "index.js": "20e6429e227280209851b870d1b944923e48c7c21ab9a1f93c099cca85f5324a",
+            "package.json": "4677d4a271059ff0b76ddbbf328519f23b9156b3e647a46e77f86750cb2dcc2e",
+            "readme.md": "7e53440c912638473840f8ddf15e9ef60b1bc4cde5a6c7ee0161266e0216f13b",
+            "license": "48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0"
+          },
+          "source_lines": {
+            "index.js": 115
+          }
+        }
+      },
+      "dependencies": {},
+      "shared_public_docs_sha256": "71dd25a20dde2bdba5311253d3fa2753dfc77e76dfdf671e35e23b959d9e8b05",
+      "dependency_lock_sha256": "b931757275dadf35260aaa0c5c64cf3e11489c2dcd3a6bf1cad2de6ab240930c",
+      "install_log_sha256": "8f5409c9e3823584da3fe3f3f9b249645fcd8ead781f14c5dea1c106155c1310",
+      "installed_dependency_files": {}
+    }
+  ]
+}

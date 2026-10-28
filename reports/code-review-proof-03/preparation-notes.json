@@ -1,0 +1,26 @@
+{
+  "model_inference_run": false,
+  "participant_exposure_run": false,
+  "case_replacements": [],
+  "preparation_failures": [
+    {
+      "attempt": 1,
+      "kind": "result parser",
+      "observed": "H03 fixed regression passed all 26 assertions and exited 0, but trailing native stderr TimeoutOverflowWarning text was parsed as final JSON",
+      "retained_report": "preflight-attempt-01.json",
+      "resolution": "structured probe result parsing corrected without changing probes, sources or cases"
+    },
+    {
+      "attempt": 2,
+      "kind": "result parser",
+      "observed": "success-only stdout parsing classified expected target assertion failures on stderr as malformed output",
+      "retained_report": "preflight-attempt-02.json",
+      "resolution": "require exactly one mode-matching structured result across both output streams; retain every warning verbatim"
+    }
+  ],
+  "fixture_limitations": [
+    "Corrected controls are corrected for their pinned historical defect, not certified free from every other defect.",
+    "H03 p-memoize parent and fixed snapshots both have a separate falsy-rejection caching weakness due to truthiness checking of rejection reasons; this can yield a legitimate report on a corrected target control.",
+    "H03 fixed snapshot emits native TimeoutOverflowWarning messages under maxAge due to temporary Infinity expiry values passed through map-age-cleaner; warnings are retained, not suppressed."
+  ]
+}

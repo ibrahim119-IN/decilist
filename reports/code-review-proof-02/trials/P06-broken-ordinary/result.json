@@ -1,0 +1,42 @@
+{
+  "id": "P06",
+  "variant": "broken",
+  "arm": "ordinary",
+  "utc": "2026-10-28T07:00:28.719078+00:00",
+  "specialist": null,
+  "verified_target_repair": false,
+  "result": {
+    "schema_version": "review-repair.1",
+    "status": "invalid",
+    "reason": "evidence_content",
+    "source_sha256": "1902304df1718764796ba75159f073b425f5757787f5d10c6dc527397ca34519",
+    "attempts": [
+      {
+        "hypothesis": {
+          "claim": "The delay.clear() method does not properly handle the case where the timer has already fired, causing a potential race condition that may lead to inconsistent promise resolution behavior.",
+          "path": "index.js",
+          "start_line": 51,
+          "end_line": 55,
+          "evidence": "delayPromise.clear = () => {\n\tclear(timeoutId);\n\ttimeoutId = null;\n\tsettle();\n};",
+          "reproduction": {
+            "code": "const {default: delay} = await load('./index.js');\nconst controller = new AbortController();\nconst promise = delay(10, {signal: controller.signal});\nsetTimeout(() => controller.abort(), 5);\nawait promise.catch(e => assert.equal(e.name, 'AbortError'));\n",
+            "filename": "reproduction.cjs"
+          }
+        },
+        "status": "invalid",
+        "reason": "evidence_content",
+        "baseline_reproduction": null,
+        "baseline_regression": null,
+        "candidate_reproduction": null,
+        "candidate_regression": null,
+        "edits": [],
+        "timings_ms": {}
+      }
+    ],
+    "candidate_workspace": null,
+    "latency_ms": 3686.6316000086954,
+    "human_time_claim": "not_measured"
+  },
+  "elapsed_seconds": 3.68679809999594,
+  "capped_task_seconds": 180
+}

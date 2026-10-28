@@ -1,0 +1,82 @@
+{
+  "id": "H01",
+  "variant": "fixed",
+  "arm": "ordinary",
+  "utc": "2026-10-28T07:32:34.994709+00:00",
+  "specialist": null,
+  "verified_target_repair": false,
+  "result": {
+    "schema_version": "review-repair.1",
+    "status": "accepted_candidate",
+    "reason": "proposed_reproduction_and_existing_checks_passed",
+    "source_sha256": "ffe0c3f59b3ec806f50c4b7713943d7c8c2d60297ccdc57fef277a368950c509",
+    "attempts": [
+      {
+        "hypothesis": {
+          "claim": "The `handleAbortError` function throws a generic `TimeoutError` when the timeout expires and `timeout` is a number, ignoring the `timeout` value which should be used to construct the error message (e.g., including the milliseconds). The contract implies the error should be a `TimeoutError`, but the default message 'Promise timed out' lacks the specific timeout duration context provided by the numeric timeout, unlike the object-based timeout path which uses `createTimeoutError`. More critically, if `timeout` is a number, `handleAbortError` throws `new TimeoutError()` with the default message, whereas `createTimeoutError` (used for object timeouts) generates a message like `Promise timed out after X milliseconds`. While not strictly a violation if the contract doesn't specify the message content for numeric timeouts, the bigger issue is likely in how `TimeoutError` is exported or used. Let's look closer. Actually, the contract says ",
+          "path": "index.js",
+          "start_line": 57,
+          "end_line": 69,
+          "evidence": "\t\tthrow new TimeoutError();",
+          "reproduction": {
+            "code": "const {default: pWaitFor, TimeoutError} = await load('./index.js');\nconst err = await pWaitFor(async () => false, {timeout: 10}).catch(e => e);\nassert.ok(err instanceof TimeoutError, 'Should be TimeoutError');\nassert.ok(err.message.includes('10'), 'Message should include timeout duration');",
+            "filename": "reproduction.cjs"
+          }
+        },
+        "status": "accepted_candidate",
+        "reason": "proposed_reproduction_and_existing_checks_passed",
+        "baseline_reproduction": null,
+        "baseline_regression": {
+          "outcome": "pass",
+          "assertions": 27,
+          "evidence": "{\"status\":\"passed\",\"mode\":\"regression\",\"checks\":27}\n"
+        },
+        "candidate_reproduction": {
+          "outcome": "pass",
+          "assertions": 2,
+          "evidence": "reproduction completed"
+        },
+        "candidate_regression": {
+          "outcome": "pass",
+          "assertions": 27,
+          "evidence": "{\"status\":\"passed\",\"mode\":\"regression\",\"checks\":27}\n"
+        },
+        "edits": [
+          {
+            "path": "index.js",
+            "start_line": 64,
+            "end_line": 64,
+            "source_sha256": "d7dae0b2d37226c79548a139eadd94953f65d89dd25039a38c5d53e2f694082c",
+            "replacement": "\t\tthrow new TimeoutError(`Promise timed out after ${timeout} milliseconds`);"
+          }
+        ],
+        "timings_ms": {
+          "baseline_regression": 247.3376999987522,
+          "repair": 6978.714899989427,
+          "candidate_reproduction": 96.86749998945743,
+          "candidate_regression": 94.02899999986403
+        }
+      }
+    ],
+    "candidate_workspace": "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H01\\trial-work\\H01-fixed-ordinary\\review-repair-candidate-ybzg0bk9",
+    "latency_ms": 32356.132000000798,
+    "human_time_claim": "not_measured"
+  },
+  "hidden_target_verification": {
+    "passed": true,
+    "returncode": 0,
+    "observed": {
+      "status": "passed",
+      "mode": "target",
+      "checks": 10
+    },
+    "output": "{\"status\":\"passed\",\"mode\":\"target\",\"checks\":10}\n",
+    "seconds": 0.10175390000222251
+  },
+  "diff": "--- index.js\n+++ index.js\n@@ -61,7 +61,7 @@\n \t\t\treturn handleFallback(timeout);\n \t\t}\n \n-\t\tthrow new TimeoutError();\n+\t\tthrow new TimeoutError(`Promise timed out after ${timeout} milliseconds`);\n \t}\n \n \t// It's a user abort\n",
+  "candidate_source": {
+    "index.js": "/* eslint-disable no-await-in-loop -- Polling loop: each iteration must await the previous check before sleeping again. */\nconst resolveValue = Symbol('resolveValue');\n\nconst sleep = (ms, signal) => new Promise((resolve, reject) => {\n\tif (signal?.aborted) {\n\t\treject(signal.reason);\n\t\treturn;\n\t}\n\n\tconst onAbort = () => {\n\t\tclearTimeout(timeout);\n\t\treject(signal.reason);\n\t};\n\n\tconst timeout = setTimeout(() => {\n\t\t// `once: true` only detaches the listener when the signal aborts, so a normal resolve has to remove it.\n\t\tsignal?.removeEventListener('abort', onAbort);\n\t\tresolve();\n\t}, ms);\n\n\tif (signal) {\n\t\tsignal.addEventListener('abort', onAbort, {once: true});\n\t}\n});\n\nconst validateOptions = (interval, timeout) => {\n\tif (typeof interval !== 'number' || !Number.isFinite(interval) || interval < 0) {\n\t\tthrow new TypeError('Expected interval to be a finite non-negative number');\n\t}\n\n\tif (typeof timeout === 'object' && timeout !== null) {\n\t\tif (typeof timeout.milliseconds !== 'number' || Number.isNaN(timeout.milliseconds) || timeout.milliseconds < 0) {\n\t\t\tthrow new TypeError('Expected timeout.milliseconds to be a finite non-negative number');\n\t\t}\n\t} else if (typeof timeout === 'number' && (Number.isNaN(timeout) || timeout < 0)) {\n\t\tthrow new TypeError('Expected timeout to be a finite non-negative number');\n\t}\n};\n\nconst createTimeoutError = timeout => {\n\tif (timeout.message instanceof Error) {\n\t\treturn timeout.message;\n\t}\n\n\tconst message = timeout.message ?? `Promise timed out after ${timeout.milliseconds} milliseconds`;\n\treturn new TimeoutError(message);\n};\n\nconst handleFallback = timeout => {\n\tif (timeout.fallback) {\n\t\treturn timeout.fallback();\n\t}\n\n\tthrow createTimeoutError(timeout);\n};\n\nconst handleAbortError = (timeoutSignal, timeout, signal) => {\n\tif (timeoutSignal?.aborted) {\n\t\t// It's a timeout\n\t\tif (typeof timeout === 'object') {\n\t\t\treturn handleFallback(timeout);\n\t\t}\n\n\t\tthrow new TimeoutError(`Promise timed out after ${timeout} milliseconds`);\n\t}\n\n\t// It's a user abort\n\tthrow signal.reason;\n};\n\nexport default async function pWaitFor(condition, options = {}) {\n\tconst {\n\t\tinterval = 20,\n\t\ttimeout = Infinity,\n\t\tbefore = true,\n\t\tsignal,\n\t} = options;\n\n\tvalidateOptions(interval, timeout);\n\n\t// Create combined signal\n\tconst timeoutMs = typeof timeout === 'number' ? timeout : timeout?.milliseconds ?? Infinity;\n\tconst timeoutSignal = timeoutMs === Infinity ? undefined : AbortSignal.timeout(timeoutMs);\n\tconst combinedSignal = timeoutSignal && signal\n\t\t? AbortSignal.any([timeoutSignal, signal])\n\t\t: (timeoutSignal ?? signal);\n\n\tconst poll = async () => {\n\t\t// Handle initial delay\n\t\tif (!before) {\n\t\t\t// The timeout or the user abort can expire here, before `condition` ever runs. The race below handles it.\n\t\t\tawait sleep(interval, combinedSignal);\n\t\t}\n\n\t\t// Main loop\n\t\twhile (true) {\n\t\t\tconst value = await condition();\n\n\t\t\t// Check for resolveWith value\n\t\t\tif (typeof value === 'object' && value !== null && Object.hasOwn(value, resolveValue)) {\n\t\t\t\treturn value[resolveValue];\n\t\t\t}\n\n\t\t\tif (value === true) {\n\t\t\t\treturn;\n\t\t\t}\n\n\t\t\tif (value === false) {\n\t\t\t\t// The sleep observes the signal, so an orphaned poll stops here instead of calling `condition` again.\n\t\t\t\tawait sleep(interval, combinedSignal);\n\t\t\t\tcontinue;\n\t\t\t}\n\n\t\t\tthrow new TypeError('Expected condition to return a boolean');\n\t\t}\n\t};\n\n\tif (!combinedSignal) {\n\t\treturn poll();\n\t}\n\n\t// Check for pre-abort\n\tif (combinedSignal.aborted) {\n\t\treturn handleAbortError(timeoutSignal, timeout, signal);\n\t}\n\n\t// Race the poll against the signal so an abort settles the wait even while `condition` is pending. The pending `condition` is not cancelled.\n\tconst {promise: abortPromise, reject} = Promise.withResolvers();\n\tconst onAbort = () => {\n\t\treject(combinedSignal.reason);\n\t};\n\n\tcombinedSignal.addEventListener('abort', onAbort, {once: true});\n\n\ttry {\n\t\treturn await Promise.race([poll(), abortPromise]);\n\t} catch (error) {\n\t\t// Handle timeout vs abort vs condition error\n\t\tif (combinedSignal.aborted && error === combinedSignal.reason) {\n\t\t\treturn handleAbortError(timeoutSignal, timeout, signal);\n\t\t}\n\n\t\t// Some other error from condition()\n\t\tthrow error;\n\t} finally {\n\t\t// `once: true` only detaches the listener when the signal aborts, so a settled wait has to remove it.\n\t\tcombinedSignal.removeEventListener('abort', onAbort);\n\t}\n}\n\npWaitFor.resolveWith = value => ({[resolveValue]: value});\n\nexport class TimeoutError extends Error {\n\tconstructor(message = 'Promise timed out') {\n\t\tsuper(message);\n\t\tthis.name = 'TimeoutError';\n\t}\n}\n"
+  },
+  "elapsed_seconds": 32.458939599993755,
+  "capped_task_seconds": 180
+}

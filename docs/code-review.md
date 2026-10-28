@@ -117,3 +117,7 @@ Verification run: 2,041 Python tests plus 32 subtests passed in the full suite b
 - [Author's implementation report](https://ryanyannelli.com/blog/reviewing-every-coding-agent-edit-with-a-3b-decision-model/) is upstream evidence, not Decilist's measured result.
 
 Decilist did not train these weights. Its contribution here is a ready-to-call contract, shared runtime, integration paths, visible failure states, and reproducible evaluation. No weights or vendor implementation are committed to the repository.
+
+## Executable investigation
+
+The optional [`review investigate` workflow](review-proof.md) adds a local generative provider and a bounded Node execution host. It requires an assertion to fail before requesting a minimal edit in a separate copy, then reruns that same reproduction and existing tests. It emits a review candidate, never applies changes to the original project, and does not turn d1 advisory labels into proof. See the [historical comparisons and limitations](code-review-proof-results.md), including failed runs. This Python/CLI capability is experimental; it is separate from the read-only TypeScript/HTTP `review` contract above.

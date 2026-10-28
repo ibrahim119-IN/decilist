@@ -1,0 +1,42 @@
+{
+  "id": "P02",
+  "variant": "fixed",
+  "arm": "ordinary",
+  "utc": "2026-10-28T06:58:27.080882+00:00",
+  "specialist": null,
+  "verified_target_repair": false,
+  "result": {
+    "schema_version": "review-repair.1",
+    "status": "invalid",
+    "reason": "evidence_content",
+    "source_sha256": "27802cf836c301ed4423ba7a5a3f0f968de9a756c287ddb4c7b0700d0a924090",
+    "attempts": [
+      {
+        "hypothesis": {
+          "claim": "The pMap function does not properly handle the case where a mapper returns pMapSkip for an item at index 0, causing that item to be omitted from the result even though it should be included in order.",
+          "path": "index.js",
+          "start_line": 123,
+          "end_line": 130,
+          "evidence": "if (value === pMapSkip) {\n\t\t\tskippedIndexesMap.set(index, value);\n\t\t}\n\n\t\tresult[index] = value;",
+          "reproduction": {
+            "code": "const {default: pMap, pMapSkip} = await load('./index.js');\nconst input = [1, 2, 3];\nconst mapper = (value, index) => {\n  if (index === 0) return pMapSkip;\n  return value * 2;\n};\nconst result = await pMap(input, mapper);\nassert.deepEqual(result, [4, 6]);",
+            "filename": "reproduction.cjs"
+          }
+        },
+        "status": "invalid",
+        "reason": "evidence_content",
+        "baseline_reproduction": null,
+        "baseline_regression": null,
+        "candidate_reproduction": null,
+        "candidate_regression": null,
+        "edits": [],
+        "timings_ms": {}
+      }
+    ],
+    "candidate_workspace": null,
+    "latency_ms": 9810.475199992652,
+    "human_time_claim": "not_measured"
+  },
+  "elapsed_seconds": 9.8106373000046,
+  "capped_task_seconds": 180
+}

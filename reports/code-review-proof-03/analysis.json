@@ -1,0 +1,44 @@
+{
+  "primary_metrics": {
+    "ordinary": {
+      "verified_repairs": 0,
+      "cases": 4,
+      "capped_median_seconds": 180.0,
+      "actual_total_seconds": 296.5883801000018
+    },
+    "proof": {
+      "verified_repairs": 0,
+      "cases": 4,
+      "capped_median_seconds": 180.0,
+      "actual_total_seconds": 295.61606879999454
+    }
+  },
+  "statuses": {
+    "ordinary": {
+      "provider_error": 1,
+      "proposed_reproduction_and_existing_checks_passed": 1,
+      "provider_timeout": 6
+    },
+    "proof": {
+      "provider_error": 1,
+      "proof_and_existing_checks_passed": 1,
+      "provider_timeout": 6
+    }
+  },
+  "accepted_control_candidates": {
+    "ordinary": [
+      "H01"
+    ],
+    "proof": [
+      "H01"
+    ]
+  },
+  "confirmed_false_control_alerts": {
+    "ordinary": 1,
+    "proof": 1
+  },
+  "corrected_controls_per_arm": 4,
+  "gate_passed": false,
+  "human_time_measured": false,
+  "note": "All 16 assigned trials retained. Twelve provider timeouts; two H01 broken proposals rejected for prohibited constructor property access in error formatting. H01 fixed candidates in both arms invent a numeric timeout-message requirement not present in the supplied public contract. No verified target repairs."
+}

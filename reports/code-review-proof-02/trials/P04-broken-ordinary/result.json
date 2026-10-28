@@ -1,0 +1,42 @@
+{
+  "id": "P04",
+  "variant": "broken",
+  "arm": "ordinary",
+  "utc": "2026-10-28T06:59:29.486750+00:00",
+  "specialist": null,
+  "verified_target_repair": false,
+  "result": {
+    "schema_version": "review-repair.1",
+    "status": "invalid",
+    "reason": "evidence_content",
+    "source_sha256": "9b9b3617db3dd174c1576b566acc6d1f19e74a3aab0c9bda4f9da0f9dbe3638f",
+    "attempts": [
+      {
+        "hypothesis": {
+          "claim": "When a promise with a cancel method times out and fallback is not provided, the cancel method is called before rejecting with TimeoutError",
+          "path": "index.js",
+          "start_line": 70,
+          "end_line": 82,
+          "evidence": "if (typeof promise.cancel === 'function') {\n\t\t\tpromise.cancel();\n\t\t}\n\n\t\tif (message === false) {\n\t\t\tresolve();\n\t\t} else if (message instanceof Error) {\n\t\t\treject(message);\n\t\t} else {\n\t\t\ttimeoutError.message = message ?? `Promise timed out after ${milliseconds} milliseconds`;\n\t\t\treject(timeoutError);\n\t\t}",
+          "reproduction": {
+            "code": "const {default: pTimeout, TimeoutError} = await load('./index.js');\n\nconst cancelSpy = jest.fn();\nconst inputPromise = Promise.resolve('success');\ninputPromise.cancel = cancelSpy;\n\nconst decoratedPromise = pTimeout(inputPromise, {milliseconds: 10});\n\nsetTimeout(() => {\n  decoratedPromise.clear();\n}, 5);\n\ntry {\n  await decoratedPromise;\n} catch (error) {\n  assert.ok(error instanceof TimeoutError);\n  assert.equal(cancelSpy.mock.calls.length, 1);\n}",
+            "filename": "reproduction.cjs"
+          }
+        },
+        "status": "invalid",
+        "reason": "evidence_content",
+        "baseline_reproduction": null,
+        "baseline_regression": null,
+        "candidate_reproduction": null,
+        "candidate_regression": null,
+        "edits": [],
+        "timings_ms": {}
+      }
+    ],
+    "candidate_workspace": null,
+    "latency_ms": 3406.0829999943962,
+    "human_time_claim": "not_measured"
+  },
+  "elapsed_seconds": 3.4062493999954313,
+  "capped_task_seconds": 180
+}

@@ -1,0 +1,98 @@
+{
+  "id": "P05",
+  "variant": "broken",
+  "arm": "proof_d1",
+  "utc": "2026-10-28T07:00:05.634403+00:00",
+  "specialist": {
+    "wall_seconds": 0.685652600004687,
+    "rows": [
+      {
+        "path": "index.js",
+        "review": {
+          "schema_version": "code-review.1",
+          "status": "no_flags",
+          "advisory": true,
+          "model": "yannelli/d1-3b-code-review-decisions",
+          "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+          "rules": [
+            "error_handling_problem",
+            "type_safety_hole",
+            "unsafe_input"
+          ],
+          "threshold": 0.9,
+          "total_lines": 102,
+          "reviewed_lines": 102,
+          "windows": [
+            {
+              "start_line": 1,
+              "end_line": 80,
+              "probabilities": {
+                "error_handling_problem": 0.01590639171181471,
+                "type_safety_hole": 0.024423090054107213,
+                "unsafe_input": 0.017986209962091555
+              }
+            },
+            {
+              "start_line": 69,
+              "end_line": 102,
+              "probabilities": {
+                "error_handling_problem": 0.012431650853185818,
+                "type_safety_hole": 0.01590639171181471,
+                "unsafe_input": 0.0446808702726502
+              }
+            }
+          ],
+          "findings": [],
+          "latency_ms": 493.73359998571686,
+          "error": null
+        }
+      }
+    ]
+  },
+  "verified_target_repair": false,
+  "result": {
+    "schema_version": "review-repair.1",
+    "status": "unproven",
+    "reason": "baseline_not_assertion_failure",
+    "source_sha256": "2091965f718bcd743acd4e1c6766a9f42ea2507fc7136d598262da8d41606429",
+    "attempts": [
+      {
+        "hypothesis": {
+          "claim": "The function fails to properly handle the case where the count of eligible values is exactly met, causing it to resolve with an array that may contain more elements than requested.",
+          "path": "index.js",
+          "start_line": 56,
+          "end_line": 59,
+          "evidence": "if (--options.count === 0) {\n\t\t\tisDone = true;\n\t\t\tresolve(values);\n\t\t}",
+          "reproduction": {
+            "code": "const {default: pSome} = await load('./index.js');\nconst result = await pSome([1, 2, 3], {count: 2, filter: x => x < 3});\nassert.equal(result.length, 2);\nassert.deepStrictEqual(result, [1, 2]);",
+            "filename": "reproduction.cjs"
+          }
+        },
+        "status": "unproven",
+        "reason": "baseline_not_assertion_failure",
+        "baseline_reproduction": {
+          "outcome": "pass",
+          "assertions": 2,
+          "evidence": "reproduction completed"
+        },
+        "baseline_regression": {
+          "outcome": "pass",
+          "assertions": 11,
+          "evidence": "{\"status\":\"passed\",\"mode\":\"regression\",\"checks\":11}\n"
+        },
+        "candidate_reproduction": null,
+        "candidate_regression": null,
+        "edits": [],
+        "timings_ms": {
+          "baseline_regression": 64.17149999469984,
+          "baseline_reproduction": 91.69989998918027
+        }
+      }
+    ],
+    "candidate_workspace": null,
+    "latency_ms": 3207.2066999971867,
+    "human_time_claim": "not_measured"
+  },
+  "elapsed_seconds": 3.89314449999074,
+  "capped_task_seconds": 180
+}

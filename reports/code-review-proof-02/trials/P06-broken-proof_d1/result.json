@@ -1,0 +1,110 @@
+{
+  "id": "P06",
+  "variant": "broken",
+  "arm": "proof_d1",
+  "utc": "2026-10-28T07:00:23.955418+00:00",
+  "specialist": {
+    "wall_seconds": 0.5068286000023363,
+    "rows": [
+      {
+        "path": "index.js",
+        "review": {
+          "schema_version": "code-review.1",
+          "status": "no_flags",
+          "advisory": true,
+          "model": "yannelli/d1-3b-code-review-decisions",
+          "revision": "047a67d224c6d90767dddea3712ee8af434eaff3",
+          "rules": [
+            "error_handling_problem",
+            "type_safety_hole",
+            "unsafe_input"
+          ],
+          "threshold": 0.9,
+          "total_lines": 71,
+          "reviewed_lines": 71,
+          "windows": [
+            {
+              "start_line": 1,
+              "end_line": 71,
+              "probabilities": {
+                "error_handling_problem": 0.008577485413711986,
+                "type_safety_hole": 0.02297736991002561,
+                "unsafe_input": 0.00433150202056399
+              }
+            }
+          ],
+          "findings": [],
+          "latency_ms": 368.9705999859143,
+          "error": null
+        }
+      }
+    ]
+  },
+  "verified_target_repair": false,
+  "result": {
+    "schema_version": "review-repair.1",
+    "status": "invalid",
+    "reason": "evidence_content",
+    "source_sha256": "1902304df1718764796ba75159f073b425f5757787f5d10c6dc527397ca34519",
+    "attempts": [
+      {
+        "hypothesis": {
+          "claim": "The delay.clear() method does not properly handle the case where the timer has already fired before clear is called, leading to a potential race condition where the promise settles twice.",
+          "path": "index.js",
+          "start_line": 51,
+          "end_line": 55,
+          "evidence": "delayPromise.clear = () => {\n\tclear(timeoutId);\n\ttimeoutId = null;\n\tsettle();\n};",
+          "reproduction": {
+            "code": "const {default: delay} = await load('./index.js');\nconst signal = new AbortController().signal;\nconst promise = delay(10, {signal});\nsetTimeout(() => {\n  promise.clear();\n}, 5);\nlet settled = false;\npromise.then(() => {\n  if (settled) throw new Error('Settled twice');\n  settled = true;\n}).catch(() => {\n  if (settled) throw new Error('Settled twice');\n  settled = true;\n});\nawait new Promise(resolve => setTimeout(resolve, 20));\nif (!settled) throw new Error('Never settled');",
+            "filename": "reproduction.cjs"
+          }
+        },
+        "status": "invalid",
+        "reason": "evidence_content",
+        "baseline_reproduction": null,
+        "baseline_regression": null,
+        "candidate_reproduction": null,
+        "candidate_regression": null,
+        "edits": [],
+        "timings_ms": {}
+      },
+      {
+        "hypothesis": {
+          "claim": "The delay.range function does not properly handle the case where minimum equals maximum, which should resolve immediately with the specified value.",
+          "path": "index.js",
+          "start_line": 62,
+          "end_line": 62,
+          "evidence": "delay.range = (minimum, maximum, options) => delay(randomInteger(minimum, maximum), options);",
+          "reproduction": {
+            "code": "const {default: delay} = await load('./index.js');\nconst result = await delay.range(5, 5, {value: 'test'});\nif (result !== 'test') throw new Error('Expected test value');",
+            "filename": "reproduction.cjs"
+          }
+        },
+        "status": "unproven",
+        "reason": "baseline_not_assertion_failure",
+        "baseline_reproduction": {
+          "outcome": "pass",
+          "assertions": 0,
+          "evidence": "reproduction completed"
+        },
+        "baseline_regression": {
+          "outcome": "pass",
+          "assertions": 12,
+          "evidence": "{\"status\":\"passed\",\"mode\":\"regression\",\"checks\":12}\n"
+        },
+        "candidate_reproduction": null,
+        "candidate_regression": null,
+        "edits": [],
+        "timings_ms": {
+          "baseline_regression": 57.594199999584816,
+          "baseline_reproduction": 57.38140000903513
+        }
+      }
+    ],
+    "candidate_workspace": null,
+    "latency_ms": 4255.800400002045,
+    "human_time_claim": "not_measured"
+  },
+  "elapsed_seconds": 4.762908000004245,
+  "capped_task_seconds": 180
+}

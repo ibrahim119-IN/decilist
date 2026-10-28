@@ -1,0 +1,137 @@
+{
+  "profile": "ESLint 10.13.0 / @eslint/js 10.0.1 recommended JS; original module type; declared Node/browser globals; inline config disabled",
+  "rows": [
+    {
+      "id": "P01",
+      "variant": "broken",
+      "latency_ms": 2422.3713,
+      "diagnostics": [
+        {
+          "path": "index.js",
+          "ruleId": "no-empty",
+          "message": "Empty block statement.",
+          "line": 321,
+          "endLine": 321,
+          "column": 10,
+          "severity": 2
+        }
+      ]
+    },
+    {
+      "id": "P01",
+      "variant": "fixed",
+      "latency_ms": 18.588300000000345,
+      "diagnostics": [
+        {
+          "path": "index.js",
+          "ruleId": "no-empty",
+          "message": "Empty block statement.",
+          "line": 322,
+          "endLine": 322,
+          "column": 10,
+          "severity": 2
+        }
+      ]
+    },
+    {
+      "id": "P02",
+      "variant": "broken",
+      "latency_ms": 38.960399999999936,
+      "diagnostics": []
+    },
+    {
+      "id": "P02",
+      "variant": "fixed",
+      "latency_ms": 43.28510000000006,
+      "diagnostics": []
+    },
+    {
+      "id": "P03",
+      "variant": "broken",
+      "latency_ms": 39.284999999999854,
+      "diagnostics": [
+        {
+          "path": "index.js",
+          "ruleId": "no-undef",
+          "message": "'DOMException' is not defined.",
+          "line": 10,
+          "endLine": 10,
+          "column": 57,
+          "severity": 2
+        }
+      ]
+    },
+    {
+      "id": "P03",
+      "variant": "fixed",
+      "latency_ms": 14.054299999999785,
+      "diagnostics": [
+        {
+          "path": "index.js",
+          "ruleId": "no-undef",
+          "message": "'DOMException' is not defined.",
+          "line": 10,
+          "endLine": 10,
+          "column": 57,
+          "severity": 2
+        }
+      ]
+    },
+    {
+      "id": "P04",
+      "variant": "broken",
+      "latency_ms": 15.947499999999309,
+      "diagnostics": [
+        {
+          "path": "index.js",
+          "ruleId": "no-undef",
+          "message": "'DOMException' is not defined.",
+          "line": 12,
+          "endLine": 12,
+          "column": 57,
+          "severity": 2
+        }
+      ]
+    },
+    {
+      "id": "P04",
+      "variant": "fixed",
+      "latency_ms": 22.486399999999776,
+      "diagnostics": [
+        {
+          "path": "index.js",
+          "ruleId": "no-undef",
+          "message": "'DOMException' is not defined.",
+          "line": 12,
+          "endLine": 12,
+          "column": 57,
+          "severity": 2
+        }
+      ]
+    },
+    {
+      "id": "P05",
+      "variant": "broken",
+      "latency_ms": 16.319800000000214,
+      "diagnostics": []
+    },
+    {
+      "id": "P05",
+      "variant": "fixed",
+      "latency_ms": 4.524599999999737,
+      "diagnostics": []
+    },
+    {
+      "id": "P06",
+      "variant": "broken",
+      "latency_ms": 28.43000000000029,
+      "diagnostics": []
+    },
+    {
+      "id": "P06",
+      "variant": "fixed",
+      "latency_ms": 17.919400000000678,
+      "diagnostics": []
+    }
+  ]
+}

@@ -1,0 +1,235 @@
+* Getting build dependencies for wheel...
+running egg_info
+writing src\decilist.egg-info\PKG-INFO
+writing dependency_links to src\decilist.egg-info\dependency_links.txt
+writing entry points to src\decilist.egg-info\entry_points.txt
+writing requirements to src\decilist.egg-info\requires.txt
+writing top-level names to src\decilist.egg-info\top_level.txt
+reading manifest file 'src\decilist.egg-info\SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+adding license file 'LICENSE'
+adding license file 'src/decilist/data/code_review_LICENSE.txt'
+adding license file 'src/decilist/data/code_review_NOTICE.txt'
+writing manifest file 'src\decilist.egg-info\SOURCES.txt'
+* Building wheel...
+running bdist_wheel
+running build
+running build_py
+copying src\decilist\cli.py -> build\lib\decilist
+copying src\decilist\client.py -> build\lib\decilist
+copying src\decilist\code_review.py -> build\lib\decilist
+copying src\decilist\code_review_cli.py -> build\lib\decilist
+copying src\decilist\contracts.py -> build\lib\decilist
+copying src\decilist\demo.py -> build\lib\decilist
+copying src\decilist\engine.py -> build\lib\decilist
+copying src\decilist\evaluation.py -> build\lib\decilist
+copying src\decilist\llama_cpp.py -> build\lib\decilist
+copying src\decilist\providers.py -> build\lib\decilist
+copying src\decilist\review_repair.py -> build\lib\decilist
+copying src\decilist\review_repair_cli.py -> build\lib\decilist
+copying src\decilist\review_repair_local.py -> build\lib\decilist
+copying src\decilist\runtime.py -> build\lib\decilist
+copying src\decilist\server.py -> build\lib\decilist
+copying src\decilist\triage.py -> build\lib\decilist
+copying src\decilist\triage_actions.py -> build\lib\decilist
+copying src\decilist\triage_assistant.py -> build\lib\decilist
+copying src\decilist\triage_context.py -> build\lib\decilist
+copying src\decilist\triage_context_v3.py -> build\lib\decilist
+copying src\decilist\triage_context_v4.py -> build\lib\decilist
+copying src\decilist\triage_context_v5.py -> build\lib\decilist
+copying src\decilist\triage_context_v6.py -> build\lib\decilist
+copying src\decilist\triage_diagnostic.py -> build\lib\decilist
+copying src\decilist\triage_evidence.py -> build\lib\decilist
+copying src\decilist\triage_hypothesis_v4.py -> build\lib\decilist
+copying src\decilist\triage_hypothesis_v5.py -> build\lib\decilist
+copying src\decilist\triage_hypothesis_v6.py -> build\lib\decilist
+copying src\decilist\triage_inspect.py -> build\lib\decilist
+copying src\decilist\triage_lines_v6.py -> build\lib\decilist
+copying src\decilist\triage_line_edits_v6.py -> build\lib\decilist
+copying src\decilist\triage_line_hypothesis_v6.py -> build\lib\decilist
+copying src\decilist\triage_module_literals_v8.py -> build\lib\decilist
+copying src\decilist\triage_setup.py -> build\lib\decilist
+copying src\decilist\triage_test_worker_v4.py -> build\lib\decilist
+copying src\decilist\triage_trace_v4.py -> build\lib\decilist
+copying src\decilist\triage_trace_v5.py -> build\lib\decilist
+copying src\decilist\triage_v3.py -> build\lib\decilist
+copying src\decilist\triage_v4.py -> build\lib\decilist
+copying src\decilist\triage_v5.py -> build\lib\decilist
+copying src\decilist\triage_v6.py -> build\lib\decilist
+copying src\decilist\triage_verify_v4.py -> build\lib\decilist
+copying src\decilist\triage_verify_v5.py -> build\lib\decilist
+copying src\decilist\triage_verify_v6.py -> build\lib\decilist
+copying src\decilist\web.py -> build\lib\decilist
+copying src\decilist\__init__.py -> build\lib\decilist
+copying src\decilist\__main__.py -> build\lib\decilist
+running egg_info
+writing src\decilist.egg-info\PKG-INFO
+writing dependency_links to src\decilist.egg-info\dependency_links.txt
+writing entry points to src\decilist.egg-info\entry_points.txt
+writing requirements to src\decilist.egg-info\requires.txt
+writing top-level names to src\decilist.egg-info\top_level.txt
+reading manifest file 'src\decilist.egg-info\SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+adding license file 'LICENSE'
+adding license file 'src/decilist/data/code_review_LICENSE.txt'
+adding license file 'src/decilist/data/code_review_NOTICE.txt'
+writing manifest file 'src\decilist.egg-info\SOURCES.txt'
+copying src\decilist\py.typed -> build\lib\decilist
+copying src\decilist\static\app.js -> build\lib\decilist\static
+copying src\decilist\static\demo.html -> build\lib\decilist\static
+copying src\decilist\static\demo.js -> build\lib\decilist\static
+copying src\decilist\static\index.html -> build\lib\decilist\static
+copying src\decilist\static\style.css -> build\lib\decilist\static
+copying src\decilist\data\code_review_LICENSE.txt -> build\lib\decilist\data
+copying src\decilist\data\code_review_NOTICE.txt -> build\lib\decilist\data
+copying src\decilist\data\code_review_questions.json -> build\lib\decilist\data
+copying src\decilist\data\review_proof_runner.mjs -> build\lib\decilist\data
+copying src\decilist\data\code_review_LICENSE.txt -> build\lib\decilist\data
+copying src\decilist\data\code_review_NOTICE.txt -> build\lib\decilist\data
+copying src\decilist\data\code_review_questions.json -> build\lib\decilist\data
+copying src\decilist\data\review_proof_runner.mjs -> build\lib\decilist\data
+copying src\decilist\static\app.js -> build\lib\decilist\static
+copying src\decilist\static\demo.html -> build\lib\decilist\static
+copying src\decilist\static\demo.js -> build\lib\decilist\static
+copying src\decilist\static\index.html -> build\lib\decilist\static
+copying src\decilist\static\style.css -> build\lib\decilist\static
+warning: build_py: byte-compiling is disabled, skipping.
+
+installing to build\bdist.win-amd64\wheel
+running install
+running install_lib
+creating build\bdist.win-amd64\wheel
+creating build\bdist.win-amd64\wheel\decilist
+copying build\lib\decilist\cli.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\client.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\code_review.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\code_review_cli.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\contracts.py -> build\bdist.win-amd64\wheel\.\decilist
+creating build\bdist.win-amd64\wheel\decilist\data
+copying build\lib\decilist\data\code_review_LICENSE.txt -> build\bdist.win-amd64\wheel\.\decilist\data
+copying build\lib\decilist\data\code_review_NOTICE.txt -> build\bdist.win-amd64\wheel\.\decilist\data
+copying build\lib\decilist\data\code_review_questions.json -> build\bdist.win-amd64\wheel\.\decilist\data
+copying build\lib\decilist\data\review_proof_runner.mjs -> build\bdist.win-amd64\wheel\.\decilist\data
+copying build\lib\decilist\demo.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\engine.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\evaluation.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\llama_cpp.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\providers.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\py.typed -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\review_repair.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\review_repair_cli.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\review_repair_local.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\runtime.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\server.py -> build\bdist.win-amd64\wheel\.\decilist
+creating build\bdist.win-amd64\wheel\decilist\static
+copying build\lib\decilist\static\app.js -> build\bdist.win-amd64\wheel\.\decilist\static
+copying build\lib\decilist\static\demo.html -> build\bdist.win-amd64\wheel\.\decilist\static
+copying build\lib\decilist\static\demo.js -> build\bdist.win-amd64\wheel\.\decilist\static
+copying build\lib\decilist\static\index.html -> build\bdist.win-amd64\wheel\.\decilist\static
+copying build\lib\decilist\static\style.css -> build\bdist.win-amd64\wheel\.\decilist\static
+copying build\lib\decilist\triage.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_actions.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_assistant.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_context.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_context_v3.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_context_v4.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_context_v5.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_context_v6.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_diagnostic.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_evidence.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_hypothesis_v4.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_hypothesis_v5.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_hypothesis_v6.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_inspect.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_lines_v6.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_line_edits_v6.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_line_hypothesis_v6.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_module_literals_v8.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_setup.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_test_worker_v4.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_trace_v4.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_trace_v5.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_v3.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_v4.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_v5.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_v6.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_verify_v4.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_verify_v5.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\triage_verify_v6.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\web.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\__init__.py -> build\bdist.win-amd64\wheel\.\decilist
+copying build\lib\decilist\__main__.py -> build\bdist.win-amd64\wheel\.\decilist
+warning: install_lib: byte-compiling is disabled, skipping.
+
+running install_egg_info
+Copying src\decilist.egg-info to build\bdist.win-amd64\wheel\.\decilist-0.1.0a1-py3.12.egg-info
+running install_scripts
+creating build\bdist.win-amd64\wheel\decilist-0.1.0a1.dist-info\WHEEL
+creating 'L:\CodexData\Decilist\work\code-review-proof-03\packages\.tmp-hmd9zfvs\decilist-0.1.0a1-py3-none-any.whl' and adding 'build\bdist.win-amd64\wheel' to it
+adding 'decilist/__init__.py'
+adding 'decilist/__main__.py'
+adding 'decilist/cli.py'
+adding 'decilist/client.py'
+adding 'decilist/code_review.py'
+adding 'decilist/code_review_cli.py'
+adding 'decilist/contracts.py'
+adding 'decilist/demo.py'
+adding 'decilist/engine.py'
+adding 'decilist/evaluation.py'
+adding 'decilist/llama_cpp.py'
+adding 'decilist/providers.py'
+adding 'decilist/py.typed'
+adding 'decilist/review_repair.py'
+adding 'decilist/review_repair_cli.py'
+adding 'decilist/review_repair_local.py'
+adding 'decilist/runtime.py'
+adding 'decilist/server.py'
+adding 'decilist/triage.py'
+adding 'decilist/triage_actions.py'
+adding 'decilist/triage_assistant.py'
+adding 'decilist/triage_context.py'
+adding 'decilist/triage_context_v3.py'
+adding 'decilist/triage_context_v4.py'
+adding 'decilist/triage_context_v5.py'
+adding 'decilist/triage_context_v6.py'
+adding 'decilist/triage_diagnostic.py'
+adding 'decilist/triage_evidence.py'
+adding 'decilist/triage_hypothesis_v4.py'
+adding 'decilist/triage_hypothesis_v5.py'
+adding 'decilist/triage_hypothesis_v6.py'
+adding 'decilist/triage_inspect.py'
+adding 'decilist/triage_line_edits_v6.py'
+adding 'decilist/triage_line_hypothesis_v6.py'
+adding 'decilist/triage_lines_v6.py'
+adding 'decilist/triage_module_literals_v8.py'
+adding 'decilist/triage_setup.py'
+adding 'decilist/triage_test_worker_v4.py'
+adding 'decilist/triage_trace_v4.py'
+adding 'decilist/triage_trace_v5.py'
+adding 'decilist/triage_v3.py'
+adding 'decilist/triage_v4.py'
+adding 'decilist/triage_v5.py'
+adding 'decilist/triage_v6.py'
+adding 'decilist/triage_verify_v4.py'
+adding 'decilist/triage_verify_v5.py'
+adding 'decilist/triage_verify_v6.py'
+adding 'decilist/web.py'
+adding 'decilist/data/code_review_LICENSE.txt'
+adding 'decilist/data/code_review_NOTICE.txt'
+adding 'decilist/data/code_review_questions.json'
+adding 'decilist/data/review_proof_runner.mjs'
+adding 'decilist/static/app.js'
+adding 'decilist/static/demo.html'
+adding 'decilist/static/demo.js'
+adding 'decilist/static/index.html'
+adding 'decilist/static/style.css'
+adding 'decilist-0.1.0a1.dist-info/licenses/LICENSE'
+adding 'decilist-0.1.0a1.dist-info/licenses/src/decilist/data/code_review_LICENSE.txt'
+adding 'decilist-0.1.0a1.dist-info/licenses/src/decilist/data/code_review_NOTICE.txt'
+adding 'decilist-0.1.0a1.dist-info/METADATA'
+adding 'decilist-0.1.0a1.dist-info/WHEEL'
+adding 'decilist-0.1.0a1.dist-info/entry_points.txt'
+adding 'decilist-0.1.0a1.dist-info/top_level.txt'
+adding 'decilist-0.1.0a1.dist-info/RECORD'
+removing build\bdist.win-amd64\wheel
+Successfully built decilist-0.1.0a1-py3-none-any.whl

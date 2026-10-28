@@ -1,0 +1,49 @@
+{
+  "id": "P04",
+  "variant": "fixed",
+  "arm": "ordinary",
+  "utc": "2026-10-28T06:59:54.188631+00:00",
+  "specialist": null,
+  "verified_target_repair": false,
+  "result": {
+    "schema_version": "review-repair.1",
+    "status": "invalid",
+    "reason": "edit_range",
+    "source_sha256": "5b19904e683ecc975786841b78678f26a948f8f528664796703183758ee16179",
+    "attempts": [
+      {
+        "hypothesis": {
+          "claim": "When milliseconds is Infinity, the timeout timer is still created and will fire after the maximumDelay, causing unexpected behavior.",
+          "path": "index.js",
+          "start_line": 56,
+          "end_line": 87,
+          "evidence": "if (milliseconds > maximumDelay) {\n\t\t\treturn;\n\t\t}\n\n\t\t// We create the error outside of `setTimeout` to preserve the stack trace.\n\t\tconst timeoutError = new TimeoutError();\n\n\t\t// `.call(undefined, ...)` is needed for custom timers to avoid context issues\n\t\ttimer = customTimers.setTimeout.call(undefined, () => {",
+          "reproduction": {
+            "code": "const {default: pTimeout, TimeoutError} = await load('./index.js');\nconst promise = new Promise(() => {});\nconst decorated = pTimeout(promise, { milliseconds: Infinity });\n\n// The timer should not be set up for Infinity\nassert.equal(decorated.clear, undefined);",
+            "filename": "reproduction.cjs"
+          }
+        },
+        "status": "invalid",
+        "reason": "edit_range",
+        "baseline_reproduction": null,
+        "baseline_regression": {
+          "outcome": "pass",
+          "assertions": 25,
+          "evidence": "{\"status\":\"passed\",\"mode\":\"regression\",\"checks\":25}\n"
+        },
+        "candidate_reproduction": null,
+        "candidate_regression": null,
+        "edits": [],
+        "timings_ms": {
+          "baseline_regression": 60.95610000193119,
+          "repair": 3010.2224000002025
+        }
+      }
+    ],
+    "candidate_workspace": null,
+    "latency_ms": 6192.682300010347,
+    "human_time_claim": "not_measured"
+  },
+  "elapsed_seconds": 6.192870500002755,
+  "capped_task_seconds": 180
+}

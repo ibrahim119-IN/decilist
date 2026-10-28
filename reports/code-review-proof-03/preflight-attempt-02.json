@@ -1,0 +1,339 @@
+{
+  "schema_version": "review-proof-preflight.1",
+  "completed_at": "2026-10-28T07:09:30.940839+00:00",
+  "node": "v22.23.1",
+  "catalog_sha256": "e431002511d14c24434847e3b68dbf83565199f205dca2c3c117b304a666b81e",
+  "probe_sha256": "9976e5d6f6969ebb75b6cc847bbe29f63ce98d9ab4f1a8029b011be90acd8805",
+  "preparer_sha256": "1ffca9a5e83bd6c78c1969a5edef42d0265b9822579b1c125937afc607fb4d7f",
+  "results": [
+    {
+      "id": "H01",
+      "state": "broken",
+      "mode": "regression",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_holdout_probe.mjs",
+        "H01",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H01\\broken",
+        "regression"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "regression",
+        "checks": 27
+      },
+      "matches_expected": true,
+      "log_sha256": "188ca0f5ec277f7019e757ac88c4eb694d5526c7b89a0a99c186ceed4173d980"
+    },
+    {
+      "id": "H01",
+      "state": "broken",
+      "mode": "target",
+      "expected": "failed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_holdout_probe.mjs",
+        "H01",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H01\\broken",
+        "target"
+      ],
+      "returncode": 1,
+      "observed": {
+        "status": "invalid-probe-output"
+      },
+      "matches_expected": false,
+      "log_sha256": "aeb9009d9f4ef581c1891f840dfec6e444aa0c1b7f838a1aa7569d65d94360d8"
+    },
+    {
+      "id": "H01",
+      "state": "fixed",
+      "mode": "regression",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_holdout_probe.mjs",
+        "H01",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H01\\fixed",
+        "regression"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "regression",
+        "checks": 27
+      },
+      "matches_expected": true,
+      "log_sha256": "188ca0f5ec277f7019e757ac88c4eb694d5526c7b89a0a99c186ceed4173d980"
+    },
+    {
+      "id": "H01",
+      "state": "fixed",
+      "mode": "target",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_holdout_probe.mjs",
+        "H01",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H01\\fixed",
+        "target"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "target",
+        "checks": 10
+      },
+      "matches_expected": true,
+      "log_sha256": "ee02307927a49ab0eafc8cd446277e9344843d8a9954545320166cf8216d3c83"
+    },
+    {
+      "id": "H02",
+      "state": "broken",
+      "mode": "regression",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_holdout_probe.mjs",
+        "H02",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H02\\broken",
+        "regression"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "regression",
+        "checks": 15
+      },
+      "matches_expected": true,
+      "log_sha256": "f984242eea952f34121040def8f6f13b1490847b4c55ce1af56cf9557547cfbe"
+    },
+    {
+      "id": "H02",
+      "state": "broken",
+      "mode": "target",
+      "expected": "failed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_holdout_probe.mjs",
+        "H02",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H02\\broken",
+        "target"
+      ],
+      "returncode": 1,
+      "observed": {
+        "status": "invalid-probe-output"
+      },
+      "matches_expected": false,
+      "log_sha256": "3a612597498541fd18388dc9a8ad3c610b78df9a7dd7060b3b90d4699b55b2c2"
+    },
+    {
+      "id": "H02",
+      "state": "fixed",
+      "mode": "regression",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_holdout_probe.mjs",
+        "H02",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H02\\fixed",
+        "regression"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "regression",
+        "checks": 15
+      },
+      "matches_expected": true,
+      "log_sha256": "f984242eea952f34121040def8f6f13b1490847b4c55ce1af56cf9557547cfbe"
+    },
+    {
+      "id": "H02",
+      "state": "fixed",
+      "mode": "target",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_holdout_probe.mjs",
+        "H02",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H02\\fixed",
+        "target"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "target",
+        "checks": 9
+      },
+      "matches_expected": true,
+      "log_sha256": "f55f12fa0d8b51be3802f222470ac72deaa3344d89d8037f272c645ba8369c67"
+    },
+    {
+      "id": "H03",
+      "state": "broken",
+      "mode": "regression",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_holdout_probe.mjs",
+        "H03",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H03\\broken",
+        "regression"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "regression",
+        "checks": 26
+      },
+      "matches_expected": true,
+      "log_sha256": "860234ea3f47e13608fa694ca0bbc4300de676f939751d4d73dfbf4a187e6a04"
+    },
+    {
+      "id": "H03",
+      "state": "broken",
+      "mode": "target",
+      "expected": "failed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_holdout_probe.mjs",
+        "H03",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H03\\broken",
+        "target"
+      ],
+      "returncode": 1,
+      "observed": {
+        "status": "invalid-probe-output"
+      },
+      "matches_expected": false,
+      "log_sha256": "58cc0ce292e824556e411f9efaee40a30a206ae766ff7a6857c6a8fcd4154e48"
+    },
+    {
+      "id": "H03",
+      "state": "fixed",
+      "mode": "regression",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_holdout_probe.mjs",
+        "H03",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H03\\fixed",
+        "regression"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "regression",
+        "checks": 26
+      },
+      "matches_expected": true,
+      "log_sha256": "cba998f00a19167a48915c57a551913f10e843e8dba9a234b446307b6289a812"
+    },
+    {
+      "id": "H03",
+      "state": "fixed",
+      "mode": "target",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_holdout_probe.mjs",
+        "H03",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H03\\fixed",
+        "target"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "target",
+        "checks": 9
+      },
+      "matches_expected": true,
+      "log_sha256": "f55f12fa0d8b51be3802f222470ac72deaa3344d89d8037f272c645ba8369c67"
+    },
+    {
+      "id": "H04",
+      "state": "broken",
+      "mode": "regression",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_holdout_probe.mjs",
+        "H04",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H04\\broken",
+        "regression"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "regression",
+        "checks": 24
+      },
+      "matches_expected": true,
+      "log_sha256": "154b0b36eb15e8da4e5978bfd25bc4a4d370badfd11c71c6b2aa7df047e787d4"
+    },
+    {
+      "id": "H04",
+      "state": "broken",
+      "mode": "target",
+      "expected": "failed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_holdout_probe.mjs",
+        "H04",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H04\\broken",
+        "target"
+      ],
+      "returncode": 1,
+      "observed": {
+        "status": "invalid-probe-output"
+      },
+      "matches_expected": false,
+      "log_sha256": "a021309bfa00bb3d4291257ae8464b460313c19aa015d91cce6fb568be69a907"
+    },
+    {
+      "id": "H04",
+      "state": "fixed",
+      "mode": "regression",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_holdout_probe.mjs",
+        "H04",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H04\\fixed",
+        "regression"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "regression",
+        "checks": 24
+      },
+      "matches_expected": true,
+      "log_sha256": "154b0b36eb15e8da4e5978bfd25bc4a4d370badfd11c71c6b2aa7df047e787d4"
+    },
+    {
+      "id": "H04",
+      "state": "fixed",
+      "mode": "target",
+      "expected": "passed",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "L:\\CodexData\\Decilist\\outputs\\decilist\\benchmarks\\code_review_proof_holdout_probe.mjs",
+        "H04",
+        "L:\\CodexData\\Decilist\\work\\code-review-proof-03\\corpus\\H04\\fixed",
+        "target"
+      ],
+      "returncode": 0,
+      "observed": {
+        "status": "passed",
+        "mode": "target",
+        "checks": 16
+      },
+      "matches_expected": true,
+      "log_sha256": "f16242463f60a3632bb96f2f0824ca8f90e20345d5b1d5ece0bedb8a7be07bca"
+    }
+  ],
+  "all_expected": false
+}

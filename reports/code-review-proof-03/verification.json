@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-28",
+  "final_focused": {
+    "command": "python -m pytest -q tests/test_review_proof_integration.py packages/python/tests/test_review_repair.py packages/python/tests/test_review_repair_local.py packages/python/tests/test_code_review.py",
+    "passed": 180,
+    "failed": 0,
+    "seconds": 21.89,
+    "log": "final-targeted-tests.log"
+  },
+  "earlier_full_suite": {
+    "passed": 2160,
+    "failed": 1,
+    "subtests_passed": 32,
+    "seconds": 2555.52,
+    "failed_test": "packages/python/tests/test_triage_verify_v4.py::test_timeout_also_terminates_descendants",
+    "observation": "Timeout before descendant readiness marker; stdout empty. Does not establish that a spawned child survived.",
+    "log": "../code-review-proof-02/full-tests.log",
+    "rerun": {
+      "passed": 1,
+      "seconds": 4.87,
+      "log": "old-timeout-test-rerun.log"
+    },
+    "not_repeated_after_latest_development_changes": true
+  },
+  "node_syntax_checks_passed": [
+    "packages/python/src/decilist/data/review_proof_runner.mjs",
+    "benchmarks/code_review_proof_probe.mjs",
+    "benchmarks/code_review_proof_holdout_probe.mjs",
+    "benchmarks/code-review-lint/proof.mjs"
+  ],
+  "wheel_build": "passed; no-isolation; final wheel source/runner bytes checked against checkout",
+  "installed_live_example": "installed-demo/verification.json",
+  "human_time_measured": false,
+  "fresh_historical_gate_passed": false,
+  "scope": "Trusted selected native JavaScript modules and Node tests. No hostile-code OS sandbox, human study, production auto-apply, or new npm/PyPI release."
+}

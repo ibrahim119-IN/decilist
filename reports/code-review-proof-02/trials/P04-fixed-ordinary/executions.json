@@ -1,0 +1,15 @@
+[
+  {
+    "stage": "regression",
+    "workspace": "L:\\CodexData\\Decilist\\work\\code-review-proof-02\\corpus\\P04\\trial-work\\P04-fixed-ordinary\\review-repair-baseline-cyfqqxz9",
+    "passed": true,
+    "returncode": 0,
+    "observed": {
+      "status": "passed",
+      "mode": "regression",
+      "checks": 25
+    },
+    "output": "{\"status\":\"passed\",\"mode\":\"regression\",\"checks\":25}\n",
+    "seconds": 0.06024799999431707
+  }
+]
