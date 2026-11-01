@@ -12,7 +12,7 @@ The example is not tied to an industry. An existing text application already kno
 6. Open the optional Playground. Try input → inspect answer → correct/save local test → rerun → copy integration in the same workspace. Advanced details remain collapsed until useful.
 7. Show the measured report with coverage and errors. Distinguish this app example from the separate request-text evaluation task. Do not use baseline accuracy as evidence of model intelligence.
 
-The complete UX and verification scope is recorded in [UI experience](ui-experience.md). Before the November 1 presentation, rehearse the actual selected provider offline after dependencies and weights are cached, and keep the clearly labelled baseline as a fallback demonstration.
+The complete UX and verification scope is recorded in [UI experience](ui-experience.md). To show it offline, cache the dependencies and weights first and try the selected provider without a network.
 
 ## Additional foundation checks: workflow gate
 

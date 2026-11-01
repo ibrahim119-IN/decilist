@@ -1,185 +1,353 @@
-# decilist
+<p align="center">
+  <img src="docs/assets/hero.svg" alt="Decilist: put a typed decision inside your app. Open-source SDK for Python, TypeScript and HTTP. You bring the model." width="100%">
+</p>
 
-**Build decisions you can test, compare, and run on your own machine.**
+<p align="center">
+  <a href="https://github.com/ibrahim119-IN/decilist/actions/workflows/ci.yml"><img src="https://github.com/ibrahim119-IN/decilist/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-b9f48c?labelColor=142023" alt="License: Apache-2.0"></a>
+  <img src="https://img.shields.io/badge/status-alpha-e8b85c?labelColor=142023" alt="Status: alpha">
+  <img src="https://img.shields.io/badge/python-3.11%2B-9cafb2?labelColor=142023" alt="Python 3.11 or newer">
+  <img src="https://img.shields.io/badge/node-22%2B-9cafb2?labelColor=142023" alt="Node 22 or newer">
+</p>
 
-Decilist is an early, open-source Decision Intelligence SDK. Ask a bounded question directly in your code, validate its answer, apply a policy, and evaluate the result through the same contract across providers. It is local-first and model-agnostic by design. No decision registration or Playground session is required; reusable decision definitions are an optional future convenience.
+Decilist lets your app ask a small question, get back one of the answers you allowed, and know clearly when there is no answer. It works the same way from Python, TypeScript and plain HTTP, and it runs on your own machine.
 
-**Status: measured local alpha.** Direct SDK calls, an explicit runtime launcher, packaged UI, and reproducible evaluation are implemented. Liquid d1-3B runs locally on the tested Windows RTX 3090. Its general held-out evaluation exposed substantial decision errors: 66.7% accepted classification accuracy and 60% overall coverage. See the [actual model results and failures](docs/model-validation.md). The optional `decilist debug` assistant runs existing Python tests, gathers executed code, and verifies a proposed repair in a separate project copy. In the latest three historical HTTPX cases, one initial repair succeeded automatically; median agent repair time was 61.6s assisted versus 44.8s ordinary. The overall improvement gate failed; human time saving remains unmeasured. See the [complete results and limitations](docs/triage-natural-v7-results.md) and [terminal/Python quickstart](docs/triage-v6-quickstart.md). The default `demo` provider remains labelled deterministic rules. OpenAI Decisions is planned. Packages are not published to npm or PyPI.
+> [!IMPORTANT]
+> **Decilist is an SDK, not a model.** Installing it gives you the contract, the policies and the checks. It includes fixed demo rules so you can test your wiring, but those rules aren't AI. For real decisions, you still need to download a model or bring your own.
 
-![Normal-app example using the local model](reports/ui/demo-liquid.png)
+## What's in the box
 
-Current repair development adds observed producer retrieval and checked module-literal edits. Its replay of the same three exposed historical cases produced no automatic protected repairs; see the [V8 development failures and scope](docs/triage-v8-development.md). These capabilities remain experimental.
+![Your app asks the Decilist SDK a question. The SDK asks a provider and checks the answer. Demo rules are included. Your own model is wrapped. LiquidAI/d1-3B is a separate download.](docs/assets/sdk-and-model.svg)
 
-## Why this exists
+| Provider | What it is | What you need |
+|---|---|---|
+| Demo rules | Fixed rules for one example workflow. Use them to test your wiring. | Nothing more |
+| Your function or model | Any local code that returns probabilities | Your code, wrapped with `FunctionProvider` |
+| [`LiquidAI/d1-3B`](https://huggingface.co/LiquidAI/d1-3B) | A decision model that runs on your machine | A separate 6.25 GB download. Tested on an RTX 3090 |
+| OpenAI Decisions | Cloud provider | Planned, not built |
 
-The optional [local JS/TS reviewer](docs/code-review.md) integrates an existing specialist model with `sdk.review(existingSource, { task })`, Python, HTTP, and a terminal command. It returns advisory findings with explicit coverage and failure states. In an 18-snippet authored pilot it detected all nine target issues and flagged one valid snippet, versus three issues detected by the selected ESLint configuration. This is preliminary quality evidence, not a developer time-saving measurement. No new form or decision definition is required.
+## Try it in one minute
 
-The subsequent [eight-defect historical trial](docs/code-review-natural-results.md) on p-limit, p-retry, Axios and Fastify **failed the time-saving gate**. Ordinary and assisted local-model review each passed the initial protected checks on one defect, but both repairs introduced other behavioral regressions. No repair was accepted after the additional audit. Confirmed false runtime claims appeared on 4/8 corrected controls without assistance and 5/8 with it. This experiment does not support automatic fixes or a human productivity claim; the specialist remains optional and advisory.
-
-The experimental [`review investigate` command](docs/review-proof.md) now runs a proposed reproduction before editing, then validates a small isolated candidate against the identical reproduction and existing Node tests. It retains a patch for review and leaves the original project unchanged. [Fresh historical comparisons](docs/code-review-proof-results.md) retain failed attempts and timeouts. A model-written assertion can invent a requirement, so passing these checks is not proof of contract correctness or developer time saved.
-
-Calling a model is one step. A developer still needs to decide what counts as a valid answer, when to abstain, which fallback may receive the input, and whether a new provider actually improves their workload.
-
-Decilist's intended value is that complete development loop:
-
-- `choose`, `predict`, and `score` share a versioned contract across Python, TypeScript, and HTTP.
-- Runtime checks reject unknown categories, invalid distributions, and inconsistent answers.
-- A local-only policy blocks remote providers before inference. Low confidence, invalid output, errors, and timeouts are visible in the attempt trace.
-- Evaluation keeps accuracy, coverage, abstention, and latency separate. Unknown cost stays `null`.
-- The same domain-neutral example runs in code and a local Playground.
-
-This does not introduce a new trained model or claim a speed advantage over vendor APIs. Differentiation must be demonstrated by lower integration effort and better measured application decisions. See [architecture](docs/architecture.md) and [evaluation methodology](docs/evaluation.md).
-
-## Start locally
-
-For Python and the packaged UI, install Python 3.12 (minimum 3.11) and Git. Clone the repository and create a local environment:
+You need Python 3.11 or newer and Git. You don't need a GPU or a model.
 
 ```bash
-git clone https://github.com/ibrahim119-IN/decilist.git
-cd decilist
 python -m venv .venv
 ```
 
-Activate `.venv` (`.\.venv\Scripts\Activate.ps1` on Windows PowerShell, `source .venv/bin/activate` on Ubuntu), then install and start:
+Activate the environment. On Windows PowerShell:
 
-```bash
-python -m pip install "./packages/python[server]"
-python -m decilist runtime start --provider demo
+```powershell
+.\.venv\Scripts\Activate.ps1
 ```
 
-If activation is unavailable, replace `python` with `.\.venv\Scripts\python.exe` on Windows or `.venv/bin/python` on Ubuntu.
+On macOS or Linux:
 
-Open **http://127.0.0.1:8765/demo** for a normal request-composer example, or **http://127.0.0.1:8765/** for the optional Playground. Keep this terminal open; Ctrl+C stops the runtime. The app asks one focused clarification in place, preserves its known context, and prepares a local request preview. It does not generate the requested summary or execute external actions. This loopback development server has no production authentication, API key, external fonts, analytics, or cloud inference. Dependency installation requires internet access; the default demo does not.
+```bash
+source .venv/bin/activate
+```
 
-## Python SDK
+Then install from GitHub. Decilist isn't on PyPI or npm yet.
 
-Connect once and use direct calls. Run this example in another terminal using the same environment and the running rules runtime:
+```bash
+python -m pip install "decilist[server] @ git+https://github.com/ibrahim119-IN/decilist.git#subdirectory=packages/python"
+```
+
+Save this as `app.py`:
 
 ```python
 import asyncio
-from decilist import Client
+import json
+
+from decilist import Decilist, FunctionProvider
+
+
+def my_rules(question):
+    order = json.loads(question.state)
+    winner = "refund" if order["days_since_purchase"] <= 30 else "escalate"
+    return {"refund": float(winner == "refund"), "escalate": float(winner == "escalate")}
+
+
+decisions = Decilist([FunctionProvider(my_rules, name="my-rules")])
+
 
 async def main():
-    async with await Client.connect() as decisions:
-        result = await decisions.predict('{"complete":true,"valid":true}', "Is the workflow ready to proceed?")
-        print(result.value if result.status == "accepted" else "Needs review")
+    answer = await decisions.choose(
+        '{"days_since_purchase": 12}',
+        "Pick the next step for this support request.",
+        {"refund": "Refund the customer", "escalate": "Send to a person"},
+    )
+    if answer.status == "accepted":
+        print("Do this:", answer.value)
+    else:
+        print("No answer. Ask a person.")
+
 
 asyncio.run(main())
 ```
 
-Python can also run in process with `Decilist([provider])`. Both paths expose `choose(state, instructions, options)`, `predict(state, instructions)`, and `score(state, instructions, levels)`. Prediction returns a boolean with P(true) in `probabilities["true"]`; scoring returns a probability-weighted index of 2–10 ordered levels, starting at zero. See [runtime setup and direct integration](docs/runtime.md).
+Run it with `python app.py`. It prints `Do this: refund`. The answer here comes from your own rules, so swapping in a model doesn't change the rest of your code.
 
-## TypeScript SDK
+## How a decision runs
 
-TypeScript also requires Node.js 22+. From the repository root, install and build the workspace:
+There are three kinds of question:
+
+| Call | Use it to | You get back |
+|---|---|---|
+| `choose(state, instructions, options)` | Pick one of up to 64 named options | The option's name |
+| `predict(state, instructions)` | Answer yes or no | `True` or `False` |
+| `score(state, instructions, levels)` | Rate on 2 to 10 ordered levels | A number, the expected level |
+
+Each call goes through the same steps. You list your providers in order, and Decilist tries them until one gives an answer that passes.
+
+```mermaid
+flowchart TD
+    A["Your code calls choose, predict or score"] --> B{"Another provider<br/>in your list?"}
+    B -- "No" --> X["status: abstained<br/>value: null"]
+    B -- "Yes" --> C{"Allowed by<br/>local_only?"}
+    C -- "No" --> L["Record: blocked"] --> B
+    C -- "Yes" --> D["Ask the provider,<br/>up to timeout_ms"]
+    D -- "Timeout or error" --> M["Record: timeout or error"] --> B
+    D -- "Answer" --> E{"Valid probabilities<br/>for your labels?"}
+    E -- "No" --> N["Record: invalid_output"] --> B
+    E -- "Yes" --> F{"Confidence at least<br/>min_confidence?"}
+    F -- "No" --> O["Record: low_confidence"] --> B
+    F -- "Yes" --> G["status: accepted<br/>value, confidence, provider, model"]
+    classDef ok fill:#b9f48c,stroke:#5c8f35,color:#0d1416
+    classDef stop fill:#f5e2b8,stroke:#e8b85c,color:#0d1416
+    class G ok
+    class X stop
+```
+
+The defaults are `local_only=True`, `min_confidence=0.7` and `timeout_ms=5000`. Every result lists its attempts, so you can see what was tried and why. Decilist never moves your data to a cloud provider as a hidden fallback. With `local_only` on, a remote provider is blocked before it sees anything.
+
+Confidence is the model's own estimate. It isn't a guarantee that the answer is right.
+
+## Connect it to your project
+
+![In Python, call Decilist in the same process. From TypeScript or any other language, send HTTP to a local Decilist runtime.](docs/assets/two-ways-to-connect.svg)
+
+Find the place in your code where a person or a long `if` chain makes a small decision today. Pass the facts as `state`, list the allowed answers, then branch on the result. Your app keeps its own actions, screens and permissions.
+
+<details open>
+<summary><b>Python, in the same process</b></summary>
+
+This is the `app.py` above. To connect your own model instead of rules, return its probabilities. The labels must match your options exactly and sum to 1.
+
+```python
+def my_model_provider(question):
+    features = json.loads(question.state)
+    return my_model.predict_proba(features)  # {"refund": 0.9, "escalate": 0.1}
+
+
+decisions = Decilist([FunctionProvider(my_model_provider, name="my-model", model="my-model-v1")])
+```
+
+[`examples/own_model.py`](examples/own_model.py) is a complete version you can run, and it shows the abstained path too. `FunctionProvider` runs on the event loop, so a slow model needs its own provider class with `async def infer` that runs the model in a thread. The [architecture notes](docs/architecture.md) describe that interface.
+
+</details>
+
+<details>
+<summary><b>Python, through the local runtime</b></summary>
+
+Start the runtime in one terminal and keep it open:
+
+```bash
+python -m decilist runtime start --provider demo
+```
+
+Then call it from another terminal, with the same environment active:
+
+```python
+import asyncio
+
+from decilist import Client
+
+
+async def main():
+    async with await Client.connect() as decisions:
+        answer = await decisions.predict('{"complete":true,"valid":true}', "Is the workflow ready to proceed?")
+        print(answer.value if answer.status == "accepted" else "Needs review")
+
+
+asyncio.run(main())
+```
+
+The demo rules only understand the example workflow. Other questions abstain until you start a real model.
+
+</details>
+
+<details>
+<summary><b>TypeScript</b></summary>
+
+You need Node.js 22 or newer. The TypeScript SDK isn't on npm yet, so build a package from a clone:
+
+```bash
+git clone https://github.com/ibrahim119-IN/decilist.git
+```
+
+```bash
+cd decilist
+```
 
 ```bash
 npm ci
-npm run build
-python -m decilist runtime run --provider demo -- node examples/workflow.mjs
 ```
-
-The last command starts or reuses a compatible Python runtime and runs the TypeScript example. The package is currently consumed from the workspace, not a public registry. For your own app, use the shared runtime from Start locally or launch the app with `runtime run`. A direct call looks like:
-
-```ts
-import { Decilist } from "@decilist/sdk";
-
-const sdk = await Decilist.connect(); // verifies local runtime readiness once
-const result = await sdk.choose(
-  JSON.stringify({ complete: true, valid: true }),
-  "Choose the next workflow action.",
-  { proceed: "Ready", retry: "Transient error", review: "Needs a person" },
-);
-if (result.status === "accepted") {
-  // value is typed as "proceed" | "retry" | "review"
-  console.log(result.value);
-}
-```
-
-The TypeScript SDK performs request and response validation. The Python runtime owns model loading, provider policies, and evaluation. The explicit launcher starts or reuses the correct runtime and stops only the runtime it owns. Native TypeScript model execution is not implemented; imports do not start a process or download anything.
-
-## HTTP for other languages
-
-`POST /v1/decisions`, with `Content-Type: application/json`:
-
-```json
-{
-  "question": {
-    "kind": "choose",
-    "state": "{\"complete\":true,\"valid\":true}",
-    "instructions": "Choose the next workflow action.",
-    "options": {"proceed":"Ready","retry":"Transient error","review":"Needs a person"}
-  },
-  "policy": {"local_only":true,"min_confidence":0.7,"timeout_ms":5000}
-}
-```
-
-The demo's rules only implement the documented workflow gate; they do not interpret arbitrary prompts. Generated OpenAPI is served at `/openapi.json`, with a checked-in copy in [contracts/openapi.json](contracts/openapi.json).
-
-## Inspect a failing test in an existing project
-
-The optional Python triage helper consumes your existing failure log, extracts observed facts, and follows bounded static Python references to implementation code. It proposes an inspection when a narrow error-pattern rule or the learned local model supports it. Rules and model results remain distinguishable. It does not execute commands or repair files.
 
 ```bash
-decilist triage --log failure.log --project .
+npm run build
 ```
 
-Or call it directly from your existing Python tooling:
-
-```python
-from pathlib import Path
-from decilist.triage_assistant import diagnose
-from decilist.triage_evidence import prepare_evidence
-
-evidence = prepare_evidence(Path("failure.log").read_text(), project=Path("."))
-report = await diagnose(evidence, project=Path("."))  # inside your existing async function
-print(report["next_check"]["title"])
+```bash
+npm pack ./packages/typescript
 ```
 
-Use `--mode rules` for facts and narrow rules without a model; `--mode model` explicitly bypasses rules. The default `auto` applies a supported rule first, otherwise requests the already-running learned local model. The `demo` runtime is rejected as a learned provider. `python -m decilist triage` is the equivalent module command; the original `decilist.triage` module remains available for reproducing v1.
+That creates `decilist-sdk-0.1.0-alpha.1.tgz`. Install it in your project with `npm install <path to the .tgz>`, then:
 
-Transport is restricted to a local loopback endpoint. Credential filtering is heuristic, so inspect evidence before sharing reports. The [Arabic install and integration guide](docs/install-and-use-ar.md) covers the few-line API, status handling, and setup. The [walkthrough](docs/triage.md) explains evidence limits. The [deferred human experiment](docs/triage-study.md) remains unstarted; separate agent-run trials measure actual agent time to a protected repair, without claiming human time savings.
+```javascript
+import { Decilist } from "@decilist/sdk";
 
-**Triage quality remains limited.** The [original result](docs/triage-results.md) is preserved: Liquid suggested one next check and abstained on seven known cases. On eight fresh evaluation regressions, v2's learned path accepted two correct next checks versus one for v1, at the unchanged 0.7 threshold. The default hybrid also accepted two (one explicit rule, one model result). All three ambiguity/mixed/insufficient controls went to review in v2. These small authored suites do not establish general diagnosis quality or human productivity savings. [Full results and retained failures](docs/triage-v2-results.md).
+const decisions = await Decilist.connect();
+const answer = await decisions.predict(
+  '{"complete":true,"valid":true}',
+  "Is the workflow ready to proceed?",
+);
+console.log(answer.status === "accepted" ? answer.value : "Needs review");
+```
 
-The separate experimental **V5 verification workflow** gathers executed Python function context, proposes a small intervention with a local coding model, and reruns unchanged target and regression tests in a disposable copy. It leaves the original project untouched unless explicitly invoked with `--apply`. Use it directly from a terminal or Python API in an existing trusted project; no Playground or new form is required. See the [V5 quickstart](docs/triage-v5-quickstart.md), [measurement protocol](docs/triage-v5-experiment.md), and [actual results](docs/triage-v5-results.md). V5 verified **2/6** fresh evaluation repairs. The assisted agent median was **67.875s versus 58.703s** with ordinary tools; all four hints failed and agents continued manually. Both arms ultimately repaired all four reserved cases. The prespecified quality and time targets failed. Passing selected tests supports an intervention; it does not establish complete correctness or human debugging-time savings. [V4's negative results](docs/triage-v4-results.md) remain available unchanged.
+TypeScript talks to the Python runtime and doesn't run models itself. Start your app and a runtime together with one command:
 
-**V6 is under development.** It adds bounded state/constructor context, explicitly read-only helper references, stricter native generation-mode checks, and one-time model configuration. The [terminal/Python quickstart](docs/triage-v6-quickstart.md) uses an existing project and its tests. [Retained development observations](docs/triage-v6-development.md) include failures; they do not establish time savings. The [fixed model/context comparison](docs/triage-v6-experiment.md) and [historical transfer experiment](docs/triage-natural-transfer-protocol.md) separate implementation changes from fresh repair and timing measurements.
+```bash
+python -m decilist runtime run --provider demo -- node app.mjs
+```
 
-## Verify and compare
+</details>
 
-Contributors also install the test/build dependencies. From the repository root with `.venv` active:
+<details>
+<summary><b>Any other language, over HTTP</b></summary>
+
+With the runtime running, send a `POST` to `http://127.0.0.1:8765/v1/decisions`. This uses macOS, Linux or Git Bash quoting:
+
+```bash
+curl -s http://127.0.0.1:8765/v1/decisions -H "Content-Type: application/json" -d '{"question":{"kind":"choose","state":"{\"complete\":true,\"valid\":true}","instructions":"Choose the next workflow action.","options":{"proceed":"Ready","retry":"Transient error","review":"Needs a person"}},"policy":{"local_only":true,"min_confidence":0.7,"timeout_ms":5000}}'
+```
+
+The answer includes `status`, `value`, `probabilities`, `confidence`, `provider`, `model` and `attempts`. The full schema is in [`contracts/`](contracts/).
+
+</details>
+
+## Add a real model
+
+```mermaid
+flowchart LR
+    A["Install the SDK"] --> B["Test your wiring<br/>with rules"]
+    B --> C{"Do you have<br/>a model?"}
+    C -- "Yes" --> D["Wrap it with<br/>FunctionProvider"]
+    C -- "No" --> E["Download<br/>LiquidAI/d1-3B"]
+    D --> F["Test it on your<br/>own cases"]
+    E --> F
+    F --> G["Decide what your app<br/>does when it abstains"]
+    classDef ok fill:#b9f48c,stroke:#5c8f35,color:#0d1416
+    class G ok
+```
+
+To use `LiquidAI/d1-3B`, first read its [license](https://huggingface.co/LiquidAI/d1-3B/blob/main/LICENSE) and the vendor code you'll be running. Use a separate environment, and install PyTorch for your machine from the [official selector](https://pytorch.org/get-started/locally/). Then:
+
+```bash
+python -m pip install "decilist[server,liquid] @ git+https://github.com/ibrahim119-IN/decilist.git#subdirectory=packages/python"
+```
+
+This downloads the weights once. Nothing downloads unless you pass `--allow-download`:
+
+```bash
+python -m decilist runtime setup liquid --allow-download --allow-model-code --device cuda
+```
+
+This starts the runtime with the cached model and doesn't download anything:
+
+```bash
+python -m decilist runtime start --provider liquid --allow-model-code --device cuda
+```
+
+Your calls stay the same. For a slower machine, raise the timeout once with `Client.connect(policy=Policy(timeout_ms=30000))`. If the model fails to load, you get an error, and Decilist doesn't switch to something else behind your back. See the [provider](docs/providers.md) and [runtime](docs/runtime.md) guides for details.
+
+![The Decilist SDK with server dependencies is 0.02 GB. The Python packages for d1-3B are 4.60 GB. The d1-3B weights are 6.25 GB.](docs/assets/chart-download-size.svg)
+
+### What we measured with d1-3B
+
+![Of 81 held-out calls, 36 were accepted and correct, 18 accepted and wrong, and 27 abstained. 66.7% correct among accepted answers.](docs/assets/chart-held-out.svg)
+
+| Measure | Result |
+|---|---|
+| Speed, warm, on our text task | 45.63 ms median, 47.76 ms at p95 |
+| Peak GPU memory | 6.36 GB |
+| Machine | Windows 11, NVIDIA RTX 3090 |
+| Coverage across all held-out calls | 60% (72 of 120) |
+| CPU, Apple GPU, Linux GPU | Not measured by us. `--device cpu` exists, and speed depends on the machine |
+
+Full method and failures are in the [model validation report](docs/model-validation.md). These numbers cover one small English task, so please don't read them as how the model will do on yours.
+
+## See it in your browser
+
+With the runtime running, open:
+
+- **<http://127.0.0.1:8765/>** for the Playground, where you can try questions and copy the code.
+- **<http://127.0.0.1:8765/demo>** for a small ordinary app that uses Decilist behind the scenes. It only prepares a local preview and never sends anything.
+
+![The Decilist Playground showing an accepted decision, its probabilities and SDK code.](docs/assets/playground.png)
+
+## Status and limits
+
+Decilist is **alpha**, so the API can change.
+
+| Area | State |
+|---|---|
+| **Works today** | Python and TypeScript SDKs, HTTP API, policies, attempt traces, the local runtime, the Playground and the examples |
+| **Checked by CI** | Tests and the example apps, on Windows and Ubuntu, with the demo rules. CI doesn't run a model |
+| **Checked by hand** | d1-3B through both SDKs, on Windows with an RTX 3090 |
+| **Not checked** | macOS, GPU on Linux, first use by outside developers |
+| **Not measured** | Developer time saved. We don't have a number for this |
+| **Not published** | PyPI and npm packages |
+
+The repository also has experimental helpers for failing tests and code review. They aren't part of the core SDK, and several of their experiments recorded failures. The [docs index](docs/README.md) links to those results.
+
+## What's where
+
+| Folder | What's inside |
+|---|---|
+| [`packages/python`](packages/python) | Python SDK, local runtime, Playground |
+| [`packages/typescript`](packages/typescript) | TypeScript SDK |
+| [`contracts`](contracts) | The shared decision contract |
+| [`examples`](examples) | Small programs you can run |
+| [`docs`](docs/README.md) | Guides, plus the research record |
+| [`tests`](tests) | Test suite |
+| [`benchmarks`](benchmarks), [`reports`](reports/README.md) | Evaluation tools and recorded results |
+
+## Run the tests
+
+From a clone, with an environment active and Node.js 22 installed:
 
 ```bash
 python -m pip install -c requirements-dev.lock -e "./packages/python[server,dev]"
-npm ci
-python scripts/restore_triage_v5_fixture_evidence.py
-python -m pytest -q
-npm test
-python -m benchmarks.run --output reports/local/workflow.json
 ```
 
-[CI for V5 and portable fixture evidence](https://github.com/ibrahim119-IN/decilist/actions/runs/40373453349) passed on Windows and Ubuntu, including the full test suite, package build and Python/TypeScript HTTP integrations. Native GPU inference was separately verified on the Windows presentation machine. First-use human usability remains unmeasured.
+```bash
+npm ci
+```
 
-The original 12-case smoke suite checks wiring. Its perfect rule score follows from rules implementing its labels; it is **not** model-quality evidence. [Initial measured report](reports/baseline-2026-10-25.json).
+```bash
+python scripts/restore_triage_v5_fixture_evidence.py
+```
 
-The [new text suite](docs/evaluation-v2.md) has 20 development and 40 held-out cases across all three operations, with frozen labels and policy. It reports classification accuracy, numeric score error, coverage, abstention, validity, latency, and failure cases. The [Liquid report](benchmarks/results/request-text-liquid.json) records three repetitions of each case. The original rules do not implement this different task, so no misleading numeric comparison is made. The [uniform reference report](benchmarks/results/request-text-uniform.json) is a baseline, not a model result.
+```bash
+python -m pytest -q
+```
 
-## Repository map
+```bash
+npm test
+```
 
-| Path | Purpose |
-| --- | --- |
-| `packages/python` | Runtime, typed contracts, providers, HTTP client, evaluation |
-| `packages/typescript` | Typed SDK, validation, HTTP transport |
-| `apps/api` | Thin repository entry point to the installed server |
-| `packages/python/src/decilist/static` | Optional Playground and normal-app example |
-| `contracts` | Shared parity cases and OpenAPI |
-| `examples` | Domain-neutral workflow gate |
-| `benchmarks` | Smoke/text evaluations, isolated triage regression lab, deferred study |
-| `docs` | MVP plan, architecture, provider compatibility, licensing |
+The restore step writes its fixtures to `../../work/triage-v5-lab`, outside the clone. To put them somewhere else, set `DECILIST_TRIAGE_V5_WORK_ROOT` to the same folder before the restore and test commands. The default tests don't download a model or call a paid API. See [CONTRIBUTING.md](CONTRIBUTING.md) to contribute and [SECURITY.md](SECURITY.md) to report a security issue.
 
-## License and roadmap
+## License
 
-Decilist's own code is **Apache-2.0**. Model weights and vendor code are not included and retain their own terms. Liquid d1-3B is open-weight under the LFM Open License, not automatically covered by our code license. See [third-party terms](THIRD_PARTY.md) and the [Liquid setup gate](docs/providers.md).
-
-The first presentation target is **Sunday, November 1, 2026**, Cairo time. The [implementation plan](docs/mvp-plan.md) prioritizes real local inference, direct SDK integration, simpler runtime setup, one optional Playground workspace, and a normal-app demonstration. See also the [demo walkthrough](docs/demo.md) and [contributing](CONTRIBUTING.md).
+Decilist is licensed under [Apache-2.0](LICENSE). Models and their weights have their own terms and aren't included. See [THIRD_PARTY.md](THIRD_PARTY.md).

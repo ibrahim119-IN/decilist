@@ -15,8 +15,8 @@ python -m pip install -c requirements-dev.lock -e "./packages/python[dev]"
 على Windows مع CUDA، [أداة إعداد Qwen3-Coder الموجودة](stronger-local.md) بتنزّل الملف المحدد وتتحقق منه. للتشغيل مع V6 استخدم `--context 16384` صراحةً بدل القيمة الافتراضية القديمة:
 
 ```powershell
-python scripts/setup_stronger_local.py download --cache-dir L:/DecilistModels/qwen-coder
-python scripts/setup_stronger_local.py serve --cache-dir L:/DecilistModels/qwen-coder --gpu 0 --context 16384
+python scripts/setup_stronger_local.py download --cache-dir ../decilist-models/qwen-coder
+python scripts/setup_stronger_local.py serve --cache-dir ../decilist-models/qwen-coder --gpu 0 --context 16384
 ```
 
 التنزيل صريح وحجمه حوالي 18 جيجابايت. سيب نافذة الخدمة مفتوحة وافتح تيرمنال تاني للمساعد. دي تجربة على جهاز بكارت RTX 3090 وذاكرة 24 جيجابايت؛ مش وعد بالتوافق مع أي لابتوب. اتبع متطلبات أداة الإعداد ورخص الموديلات في الدليل المرتبط.
@@ -62,6 +62,6 @@ print(format_text(report))
 
 تقدر تحط الاستدعاء بعد أمر الاختبارات الموجود في أداة التطوير. المساعد بيستخدم الاختبارات والكود، مش بيانات Playground. تجميع السياق بيفرق بين الدوال اللي اتنفذت، وروابط الحالة المستنتجة من الكود، والدوال المساعدة اللي اتقرت فقط. الفلتر بيرفض تعديل الاختبارات، والردود اللي بتكرر نفس الكود، والتعديلات الخارجة عن النطاق المسموح.
 
-على جهاز العرض، استخدم النسخة الفعلية على `L:\CodexData\Decilist\outputs\decilist` وخلي مجلد العمل والملفات المؤقتة على L. الاختبارات بتتنفذ بصلاحيات المستخدم العادية، والنسخة المنفصلة مش بيئة عزل أمني.
+الاختبارات بتتنفذ بصلاحيات المستخدم العادية، والنسخة المنفصلة مش بيئة عزل أمني.
 
 [بروتوكول المقارنة](triage-v6-experiment.md) بيفصل أثر الموديل عن أثر تجميع السياق. وقت انتظار الموديل وجمع السياق والتحقق وأي استمرار يدوي بيتحسب ضمن التجربة. تجارب الوكلاء مش قياسًا لوقت مطور بشري.

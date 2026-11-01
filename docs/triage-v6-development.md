@@ -1,6 +1,6 @@
 # V6 development observations — not fresh evaluation
 
-These observations precede the frozen V6 model/context matrix. They informed development and receive no held-out accuracy or productivity credit. All files and inference ran from L on the presentation machine. The stronger model was downloading during the early runs and was actually loaded for the final development comparisons below.
+These observations precede the frozen V6 model/context matrix. They informed development and receive no held-out accuracy or productivity credit. The stronger model was downloading during the early runs and was actually loaded for the final development comparisons below.
 
 ## Context and response changes
 

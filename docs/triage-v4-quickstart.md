@@ -29,7 +29,7 @@ Create a JSON identity file, replacing these placeholders with the exact configu
 
 Choose at least one failing selector and at least one existing regression selector. Paths and pytest node IDs are relative to the target project, for example `tests/test_service.py::test_bug`. A test file or test directory is also accepted. Repeat `--test` and `--regression` for multiple selectors.
 
-Choose a **new** `--work-dir` outside the target project, under an existing parent directory you own. For example, create `L:/triage-runs` yourself, then use `L:/triage-runs/my-app-001` as the new work directory. V4 refuses an existing destination and retains its owned snapshot and evidence there. Use a different destination for each run.
+Choose a **new** `--work-dir` outside the target project, under an existing parent directory you own. For example, create `../triage-runs` yourself, then use `../triage-runs/my-app-001` as the new work directory. V4 refuses an existing destination and retains its owned snapshot and evidence there. Use a different destination for each run.
 
 Tests execute Python with your operating-system permissions. The disposable copy is not an OS sandbox; use only projects and tests you trust. Virtual environments, caches, known credential paths, and other excluded or oversized files are not copied. Install required test dependencies beforehand and inspect the report's `excluded` entries if reproduction fails.
 
@@ -38,7 +38,7 @@ Tests execute Python with your operating-system permissions. The disposable copy
 This command tests an intervention without applying it to the original project:
 
 ```powershell
-python -m decilist.triage_v4 --project L:/work/my-app --test tests/test_service.py::test_bug --regression tests/test_existing.py --work-dir L:/triage-runs/my-app-001 --model-config L:/work/model-identity.json
+python -m decilist.triage_v4 --project ../my-app --test tests/test_service.py::test_bug --regression tests/test_existing.py --work-dir ../triage-runs/my-app-001 --model-config ../model-identity.json
 ```
 
 The default permits implementation edits under `src`, `packages/python/src`, and `vendor`. For another source layout, repeat `--production-root` with project-relative implementation directories. A flat-module project can explicitly use `--production-root .`; test and configuration files remain protected.
@@ -79,11 +79,11 @@ from decilist.triage_v4 import run_triage_v4
 
 async def main():
     report = await run_triage_v4(
-        project=Path("L:/work/my-app"),
+        project=Path("../my-app"),
         tests=["tests/test_service.py::test_bug"],
         regressions=["tests/test_existing.py"],
-        work_dir=Path("L:/triage-runs/my-app-api-001"),
-        model_config=Path("L:/work/model-identity.json"),
+        work_dir=Path("../triage-runs/my-app-api-001"),
+        model_config=Path("../model-identity.json"),
         capture_failure_text=False,
         apply=False,
     )

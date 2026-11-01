@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 390" width="1200" height="390" role="img" aria-labelledby="t d">
+  <title id="t">What you download, in gigabytes</title>
+  <desc id="d">Bar chart. The Decilist SDK with its server dependencies is 0.02 GB. The Python packages for the d1-3B path, including CUDA PyTorch, are 4.60 GB. The d1-3B weights are 6.25 GB.</desc>
+  <style>
+    .sans { font-family: Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .title { font-size: 26px; font-weight: 700; fill: #f2f6f5; }
+    .sub { font-size: 16px; fill: #9cafb2; }
+    .name { font-size: 18px; font-weight: 600; fill: #e5eceb; }
+    .note { font-size: 15px; fill: #9cafb2; }
+    .value { font-size: 22px; font-weight: 700; fill: #f2f6f5; }
+  </style>
+  <rect width="1200" height="390" rx="18" fill="#0d1416"/>
+  <text x="40" y="58" class="sans title">The SDK is small. The model is the big download.</text>
+  <text x="40" y="88" class="sans sub">Size on disk in gigabytes. You need the two lower bars only for the d1-3B path.</text>
+
+  <line x1="360" y1="116" x2="360" y2="340" stroke="#2b3c41"/>
+
+  <text x="40" y="146" class="sans name">Decilist SDK + server</text>
+  <text x="40" y="170" class="sans note">Always. Measured: 20.7 MB</text>
+  <rect x="360" y="142" width="3" height="22" fill="#b9f48c"/>
+  <text x="376" y="161" class="sans value">0.02 GB</text>
+
+  <text x="40" y="222" class="sans name">Python packages for d1-3B</text>
+  <text x="40" y="246" class="sans note">CUDA PyTorch and friends</text>
+  <path d="M360 218 H 864 a4 4 0 0 1 4 4 V 236 a4 4 0 0 1 -4 4 H 360 z" fill="#6f8287"/>
+  <text x="880" y="237" class="sans value">4.60 GB</text>
+
+  <text x="40" y="298" class="sans name">LiquidAI/d1-3B weights</text>
+  <text x="40" y="322" class="sans note">Pinned revision, full size</text>
+  <path d="M360 294 H 1046 a4 4 0 0 1 4 4 V 312 a4 4 0 0 1 -4 4 H 360 z" fill="#6f8287"/>
+  <text x="1062" y="313" class="sans value">6.25 GB</text>
+
+  <text x="40" y="368" class="sans note">Measured on Windows, Python 3.12. Package sizes vary by OS and PyTorch build.</text>
+</svg>

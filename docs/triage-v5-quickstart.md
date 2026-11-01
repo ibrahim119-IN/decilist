@@ -7,15 +7,13 @@
 المشروع والموديل والمجلدات المؤقتة موجودين على L. شغّل من PowerShell:
 
 ```powershell
-$env:TEMP='L:\CodexData\Decilist\tmp'
 $env:TMP=$env:TEMP
-$env:PYTHONPATH='L:\CodexData\Decilist\outputs\decilist\packages\python\src'
-& 'L:\CodexData\Decilist\work\.venv\Scripts\python.exe' -m decilist.triage_v5 `
-  --project 'L:\Projects\my-app' `
+python -m decilist.triage_v5 `
+  --project '..\my-app' `
   --test 'tests/test_checkout.py' `
   --regression 'tests/test_cart.py' `
-  --work-dir 'L:\CodexData\Decilist\work\my-app-triage-01' `
-  --model-config 'L:\CodexData\Decilist\work\triage-v3-model\decilist-model.json' `
+  --work-dir '..\my-app-triage-01' `
+  --model-config '..\triage-v3-model\decilist-model.json' `
   --capture-failure-text
 ```
 

@@ -23,7 +23,7 @@ Advanced UI confirmed one `liquid-local` provider, `LiquidAI/d1-3B` revision `05
 
 ## Presentation boundaries
 
-The [Arabic five-minute script](../../docs/presentation-rehearsal-ar.md) leads with the ordinary app, then direct SDK integration, existing-project triage and measured failures. At the time of this walkthrough, triage v2 was still being implemented. Its slot remains explicitly conditional until the primary agent verifies actual CLI output and the final package. No human debugging-time savings, calibrated confidence, cross-platform GPU support, production readiness, or OS-level network isolation can be claimed from this check.
+The five-minute script used at the time led with the ordinary app, then direct SDK integration, existing-project triage and measured failures. At the time of this walkthrough, triage v2 was still being implemented. Its slot remains explicitly conditional until the primary agent verifies actual CLI output and the final package. No human debugging-time savings, calibrated confidence, cross-platform GPU support, production readiness, or OS-level network isolation can be claimed from this check.
 
 Final browser state: `/demo`, clear request, `DRAFT READY`. The Liquid runtime was left running.
 
