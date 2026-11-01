@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 340" width="1200" height="340" role="img" aria-labelledby="t d">
+  <title id="t">Decilist</title>
+  <desc id="d">Decilist is an open-source SDK that puts a typed decision inside your app. A choose call returns status accepted and value retry from the demo rules.</desc>
+  <style>
+    .sans { font-family: Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .mono { font-family: ui-monospace, "Cascadia Code", Consolas, Menlo, monospace; font-size: 17px; }
+  </style>
+  <rect width="1200" height="340" rx="18" fill="#0d1416"/>
+
+  <text x="56" y="104" class="sans" font-size="66" font-weight="700" fill="#b9f48c">d.</text>
+  <text x="124" y="104" class="sans" font-size="66" font-weight="700" fill="#f2f6f5">decilist</text>
+  <rect x="404" y="62" width="72" height="30" rx="5" fill="none" stroke="#2b3c41"/>
+  <text x="440" y="82" class="sans" font-size="14" font-weight="600" fill="#9cafb2" text-anchor="middle">ALPHA</text>
+
+  <text x="56" y="170" class="sans" font-size="31" font-weight="600" fill="#e5eceb">Put a typed decision</text>
+  <text x="56" y="210" class="sans" font-size="31" font-weight="600" fill="#e5eceb">inside your app.</text>
+  <text x="56" y="252" class="sans" font-size="18" fill="#9cafb2">Open-source SDK for Python, TypeScript and HTTP.</text>
+  <text x="56" y="278" class="sans" font-size="18" fill="#9cafb2">You bring the model.</text>
+
+  <rect x="610" y="42" width="546" height="256" rx="12" fill="#142023" stroke="#2b3c41"/>
+  <text x="634" y="78" class="mono" fill="#e5eceb">await decisions.<tspan fill="#b9f48c">choose</tspan>(state, instructions, {</text>
+  <text x="656" y="104" class="mono" fill="#9cafb2">"proceed": "Complete and valid",</text>
+  <text x="656" y="130" class="mono" fill="#9cafb2">"retry": "Transient failure",</text>
+  <text x="656" y="156" class="mono" fill="#9cafb2">"review": "Needs a person",</text>
+  <text x="634" y="182" class="mono" fill="#e5eceb">})</text>
+  <line x1="634" y1="200" x2="1132" y2="200" stroke="#2b3c41"/>
+  <text x="634" y="230" class="mono" fill="#9cafb2">status</text>
+  <text x="734" y="230" class="mono" fill="#b9f48c">"accepted"</text>
+  <text x="634" y="256" class="mono" fill="#9cafb2">value</text>
+  <text x="734" y="256" class="mono" fill="#b9f48c">"retry"</text>
+  <text x="634" y="282" class="mono" fill="#9cafb2">provider</text>
+  <text x="734" y="282" class="mono" fill="#e5eceb">"workflow-rules"</text>
+  <text x="1132" y="282" class="sans" font-size="14" fill="#9cafb2" text-anchor="end">demo rules, not a model</text>
+</svg>

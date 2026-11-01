@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 370" width="1200" height="370" role="img" aria-labelledby="t d">
+  <title id="t">What d1-3B did on 81 held-out classification calls</title>
+  <desc id="d">Stacked bar of 81 calls: 36 accepted and correct, 18 accepted and wrong, 27 abstained. Among accepted answers 66.7 percent were correct. Across all calls 44.4 percent were correct.</desc>
+  <style>
+    .sans { font-family: Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .title { font-size: 26px; font-weight: 700; fill: #f2f6f5; }
+    .sub { font-size: 16px; fill: #9cafb2; }
+    .big { font-size: 32px; font-weight: 700; fill: #f2f6f5; }
+    .name { font-size: 17px; font-weight: 600; fill: #e5eceb; }
+    .note { font-size: 15px; fill: #9cafb2; }
+  </style>
+  <rect width="1200" height="370" rx="18" fill="#0d1416"/>
+  <text x="40" y="58" class="sans title">A real model still gets things wrong, so handle every outcome.</text>
+  <text x="40" y="88" class="sans sub">LiquidAI/d1-3B on 81 held-out choose and predict calls: 27 cases, 3 repetitions, one authored English task.</text>
+
+  <!-- 1120 px wide at 13.827 px per call, 2 px gaps between segments -->
+  <text x="40" y="146" class="sans big">36</text>
+  <text x="88" y="146" class="sans name">&#10003; accepted, correct</text>
+  <path d="M44 162 H 536 V 212 H 44 a4 4 0 0 1 -4 -4 V 166 a4 4 0 0 1 4 -4 z" fill="#0ca30c"/>
+
+  <text x="538" y="146" class="sans big">18</text>
+  <text x="586" y="146" class="sans name">&#10005; accepted, wrong</text>
+  <rect x="538" y="162" width="247" height="50" fill="#d03b3b"/>
+
+  <text x="787" y="146" class="sans big">27</text>
+  <text x="835" y="146" class="sans name">&#8211; abstained: no answer given</text>
+  <path d="M787 162 H 1156 a4 4 0 0 1 4 4 V 208 a4 4 0 0 1 -4 4 H 787 z" fill="#6f8287"/>
+
+  <line x1="40" y1="246" x2="1160" y2="246" stroke="#2b3c41"/>
+  <text x="40" y="284" class="sans big">66.7%</text>
+  <text x="150" y="284" class="sans name">correct among the 54 answers it accepted</text>
+  <text x="640" y="284" class="sans big">44.4%</text>
+  <text x="750" y="284" class="sans name">correct across all 81 calls</text>
+  <text x="40" y="332" class="sans note">Tested on an RTX 3090 at a 0.7 confidence threshold. This is one small task, not a general accuracy figure. Test on your own data.</text>
+</svg>

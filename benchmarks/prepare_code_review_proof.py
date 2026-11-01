@@ -174,9 +174,7 @@ def main():
     if not args.node or not args.npm:
         parser.error('Node and npm executables are required')
     args.root.mkdir(parents=True, exist_ok=True)
-    env = dict(os.environ, TEMP='L:/CodexData/Decilist/tmp', TMP='L:/CodexData/Decilist/tmp',
-               PIP_CACHE_DIR='L:/CodexData/Decilist/cache/pip',
-               npm_config_cache='L:/CodexData/Decilist/cache/npm', npm_config_ignore_scripts='true')
+    env = dict(os.environ, npm_config_ignore_scripts='true')
     if subprocess.check_output([args.node, '--version'], env=env, text=True).strip() != 'v22.23.1':
         parser.error('the proof corpus requires the pinned Node v22.23.1 runtime')
     cases = json.loads(CATALOG.read_text(encoding='utf-8'))['cases']

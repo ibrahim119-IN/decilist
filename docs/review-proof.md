@@ -24,7 +24,7 @@ node --test --test-reporter=tap examples/review_proof/test/within.test.mjs
 
 The [example](../examples/review_proof/README.md) is an authored teaching fixture with incomplete existing tests and a documented public contract. Its behavior is not benchmark evidence.
 
-An actual installed-wheel run on the presentation machine found the lower-endpoint defect, retained a one-line candidate, and passed its reproduction plus the four existing tests. The [recorded run](../reports/code-review-proof-03/installed-demo/verification.json) is a smoke test; model outcomes on other projects are not guaranteed.
+An actual installed-wheel run on a Windows machine found the lower-endpoint defect, retained a one-line candidate, and passed its reproduction plus the four existing tests. The [recorded run](https://github.com/ibrahim119-IN/decilist/blob/2d641ab/reports/code-review-proof-03/installed-demo/verification.json) is a smoke test; model outcomes on other projects are not guaranteed.
 
 You must already have a local OpenAI-compatible model server that supports the requested JSON-schema structured output. This command does not download weights or start a server. The following values match the optional [Qwen3.6 local setup](stronger-local-profiles.md); use the URL and model alias of your running server. `--no-thinking` enables the current llama.cpp/Qwen3.6 structured-output compatibility settings.
 

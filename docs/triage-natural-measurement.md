@@ -74,10 +74,8 @@ Exports are separate, redacted public and full private records, and existing fil
 Use the existing interpreter; do not install or change the main environment. From the repository in PowerShell, using the normal development environment:
 
 ```powershell
-$env:TEMP = 'L:\CodexData\Decilist\tmp'
-$env:TMP = 'L:\CodexData\Decilist\tmp'
 $env:PYTEST_DISABLE_PLUGIN_AUTOLOAD = '1'
-& 'L:\CodexData\Decilist\work\.venv\Scripts\python.exe' -m pytest -p pytest_asyncio.plugin -o asyncio_mode=auto -q tests/test_natural_measurement.py
+python -m pytest -p pytest_asyncio.plugin -o asyncio_mode=auto -q tests/test_natural_measurement.py
 ```
 
 The explicit test options make plugin loading and async behavior deterministic. They do not affect participant checks or the frozen workflow.
