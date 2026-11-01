@@ -23,9 +23,6 @@ The dedicated service listens only on `127.0.0.1:8766`. It loads weights once, s
 To keep storage off C on this project's Windows machine, set these before setup or review:
 
 ```powershell
-$env:HF_HOME = 'L:\CodexData\Decilist\work\model-cache'
-$env:TEMP = $env:TMP = 'L:\CodexData\Decilist\tmp'
-$env:PIP_CACHE_DIR = 'L:\CodexData\Decilist\cache\pip'
 ```
 
 ## Add it to an existing application

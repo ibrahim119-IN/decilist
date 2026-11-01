@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600" role="img" aria-labelledby="t d">
+  <title id="t">Decilist is the SDK. The model is yours.</title>
+  <desc id="d">Three columns. Your app asks a question and acts on the answer. The Decilist SDK applies the contract and policy, validates the answer and records attempts. A provider answers: demo rules are included for wiring only, your own function or model can be wrapped, LiquidAI d1-3B is a separate 6.25 GB download, and OpenAI Decisions is planned but not built.</desc>
+  <style>
+    .sans { font-family: Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .mono { font-family: ui-monospace, "Cascadia Code", Consolas, Menlo, monospace; }
+    .eyebrow { font-size: 14px; font-weight: 700; letter-spacing: 1.4px; }
+    .head { font-size: 25px; font-weight: 700; fill: #f2f6f5; }
+    .body { font-size: 17px; fill: #c9d5d6; }
+    .sub { font-size: 15px; fill: #9cafb2; }
+    .name { font-size: 18px; font-weight: 600; fill: #f2f6f5; }
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#9cafb2"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="600" rx="18" fill="#0d1416"/>
+
+  <!-- Your app -->
+  <rect x="36" y="36" width="290" height="440" rx="14" fill="#142023" stroke="#2b3c41"/>
+  <text x="62" y="76" class="sans eyebrow" fill="#9cafb2">YOU WRITE THIS</text>
+  <text x="62" y="112" class="sans head">Your app</text>
+  <text x="62" y="170" class="sans body">Knows the current state</text>
+  <text x="62" y="212" class="sans body">Asks one clear question</text>
+  <text x="62" y="254" class="sans body">Lists the allowed answers</text>
+  <text x="62" y="296" class="sans body">Acts on the answer</text>
+  <text x="62" y="338" class="sans body">Handles "no answer"</text>
+  <text x="62" y="430" class="sans sub">Your app stays in charge of</text>
+  <text x="62" y="452" class="sans sub">what happens next.</text>
+
+  <!-- arrows 1 -->
+  <line x1="332" y1="226" x2="414" y2="226" stroke="#9cafb2" stroke-width="2" marker-end="url(#a)"/>
+  <text x="373" y="214" class="sans sub" text-anchor="middle">question</text>
+  <line x1="414" y1="290" x2="332" y2="290" stroke="#9cafb2" stroke-width="2" marker-end="url(#a)"/>
+  <text x="373" y="314" class="sans sub" text-anchor="middle">answer</text>
+
+  <!-- SDK -->
+  <rect x="420" y="36" width="320" height="440" rx="14" fill="#16261f" stroke="#b9f48c" stroke-width="2"/>
+  <text x="446" y="76" class="sans eyebrow" fill="#b9f48c">THIS REPOSITORY</text>
+  <text x="446" y="112" class="sans head">Decilist SDK</text>
+  <text x="446" y="170" class="mono" font-size="17" fill="#b9f48c">choose predict score</text>
+  <text x="446" y="212" class="sans body">Same contract in Python,</text>
+  <text x="446" y="236" class="sans body">TypeScript and HTTP</text>
+  <text x="446" y="278" class="sans body">Policy: local only, minimum</text>
+  <text x="446" y="302" class="sans body">confidence, timeout</text>
+  <text x="446" y="344" class="sans body">Checks every answer</text>
+  <text x="446" y="386" class="sans body">Returns accepted or abstained</text>
+  <text x="446" y="428" class="sans body">Records every attempt</text>
+
+  <!-- arrows 2 -->
+  <line x1="746" y1="226" x2="828" y2="226" stroke="#9cafb2" stroke-width="2" marker-end="url(#a)"/>
+  <text x="787" y="214" class="sans sub" text-anchor="middle">question</text>
+  <line x1="828" y1="290" x2="746" y2="290" stroke="#9cafb2" stroke-width="2" marker-end="url(#a)"/>
+  <text x="787" y="314" class="sans sub" text-anchor="middle">answer</text>
+
+  <!-- Providers -->
+  <text x="836" y="62" class="sans eyebrow" fill="#9cafb2">YOU PICK ONE OR MORE</text>
+  <text x="836" y="96" class="sans head">Provider</text>
+
+  <rect x="834" y="114" width="330" height="80" rx="10" fill="#142023" stroke="#b9f48c"/>
+  <text x="854" y="146" class="sans name">Demo rules</text>
+  <text x="1148" y="146" class="sans sub" text-anchor="end" fill="#b9f48c">included</text>
+  <text x="854" y="174" class="sans sub">Fixed rules to test your wiring. Not AI.</text>
+
+  <rect x="834" y="204" width="330" height="80" rx="10" fill="#142023" stroke="#2b3c41"/>
+  <text x="854" y="236" class="sans name">Your function or model</text>
+  <text x="1148" y="236" class="sans sub" text-anchor="end">you bring it</text>
+  <text x="854" y="264" class="sans sub">Wrap it with FunctionProvider.</text>
+
+  <rect x="834" y="294" width="330" height="88" rx="10" fill="#142023" stroke="#e8b85c" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="854" y="326" class="sans name">LiquidAI/d1-3B</text>
+  <text x="1148" y="326" class="sans sub" text-anchor="end">download it</text>
+  <text x="854" y="356" class="sans sub">Not included. 6.25 GB of weights.</text>
+
+  <rect x="834" y="392" width="330" height="84" rx="10" fill="none" stroke="#2b3c41" stroke-dasharray="3 5"/>
+  <text x="854" y="426" class="sans name" style="fill:#9cafb2">OpenAI Decisions</text>
+  <text x="1148" y="426" class="sans sub" text-anchor="end">planned</text>
+  <text x="854" y="454" class="sans sub">Not built yet.</text>
+
+  <!-- Bottom strip -->
+  <rect x="36" y="502" width="1128" height="66" rx="12" fill="#2a2413" stroke="#e8b85c"/>
+  <text x="600" y="543" class="sans" font-size="20" font-weight="600" fill="#f5e2b8" text-anchor="middle">No model ships with the SDK. For real decisions, download a model or bring your own.</text>
+</svg>

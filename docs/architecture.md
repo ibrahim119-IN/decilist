@@ -2,7 +2,7 @@
 
 ## MVP boundary
 
-The Python package is the decision runtime. TypeScript and Python HTTP clients share a public contract with all other languages. This avoids maintaining two model runtimes before the November 1 demo. Custom Python providers implement `name`, `model`, `locality`, and `async infer(question) -> probabilities`. A TypeScript `Transport` changes where requests execute; it is not itself a model provider.
+The Python package is the decision runtime. TypeScript and Python HTTP clients share a public contract with all other languages. This avoids maintaining two model runtimes. Custom Python providers implement `name`, `model`, `locality`, and `async infer(question) -> probabilities`. A TypeScript `Transport` changes where requests execute; it is not itself a model provider.
 
 ## Integration experience
 

@@ -40,7 +40,7 @@ The two-case pilot is prepared locally with both timers unset. The participant w
 
 **Human debugging-time savings are not measured.** The current model abstained on both pilot cases in the machine evaluation, so this prepared version can exercise the workflow but should not be presented as a promising efficacy trial. The cases are not established to be equally difficult. One participant and two cases cannot support a general speedup claim. If improving the assistant, freeze its new version and use fresh, prespecified cases before a broader time comparison.
 
-The immediate product decision is to improve specific, evidence-backed help before adding integrations or UI screens. Test a clearly labelled rules path for direct error signals and reserve model evaluation for ambiguous evidence; that hybrid production path is a proposal, not implemented functionality. Keep the existing negative result. The [Arabic roadmap](product-roadmap-ar.md) gives the November 1 priorities and success gates.
+The immediate product decision is to improve specific, evidence-backed help before adding integrations or UI screens. Test a clearly labelled rules path for direct error signals and reserve model evaluation for ambiguous evidence; that hybrid production path is a proposal, not implemented functionality. Keep the existing negative result.
 
 ## Retained evidence
 

@@ -2,7 +2,7 @@
 
 `scripts/setup_stronger_local.py` supports explicit model profiles. The integrated plans and setup guards passed 21 focused tests using stubs and pure plans. Separately, on 2026-10-26 the public setup helper successfully loaded Qwen3.6-27B Q8_0 on the existing Windows machine with two RTX 3090 24 GB cards, 16,384 context tokens, a 3:2 layer split and native `--reasoning off`. It verified the full pinned weight SHA-256, owned listener PID 64136, serving context, actual CUDA DLL paths/hashes and the default closed-thinking template prefix. This is observed setup readiness on that hardware, not a general compatibility, diagnostic-quality or human-speed claim.
 
-The retained local manifest is `L:/CodexData/Decilist/work/triage-v6-model/launches/20261026T201514864850Z-qwen36-27b-q8/server-ready-manifest.json`. That launch reused the pinned runtime and existing CUDA DLLs through the explicit directory options below. The setup helper made zero generation requests; the commands in this guide describe checkout usage.
+That launch reused the pinned runtime and existing CUDA DLLs through the explicit directory options below. The setup helper made zero generation requests; the commands in this guide describe checkout usage.
 
 The existing default remains Qwen3-Coder-30B-A3B-Instruct Q4_K_M. Select Qwen3.6 explicitly; installing or importing the SDK does not select, download or start either model. Windows x64 CUDA is the setup helper's supported target. The ordinary `decilist triage` command and existing provider/config schemas are unchanged.
 
@@ -22,7 +22,7 @@ The existing default remains Qwen3-Coder-30B-A3B-Instruct Q4_K_M. Select Qwen3.6
 Run from the checkout. Use a dedicated cache directory and Python environment. SDK installation needs no GPU framework. The separate Hub packages are needed only for an explicit model download; the helper never installs packages itself. These are checkout commands, not a claim that this candidate is published on PyPI.
 
 ```powershell
-$setupRoot = 'L:/CodexData/Decilist/work/qwen36-local'
+$setupRoot = '../qwen36-local'
 New-Item -ItemType Directory -Force "$setupRoot/tmp", "$setupRoot/pip-cache" | Out-Null
 $env:TEMP = "$setupRoot/tmp"
 $env:TMP = "$setupRoot/tmp"
@@ -80,7 +80,7 @@ This verifies the native profile and records the model, build, generation profil
 
 ```powershell
 decilist debug --url http://127.0.0.1:8794 `
-  --model-config "$setupRoot/NEW-V6.json" --project L:/path/to/app `
+  --model-config "$setupRoot/NEW-V6.json" --project ../path/to/app `
   --test tests/test_bug.py::test_bug --regression tests/test_existing.py `
   --production-root src --work-dir "$setupRoot/runs/new-v6-run"
 ```
@@ -115,7 +115,7 @@ from decilist.llama_cpp import LlamaCppProvider
 from decilist.triage_v3 import load_qwen_config
 
 async def main():
-    config = load_qwen_config(Path("L:/CodexData/Decilist/work/qwen36-local/decilist-model-qwen36-27b-q8.json"))
+    config = load_qwen_config(Path("../qwen36-local/decilist-model-qwen36-27b-q8.json"))
     async with LlamaCppProvider(base_url="http://127.0.0.1:8794", **config) as provider:
         result = await Decilist([provider]).choose(
             "The retry budget is exhausted.", "Choose the next action.",
