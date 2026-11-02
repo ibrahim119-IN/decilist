@@ -44,7 +44,7 @@ The API enforces local-only even if a request asks to disable it. The MVP expose
 
 The development server binds to loopback, restricts Host and browser Origin, limits request bodies, and serves fixed local files. It is not a production service. Remote hosting needs authentication, TLS, quotas, a total deadline, deployment review, and an explicit privacy policy. Configuring a remote HTTP runtime sends input to that runtime even if model inference there is local.
 
-Fast local rule functions execute directly and must not block the event loop. Native Liquid inference uses a worker thread and a lock. A timeout cannot terminate a GPU kernel; it stops waiting while the running job retains the lock. Later requests cannot overlap that native inference. Hard cancellation and process isolation are later work.
+FunctionProvider awaits coroutine functions directly and runs plain functions in a worker thread. A timed-out plain function keeps running until it returns, so it must be thread-safe. Native Liquid inference uses a worker thread and a lock. A timeout cannot terminate a GPU kernel; it stops waiting while the running job retains the lock. Later requests cannot overlap that native inference. Hard cancellation and process isolation are later work.
 
 ## Differentiation to validate
 

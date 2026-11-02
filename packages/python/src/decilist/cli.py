@@ -16,12 +16,20 @@ def _help() -> argparse.ArgumentParser:
     commands.add_parser("triage", help="Inspect a saved failure log and suggest the next check")
     commands.add_parser("debug", help="Debug an existing test in a disposable project copy")
     commands.add_parser("review", help="Review JS/TS code locally with an optional specialist")
+    commands.add_parser("calibrate", help="Calibrate confidence from a local decision log")
+    commands.add_parser("shadow-report", help="Report comparisons from a local decision log")
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     """Route explicit helpers and preserve the runtime's complete argument list."""
     arguments = list(sys.argv[1:] if argv is None else argv)
+    if arguments[:1] == ["shadow-report"]:
+        from .shadow import _main as shadow_main
+        return shadow_main(arguments[1:])
+    if arguments[:1] == ["calibrate"]:
+        from .decision_log import _main as calibrate_main
+        return calibrate_main(arguments[1:])
     if arguments[:1] == ["review"]:
         from .code_review_cli import main as review_main
         return review_main(arguments[1:])

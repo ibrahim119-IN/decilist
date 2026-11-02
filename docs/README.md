@@ -8,6 +8,9 @@ New here? Start with the [README](../README.md).
 |---|---|
 | [Runtime and direct SDK calls](runtime.md) | Install, run the runtime, call it from Python and TypeScript |
 | [Providers](providers.md) | Demo rules, your own function, `LiquidAI/d1-3B`, and what is planned |
+| [Verified decisions](verified-decisions.md) | Check ranked choices and use a fallback |
+| [Decision logs and calibration](decision-log.md) | Record outcomes and calculate confidence thresholds |
+| [Shadow mode](shadow-mode.md) | Compare model answers with current decisions |
 | [Architecture and contracts](architecture.md) | How the pieces fit, and the provider interface |
 | [Playground and example app](ui-experience.md) | The optional local pages |
 | [Example app walkthrough](demo.md) | The request desk at `/demo` |

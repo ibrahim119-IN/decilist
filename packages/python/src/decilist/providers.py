@@ -3,20 +3,71 @@ from __future__ import annotations
 
 import asyncio
 import importlib
-from collections.abc import Callable
+import inspect
+from numbers import Integral
+from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 from .contracts import Choose, Predict, Question, labels_for
 
 
+async def _call_function(fn: Callable, *args: Any) -> Any:
+    if inspect.iscoroutinefunction(fn):
+        return await fn(*args)
+    result = await asyncio.to_thread(fn, *args)
+    return await result if inspect.isawaitable(result) else result
+
+
 class FunctionProvider:
-    """Explicit local rules/baseline. Function must be fast and non-blocking."""
+    """Run local rules or a model function.
+
+    A timed-out plain function's thread keeps running until it returns: Python
+    cannot kill a thread. The function must therefore be thread-safe.
+    asyncio.run and interpreter shutdown wait for worker threads before exiting.
+    """
     locality = "local"
 
     def __init__(self, fn: Callable[[Question], dict[str, float]], *, name: str = "rules", model: str = "rules-v1"):
         self.fn, self.name, self.model = fn, name, model
 
     async def infer(self, question: Question) -> dict[str, float]:
-        return self.fn(question)
+        return await _call_function(self.fn, question)
+
+
+class PredictProbaProvider:
+    """Adapt an estimator with classes_ and predict_proba to decision labels."""
+    locality = "local"
+
+    def __init__(self, estimator: Any, *, features: Callable[[Question], Sequence],
+                 labels: Mapping | None = None, name: str = "predict-proba", model: str = "predict-proba-v1"):
+        self.estimator, self.features, self.labels = estimator, features, labels
+        self.name, self.model = name, model
+
+    async def infer(self, question: Question) -> dict[str, float]:
+        def run() -> dict[str, float]:
+            row = self.features(question)
+            probabilities = self.estimator.predict_proba([row])[0]
+            classes = self.estimator.classes_
+            if len(classes) != len(probabilities):
+                raise ValueError("class and probability counts differ")
+            result = dict.fromkeys(labels_for(question), 0.0)
+            seen = set()
+            for cls, probability in zip(classes, probabilities):
+                if self.labels is not None:
+                    if cls not in self.labels:
+                        raise ValueError("model class has no label mapping")
+                    label = self.labels[cls]
+                elif isinstance(cls, bool) or (type(cls).__name__ in ("bool", "bool_") and type(cls).__module__.startswith("numpy")):
+                    label = "true" if cls else "false"
+                elif isinstance(question, Predict) and isinstance(cls, Integral) and cls in (0, 1):
+                    label = "true" if cls else "false"
+                else:
+                    label = str(cls)
+                if label not in result or label in seen:
+                    raise ValueError("model classes must map to distinct question labels")
+                seen.add(label)
+                result[label] = float(probability)
+            return result
+        return await asyncio.to_thread(run)
 
 
 class UniformProvider:

@@ -22,3 +22,25 @@ if (special.status === "accepted") {
   // @ts-expect-error special labels must retain the same bounded choice type
   const invalid: "other" = special.value;
 }
+
+await sdk.choose({count: 1}, "Choose", {yes: "Yes", no: "No"});
+await sdk.predict([1, "two"] as const, "Ready?");
+await sdk.score({nested: [true]}, "Rate", ["Low", "High"]);
+const checked = await sdk.chooseVerified("state", "Choose", {proceed:"Ready", review:"Review"}, {
+  verify: label => label === "proceed" ? {ticket: 1} : null,
+  fallback: () => "manual" as const,
+});
+if (checked.status === "verified") {
+  const selected: "proceed" | "review" = checked.value;
+  const result: {ticket: number} | null = checked.result;
+  // @ts-expect-error labels are restricted to the options
+  const invalid: "other" = checked.value;
+} else if (checked.status === "fallback") {
+  const fallback: "manual" = checked.result;
+  const value: null = checked.value;
+} else {
+  const result: null = checked.result;
+  const value: null = checked.value;
+}
+// @ts-expect-error primitive numeric state is not supported
+await sdk.predict(42, "Ready?");

@@ -62,7 +62,7 @@ async def test_timeout_then_fallback():
         async def infer(self, question):
             await asyncio.sleep(1)
             return {"a":1,"b":0}
-    result = await Decilist([Slow(), FunctionProvider(lambda q: {"a":0,"b":1})], Policy(timeout_ms=10)).decide(QUESTION)
+    result = await Decilist([Slow(), FunctionProvider(lambda q: {"a":0,"b":1})], Policy(timeout_ms=200)).decide(QUESTION)
     assert result.value == "b"
     assert result.attempts[0].outcome == "timeout"
 

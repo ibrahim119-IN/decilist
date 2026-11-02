@@ -57,3 +57,74 @@ test("abstention retains null value",async()=>{
   const c=cases[0];const result=validateDecision(c.question,{...envelope(c),status:"abstained",value:null,confidence:null,probabilities:{},provider:null,model:null});
   assert.equal(result.value,null);
 });
+
+test("structured states become wire strings for each convenience call", async () => {
+  const seen = [];
+  const sdk = new Decilist({async decide(question) {
+    seen.push(question);
+    return {schema_version:"1",request_id:"test",kind:question.kind,status:"abstained",value:null,probabilities:{},confidence:null,provider:null,model:null,latency_ms:1,cost_usd:null,attempts:[]};
+  }});
+  await sdk.choose({name:"\u0639\u0631\u0628\u064a", count:2}, "Choose", {a:"A",b:"B"});
+  await sdk.predict([1, {ready:true}], "Ready?");
+  await sdk.score("unchanged", "Rate", ["Low", "High"]);
+  assert.deepEqual(seen.map(q => q.state), ['{"name":"\u0639\u0631\u0628\u064a","count":2}', '[1,{"ready":true}]', 'unchanged']);
+  assert.throws(() => sdk.predict({toJSON() { return undefined; }}, "Ready?"), TypeError);
+  assert.throws(() => sdk.predict({x: 1n}, "Ready?"), TypeError);
+});
+
+function rankedSdk(probabilities = {a:.2,b:.5,c:.3}, value = "b", status = "accepted") {
+  let calls = 0;
+  const sdk = new Decilist({async decide(question, policy) {
+    calls++;
+    return {schema_version:"1",request_id:"test",kind:"choose",status,value:status === "accepted" ? value : null,
+      probabilities:status === "accepted" ? probabilities : {}, confidence:status === "accepted" ? Math.max(...Object.values(probabilities)) : null,
+      provider:status === "accepted" ? "stub" : null,model:status === "accepted" ? "stub" : null,latency_ms:1,cost_usd:null,attempts:[]};
+  }});
+  return {sdk, calls: () => calls};
+}
+const rankedOptions = {a:"A",b:"B",c:"C"};
+test("verified choice checks in order, retains results and respects the limit", async () => {
+  const {sdk} = rankedSdk();
+  const calls = [];
+  const payload = {ok:true};
+  const first = await sdk.chooseVerified("state", "Choose", rankedOptions, {verify: label => {calls.push(label); return payload;}});
+  assert.equal(first.status,"verified"); assert.equal(first.result,payload); assert.deepEqual(calls,["b"]);
+  calls.length = 0;
+  const second = await sdk.chooseVerified("state", "Choose", rankedOptions, {verify: async label => {calls.push(label); return label === "c";}});
+  assert.equal(second.value,"c"); assert.deepEqual(calls,["b","c"]); assert.deepEqual(second.tried.map(x => x.ok),[false,true]);
+  calls.length = 0;
+  const unresolved = await sdk.chooseVerified("state", "Choose", rankedOptions, {verify: label => {calls.push(label); return false;}, maxTries:2});
+  assert.equal(unresolved.status,"unresolved"); assert.equal(unresolved.result,null); assert.deepEqual(calls,["b","c"]);
+  assert.ok(unresolved.tried.every(x => x.latencyMs >= 0 && x.error === null));
+});
+test("ties begin with decision value even if probability keys arrive reordered", async () => {
+  const {sdk} = rankedSdk({c:.5,b:.5,a:0}, "b");
+  const calls = [];
+  const result = await sdk.chooseVerified("state", "Choose", rankedOptions, {verify: label => {calls.push(label); return false;}});
+  assert.deepEqual(calls,["b","c","a"]); assert.equal(calls[0], result.decision.value);
+  assert.deepEqual(Object.keys(result.decision.probabilities),["c","b","a"]);
+});
+test("abstention, failures, error redaction and fallback", async () => {
+  const abstained = rankedSdk(undefined, undefined, "abstained").sdk;
+  let checked = 0;
+  const result = await abstained.chooseVerified("state", "Choose", rankedOptions, {verify: () => {checked++;}, fallback: () => 0});
+  assert.equal(result.status,"fallback"); assert.equal(result.result,0); assert.equal(checked,0); assert.deepEqual(result.tried,[]);
+  const {sdk} = rankedSdk();
+  const errors = await sdk.chooseVerified("state", "Choose", rankedOptions, {verify: label => {
+    if (label === "b") throw new TypeError("private text");
+    if (label === "c") throw "private text";
+    return true;
+  }});
+  assert.equal(errors.value,"a"); assert.deepEqual(errors.tried.map(x => x.error),["TypeError","Error",null]);
+  assert.ok(!JSON.stringify(errors).includes("private text"));
+  const fallback = await sdk.chooseVerified("state", "Choose", rankedOptions, {verify: () => false, fallback: async () => false});
+  assert.equal(fallback.status,"fallback"); assert.equal(fallback.result,false);
+  await assert.rejects(sdk.chooseVerified("state", "Choose", rankedOptions, {verify: () => false, fallback: () => {throw new Error("fallback");}}), /fallback/);
+});
+test("invalid verification settings fail before transport", async () => {
+  const {sdk, calls} = rankedSdk();
+  for (const maxTries of [0,-1,1.5,NaN,true,null]) await assert.rejects(sdk.chooseVerified("state", "Choose", rankedOptions, {verify: () => true, maxTries}));
+  await assert.rejects(sdk.chooseVerified("state", "Choose", rankedOptions, {verify:null}), TypeError);
+  await assert.rejects(sdk.chooseVerified("state", "Choose", rankedOptions, {verify:() => true, fallback:null}), TypeError);
+  assert.equal(calls(),0);
+});

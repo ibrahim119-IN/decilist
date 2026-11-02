@@ -1,7 +1,7 @@
 import re
 from pathlib import Path
 
-from examples import own_model, quickstart
+from examples import own_model, quickstart, verified_choice
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -15,6 +15,13 @@ async def test_own_model_example_accepts_and_abstains():
     assert (await own_model.handle(3)).startswith("urgent (confidence 0.90, from stand-in-v1)")
     assert (await own_model.handle(0)).startswith("normal (confidence 0.90, from stand-in-v1)")
     assert await own_model.handle(1) == "abstained: ask a person (attempt: low_confidence)"
+
+
+async def test_verified_choice_example(capsys):
+    await verified_choice.main()
+    assert capsys.readouterr().out.strip().splitlines() == [
+        "The provider is a fixed stand-in, not a real model.", "verified: backup"
+    ]
 
 
 def test_readme_first_program_matches_the_example():
