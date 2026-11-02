@@ -30,6 +30,8 @@ async def shutdown():
 
 `current` accepts `str`, `bool`, `int`, a finite `float`, `None`, or an `Enum` member. Anything else, including NumPy scalars, is counted in `shadow.errors` and is not run; convert it first.
 
+The question is encoded when the call is made, on the app's path, so the app can change its data afterwards. A large state costs that encoding time even though the model runs in the background.
+
 The model still runs and uses CPU, memory, and whatever else its provider needs. Background work is not free. A plain-function provider uses a thread. The usual `local_only` policy still applies; nothing leaves the machine unless the app configured a provider that does that.
 
 ## Record outcomes
@@ -53,5 +55,7 @@ decilist shadow-report decisions.jsonl --model my-model --max-disagreements 20 -
 ```
 
 The report joins shadow lines to their decision lines by request ID. Coverage is the fraction of observations the model accepted. Agreement counts only observations where the answers can be compared. A score agrees when it is within 0.5 of the current numeric answer; a boolean is not a numeric score. Abstentions and missing or incompatible current answers are not compared. The report gives a Wilson lower bound for agreement, latency percentiles, and recent disagreements. The JSON output includes counts by question kind.
+
+`errors` counts shadow error lines plus failed provider attempts. `failed_attempts` counts attempts with an error or timeout, including a failed attempt that a later provider recovered from. With `--model`, observations that name no model are left out; the report warns when this happens.
 
 Agreement with the current method is not accuracy: a disagreement may mean the app is wrong or the model is wrong. If you add outcomes with `DecisionLog.record_outcome`, the report includes model accuracy for accepted labelled decisions and current-answer accuracy where an expected answer is available. An outcome that only supplies `correct` labels the model decision, not the current answer. Outcomes may be unrepresentative; review the sample before drawing conclusions.

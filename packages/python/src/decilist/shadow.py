@@ -8,10 +8,10 @@ import json
 import logging
 import math
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 from .client import Client
-from .contracts import Decision, Policy, Question, State
+from .contracts import Choose, Decision, Policy, Predict, Question, Score, State, _encode_options, encode_state
 from .decision_log import DecisionLog, _wilson_lower
 from .engine import Decilist
 
@@ -40,7 +40,7 @@ class Shadow:
             except Exception as write_exc:
                 logging.getLogger("decilist").warning("Shadow error log failed (%s)", type(write_exc).__name__)
 
-    def _start(self, method: str, args: tuple, current: Any, policy: Policy | None) -> asyncio.Task | None:
+    def _start(self, build: Callable[[], Question], current: Any, policy: Policy | None) -> asyncio.Task | None:
         try:
             if isinstance(current, Enum):
                 current = current.name
@@ -61,7 +61,14 @@ class Shadow:
         if len(self._tasks) >= self.max_pending:
             self.dropped += 1
             return None
-        coroutine = self._run(method, args, current, policy)
+        try:
+            question = build()
+            if policy is not None:
+                policy = policy.model_copy(deep=True)
+        except Exception as exc:
+            self._error(exc, before_decision=True)
+            return None
+        coroutine = self._run(question, current, policy)
         try:
             task = asyncio.create_task(coroutine)
         except Exception as exc:
@@ -72,10 +79,10 @@ class Shadow:
         task.add_done_callback(self._tasks.discard)
         return task
 
-    async def _run(self, method: str, args: tuple, current: Any, policy: Policy | None) -> Decision | None:
+    async def _run(self, question: Question, current: Any, policy: Policy | None) -> Decision | None:
         decision = None
         try:
-            decision = await getattr(self.decisions, method)(*args, policy=policy)
+            decision = await self.decisions.decide(question, policy=policy)
             for attempt in decision.attempts:
                 if attempt.outcome in ("error", "timeout"):
                     self.errors += 1
@@ -96,39 +103,39 @@ class Shadow:
 
     def choose(self, state: State, instructions: str, options: dict[str, str] | type[Enum], *, current: Any, policy: Policy | None = None) -> bool:
         """Start a choice comparison and return whether it started."""
-        return self._start("choose", (state, instructions, options), current, policy) is not None
+        return self._start(lambda: Choose(state=encode_state(state), instructions=instructions, options=_encode_options(options)), current, policy) is not None
 
     def predict(self, state: State, instructions: str, *, current: Any, policy: Policy | None = None) -> bool:
         """Start a prediction comparison and return whether it started."""
-        return self._start("predict", (state, instructions), current, policy) is not None
+        return self._start(lambda: Predict(state=encode_state(state), instructions=instructions), current, policy) is not None
 
     def score(self, state: State, instructions: str, levels: list[str], *, current: Any, policy: Policy | None = None) -> bool:
         """Start a score comparison and return whether it started."""
-        return self._start("score", (state, instructions, levels), current, policy) is not None
+        return self._start(lambda: Score(state=encode_state(state), instructions=instructions, levels=levels), current, policy) is not None
 
     def observe(self, question: Question, *, current: Any, policy: Policy | None = None) -> bool:
         """Start a comparison for a question and return whether it started."""
-        return self._start("decide", (question,), current, policy) is not None
+        return self._start(lambda: question.model_copy(deep=True), current, policy) is not None
 
-    async def _compare(self, method: str, args: tuple, current: Any, policy: Policy | None) -> Decision | None:
-        task = self._start(method, args, current, policy)
+    async def _compare(self, build: Callable[[], Question], current: Any, policy: Policy | None) -> Decision | None:
+        task = self._start(build, current, policy)
         return await task if task is not None else None
 
     async def compare_choose(self, state: State, instructions: str, options: dict[str, str] | type[Enum], *, current: Any, policy: Policy | None = None) -> Decision | None:
         """Wait for a choice comparison."""
-        return await self._compare("choose", (state, instructions, options), current, policy)
+        return await self._compare(lambda: Choose(state=encode_state(state), instructions=instructions, options=_encode_options(options)), current, policy)
 
     async def compare_predict(self, state: State, instructions: str, *, current: Any, policy: Policy | None = None) -> Decision | None:
         """Wait for a prediction comparison."""
-        return await self._compare("predict", (state, instructions), current, policy)
+        return await self._compare(lambda: Predict(state=encode_state(state), instructions=instructions), current, policy)
 
     async def compare_score(self, state: State, instructions: str, levels: list[str], *, current: Any, policy: Policy | None = None) -> Decision | None:
         """Wait for a score comparison."""
-        return await self._compare("score", (state, instructions, levels), current, policy)
+        return await self._compare(lambda: Score(state=encode_state(state), instructions=instructions, levels=levels), current, policy)
 
     async def compare(self, question: Question, *, current: Any, policy: Policy | None = None) -> Decision | None:
         """Wait for a comparison for a question."""
-        return await self._compare("decide", (question,), current, policy)
+        return await self._compare(lambda: question.model_copy(deep=True), current, policy)
 
     async def drain(self, timeout: float | None = None) -> int:
         """Wait for current tasks without cancelling those that outlast the timeout."""
@@ -180,6 +187,9 @@ def _valid(record: dict) -> bool:
         correct = type(record.get("correct")) is bool
         expected = "expected" in record and record["expected"] is not None and _scalar(record["expected"])
         return correct or expected
+    attempts = record.get("attempts", [])
+    if not isinstance(attempts, list) or any(not isinstance(attempt, dict) for attempt in attempts):
+        return False
     confidence = record.get("confidence")
     latency = record.get("latency_ms")
     status = record.get("status")
@@ -201,11 +211,12 @@ def _counts(rows: list[tuple[dict, dict]]) -> dict:
     accepted = sum(d["status"] == "accepted" for d, _ in rows)
     compared = sum(s["agreed"] is not None for _, s in rows)
     agreements = sum(s["agreed"] is True for _, s in rows)
+    failed_attempts = sum(attempt.get("outcome") in ("error", "timeout") for d, _ in rows for attempt in d.get("attempts", []))
     rate = agreements / compared if compared else None
     lower = _wilson_lower(agreements, compared)
     return {"observations": n, "accepted": accepted, "abstained": n-accepted, "coverage": accepted/n if n else 0.0,
             "compared": compared, "agreements": agreements, "agreement_rate": rate, "agreement_wilson_lower": lower,
-            "disagreements_total": compared-agreements}
+            "disagreements_total": compared-agreements, "failed_attempts": failed_attempts}
 
 
 def shadow_report(path: str | Path, *, max_disagreements: int = 20, model: str | None = None) -> dict:
@@ -233,14 +244,17 @@ def shadow_report(path: str | Path, *, max_disagreements: int = 20, model: str |
         else:
             outcomes[record["request_id"]] = record
     rows = []
+    unnamed = 0
     for shadow in shadows:
         decision = decisions.get(shadow["request_id"])
         if decision is None:
             malformed += 1
         elif model is None or decision.get("model") == model:
             rows.append((decision, shadow))
+        elif decision.get("model") is None:
+            unnamed += 1
     result = _counts(rows)
-    result.update(errors=errors, malformed_lines=malformed)
+    result.update(errors=errors + result["failed_attempts"], malformed_lines=malformed)
     result["by_kind"] = {kind: _counts([row for row in rows if row[0]["kind"] == kind]) for kind in sorted({d["kind"] for d, _ in rows})}
     result["disagreements"] = [{"request_id": d["request_id"], "kind": d["kind"], "value": d.get("value"),
                                 "current": s["current"], "confidence": d.get("confidence"), "state_sha256": d.get("state_sha256")}
@@ -266,6 +280,8 @@ def shadow_report(path: str | Path, *, max_disagreements: int = 20, model: str |
     warnings = []
     if model is None and len({d.get("model") for d, _ in rows if d.get("model") is not None}) > 1:
         warnings.append("The report mixes more than one model.")
+    if unnamed:
+        warnings.append(f"{unnamed} observations name no model and were left out, so coverage and failed attempts only count observations this model answered.")
     if result["compared"] < 30:
         warnings.append("Fewer than 30 observations were compared.")
     if len(labelled) < len(rows):
@@ -295,13 +311,13 @@ def _main(argv: list[str]) -> int:
     if not report["observations"]:
         print("No shadow observations found in the log for this selection.")
         if report["errors"] or report["malformed_lines"]:
-            print(f'Errors: {report["errors"]}; malformed lines: {report["malformed_lines"]}')
+            print(f'Errors: {report["errors"]}; failed attempts: {report["failed_attempts"]}; malformed lines: {report["malformed_lines"]}')
         return 1
     if args.json:
         print(json.dumps(report, ensure_ascii=False, indent=2))
     else:
         print(f'Observations: {report["observations"]}; coverage: {report["coverage"]:.1%}; compared: {report["compared"]}; agreements: {report["agreements"]}')
-        print(f'Disagreements: {report["disagreements_total"]}; errors: {report["errors"]}; malformed lines: {report["malformed_lines"]}')
+        print(f'Disagreements: {report["disagreements_total"]}; errors: {report["errors"]}; failed attempts: {report["failed_attempts"]}; malformed lines: {report["malformed_lines"]}')
         def percent(value: float | None) -> str:
             return f"{value:.1%}" if value is not None else "-"
         print(f'Agreement rate: {percent(report["agreement_rate"])}; Wilson lower: {percent(report["agreement_wilson_lower"])}')
