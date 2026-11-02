@@ -142,7 +142,7 @@ def my_model_provider(question):
 decisions = Decilist([FunctionProvider(my_model_provider, name="my-model", model="my-model-v1")])
 ```
 
-[`examples/own_model.py`](examples/own_model.py) is a complete version you can run, and it shows the abstained path too. `FunctionProvider` runs on the event loop, so a slow model needs its own provider class with `async def infer` that runs the model in a thread. The [architecture notes](docs/architecture.md) describe that interface.
+[`examples/own_model.py`](examples/own_model.py) is a complete version you can run, and it shows the abstained path too. `FunctionProvider` runs plain functions in a thread and awaits coroutine functions. A timed-out thread keeps running until the function returns, so the function must be thread-safe. For scripts, use `choose_sync`, `predict_sync`, `score_sync`, or `decide_sync`; use sync or async calls on an instance, not both. The [architecture notes](docs/architecture.md) describe that interface.
 
 </details>
 
@@ -165,7 +165,7 @@ from decilist import Client
 
 async def main():
     async with await Client.connect() as decisions:
-        answer = await decisions.predict('{"complete":true,"valid":true}', "Is the workflow ready to proceed?")
+        answer = await decisions.predict({"complete": True, "valid": True}, "Is the workflow ready to proceed?")
         print(answer.value if answer.status == "accepted" else "Needs review")
 
 
@@ -234,6 +234,30 @@ curl -s http://127.0.0.1:8765/v1/decisions -H "Content-Type: application/json" -
 The answer includes `status`, `value`, `probabilities`, `confidence`, `provider`, `model` and `attempts`. The full schema is in [`contracts/`](contracts/).
 
 </details>
+
+## Check a choice before using it
+
+Use your own check to try ranked options, then fall back to your existing method if none passes:
+
+```python
+from decilist import Policy
+
+answer = await decisions.choose_verified(
+    {"available": ["proceed"]},
+    "Choose the next action.",
+    {"proceed": "Proceed", "review": "Ask a person"},
+    verify=lambda label: label in {"proceed"},  # Replace with your app's check.
+    fallback=lambda: "ask a person",
+    policy=Policy(min_confidence=0.0),
+)
+print(answer.status, answer.value, answer.result)
+```
+
+`verified` means your app's own check passed. It does not mean the model was right about anything else; the guarantee is only as good as your check. The default policy abstains below 0.7, so use `min_confidence=0.0` when you want a ranking even if the model is unsure and your check is the safeguard. See [verified decisions](docs/verified-decisions.md) and the [offline example](examples/verified_choice.py).
+
+The Python SDK can record decisions and outcomes locally and calculate a confidence threshold from them. See [decision logs and calibration](docs/decision-log.md). The TypeScript client and runtime server do not log.
+
+For async Python apps, [shadow mode](docs/shadow-mode.md) compares model answers with your current decisions in the background.
 
 ## Add a real model
 

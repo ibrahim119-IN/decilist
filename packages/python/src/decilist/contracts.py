@@ -1,13 +1,41 @@
 """Version 1 decision contract. Probabilities are estimates, not guarantees."""
 from __future__ import annotations
 
+import json
 import math
-from collections.abc import Iterable
+from enum import Enum
+from collections.abc import Iterable, Mapping
 from typing import Annotated, Literal, TypeAlias
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, TypeAdapter, field_validator
 
 Text = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=65536)]
 Label = Annotated[str, StringConstraints(min_length=1, max_length=256)]
+
+
+State: TypeAlias = str | Mapping | list | tuple
+
+
+def encode_state(state: State) -> str:
+    """Encode structured state as JSON while leaving strings unchanged."""
+    if isinstance(state, str):
+        return state
+    if not isinstance(state, (Mapping, list, tuple)):
+        raise TypeError("state must be a str, Mapping, list, or tuple")
+    try:
+        return json.dumps(dict(state) if isinstance(state, Mapping) else state, ensure_ascii=False, allow_nan=False)
+    except (TypeError, ValueError) as exc:
+        raise type(exc)(f"state must contain JSON-encodable values: {exc}") from exc
+
+
+def _encode_options(options: dict[str, str] | type[Enum]) -> dict[str, str]:
+    if isinstance(options, Enum):
+        raise TypeError("options must be a mapping or an Enum class, not an Enum member")
+    if isinstance(options, type) and issubclass(options, Enum):
+        result = {member.name: str(member.value) for member in options}
+        if not result:
+            raise ValueError("options Enum must not be empty")
+        return result
+    return options
 
 
 def _json_key_order(keys: Iterable[str]) -> list[str]:

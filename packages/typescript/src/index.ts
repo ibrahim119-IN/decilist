@@ -44,6 +44,14 @@ export const decisionSchema = z.strictObject({
 });
 type Envelope = Omit<z.infer<typeof decisionSchema>, "status" | "value">;
 export type Decision<T> = Envelope & ({status: "accepted"; value: T} | {status: "abstained"; value: null});
+export type TriedOption<T extends string> = {label: T; ok: boolean; latencyMs: number; error: string | null};
+export type VerifiedDecision<T extends string, R = unknown, F = unknown> = {
+  decision: Decision<T>; tried: TriedOption<T>[];
+} & (
+  | {status: "verified"; value: T; result: R}
+  | {status: "fallback"; value: null; result: F}
+  | {status: "unresolved"; value: null; result: null}
+);
 
 export function validateDecision<T>(question: Question, input: unknown): Decision<T> {
   const result = decisionSchema.parse(input);
@@ -152,6 +160,15 @@ export class HttpTransport implements Transport {
   }
 }
 
+export type State = string | Record<string, unknown> | readonly unknown[];
+
+function encodeState(state: State): string {
+  if (typeof state === "string") return state;
+  const encoded = JSON.stringify(state);
+  if (encoded === undefined) throw new TypeError("state must encode to JSON");
+  return encoded;
+}
+
 export type ConnectOptions = {baseUrl?: string; timeoutMs?: number; waitMs?: number; policy?: Policy};
 
 export class Decilist {
@@ -175,13 +192,44 @@ export class Decilist {
   decide(question: Question, policy?: Policy): Promise<Decision<string | boolean | number>> {
     return this.execute(question, policy);
   }
-  choose<const T extends string>(state: string, instructions: string, options: Record<T, string>, policy?: Policy): Promise<Decision<T>> {
-    return this.execute<T>({kind: "choose", state, instructions, options}, policy);
+  choose<const T extends string>(state: State, instructions: string, options: Record<T, string>, policy?: Policy): Promise<Decision<T>> {
+    return this.execute<T>({kind: "choose", state: encodeState(state), instructions, options}, policy);
   }
-  predict(state: string, instructions: string, policy?: Policy): Promise<Decision<boolean>> {
-    return this.execute<boolean>({kind: "predict", state, instructions}, policy);
+  /** Check ranked choices. Policy timeout applies to the model, not verify or fallback. */
+  async chooseVerified<const T extends string, R = unknown, F = unknown>(
+    state: State, instructions: string, options: Record<T, string>,
+    config: {verify: (label: T) => R | Promise<R>; fallback?: () => F | Promise<F>; maxTries?: number; policy?: Policy},
+  ): Promise<VerifiedDecision<T, R, F>> {
+    const maxTries = config.maxTries === undefined ? 3 : config.maxTries;
+    if (!Number.isInteger(maxTries) || maxTries < 1) throw new RangeError("maxTries must be an integer of at least 1");
+    if (typeof config.verify !== "function") throw new TypeError("verify must be callable");
+    if (config.fallback !== undefined && typeof config.fallback !== "function") throw new TypeError("fallback must be callable");
+    const decision = await this.choose(state, instructions, options, config.policy);
+    const tried: TriedOption<T>[] = [];
+    if (decision.status === "accepted") {
+      const entries = Object.entries(decision.probabilities) as [T, number][];
+      entries.sort((a, b) => b[1] - a[1] || Number(b[0] === decision.value) - Number(a[0] === decision.value));
+      for (const [label] of entries.slice(0, maxTries)) {
+        const started = performance.now();
+        let result: R;
+        try {
+          result = await config.verify(label) as R;
+        } catch (error) {
+          tried.push({label, ok: false, latencyMs: performance.now() - started, error: error instanceof Error ? error.name : "Error"});
+          continue;
+        }
+        const ok = Boolean(result);
+        tried.push({label, ok, latencyMs: performance.now() - started, error: null});
+        if (ok) return {status: "verified", value: label, result, decision, tried};
+      }
+    }
+    if (config.fallback !== undefined) return {status: "fallback", value: null, result: await config.fallback() as F, decision, tried};
+    return {status: "unresolved", value: null, result: null, decision, tried};
   }
-  score(state: string, instructions: string, levels: string[], policy?: Policy): Promise<Decision<number>> {
-    return this.execute<number>({kind: "score", state, instructions, levels}, policy);
+  predict(state: State, instructions: string, policy?: Policy): Promise<Decision<boolean>> {
+    return this.execute<boolean>({kind: "predict", state: encodeState(state), instructions}, policy);
+  }
+  score(state: State, instructions: string, levels: string[], policy?: Policy): Promise<Decision<number>> {
+    return this.execute<number>({kind: "score", state: encodeState(state), instructions, levels}, policy);
   }
 }

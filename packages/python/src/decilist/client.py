@@ -1,30 +1,35 @@
 from __future__ import annotations
 
 import asyncio
+from enum import Enum
 import math
 import os
 from time import monotonic
+from typing import Any, Callable
 import httpx
-from .contracts import Choose, Decision, DecisionRequest, Policy, Predict, Question, Score, validate_decision
+from .contracts import Choose, Decision, DecisionRequest, Policy, Predict, Question, Score, State, _encode_options, encode_state, validate_decision
 from .runtime import DEFAULT_URL, RuntimeCompatibilityError, RuntimeConnectionError, validate_base_url, validate_runtime_health
 from .code_review import Language, ReviewPolicy, ReviewRequest, ReviewResult
+from .verified import VerifiedDecision, _validate_callbacks, _verify_decision
+from .decision_log import DecisionLog, _log_decision
 
 
 class Client:
     """Async HTTP client for the same decision contract, including server policy traces."""
 
-    def __init__(self, base_url: str | None = None, *, timeout: float = 130, policy: Policy | None = None):
+    def __init__(self, base_url: str | None = None, *, timeout: float = 130, policy: Policy | None = None, log: DecisionLog | None = None):
         self.base_url = validate_base_url(base_url if base_url is not None else os.environ.get("DECILIST_URL", DEFAULT_URL))
         if not math.isfinite(timeout) or timeout <= 0:
             raise ValueError("timeout must be finite and positive")
         self.policy = Policy.model_validate((policy or Policy()).model_dump())
+        self.log = log
         self._http = httpx.AsyncClient(base_url=self.base_url, timeout=timeout, trust_env=False, follow_redirects=False)
         self._ready = False
 
     @classmethod
-    async def connect(cls, base_url: str | None = None, *, timeout: float = 130, wait_seconds: float = 10, policy: Policy | None = None) -> Client:
+    async def connect(cls, base_url: str | None = None, *, timeout: float = 130, wait_seconds: float = 10, policy: Policy | None = None, log: DecisionLog | None = None) -> Client:
         """Connect once, waiting for readiness. This never starts or downloads a runtime."""
-        client = cls(base_url, timeout=timeout, policy=policy)
+        client = cls(base_url, timeout=timeout, policy=policy, log=log)
         try:
             await client.ready(wait_seconds=wait_seconds)
         except BaseException:
@@ -77,16 +82,25 @@ class Client:
             self._ready = False
             raise RuntimeConnectionError(f"The Decilist request failed at {self.base_url}. Check that the runtime is still running.") from exc
         response.raise_for_status()
-        return validate_decision(question, Decision.model_validate(response.json()))
+        decision = validate_decision(request.question, Decision.model_validate(response.json()))
+        if self.log is not None:
+            _log_decision(self.log, request.question, request.policy, decision)
+        return decision
 
-    async def choose(self, state: str, instructions: str, options: dict[str, str], *, policy: Policy | None = None) -> Decision:
-        return await self.decide(Choose(state=state, instructions=instructions, options=options), policy)
+    async def choose(self, state: State, instructions: str, options: dict[str, str] | type[Enum], *, policy: Policy | None = None) -> Decision:
+        return await self.decide(Choose(state=encode_state(state), instructions=instructions, options=_encode_options(options)), policy)
 
-    async def predict(self, state: str, instructions: str, *, policy: Policy | None = None) -> Decision:
-        return await self.decide(Predict(state=state, instructions=instructions), policy)
+    async def choose_verified(self, state: State, instructions: str, options: dict[str, str] | type[Enum], *, verify: Callable[[str], Any], fallback: Callable[[], Any] | None = None, max_tries: int = 3, policy: Policy | None = None) -> VerifiedDecision:
+        """Check ranked options; policy timeout covers the model, not verify or fallback."""
+        _validate_callbacks(verify, fallback, max_tries)
+        decision = await self.choose(state, instructions, options, policy=policy)
+        return await _verify_decision(decision, verify, fallback, max_tries, self.log)
 
-    async def score(self, state: str, instructions: str, levels: list[str], *, policy: Policy | None = None) -> Decision:
-        return await self.decide(Score(state=state, instructions=instructions, levels=levels), policy)
+    async def predict(self, state: State, instructions: str, *, policy: Policy | None = None) -> Decision:
+        return await self.decide(Predict(state=encode_state(state), instructions=instructions), policy)
+
+    async def score(self, state: State, instructions: str, levels: list[str], *, policy: Policy | None = None) -> Decision:
+        return await self.decide(Score(state=encode_state(state), instructions=instructions, levels=levels), policy)
 
     async def review(self, code: str, *, task: str, language: Language = "TypeScript", policy: ReviewPolicy | None = None) -> ReviewResult:
         body = ReviewRequest(code=code, task=task, language=language, policy=policy or ReviewPolicy())

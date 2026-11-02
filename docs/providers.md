@@ -4,8 +4,18 @@
 | --- | --- | --- |
 | Uniform baseline | Yes | Unit, API, and shared contract tests |
 | Custom local function / workflow rules | Yes | Unit, API, example, and smoke evaluation |
+| `PredictProbaProvider` | Yes | Duck-typed estimator adapter; tested with stubs |
+| `LlamaCppProvider` | Yes | Protocol tests; live compatibility must be checked separately |
 | LiquidAI/d1-3B | Yes | Real Windows CUDA inference, both HTTP SDKs, repeated offline smoke, frozen 60-case evaluation; quality limits recorded |
 | OpenAI Decisions | Planned | Official API documentation inspected; no adapter or paid request yet |
+
+## Your own functions and estimators
+
+`FunctionProvider` awaits coroutine functions directly and runs plain functions in a thread. The first call in a process also starts a worker thread, which can take some milliseconds, so very short timeouts can expire on that call. After a timeout the thread continues until the function returns, so plain functions must be thread-safe. `asyncio.run` and interpreter shutdown wait for worker threads before exiting.
+
+`PredictProbaProvider(estimator, features=...)` accepts an estimator with `classes_` and `predict_proba`. The feature function receives the question and returns one input row. Optionally pass `labels` to map estimator classes to question labels; missing question labels receive zero probability. Features and prediction run in a thread. No numpy or scikit-learn dependency is required by the SDK.
+
+`LlamaCppProvider` connects to an explicitly configured local llama.cpp server; importing it does not load or download a model. Its protocol checks are tested offline, and live compatibility must still be checked separately.
 
 ## Liquid local path
 
