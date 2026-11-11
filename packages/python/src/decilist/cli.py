@@ -18,6 +18,8 @@ def _help() -> argparse.ArgumentParser:
     commands.add_parser("review", help="Review JS/TS code locally with an optional specialist")
     commands.add_parser("calibrate", help="Calibrate confidence from a local decision log")
     commands.add_parser("shadow-report", help="Report comparisons from a local decision log")
+    commands.add_parser("cost-report", help="Replay labelled decisions under a cost rule")
+    commands.add_parser("fit-calibration", help="Fit a probability calibration from labelled decisions")
     return parser
 
 
@@ -27,6 +29,12 @@ def main(argv: list[str] | None = None) -> int:
     if arguments[:1] == ["shadow-report"]:
         from .shadow import _main as shadow_main
         return shadow_main(arguments[1:])
+    if arguments[:1] == ["fit-calibration"]:
+        from .calibration import _main as fit_main
+        return fit_main(arguments[1:])
+    if arguments[:1] == ["cost-report"]:
+        from .costs import _main as cost_main
+        return cost_main(arguments[1:])
     if arguments[:1] == ["calibrate"]:
         from .decision_log import _main as calibrate_main
         return calibrate_main(arguments[1:])

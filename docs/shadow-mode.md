@@ -52,7 +52,14 @@ The returned decision is for labelling or inspection; the app keeps using its cu
 ```bash
 decilist shadow-report decisions.jsonl
 decilist shadow-report decisions.jsonl --model my-model --max-disagreements 20 --json
+decilist shadow-report decisions.jsonl --decision alert_triage
 ```
+
+`--decision NAME` (or `name=` on `shadow_report`) limits the report to one [named decision](named-decisions.md). A named decision starts its own comparisons with `triage.observe(shadow, state, current=...)` and `await triage.compare(shadow, state, current=...)`; `shadow.observe` and `shadow.compare` also accept `name=`.
+
+For a decision defined with [costs](cost-aware-decisions.md), the comparison uses the cost rule's pick instead of the model's most probable answer. The shadow line then also records that pick's `status` and `value`, and the report uses them for coverage, agreement and accuracy. `cost_rule` in the report counts those observations, and the report warns when a log mixes both kinds.
+
+A decision defined with a [calibration](calibrated-probabilities.md) runs in shadow mode with corrected probabilities, and `shadow.observe` and `shadow.compare` accept `calibration=` directly. Shadow mode is also the usual way to collect the outcomes a calibration is fitted from.
 
 The report joins shadow lines to their decision lines by request ID. Coverage is the fraction of observations the model accepted. Agreement counts only observations where the answers can be compared. A score agrees when it is within 0.5 of the current numeric answer; a boolean is not a numeric score. Abstentions and missing or incompatible current answers are not compared. The report gives a Wilson lower bound for agreement, latency percentiles, and recent disagreements. The JSON output includes counts by question kind.
 

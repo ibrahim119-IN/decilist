@@ -7,9 +7,12 @@ from enum import Enum
 from time import perf_counter
 from typing import Any, Callable, Protocol
 from uuid import uuid4
-from .contracts import Attempt, Choose, Decision, Policy, Predict, Question, Score, State, _encode_options, encode_state, question_adapter, validate_probabilities, value_from
+from .contracts import Attempt, Choose, Decision, Policy, Predict, Question, Score, State, _encode_options, encode_state, labels_for, question_adapter, validate_probabilities, value_from
 from .verified import VerifiedDecision, _validate_callbacks, _verify_decision
 from .decision_log import DecisionLog, _log_decision
+from .calibration import Calibration, _check_question
+from .costs import Costs
+from .named import NamedDecision, _define
 
 
 class Provider(Protocol):
@@ -31,19 +34,34 @@ class Decilist:
         self.log = log
         self._sync_lock = threading.Lock()
         self._runner: asyncio.Runner | None = None
+        self._definitions: dict[str, NamedDecision] = {}
 
-    async def decide(self, question: Question, policy: Policy | None = None) -> Decision:
+    async def decide(self, question: Question, policy: Policy | None = None, *, name: str | None = None, calibration: Calibration | None = None) -> Decision:
         if self.log is None:
-            return await self._decide(question, policy)
+            return await self._decide(question, policy, calibration)
         question = question_adapter.validate_python(question.model_dump())
         used_policy = Policy.model_validate((policy or self.policy).model_dump())
-        decision = await self._decide(question, used_policy)
-        _log_decision(self.log, question, used_policy, decision)
+        decision = await self._decide(question, used_policy, calibration)
+        applied = calibration is not None and decision.status == "accepted" and calibration.applies_to(decision.model)
+        _log_decision(self.log, question, used_policy, decision, name, calibration.temperature if applied else None)
         return decision
 
-    async def _decide(self, question: Question, policy: Policy | None = None) -> Decision:
+    def define(self, name: str, instructions: str, *, options: dict[str, str] | type[Enum] | None = None, levels: list[str] | None = None,
+               policy: Policy | None = None, costs: Costs | None = None, calibration: Calibration | None = None,
+               verify: Callable[[str], Any] | None = None, fallback: Callable[[], Any] | None = None, max_tries: int = 3) -> NamedDecision:
+        """Define a question once under a name: options make a choice, levels a score, neither a yes/no."""
+        return _define(self, name, instructions, options=options, levels=levels, policy=policy, costs=costs, calibration=calibration, verify=verify, fallback=fallback, max_tries=max_tries)
+
+    @property
+    def definitions(self) -> dict[str, NamedDecision]:
+        """The decisions defined on this object, by name."""
+        return dict(self._definitions)
+
+    async def _decide(self, question: Question, policy: Policy | None = None, calibration: Calibration | None = None) -> Decision:
         question = question_adapter.validate_python(question.model_dump())
         policy = Policy.model_validate((policy or self.policy).model_dump())
+        if calibration is not None:
+            _check_question(calibration, question.kind, labels_for(question))
         started = perf_counter()
         attempts: list[Attempt] = []
         result = dict(request_id=str(uuid4()), kind=question.kind, attempts=attempts)
@@ -59,6 +77,9 @@ class Decilist:
                 except ValueError:
                     outcome = "invalid_output"
                 else:
+                    # Correct the probabilities before the threshold, so the threshold means what it says.
+                    if calibration is not None and calibration.applies_to(provider.model):
+                        probabilities = calibration.apply(probabilities)
                     confidence = max(probabilities.values())
                     if confidence >= policy.min_confidence:
                         attempts.append(Attempt(provider=provider.name, outcome="accepted", latency_ms=(perf_counter()-tick)*1000))
