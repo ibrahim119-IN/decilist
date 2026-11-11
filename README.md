@@ -122,6 +122,8 @@ The defaults are `local_only=True`, `min_confidence=0.7` and `timeout_ms=5000`. 
 
 Confidence is the model's own estimate. It isn't a guarantee that the answer is right.
 
+For every capability and where it works, see [what Decilist can do](docs/capabilities.md).
+
 ## Connect it to your project
 
 ![In Python, call Decilist in the same process. From TypeScript or any other language, send HTTP to a local Decilist runtime.](docs/assets/two-ways-to-connect.svg)
@@ -254,6 +256,45 @@ print(answer.status, answer.value, answer.result)
 ```
 
 `verified` means your app's own check passed. It does not mean the model was right about anything else; the guarantee is only as good as your check. The default policy abstains below 0.7, so use `min_confidence=0.0` when you want a ranking even if the model is unsure and your check is the safeguard. See [verified decisions](docs/verified-decisions.md) and the [offline example](examples/verified_choice.py).
+
+## Define a decision once
+
+Give a question a name, and write its instructions, options and threshold in one place. Then call it with only the facts:
+
+```python
+triage = decisions.define(
+    "alert_triage",
+    "Choose what to do with this alert.",
+    options={"ignore": "Known noise", "auto_remediate": "An approved fix exists", "page_oncall": "Needs a person now"},
+    policy=Policy(min_confidence=0.8),
+)
+
+answer = await triage({"rule": "failed_logins", "critical_asset": True})
+```
+
+The name goes into the decision log, so each decision gets its own calibration and its own reports. See [named decisions](docs/named-decisions.md) and the [offline example](examples/named_decision.py). Python only for now.
+
+## Weigh the cost of each mistake
+
+One threshold treats every mistake alike. Say what each mistake costs instead, and the decision picks the answer with the lowest expected cost:
+
+```python
+from decilist import Costs
+
+costs = Costs(
+    {   # costs[answered][actual]
+        "ignore": {"page_oncall": 100, "auto_remediate": 5},  # a missed incident is the expensive mistake
+        "auto_remediate": {"page_oncall": 40},
+        "page_oncall": {"ignore": 3, "auto_remediate": 3},    # a needless page costs less
+    },
+    abstain=2,  # what asking a person costs
+)
+triage = decisions.define("alert_triage", "Choose what to do with this alert.", options=OPTIONS, costs=costs)
+```
+
+Say the model answers `ignore` at 0.75 and gives `page_oncall` 0.20. A 0.7 threshold would accept `ignore`. With these costs its expected cost is 20.25, against 2 for asking a person, so the decision abstains. `decilist cost-report` replays your logged decisions under both rules and shows what each would have cost. The rule is only as good as the model's probabilities and the costs you give it. See [cost-aware decisions](docs/cost-aware-decisions.md) and the [offline example](examples/cost_aware.py). Python only for now.
+
+## Record, compare and calibrate
 
 The Python SDK can record decisions and outcomes locally and calculate a confidence threshold from them. See [decision logs and calibration](docs/decision-log.md). The TypeScript client and runtime server do not log.
 

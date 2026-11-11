@@ -12,6 +12,8 @@ from .runtime import DEFAULT_URL, RuntimeCompatibilityError, RuntimeConnectionEr
 from .code_review import Language, ReviewPolicy, ReviewRequest, ReviewResult
 from .verified import VerifiedDecision, _validate_callbacks, _verify_decision
 from .decision_log import DecisionLog, _log_decision
+from .costs import Costs
+from .named import NamedDecision, _define
 
 
 class Client:
@@ -25,6 +27,7 @@ class Client:
         self.log = log
         self._http = httpx.AsyncClient(base_url=self.base_url, timeout=timeout, trust_env=False, follow_redirects=False)
         self._ready = False
+        self._definitions: dict[str, NamedDecision] = {}
 
     @classmethod
     async def connect(cls, base_url: str | None = None, *, timeout: float = 130, wait_seconds: float = 10, policy: Policy | None = None, log: DecisionLog | None = None) -> Client:
@@ -72,7 +75,7 @@ class Client:
     async def __aexit__(self, *_):
         await self.aclose()
 
-    async def decide(self, question: Question, policy: Policy | None = None) -> Decision:
+    async def decide(self, question: Question, policy: Policy | None = None, *, name: str | None = None) -> Decision:
         request = DecisionRequest(question=question, policy=policy or self.policy)
         if not self._ready:
             await self.ready()
@@ -84,8 +87,19 @@ class Client:
         response.raise_for_status()
         decision = validate_decision(request.question, Decision.model_validate(response.json()))
         if self.log is not None:
-            _log_decision(self.log, request.question, request.policy, decision)
+            _log_decision(self.log, request.question, request.policy, decision, name)
         return decision
+
+    def define(self, name: str, instructions: str, *, options: dict[str, str] | type[Enum] | None = None, levels: list[str] | None = None,
+               policy: Policy | None = None, costs: Costs | None = None, verify: Callable[[str], Any] | None = None,
+               fallback: Callable[[], Any] | None = None, max_tries: int = 3) -> NamedDecision:
+        """Define a question once under a name: options make a choice, levels a score, neither a yes/no."""
+        return _define(self, name, instructions, options=options, levels=levels, policy=policy, costs=costs, verify=verify, fallback=fallback, max_tries=max_tries)
+
+    @property
+    def definitions(self) -> dict[str, NamedDecision]:
+        """The decisions defined on this object, by name."""
+        return dict(self._definitions)
 
     async def choose(self, state: State, instructions: str, options: dict[str, str] | type[Enum], *, policy: Policy | None = None) -> Decision:
         return await self.decide(Choose(state=encode_state(state), instructions=instructions, options=_encode_options(options)), policy)

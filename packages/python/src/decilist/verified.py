@@ -4,11 +4,14 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 from time import perf_counter
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 from .contracts import Decision
 from .providers import _call_function
 from .decision_log import DecisionLog, _log_outcome
+
+if TYPE_CHECKING:
+    from .costs import CostedDecision
 
 
 @dataclass(frozen=True)
@@ -28,6 +31,7 @@ class VerifiedDecision:
     result: Any
     decision: Decision
     tried: tuple[TriedOption, ...]
+    costed: CostedDecision | None = None
 
 
 def _validate_callbacks(verify: Callable, fallback: Callable | None, max_tries: int) -> None:
@@ -39,11 +43,14 @@ def _validate_callbacks(verify: Callable, fallback: Callable | None, max_tries: 
         raise TypeError("fallback must be callable or None")
 
 
-async def _verify_decision(decision: Decision, verify: Callable, fallback: Callable | None, max_tries: int, log: DecisionLog | None = None) -> VerifiedDecision:
+async def _verify_decision(decision: Decision, verify: Callable, fallback: Callable | None, max_tries: int, log: DecisionLog | None = None, *,
+                           ordered: list[str] | None = None, costed: CostedDecision | None = None) -> VerifiedDecision:
+    """Check labels in probability order, or in the given order when a cost rule ranked them."""
     tried: list[TriedOption] = []
     if decision.status == "accepted":
-        # A remote response may preserve a different probability key order from the request.
-        ordered = sorted(decision.probabilities, key=lambda label: (-decision.probabilities[label], label != decision.value))
+        if ordered is None:
+            # A remote response may preserve a different probability key order from the request.
+            ordered = sorted(decision.probabilities, key=lambda label: (-decision.probabilities[label], label != decision.value))
         for label in ordered[:max_tries]:
             tick = perf_counter()
             error = None
@@ -55,10 +62,11 @@ async def _verify_decision(decision: Decision, verify: Callable, fallback: Calla
                 ok = False
                 error = type(exc).__name__
             tried.append(TriedOption(label, ok, (perf_counter() - tick) * 1000, error))
-            if len(tried) == 1 and error is None and log is not None:
+            # The logged outcome labels the model's top answer, so skip it when a cost rule put another label first.
+            if len(tried) == 1 and error is None and log is not None and label == decision.value:
                 _log_outcome(log, decision.request_id, ok)
             if ok:
-                return VerifiedDecision("verified", label, result, decision, tuple(tried))
+                return VerifiedDecision("verified", label, result, decision, tuple(tried), costed)
     if fallback is not None:
-        return VerifiedDecision("fallback", None, await _call_function(fallback), decision, tuple(tried))
-    return VerifiedDecision("unresolved", None, None, decision, tuple(tried))
+        return VerifiedDecision("fallback", None, await _call_function(fallback), decision, tuple(tried), costed)
+    return VerifiedDecision("unresolved", None, None, decision, tuple(tried), costed)

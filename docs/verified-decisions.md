@@ -12,4 +12,6 @@ The original `decision` and the checks in `tried` are retained. An accepted deci
 
 The default policy abstains below confidence 0.7. Rankings across many options often have a low top probability, so use `policy=Policy(min_confidence=0.0)` in Python (or `policy: {min_confidence: 0.0}` in TypeScript) when you want the ranking despite uncertainty and rely on your check as the safeguard. The policy's timeout applies to the model only. There is no timeout on the check or fallback; arrange one in your own application if needed. Python runs plain functions in a worker thread and awaits async functions and awaitable returns.
 
+A [named decision](named-decisions.md) can hold `verify`, `fallback` and `max_tries`, so every call runs the check. With [costs](cost-aware-decisions.md), the check runs on the answers in order of expected cost, cheapest first, and skips any answer that costs more than asking a person; the cost result is in `VerifiedDecision.costed`. The automatic outcome for the first check is written only when that check was on the model's most probable answer.
+
 Choices are limited to 64 options. For a larger pool, rank it first using your own cheap estimate, then pass the best 64 or fewer to Decilist. See the [offline example](../examples/verified_choice.py).

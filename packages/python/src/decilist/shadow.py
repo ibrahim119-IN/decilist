@@ -40,7 +40,7 @@ class Shadow:
             except Exception as write_exc:
                 logging.getLogger("decilist").warning("Shadow error log failed (%s)", type(write_exc).__name__)
 
-    def _start(self, build: Callable[[], Question], current: Any, policy: Policy | None) -> asyncio.Task | None:
+    def _start(self, build: Callable[[], Question], current: Any, policy: Policy | None, name: str | None = None) -> asyncio.Task | None:
         try:
             if isinstance(current, Enum):
                 current = current.name
@@ -68,7 +68,7 @@ class Shadow:
         except Exception as exc:
             self._error(exc, before_decision=True)
             return None
-        coroutine = self._run(question, current, policy)
+        coroutine = self._run(question, current, policy, name)
         try:
             task = asyncio.create_task(coroutine)
         except Exception as exc:
@@ -79,10 +79,12 @@ class Shadow:
         task.add_done_callback(self._tasks.discard)
         return task
 
-    async def _run(self, question: Question, current: Any, policy: Policy | None) -> Decision | None:
+    async def _run(self, question: Question, current: Any, policy: Policy | None, name: str | None = None) -> Decision | None:
         decision = None
         try:
-            decision = await self.decisions.decide(question, policy=policy)
+            # Only pass the name when there is one, so a custom decisions object without that argument keeps working.
+            named = {} if name is None else {"name": name}
+            decision = await self.decisions.decide(question, policy=policy, **named)
             for attempt in decision.attempts:
                 if attempt.outcome in ("error", "timeout"):
                     self.errors += 1
@@ -113,12 +115,12 @@ class Shadow:
         """Start a score comparison and return whether it started."""
         return self._start(lambda: Score(state=encode_state(state), instructions=instructions, levels=levels), current, policy) is not None
 
-    def observe(self, question: Question, *, current: Any, policy: Policy | None = None) -> bool:
+    def observe(self, question: Question, *, current: Any, policy: Policy | None = None, name: str | None = None) -> bool:
         """Start a comparison for a question and return whether it started."""
-        return self._start(lambda: question.model_copy(deep=True), current, policy) is not None
+        return self._start(lambda: question.model_copy(deep=True), current, policy, name) is not None
 
-    async def _compare(self, build: Callable[[], Question], current: Any, policy: Policy | None) -> Decision | None:
-        task = self._start(build, current, policy)
+    async def _compare(self, build: Callable[[], Question], current: Any, policy: Policy | None, name: str | None = None) -> Decision | None:
+        task = self._start(build, current, policy, name)
         return await task if task is not None else None
 
     async def compare_choose(self, state: State, instructions: str, options: dict[str, str] | type[Enum], *, current: Any, policy: Policy | None = None) -> Decision | None:
@@ -133,9 +135,9 @@ class Shadow:
         """Wait for a score comparison."""
         return await self._compare(lambda: Score(state=encode_state(state), instructions=instructions, levels=levels), current, policy)
 
-    async def compare(self, question: Question, *, current: Any, policy: Policy | None = None) -> Decision | None:
+    async def compare(self, question: Question, *, current: Any, policy: Policy | None = None, name: str | None = None) -> Decision | None:
         """Wait for a comparison for a question."""
-        return await self._compare(lambda: question.model_copy(deep=True), current, policy)
+        return await self._compare(lambda: question.model_copy(deep=True), current, policy, name)
 
     async def drain(self, timeout: float | None = None) -> int:
         """Wait for current tasks without cancelling those that outlast the timeout."""
@@ -219,7 +221,7 @@ def _counts(rows: list[tuple[dict, dict]]) -> dict:
             "disagreements_total": compared-agreements, "failed_attempts": failed_attempts}
 
 
-def shadow_report(path: str | Path, *, max_disagreements: int = 20, model: str | None = None) -> dict:
+def shadow_report(path: str | Path, *, max_disagreements: int = 20, model: str | None = None, name: str | None = None) -> dict:
     """Summarize shadow comparisons and matching outcomes from a decision log."""
     if type(max_disagreements) is not int or max_disagreements < 0:
         raise ValueError("max_disagreements must be a nonnegative integer")
@@ -249,6 +251,8 @@ def shadow_report(path: str | Path, *, max_disagreements: int = 20, model: str |
         decision = decisions.get(shadow["request_id"])
         if decision is None:
             malformed += 1
+        elif name is not None and decision.get("name") != name:
+            continue
         elif model is None or decision.get("model") == model:
             rows.append((decision, shadow))
         elif decision.get("model") is None:
@@ -278,6 +282,10 @@ def shadow_report(path: str | Path, *, max_disagreements: int = 20, model: str |
                               "both_labelled": len(both), "model_correct_on_both": sum(model_correct(d, o) for d, _, o in both),
                               "current_correct_on_both": sum(_matches(d["kind"], s["current"], o["expected"]) for d, s, o in both)}
     warnings = []
+    names = sorted({d["name"] for d, _ in rows if isinstance(d.get("name"), str)})
+    result["name"], result["names"] = name, names
+    if name is None and len(names) > 1:
+        warnings.append(f"The report mixes {len(names)} named decisions ({', '.join(names)}). Report on one with its name.")
     if model is None and len({d.get("model") for d, _ in rows if d.get("model") is not None}) > 1:
         warnings.append("The report mixes more than one model.")
     if unnamed:
@@ -297,11 +305,12 @@ def _main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(prog="decilist shadow-report", description="Report local shadow comparisons")
     parser.add_argument("path")
     parser.add_argument("--model")
+    parser.add_argument("--decision", help="Only decisions defined with this name")
     parser.add_argument("--max-disagreements", type=int, default=20)
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)
     try:
-        report = shadow_report(args.path, model=args.model, max_disagreements=args.max_disagreements)
+        report = shadow_report(args.path, model=args.model, max_disagreements=args.max_disagreements, name=args.decision)
     except FileNotFoundError:
         print(f"Log file not found: {args.path}")
         return 2

@@ -9,5 +9,7 @@ from .review_repair import ReviewRepairEngine, RepairPolicy, RepairResult
 from .verified import TriedOption, VerifiedDecision
 from .decision_log import DecisionLog, threshold_table, threshold_table_from_cases
 from .shadow import Shadow, shadow_report
+from .costs import CostedDecision, Costs, apply_costs, cost_report
+from .named import NamedDecision
 
-__all__ = ["Client", "Choose", "Decision", "DecisionRequest", "Policy", "Predict", "Score", "Decilist", "Provider", "FunctionProvider", "PredictProbaProvider", "LlamaCppProvider", "encode_state", "State", "LiquidLocalProvider", "UniformProvider", "RuntimeCompatibilityError", "RuntimeConnectionError", "CodeReviewer", "LiquidCodeReviewProvider", "ReviewPolicy", "ReviewResult", "ReviewRepairEngine", "RepairPolicy", "RepairResult", "TriedOption", "VerifiedDecision", "DecisionLog", "threshold_table", "threshold_table_from_cases", "Shadow", "shadow_report"]
+__all__ = ["Client", "Choose", "Decision", "DecisionRequest", "Policy", "Predict", "Score", "Decilist", "Provider", "FunctionProvider", "PredictProbaProvider", "LlamaCppProvider", "encode_state", "State", "LiquidLocalProvider", "UniformProvider", "RuntimeCompatibilityError", "RuntimeConnectionError", "CodeReviewer", "LiquidCodeReviewProvider", "ReviewPolicy", "ReviewResult", "ReviewRepairEngine", "RepairPolicy", "RepairResult", "TriedOption", "VerifiedDecision", "DecisionLog", "threshold_table", "threshold_table_from_cases", "Shadow", "shadow_report", "Costs", "CostedDecision", "apply_costs", "cost_report", "NamedDecision"]

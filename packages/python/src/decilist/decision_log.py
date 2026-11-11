@@ -14,6 +14,7 @@ from typing import TYPE_CHECKING, Iterable, Iterator
 from .contracts import Decision, Policy, Question, validate_decision
 
 if TYPE_CHECKING:
+    from .costs import CostedDecision
     from .evaluation import Case
 
 
@@ -44,12 +45,14 @@ class DecisionLog:
             with self.path.open("a", encoding="utf-8", newline="\n") as file:
                 file.write(line)
 
-    def _decision(self, question: Question, policy: Policy, decision: Decision) -> None:
+    def _decision(self, question: Question, policy: Policy, decision: Decision, name: str | None = None) -> None:
         data = decision.model_dump()
         record = {"type": "decision", "log_version": 1, "ts": datetime.now(timezone.utc).isoformat(),
                   **{key: data[key] for key in ("request_id", "kind", "status", "value", "confidence", "probabilities", "provider", "model", "latency_ms", "attempts")},
                   "min_confidence": policy.min_confidence, "state_sha256": _hash(question.state),
                   "instructions_sha256": _hash(question.instructions)}
+        if name is not None:
+            record["name"] = name
         if self.include_state:
             record["state"] = question.state
         self._write(record)
@@ -74,6 +77,11 @@ class DecisionLog:
         self._write({"type": "shadow", "log_version": 1, "ts": datetime.now(timezone.utc).isoformat(),
                      "request_id": request_id, "current": current, "agreed": agreed})
 
+    def record_cost(self, request_id: str, *, name: str | None, status: str, value: str | bool | None, expected_cost: float | None, abstain_cost: float | None) -> None:
+        """Append the answer a cost rule picked, which can differ from the model's top answer."""
+        self._write({"type": "cost", "log_version": 1, "ts": datetime.now(timezone.utc).isoformat(), "request_id": request_id,
+                     "name": name, "status": status, "value": value, "expected_cost": expected_cost, "abstain_cost": abstain_cost})
+
     def _shadow_error(self, exc: Exception) -> None:
         self._write({"type": "shadow_error", "log_version": 1, "ts": datetime.now(timezone.utc).isoformat(),
                      "error": type(exc).__name__})
@@ -97,9 +105,16 @@ def _warn_write(log: DecisionLog, exc: Exception) -> None:
     logging.getLogger("decilist").warning("Decision log write failed (%s) at %s", type(exc).__name__, log.path)
 
 
-def _log_decision(log: DecisionLog, question: Question, policy: Policy, decision: Decision) -> None:
+def _log_decision(log: DecisionLog, question: Question, policy: Policy, decision: Decision, name: str | None = None) -> None:
     try:
-        log._decision(question, policy, decision)
+        log._decision(question, policy, decision, name)
+    except Exception as exc:
+        _warn_write(log, exc)
+
+
+def _log_cost(log: DecisionLog, name: str | None, costed: CostedDecision) -> None:
+    try:
+        log.record_cost(costed.request_id, name=name, status=costed.status, value=costed.value, expected_cost=costed.expected_cost, abstain_cost=costed.abstain_cost)
     except Exception as exc:
         _warn_write(log, exc)
 
@@ -171,7 +186,7 @@ def _table(records: list[dict], outcomes: dict[str, dict], *, thresholds, target
             "rows": rows, "recommended": recommended, "recommended_reason": reason, "reliability": reliability, "warnings": warnings}
 
 
-def threshold_table(path: str | Path, *, thresholds: Iterable[float] | None = None, target_accuracy: float | None = None, min_samples: int = 30, model: str | None = None) -> dict:
+def threshold_table(path: str | Path, *, thresholds: Iterable[float] | None = None, target_accuracy: float | None = None, min_samples: int = 30, model: str | None = None, name: str | None = None) -> dict:
     """Calculate calibration statistics from an application's decision log."""
     log = DecisionLog(path)
     lines = list(log.read())
@@ -194,6 +209,9 @@ def threshold_table(path: str | Path, *, thresholds: Iterable[float] | None = No
         (decisions if kind == "decision" else outcome_lines).append(record)
     ids = {r["request_id"] for r in decisions}
     orphans = sum(r.get("request_id") not in ids for r in outcome_lines)
+    names = sorted({r["name"] for r in decisions if isinstance(r.get("name"), str)})
+    if name is not None:
+        decisions = [r for r in decisions if r.get("name") == name]
     selected = [r for r in decisions if model is None or r.get("model") == model]
     records = [r for r in selected if r.get("kind") in ("choose", "predict")]
     selected_ids = {r.get("request_id") for r in records}
@@ -203,6 +221,11 @@ def threshold_table(path: str | Path, *, thresholds: Iterable[float] | None = No
                    malformed_lines=malformed, model=model,
                    has_verify=any(r.get("source") == "verify" for r in outcomes.values()))
     omitted = sum(r.get("kind") in ("choose", "predict") and r.get("status") == "abstained" and r.get("model") is None for r in decisions) if model is not None else 0
+    table["name"], table["names"] = name, names
+    if name is None and len(names) > 1:
+        table["warnings"].append(f"The log holds {len(names)} named decisions ({', '.join(names)}). Report on one with its name.")
+    if name is not None and name not in names:
+        table["warnings"].append(f"No decision named {name!r} is in the log.")
     if omitted:
         table["warnings"].append(f"{omitted} abstained decisions name no model and were left out, so coverage only counts decisions this model answered.")
     return table
@@ -227,6 +250,7 @@ def threshold_table_from_cases(cases: list[Case], results: list[Decision], *, th
         outcomes[result.request_id] = {"expected": case.expected, "source": "app"}
     table = _table(records, outcomes, thresholds=thresholds, target_accuracy=target_accuracy, min_samples=min_samples,
                    skipped_score=skipped, orphan_outcomes=0, malformed_lines=0, model=None)
+    table["name"], table["names"] = None, []
     if any(r.get("status") == "abstained" and any(a.get("outcome") == "low_confidence" for a in r.get("attempts", [])) for r in records):
         table["warnings"].append("Some decisions abstained on low confidence, so rows below the threshold used are incomplete. Evaluate at min_confidence=0 for the full table.")
     return table
@@ -238,10 +262,11 @@ def _main(argv: list[str]) -> int:
     parser.add_argument("--target-accuracy", type=float)
     parser.add_argument("--min-samples", type=int, default=30)
     parser.add_argument("--model")
+    parser.add_argument("--decision", help="Only decisions defined with this name")
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)
     try:
-        table = threshold_table(args.path, target_accuracy=args.target_accuracy, min_samples=args.min_samples, model=args.model)
+        table = threshold_table(args.path, target_accuracy=args.target_accuracy, min_samples=args.min_samples, model=args.model, name=args.decision)
     except FileNotFoundError:
         print(f"Log file not found: {args.path}")
         return 2

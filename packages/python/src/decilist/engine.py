@@ -10,6 +10,8 @@ from uuid import uuid4
 from .contracts import Attempt, Choose, Decision, Policy, Predict, Question, Score, State, _encode_options, encode_state, question_adapter, validate_probabilities, value_from
 from .verified import VerifiedDecision, _validate_callbacks, _verify_decision
 from .decision_log import DecisionLog, _log_decision
+from .costs import Costs
+from .named import NamedDecision, _define
 
 
 class Provider(Protocol):
@@ -31,15 +33,27 @@ class Decilist:
         self.log = log
         self._sync_lock = threading.Lock()
         self._runner: asyncio.Runner | None = None
+        self._definitions: dict[str, NamedDecision] = {}
 
-    async def decide(self, question: Question, policy: Policy | None = None) -> Decision:
+    async def decide(self, question: Question, policy: Policy | None = None, *, name: str | None = None) -> Decision:
         if self.log is None:
             return await self._decide(question, policy)
         question = question_adapter.validate_python(question.model_dump())
         used_policy = Policy.model_validate((policy or self.policy).model_dump())
         decision = await self._decide(question, used_policy)
-        _log_decision(self.log, question, used_policy, decision)
+        _log_decision(self.log, question, used_policy, decision, name)
         return decision
+
+    def define(self, name: str, instructions: str, *, options: dict[str, str] | type[Enum] | None = None, levels: list[str] | None = None,
+               policy: Policy | None = None, costs: Costs | None = None, verify: Callable[[str], Any] | None = None,
+               fallback: Callable[[], Any] | None = None, max_tries: int = 3) -> NamedDecision:
+        """Define a question once under a name: options make a choice, levels a score, neither a yes/no."""
+        return _define(self, name, instructions, options=options, levels=levels, policy=policy, costs=costs, verify=verify, fallback=fallback, max_tries=max_tries)
+
+    @property
+    def definitions(self) -> dict[str, NamedDecision]:
+        """The decisions defined on this object, by name."""
+        return dict(self._definitions)
 
     async def _decide(self, question: Question, policy: Policy | None = None) -> Decision:
         question = question_adapter.validate_python(question.model_dump())
