@@ -60,3 +60,13 @@ if (costedPredicate.status === "accepted") {
 }
 // @ts-expect-error abstain is required so the cost of asking a person is always stated
 await sdk.chooseCosted("state", "Choose", {proceed:"Ready", review:"Review"}, {costs: {wrong: {}}});
+const calibration = {temperature: 2, kind: "choose", labels: ["proceed", "review"], model: null} as const;
+const corrected = await sdk.chooseCalibrated("state", "Choose", {proceed:"Ready", review:"Review"}, {calibration});
+if (corrected.status === "accepted") {
+  const selected: "proceed" | "review" = corrected.value;
+  // @ts-expect-error a calibrated choice keeps the declared options
+  const invalid: "other" = corrected.value;
+}
+await sdk.chooseCosted("state", "Choose", {proceed:"Ready", review:"Review"}, {costs: {abstain: 1}, calibration});
+// @ts-expect-error a calibration needs a temperature
+await sdk.chooseCalibrated("state", "Choose", {proceed:"Ready", review:"Review"}, {calibration: {kind: "choose", labels: ["proceed", "review"]}});

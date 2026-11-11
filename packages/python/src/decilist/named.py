@@ -7,6 +7,7 @@ import re
 from typing import TYPE_CHECKING, Any
 
 from .contracts import Choose, Decision, Policy, Predict, Question, Score, State, _encode_options, encode_state, labels_for
+from .calibration import Calibration, _check_question
 from .costs import CostedDecision, Costs, apply_costs
 from .decision_log import DecisionLog, _log_cost
 from .verified import VerifiedDecision, _validate_callbacks, _verify_decision
@@ -21,7 +22,7 @@ class NamedDecision:
     """One named question. Call it with the state; create it with ``decisions.define``."""
 
     def __init__(self, owner: Any, name: str, instructions: str, *, options: dict[str, str] | type[Enum] | None = None,
-                 levels: list[str] | None = None, policy: Policy | None = None, costs: Costs | None = None,
+                 levels: list[str] | None = None, policy: Policy | None = None, costs: Costs | None = None, calibration: Calibration | None = None,
                  verify: Callable[[str], Any] | None = None, fallback: Callable[[], Any] | None = None, max_tries: int = 3) -> None:
         if not isinstance(name, str) or not _NAME.fullmatch(name):
             raise ValueError("name must be 1 to 64 letters, digits, '_', '.' or '-', starting with a letter or digit")
@@ -39,6 +40,8 @@ class NamedDecision:
             if self.kind == "score":
                 raise ValueError("costs apply to choose and predict, not score")
             costs.check_labels(labels)
+        if calibration is not None:
+            _check_question(calibration, self.kind, labels)
         if verify is None:
             if fallback is not None:
                 raise ValueError("fallback needs verify")
@@ -46,7 +49,13 @@ class NamedDecision:
             if self.kind != "choose":
                 raise ValueError("verify applies to a choice: give options")
             _validate_callbacks(verify, fallback, max_tries)
-        self.costs, self.verify, self.fallback, self.max_tries = costs, verify, fallback, max_tries
+        self.costs, self.calibration, self.verify, self.fallback, self.max_tries = costs, calibration, verify, fallback, max_tries
+
+    def _base_policy(self) -> Policy | None:
+        """This decision's own policy, or the calibration's threshold on the owner's policy when it has one."""
+        if self.policy is not None or self.calibration is None or self.calibration.min_confidence is None:
+            return self.policy
+        return self.owner.policy.model_copy(update={"min_confidence": self.calibration.min_confidence})
 
     def question(self, state: State) -> Question:
         """Build this decision's question for one state."""
@@ -59,11 +68,11 @@ class NamedDecision:
 
     async def __call__(self, state: State, *, policy: Policy | None = None) -> Decision | CostedDecision | VerifiedDecision:
         """Decide for one state. The result type follows the definition: plain, with costs, or with verify."""
-        used = policy or self.policy or self.owner.policy
+        used = policy or self._base_policy() or self.owner.policy
         if self.costs is not None:
             # The cost rule needs every probability, so the confidence threshold is not applied.
             used = used.model_copy(update={"min_confidence": 0.0})
-        decision = await self.owner.decide(self.question(state), used, name=self.name)
+        decision = await self.owner.decide(self.question(state), used, name=self.name, calibration=self.calibration)
         log = self.owner.log
         costed = None
         if self.costs is not None:
@@ -97,11 +106,11 @@ class NamedDecision:
 
     def observe(self, shadow: Shadow, state: State, *, current: Any) -> bool:
         """Start a background shadow comparison under this decision's name. With costs, the cost rule's pick is compared."""
-        return shadow.observe(self.question(state), current=current, policy=self.policy, name=self.name, costs=self.costs)
+        return shadow.observe(self.question(state), current=current, policy=self._base_policy(), name=self.name, costs=self.costs, calibration=self.calibration)
 
     async def compare(self, shadow: Shadow, state: State, *, current: Any) -> Decision | CostedDecision | None:
         """Wait for a shadow comparison under this decision's name. With costs, the cost result is returned."""
-        decision = await shadow.compare(self.question(state), current=current, policy=self.policy, name=self.name, costs=self.costs)
+        decision = await shadow.compare(self.question(state), current=current, policy=self._base_policy(), name=self.name, costs=self.costs, calibration=self.calibration)
         return decision if decision is None or self.costs is None else apply_costs(decision, self.costs)
 
 

@@ -55,6 +55,53 @@ export type VerifiedDecision<T extends string, R = unknown, F = unknown> = {
   | {status: "unresolved"; value: null; result: null}
 );
 
+/** A calibration written by `decilist fit-calibration`. Temperature above 1 makes the model less sure of itself. */
+/** The fields are checked when used, so an imported calibration JSON file can be passed as it is. */
+export type Calibration = {temperature: number; kind: string; labels: readonly string[]; model?: string | null; min_confidence?: number | null};
+
+/** Refuse a malformed calibration, or one fitted for another kind of question or other answers. */
+function checkCalibration(calibration: Calibration, kind: string, labels: string[]): void {
+  if (!isRecord(calibration)) throw new TypeError("calibration must be an object");
+  if (typeof calibration.temperature !== "number" || !Number.isFinite(calibration.temperature) || calibration.temperature <= 0) throw new RangeError("temperature must be a finite number above 0");
+  if (calibration.kind !== "choose" && calibration.kind !== "predict") throw new RangeError("calibration applies to choose and predict, not score");
+  if (calibration.kind !== kind) throw new RangeError(`this calibration was fitted for a ${calibration.kind} question, not ${kind}`);
+  if (!Array.isArray(calibration.labels) || calibration.labels.length !== labels.length || [...calibration.labels].sort().join("\u0000") !== [...labels].sort().join("\u0000"))
+    throw new RangeError("this calibration was fitted for different answers than the question has");
+  const floor = calibration.min_confidence;
+  if (floor !== undefined && floor !== null && (typeof floor !== "number" || !(floor >= 0 && floor <= 1))) throw new RangeError("min_confidence must be in [0, 1]");
+}
+/** Corrected probabilities for the same labels. The most probable answer does not change, and zero stays zero. */
+export function applyCalibration(probabilities: Record<string, number>, calibration: Calibration, kind: string = calibration.kind): Record<string, number> {
+  const labels = Object.keys(probabilities);
+  checkCalibration(calibration, kind, labels);
+  if (calibration.temperature === 1) return {...probabilities};
+  const logs = labels.map(label => probabilities[label]! > 0 ? Math.log(probabilities[label]!) / calibration.temperature : -Infinity);
+  const top = Math.max(...logs);
+  const weights = logs.map(value => Math.exp(value - top));
+  const total = weights.reduce((a, b) => a + b, 0);
+  return Object.fromEntries(labels.map((label, index) => [label, weights[index]! / total]));
+}
+/**
+ * Correct an accepted choose or predict decision, then apply a threshold to the corrected confidence.
+ * Ask with min_confidence 0 first. A decision from another model than the calibration's is not corrected.
+ */
+export function calibrateDecision<T>(decision: Decision<T>, calibration: Calibration, minConfidence = 0): Decision<T> {
+  if (decision.status !== "accepted") return decision;
+  if (decision.kind === "score") throw new RangeError("calibration applies to choose and predict, not score");
+  let probabilities = decision.probabilities;
+  let confidence = decision.confidence ?? 0;
+  checkCalibration(calibration, decision.kind, Object.keys(probabilities));
+  if (calibration.model === undefined || calibration.model === null || calibration.model === decision.model) {
+    probabilities = applyCalibration(probabilities, calibration, decision.kind);
+    confidence = Math.max(...Object.values(probabilities));
+  }
+  if (confidence < minConfidence) {
+    const attempts = decision.attempts.map(attempt => attempt.outcome === "accepted" ? {...attempt, outcome: "low_confidence" as const} : attempt);
+    return {...decision, status: "abstained", value: null, probabilities: {}, confidence: null, provider: null, model: null, attempts};
+  }
+  return {...decision, probabilities, confidence};
+}
+
 /** What each answer costs: wrong[answered][actual]. Unlisted wrong answers cost `default` (1); a right answer costs 0. */
 export type Costs = {wrong?: Record<string, Record<string, number>>; default?: number; abstain: number | null};
 /** The cheapest answer under your costs, or an abstention when asking a person is cheaper. */
@@ -262,10 +309,25 @@ export class Decilist {
   choose<const T extends string>(state: State, instructions: string, options: Record<T, string>, policy?: Policy): Promise<Decision<T>> {
     return this.execute<T>({kind: "choose", state: encodeState(state), instructions, options}, policy);
   }
+  /** Ask for every answer, correct it, then apply the threshold here: the runtime does not know the calibration. */
+  private async calibrated<T>(question: Question, labels: string[], calibration: Calibration, policy: Policy | undefined, threshold: boolean): Promise<Decision<T>> {
+    checkCalibration(calibration, question.kind, labels);
+    const used = policySchema.parse(policy ?? this.policy);
+    const floor = !threshold ? 0 : policy === undefined && calibration.min_confidence != null ? calibration.min_confidence : used.min_confidence;
+    return calibrateDecision(await this.execute<T>(question, {...used, min_confidence: 0}), calibration, floor);
+  }
+  /** Choose with corrected probabilities. Without a policy here, the calibration's own threshold is used when it has one. */
+  chooseCalibrated<const T extends string>(state: State, instructions: string, options: Record<T, string>, config: {calibration: Calibration; policy?: Policy}): Promise<Decision<T>> {
+    return this.calibrated<T>({kind: "choose", state: encodeState(state), instructions, options}, Object.keys(options), config.calibration, config.policy, true);
+  }
+  /** Answer yes or no with corrected probabilities. */
+  predictCalibrated(state: State, instructions: string, config: {calibration: Calibration; policy?: Policy}): Promise<Decision<boolean>> {
+    return this.calibrated<boolean>({kind: "predict", state: encodeState(state), instructions}, ["false", "true"], config.calibration, config.policy, true);
+  }
   /** Check ranked choices. Policy timeout applies to the model, not verify or fallback. */
   async chooseVerified<const T extends string, R = unknown, F = unknown>(
     state: State, instructions: string, options: Record<T, string>,
-    config: {verify: (label: T) => R | Promise<R>; fallback?: () => F | Promise<F>; maxTries?: number; policy?: Policy; costs?: Costs},
+    config: {verify: (label: T) => R | Promise<R>; fallback?: () => F | Promise<F>; maxTries?: number; policy?: Policy; costs?: Costs; calibration?: Calibration},
   ): Promise<VerifiedDecision<T, R, F>> {
     const maxTries = config.maxTries === undefined ? 3 : config.maxTries;
     if (!Number.isInteger(maxTries) || maxTries < 1) throw new RangeError("maxTries must be an integer of at least 1");
@@ -273,7 +335,9 @@ export class Decilist {
     if (config.fallback !== undefined && typeof config.fallback !== "function") throw new TypeError("fallback must be callable");
     if (config.costs !== undefined) checkCosts(config.costs, Object.keys(options));
     // With costs the check runs cheapest first, and the confidence threshold is not applied.
-    const decision = await this.choose(state, instructions, options, config.costs === undefined ? config.policy : {...(config.policy ?? this.policy), min_confidence: 0});
+    const decision = config.calibration !== undefined
+      ? await this.calibrated<T>({kind: "choose", state: encodeState(state), instructions, options}, Object.keys(options), config.calibration, config.policy, config.costs === undefined)
+      : await this.choose(state, instructions, options, config.costs === undefined ? config.policy : {...(config.policy ?? this.policy), min_confidence: 0});
     const costed = config.costs === undefined ? undefined : applyCosts(decision, config.costs);
     const extra = costed === undefined ? {} : {costed};
     const tried: TriedOption<T>[] = [];
@@ -299,13 +363,15 @@ export class Decilist {
     return {status: "unresolved", value: null, result: null, decision, tried, ...extra};
   }
   /** Choose by expected cost. The confidence threshold is not applied; costs.abstain does that job. */
-  async chooseCosted<const T extends string>(state: State, instructions: string, options: Record<T, string>, config: {costs: Costs; policy?: Policy}): Promise<CostedDecision<T>> {
+  async chooseCosted<const T extends string>(state: State, instructions: string, options: Record<T, string>, config: {costs: Costs; policy?: Policy; calibration?: Calibration}): Promise<CostedDecision<T>> {
     checkCosts(config.costs, Object.keys(options));
+    if (config.calibration !== undefined) return applyCosts(await this.calibrated<T>({kind: "choose", state: encodeState(state), instructions, options}, Object.keys(options), config.calibration, config.policy, false), config.costs);
     return applyCosts(await this.choose(state, instructions, options, {...(config.policy ?? this.policy), min_confidence: 0}), config.costs);
   }
   /** Answer yes or no by expected cost. Cost labels are "true" and "false". */
-  async predictCosted(state: State, instructions: string, config: {costs: Costs; policy?: Policy}): Promise<CostedDecision<boolean>> {
+  async predictCosted(state: State, instructions: string, config: {costs: Costs; policy?: Policy; calibration?: Calibration}): Promise<CostedDecision<boolean>> {
     checkCosts(config.costs, ["false", "true"]);
+    if (config.calibration !== undefined) return applyCosts(await this.calibrated<boolean>({kind: "predict", state: encodeState(state), instructions}, ["false", "true"], config.calibration, config.policy, false), config.costs);
     return applyCosts(await this.predict(state, instructions, {...(config.policy ?? this.policy), min_confidence: 0}), config.costs);
   }
   predict(state: State, instructions: string, policy?: Policy): Promise<Decision<boolean>> {

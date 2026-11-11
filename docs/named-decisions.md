@@ -64,6 +64,7 @@ quality = decisions.define("report_quality", "Rate this report.", levels=["poor"
 | `policy` | This decision's own `Policy`. Defaults to the policy of the `decisions` object |
 | `verify`, `fallback`, `max_tries` | An application check on the ranked answers, as in [verified decisions](verified-decisions.md). Choices only |
 | `costs` | Choose by the cost of each mistake. See [cost-aware decisions](cost-aware-decisions.md). Choices and yes or no |
+| `calibration` | Correct the model's probabilities before the threshold or the costs use them. See [calibrated probabilities](calibrated-probabilities.md). Choices and yes or no |
 
 The definition is checked when you define it, before any model runs. A bad name, a second definition with the same name, a single option, empty instructions, `verify` on a yes or no question, or a cost for a label the question does not have all raise `ValueError` at that point.
 
@@ -114,6 +115,8 @@ decilist cost-report decisions.jsonl --decision alert_triage --costs costs.json
 ```
 
 In Python, pass `name="alert_triage"` to `threshold_table`, `shadow_report` and `cost_report`. Each result lists the names it found in `names`. Without a filter, a report over a log with more than one named decision warns and lists them. A name that is not in the log gives an empty report and a warning.
+
+`decilist fit-calibration decisions.jsonl --decision alert_triage` fits a [calibration](calibrated-probabilities.md) for one decision in the same way.
 
 Use the recommended threshold as that decision's policy:
 

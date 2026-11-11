@@ -12,15 +12,18 @@ Notable changes to the Decilist SDK. Decilist is alpha, so the API can still cha
 - **Cost-aware decisions in TypeScript.** `chooseCosted`, `predictCosted`, `applyCosts` and `expectedCosts`, and a `costs` option on `chooseVerified`. The rule runs on the client and gives the same answers as Python.
 - **Shadow mode with costs.** A decision defined with costs compares the cost rule's pick with the current answer, and `shadow-report` uses that pick for coverage, agreement and accuracy.
 - **Cost replay.** `decilist cost-report` and `cost_report` replay labelled decisions from a log under a cost rule and a confidence rule and compare what each would have cost.
+- **Calibrated probabilities.** `decilist fit-calibration` and `fit_calibration` learn a temperature from labelled decisions in a log and report cross-validated figures before and after. A decision defined with `calibration=` corrects the model's probabilities before the threshold, the cost rule or shadow mode uses them. The fit leaves the probabilities alone when it would not help, and can also choose a threshold for a target accuracy. See [calibrated probabilities](docs/calibrated-probabilities.md).
+- **Calibration in TypeScript.** `chooseCalibrated`, `predictCalibrated`, `applyCalibration` and `calibrateDecision`, and a `calibration` option on `chooseCosted`, `predictCosted` and `chooseVerified`. It reads the file that Python writes and gives the same numbers.
+- `calibrate_decision(decision, calibration, min_confidence=...)` corrects a decision you already have.
 - `apply_costs(decision, costs)` applies a cost table to a decision you already have.
-- `Shadow.observe` and `Shadow.compare` accept `name=` and `costs=`, and a named decision has `observe` and `compare` helpers.
+- `Shadow.observe` and `Shadow.compare` accept `name=`, `costs=` and `calibration=`, and a named decision has `observe` and `compare` helpers.
 - [`docs/capabilities.md`](docs/capabilities.md) lists every capability and where it is available.
-- Examples: [`examples/named_decision.py`](examples/named_decision.py) and [`examples/cost_aware.py`](examples/cost_aware.py).
+- Examples: [`examples/named_decision.py`](examples/named_decision.py), [`examples/cost_aware.py`](examples/cost_aware.py) and [`examples/calibration.py`](examples/calibration.py).
 
 ### Changed
 
 - `VerifiedDecision` has a new `costed` field. It is `None` unless the decision was defined with costs.
-- `Decilist.decide` and `Client.decide` accept an optional `name=` keyword, which is written to the log.
+- `Decilist.decide` and `Client.decide` accept optional `name=` and `calibration=` keywords. The name, and the temperature of an applied calibration, are written to the log.
 - A decision log can contain `cost` lines, a `name` field on decision lines, and `status` and `value` on shadow lines written under a cost rule. Lines from direct calls are unchanged.
 - The TypeScript `VerifiedDecision` has an optional `costed` field.
 - The automatic outcome that `verify` writes for its first check is now written only when that check was on the model's most probable answer. This is always the case without costs.

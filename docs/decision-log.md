@@ -30,4 +30,6 @@ Each row shows the fraction of decisions covered at a threshold, the number with
 
 Filtering by model includes only decisions that identify that model. Abstentions without a model are excluded, so the filtered coverage does not include them. For evaluation cases, where no policy threshold is recorded, the table treats the logged minimum as zero. Run those cases with `min_confidence=0` to interpret the full table.
 
+The table reports how the model's confidence compares with its accuracy, and it does not change the probabilities. To correct them, fit a [calibration](calibrated-probabilities.md) with `decilist fit-calibration`. A decision that was corrected stores a `temperature` field next to its corrected probabilities.
+
 This data comes from your application's own runs. A table describes the past data it was built from, and a recommended threshold is not a guarantee. Outcomes must be representative of the decisions for the accuracy estimates to be useful.

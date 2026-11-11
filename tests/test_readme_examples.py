@@ -1,7 +1,7 @@
 import re
 from pathlib import Path
 
-from examples import cost_aware, named_decision, own_model, quickstart, verified_choice
+from examples import calibration, cost_aware, named_decision, own_model, quickstart, verified_choice
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -47,8 +47,29 @@ async def test_cost_aware_example_matches_the_guide(capsys):
     assert all(text in guide for text in ("= 20.25", "= 8.75", "= 2.40", "102.00", "Replayed 6 of 6 decisions"))
 
 
+async def test_calibration_example_matches_the_guide(capsys):
+    await calibration.main()
+    assert capsys.readouterr().out.strip().splitlines() == [
+        "The provider is a fixed stand-in, not a real model.",
+        "before: says 0.94 sure on average, is right 0.70 of the time",
+        "after:  says 0.70 sure on average, is right 0.70 of the time",
+        "temperature: 2.57",
+        "alert 0 before: ignore at 0.99, cost rule: ignore",
+        "alert 0 after:  ignore at 0.80, cost rule: ask an analyst",
+        "100 new alerts, total cost before: 288, after: 164",
+        "These alerts are made up to show the mechanism. They do not measure anything.",
+    ]
+    # The table in docs/calibrated-probabilities.md uses the temperature fitted in this example.
+    from decilist import Calibration
+    fitted = Calibration(temperature=2.569490549285349, kind="choose", labels=calibration.LABELS)
+    corrected = [round(fitted.apply({label: top if label == "ignore" else (1 - top) / 2 for label in calibration.LABELS})["ignore"], 2) for top in (.99, .9, .7)]
+    assert corrected == [.8, .61, .48]
+    guide = (REPO / "docs/calibrated-probabilities.md").read_text(encoding="utf-8")
+    assert all(text in guide for text in ("| 0.99 | 0.80 |", "| 0.90 | 0.61 |", "| 0.70 | 0.48 |", "Temperature: 2.569", "0.945     0.700", "0.702     0.700"))
+
+
 def test_docs_local_links_exist():
-    for name in ("capabilities.md", "named-decisions.md", "cost-aware-decisions.md"):
+    for name in ("capabilities.md", "named-decisions.md", "cost-aware-decisions.md", "calibrated-probabilities.md"):
         text = (REPO / "docs" / name).read_text(encoding="utf-8")
         targets = re.findall(r"\]\(((?!https?://|#)[^)]+)\)", text)
         assert targets

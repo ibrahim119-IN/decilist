@@ -45,7 +45,7 @@ class DecisionLog:
             with self.path.open("a", encoding="utf-8", newline="\n") as file:
                 file.write(line)
 
-    def _decision(self, question: Question, policy: Policy, decision: Decision, name: str | None = None) -> None:
+    def _decision(self, question: Question, policy: Policy, decision: Decision, name: str | None = None, temperature: float | None = None) -> None:
         data = decision.model_dump()
         record = {"type": "decision", "log_version": 1, "ts": datetime.now(timezone.utc).isoformat(),
                   **{key: data[key] for key in ("request_id", "kind", "status", "value", "confidence", "probabilities", "provider", "model", "latency_ms", "attempts")},
@@ -53,6 +53,9 @@ class DecisionLog:
                   "instructions_sha256": _hash(question.instructions)}
         if name is not None:
             record["name"] = name
+        if temperature is not None:
+            # The stored probabilities are the corrected ones; the temperature lets a later fit recover the model's own.
+            record["temperature"] = temperature
         if self.include_state:
             record["state"] = question.state
         self._write(record)
@@ -109,9 +112,9 @@ def _warn_write(log: DecisionLog, exc: Exception) -> None:
     logging.getLogger("decilist").warning("Decision log write failed (%s) at %s", type(exc).__name__, log.path)
 
 
-def _log_decision(log: DecisionLog, question: Question, policy: Policy, decision: Decision, name: str | None = None) -> None:
+def _log_decision(log: DecisionLog, question: Question, policy: Policy, decision: Decision, name: str | None = None, temperature: float | None = None) -> None:
     try:
-        log._decision(question, policy, decision, name)
+        log._decision(question, policy, decision, name, temperature)
     except Exception as exc:
         _warn_write(log, exc)
 

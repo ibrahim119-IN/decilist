@@ -12,6 +12,7 @@ New here? Start with the [README](../README.md).
 | [Named decisions](named-decisions.md) | Define a question once and report on it by name |
 | [Verified decisions](verified-decisions.md) | Check ranked choices and use a fallback |
 | [Cost-aware decisions](cost-aware-decisions.md) | Choose by the cost of each mistake and replay past decisions |
+| [Calibrated probabilities](calibrated-probabilities.md) | Correct an overconfident model from your own outcomes |
 | [Decision logs and calibration](decision-log.md) | Record outcomes and calculate confidence thresholds |
 | [Shadow mode](shadow-mode.md) | Compare model answers with current decisions |
 | [Architecture and contracts](architecture.md) | How the pieces fit, and the provider interface |

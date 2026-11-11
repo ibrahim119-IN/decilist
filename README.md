@@ -294,6 +294,23 @@ triage = decisions.define("alert_triage", "Choose what to do with this alert.", 
 
 Say the model answers `ignore` at 0.75 and gives `page_oncall` 0.20. A 0.7 threshold would accept `ignore`. With these costs its expected cost is 20.25, against 2 for asking a person, so the decision abstains. `decilist cost-report` replays your logged decisions under both rules and shows what each would have cost. The rule is only as good as the model's probabilities and the costs you give it. See [cost-aware decisions](docs/cost-aware-decisions.md) and the [offline example](examples/cost_aware.py). The rule also works in TypeScript through `chooseCosted`; the replay needs the Python decision log.
 
+## Correct an overconfident model
+
+A model that says 0.95 and is right 70% of the time breaks both a threshold and a cost rule. Fit a correction from your own logged outcomes, then attach it:
+
+```bash
+decilist fit-calibration decisions.jsonl --decision alert_triage --output alert_triage.calibration.json
+```
+
+```python
+from decilist import Calibration
+
+triage = decisions.define("alert_triage", "Choose what to do with this alert.", options=OPTIONS, costs=costs,
+                          calibration=Calibration.load("alert_triage.calibration.json"))
+```
+
+The probabilities are corrected before the threshold or the cost rule uses them. Calibration does not make the model more accurate: the most probable answer never changes, only how sure the model says it is. The fit reports cross-validated figures and leaves the probabilities alone when it would not help. See [calibrated probabilities](docs/calibrated-probabilities.md) and the [offline example](examples/calibration.py). Applying a calibration also works in TypeScript; fitting needs the Python decision log.
+
 ## Record, compare and calibrate
 
 The Python SDK can record decisions and outcomes locally and calculate a confidence threshold from them. See [decision logs and calibration](docs/decision-log.md). The TypeScript client and runtime server do not log.

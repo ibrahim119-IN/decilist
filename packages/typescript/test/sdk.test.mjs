@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { Decilist, validateDecision, HttpTransport, questionSchema, applyCosts, expectedCosts } from "../dist/index.js";
+import { Decilist, validateDecision, HttpTransport, questionSchema, applyCosts, expectedCosts, applyCalibration, calibrateDecision } from "../dist/index.js";
 const cases = JSON.parse(await readFile(new URL("../../../contracts/cases.json", import.meta.url)));
 function envelope(c) { return {schema_version:"1",request_id:"test",kind:c.question.kind,status:"accepted",value:c.value,probabilities:c.probabilities,confidence:c.confidence,provider:"test",model:"test",latency_ms:1,cost_usd:null,attempts:[{provider:"test",outcome:"accepted",latency_ms:1}]}; }
 for(const [index,c] of cases.entries()) test(`shared contract ${index}`,async()=>{
@@ -192,4 +192,60 @@ test("a model abstention stays an abstention under costs", async () => {
   const sdk = new Decilist({async decide() { return {schema_version:"1",request_id:"t",kind:"choose",status:"abstained",value:null,probabilities:{},confidence:null,provider:null,model:null,latency_ms:1,cost_usd:null,attempts:[{provider:"t",outcome:"error",latency_ms:1}]}; }});
   const result = await sdk.chooseCosted("alert", "Triage", triageOptions, {costs:triageCosts});
   assert.equal(result.status, "abstained"); assert.deepEqual(result.expectedCosts, {});
+});
+const pickOptions = {a:"A", b:"B", c:"C"};
+const twice = {temperature:2, kind:"choose", labels:["a","b","c"], model:"test"};
+function model(probabilities, seen = [], name = "test") {
+  const confidence = Math.max(...Object.values(probabilities));
+  const value = Object.keys(probabilities).find(key => probabilities[key] === confidence);
+  return new Decilist({async decide(question, policy) { seen.push(policy); return {schema_version:"1",request_id:"t",kind:"choose",status:"accepted",value,probabilities,confidence,provider:"p",model:name,latency_ms:1,cost_usd:null,attempts:[{provider:"p",outcome:"accepted",latency_ms:1}]}; }});
+}
+test("calibration matches the Python SDK", () => {
+  // Same figures as packages/python/tests/test_calibration.py.
+  near(applyCalibration({a:.9, b:.1, c:0}, twice), {a:.75, b:.25, c:0});
+  near(applyCalibration({a:.9, b:.05, c:.05}, twice), {a:0.6796227589829592, b:0.16018862050852037, c:0.16018862050852037});
+  near(applyCalibration({true:.8, false:.2}, {temperature:.5, kind:"predict", labels:["true","false"]}), {true:.64/.68, false:.04/.68});
+  assert.deepEqual(applyCalibration({a:.9, b:.05, c:.05}, {...twice, temperature:1}), {a:.9, b:.05, c:.05});
+  for (const bad of [{...twice, temperature:0}, {...twice, temperature:NaN}, {...twice, kind:"score"}, {...twice, labels:["a","b"]}, {...twice, labels:["a","b","x"]}, {...twice, min_confidence:2}, null])
+    assert.throws(() => applyCalibration({a:.9, b:.05, c:.05}, bad));
+});
+test("calibrated choice applies the threshold on the client after correcting", async () => {
+  const seen = [];
+  const sdk = model({a:.9, b:.05, c:.05}, seen);
+  const accepted = await sdk.chooseCalibrated("state", "Choose", pickOptions, {calibration:twice, policy:{min_confidence:.6}});
+  assert.equal(accepted.status, "accepted"); assert.equal(accepted.value, "a");
+  assert.ok(Math.abs(accepted.confidence - 0.6796227589829592) < 1e-9);
+  const refused = await sdk.chooseCalibrated("state", "Choose", pickOptions, {calibration:twice, policy:{min_confidence:.8}});
+  assert.equal(refused.status, "abstained"); assert.deepEqual(refused.probabilities, {}); assert.equal(refused.attempts[0].outcome, "low_confidence");
+  // No policy here: the default 0.7 applies, or the calibration's own threshold when it has one.
+  assert.equal((await sdk.chooseCalibrated("state", "Choose", pickOptions, {calibration:twice})).status, "abstained");
+  assert.equal((await sdk.chooseCalibrated("state", "Choose", pickOptions, {calibration:{...twice, min_confidence:.5}})).status, "accepted");
+  assert.equal((await sdk.chooseCalibrated("state", "Choose", pickOptions, {calibration:{...twice, min_confidence:.5}, policy:{min_confidence:.9}})).status, "abstained");
+  assert.ok(seen.every(policy => policy.min_confidence === 0));
+  const other = await model({a:.9, b:.05, c:.05}, [], "another").chooseCalibrated("state", "Choose", pickOptions, {calibration:twice, policy:{min_confidence:.8}});
+  assert.equal(other.status, "accepted"); assert.equal(other.confidence, .9);
+  await assert.rejects(sdk.chooseCalibrated("state", "Choose", {a:"A", b:"B"}, {calibration:twice}), /different answers/);
+  await assert.rejects(sdk.predictCalibrated("state", "Ready?", {calibration:twice}), /choose question, not predict/);
+  const yes = new Decilist({async decide() { return {schema_version:"1",request_id:"t",kind:"predict",status:"accepted",value:true,probabilities:{false:.2,true:.8},confidence:.8,provider:"p",model:"test",latency_ms:1,cost_usd:null,attempts:[]}; }});
+  const sure = await yes.predictCalibrated("state", "Ready?", {calibration:{temperature:.5, kind:"predict", labels:["false","true"]}, policy:{min_confidence:.9}});
+  assert.equal(sure.value, true); assert.ok(sure.confidence > .94);
+});
+test("calibration changes what the cost rule picks", async () => {
+  const costs = {wrong:{a:{b:100}, b:{a:50, c:50}, c:{a:50, b:50}}, abstain:2};
+  const sdk = model({a:.98, b:.01, c:.01});
+  const raw = await sdk.chooseCosted("state", "Choose", pickOptions, {costs});
+  assert.equal(raw.value, "a"); assert.ok(Math.abs(raw.expectedCost - 1.01) < 1e-9);
+  const corrected = await sdk.chooseCosted("state", "Choose", pickOptions, {costs, calibration:{...twice, temperature:3}});
+  assert.equal(corrected.status, "abstained"); assert.ok(corrected.decision.probabilities.a < .7); assert.ok(corrected.expectedCosts.a > 2);
+  const calls = [];
+  const verified = await sdk.chooseVerified("state", "Choose", pickOptions, {costs, calibration:{...twice, temperature:3}, verify: label => {calls.push(label); return true;}, fallback: () => "person"});
+  assert.deepEqual(calls, []); assert.equal(verified.status, "fallback");
+  const plain = await sdk.chooseVerified("state", "Choose", pickOptions, {calibration:twice, policy:{min_confidence:.99}, verify: () => true, fallback: () => "person"});
+  assert.equal(plain.status, "fallback"); assert.equal(plain.decision.status, "abstained");
+});
+test("calibrateDecision leaves abstentions alone and rejects scores", () => {
+  const abstained = {schema_version:"1",request_id:"t",kind:"choose",status:"abstained",value:null,probabilities:{},confidence:null,provider:null,model:null,latency_ms:1,cost_usd:null,attempts:[]};
+  assert.equal(calibrateDecision(abstained, twice), abstained);
+  const score = {schema_version:"1",request_id:"t",kind:"score",status:"accepted",value:.5,probabilities:{"0":.5,"1":.5},confidence:.5,provider:"p",model:"test",latency_ms:1,cost_usd:null,attempts:[]};
+  assert.throws(() => calibrateDecision(score, twice), /not score/);
 });

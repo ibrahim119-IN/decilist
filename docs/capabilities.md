@@ -25,6 +25,7 @@ The columns say where a capability is available today: in the Python SDK, in the
 | Attempt trace | Every result lists what was tried and why it was rejected | Yes | Yes | Yes | [Architecture](architecture.md) |
 | Verified choices | Your own check runs on the ranked answers, with a fallback | Yes | Yes | No | [Verified decisions](verified-decisions.md) |
 | Cost-aware decisions | Choose by the cost of each mistake, and abstain when a person is cheaper | Yes | Yes | By hand | [Cost-aware decisions](cost-aware-decisions.md) |
+| Calibrated probabilities | Correct an overconfident model before the threshold or the cost rule uses its numbers | Yes | Yes | By hand | [Calibrated probabilities](calibrated-probabilities.md) |
 
 ## Learning from results
 
@@ -32,7 +33,8 @@ The columns say where a capability is available today: in the Python SDK, in the
 |---|---|:-:|:-:|:-:|---|
 | Decision log | A local, append-only record of each decision and its attempts | Yes | No | No | [Decision logs](decision-log.md) |
 | Outcomes | Record what turned out to be right for a decision | Yes | No | No | [Decision logs](decision-log.md) |
-| Calibration | A threshold table and a recommended threshold from your own outcomes | Yes | No | No | [Decision logs](decision-log.md) |
+| Threshold table | Coverage and accuracy at each threshold, and a recommended one, from your own outcomes | Yes | No | No | [Decision logs](decision-log.md) |
+| Fitting a calibration | Learn a correction for a model's probabilities from your own outcomes | Yes | No | No | [Calibrated probabilities](calibrated-probabilities.md) |
 | Reports per decision | Calibrate and report on one named decision | Yes | No | No | [Named decisions](named-decisions.md) |
 | Shadow mode | Run the model, or a cost rule over it, beside your current answers without acting on it | Yes | No | No | [Shadow mode](shadow-mode.md) |
 | Cost replay | Replay past decisions under a cost rule and a confidence rule | Yes | No | No | [Cost-aware decisions](cost-aware-decisions.md) |
@@ -68,14 +70,15 @@ The columns say where a capability is available today: in the Python SDK, in the
 | `decilist calibrate LOG` | Threshold table and recommendation from a decision log |
 | `decilist shadow-report LOG` | Agreement, coverage and latency from shadow comparisons |
 | `decilist cost-report LOG --costs FILE` | Replay labelled decisions under a cost rule and a confidence rule |
+| `decilist fit-calibration LOG --output FILE` | Fit a probability calibration from labelled decisions |
 
-`calibrate`, `shadow-report` and `cost-report` accept `--decision NAME` to report on one named decision, and `--json` for machine-readable output.
+`calibrate`, `shadow-report`, `cost-report` and `fit-calibration` accept `--decision NAME` to work on one named decision, and `--json` for machine-readable output.
 
 ## What it does not do
 
 - It does not include a model. The demo rules are not AI, and real decisions need a model you download or bring.
-- It does not make a model more accurate. It controls when an answer is used, checked or handed to a person.
+- It does not make a model more accurate. It controls when an answer is used, checked or handed to a person. Calibration corrects how sure the model says it is, not which answer it gives.
 - Confidence is the model's own estimate. Nothing here guarantees that an accepted answer is right.
-- The log, shadow mode, named decisions and cost replay are Python only for now, because they need the decision log. The TypeScript client and the runtime do not log yet.
+- The log, shadow mode, named decisions, cost replay and fitting a calibration are Python only for now, because they need the decision log. The TypeScript client and the runtime do not log yet.
 
 The measured quality of `LiquidAI/d1-3B`, including its failures, is in the [model validation report](model-validation.md). Changes are listed in the [changelog](../CHANGELOG.md).

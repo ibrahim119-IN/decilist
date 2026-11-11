@@ -231,7 +231,7 @@ A decision can be replayed only if its log line has probabilities and its outcom
 
 ## Limits
 
-- **The rule trusts the probabilities.** If the model is overconfident, the expected costs are too low. The [model validation report](model-validation.md) records wrong answers from `LiquidAI/d1-3B` with reported probabilities above 0.84. Check a model's probabilities with `decilist calibrate`, and replay real outcomes with `cost-report`, before acting on a cost rule.
+- **The rule trusts the probabilities.** If the model is overconfident, the expected costs are too low. The [model validation report](model-validation.md) records wrong answers from `LiquidAI/d1-3B` with reported probabilities above 0.84. Correct them with a [calibration](calibrated-probabilities.md) fitted from your own outcomes, and replay real outcomes with `cost-report`, before acting on a cost rule.
 - **The costs are yours.** The SDK does not know what a mistake costs your organisation, and a wrong table gives a confidently wrong rule.
 - **A replay describes the past.** It covers only the decisions that have outcomes, which may not be a fair sample.
 - **No scores.** Costs apply to choices and yes or no questions.

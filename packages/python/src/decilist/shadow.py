@@ -10,6 +10,7 @@ import math
 from pathlib import Path
 from typing import Any, Callable
 
+from .calibration import Calibration
 from .client import Client
 from .contracts import Choose, Decision, Policy, Predict, Question, Score, State, _encode_options, encode_state, labels_for
 from .costs import Costs, apply_costs
@@ -41,7 +42,8 @@ class Shadow:
             except Exception as write_exc:
                 logging.getLogger("decilist").warning("Shadow error log failed (%s)", type(write_exc).__name__)
 
-    def _start(self, build: Callable[[], Question], current: Any, policy: Policy | None, name: str | None = None, costs: Costs | None = None) -> asyncio.Task | None:
+    def _start(self, build: Callable[[], Question], current: Any, policy: Policy | None, name: str | None = None, costs: Costs | None = None,
+               calibration: Calibration | None = None) -> asyncio.Task | None:
         try:
             if isinstance(current, Enum):
                 current = current.name
@@ -77,7 +79,7 @@ class Shadow:
         except Exception as exc:
             self._error(exc, before_decision=True)
             return None
-        coroutine = self._run(question, current, policy, name, costs)
+        coroutine = self._run(question, current, policy, name, costs, calibration)
         try:
             task = asyncio.create_task(coroutine)
         except Exception as exc:
@@ -88,11 +90,14 @@ class Shadow:
         task.add_done_callback(self._tasks.discard)
         return task
 
-    async def _run(self, question: Question, current: Any, policy: Policy | None, name: str | None = None, costs: Costs | None = None) -> Decision | None:
+    async def _run(self, question: Question, current: Any, policy: Policy | None, name: str | None = None, costs: Costs | None = None,
+                   calibration: Calibration | None = None) -> Decision | None:
         decision = None
         try:
             # Only pass the name when there is one, so a custom decisions object without that argument keeps working.
             named = {} if name is None else {"name": name}
+            if calibration is not None:
+                named["calibration"] = calibration
             decision = await self.decisions.decide(question, policy=policy, **named)
             for attempt in decision.attempts:
                 if attempt.outcome in ("error", "timeout"):
@@ -131,12 +136,14 @@ class Shadow:
         """Start a score comparison and return whether it started."""
         return self._start(lambda: Score(state=encode_state(state), instructions=instructions, levels=levels), current, policy) is not None
 
-    def observe(self, question: Question, *, current: Any, policy: Policy | None = None, name: str | None = None, costs: Costs | None = None) -> bool:
+    def observe(self, question: Question, *, current: Any, policy: Policy | None = None, name: str | None = None, costs: Costs | None = None,
+                calibration: Calibration | None = None) -> bool:
         """Start a comparison for a question and return whether it started. With costs, the cost rule's pick is compared."""
-        return self._start(lambda: question.model_copy(deep=True), current, policy, name, costs) is not None
+        return self._start(lambda: question.model_copy(deep=True), current, policy, name, costs, calibration) is not None
 
-    async def _compare(self, build: Callable[[], Question], current: Any, policy: Policy | None, name: str | None = None, costs: Costs | None = None) -> Decision | None:
-        task = self._start(build, current, policy, name, costs)
+    async def _compare(self, build: Callable[[], Question], current: Any, policy: Policy | None, name: str | None = None, costs: Costs | None = None,
+                       calibration: Calibration | None = None) -> Decision | None:
+        task = self._start(build, current, policy, name, costs, calibration)
         return await task if task is not None else None
 
     async def compare_choose(self, state: State, instructions: str, options: dict[str, str] | type[Enum], *, current: Any, policy: Policy | None = None) -> Decision | None:
@@ -151,9 +158,10 @@ class Shadow:
         """Wait for a score comparison."""
         return await self._compare(lambda: Score(state=encode_state(state), instructions=instructions, levels=levels), current, policy)
 
-    async def compare(self, question: Question, *, current: Any, policy: Policy | None = None, name: str | None = None, costs: Costs | None = None) -> Decision | None:
+    async def compare(self, question: Question, *, current: Any, policy: Policy | None = None, name: str | None = None, costs: Costs | None = None,
+                      calibration: Calibration | None = None) -> Decision | None:
         """Wait for a comparison for a question. The model's own decision is returned, also when costs are given."""
-        return await self._compare(lambda: question.model_copy(deep=True), current, policy, name, costs)
+        return await self._compare(lambda: question.model_copy(deep=True), current, policy, name, costs, calibration)
 
     async def drain(self, timeout: float | None = None) -> int:
         """Wait for current tasks without cancelling those that outlast the timeout."""
