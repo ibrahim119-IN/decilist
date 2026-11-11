@@ -4,7 +4,7 @@ A confidence threshold treats every mistake as equally bad. Most real decisions 
 
 `Costs` lets you say what each mistake costs. The decision then picks the answer with the lowest expected cost, and abstains when asking a person is cheaper than any answer.
 
-Cost-aware decisions are Python only for now. They apply to choices and yes or no questions, not scores.
+Cost-aware decisions work in Python and TypeScript, and the rule is simple enough to apply by hand over plain HTTP. They apply to choices and yes or no questions, not scores. The examples below are Python; the [TypeScript section](#typescript) shows the same calls there.
 
 ```python
 from decilist import Costs
@@ -112,6 +112,54 @@ decision = await decisions.choose(alert, "Choose what to do with this alert.", O
 answer = apply_costs(decision, costs)
 ```
 
+## Shadow mode
+
+A decision defined with costs runs in [shadow mode](shadow-mode.md) like any other. The comparison uses the cost rule's pick, not the model's most probable answer:
+
+```python
+shadow = Shadow(decisions)
+triage.observe(shadow, alert, current=analyst_choice)                  # background
+answer = await triage.compare(shadow, alert, current=analyst_choice)   # waits, returns the CostedDecision
+triage.record_outcome(answer, expected="page_oncall")
+```
+
+The shadow line in the log records the cost rule's `status` and `value`, and `decilist shadow-report` uses them for coverage, agreement and accuracy. When the cost rule abstains, the observation counts as abstained and is not compared. The report's `cost_rule` field counts the observations answered this way, and the report warns if a log mixes them with observations that used the model's top answer. `shadow.observe` and `shadow.compare` also accept `costs=` directly.
+
+## TypeScript
+
+The TypeScript SDK applies the same rule on the client, from the probabilities the runtime returns. The cost table has the same shape as `costs.json` below.
+
+```typescript
+const costs = {
+  wrong: {
+    ignore: {page_oncall: 100, auto_remediate: 5},
+    auto_remediate: {page_oncall: 40},
+    page_oncall: {ignore: 3, auto_remediate: 3},
+  },
+  abstain: 2,
+};
+
+const answer = await decisions.chooseCosted(alert, "Choose what to do with this alert.", OPTIONS, {costs});
+if (answer.status === "accepted") actOn(answer.value);
+else sendToAnalyst(alert);
+```
+
+| Python | TypeScript |
+|---|---|
+| `define(..., options=..., costs=costs)` | `chooseCosted(state, instructions, options, {costs, policy})` |
+| `define(..., costs=costs)` for yes or no | `predictCosted(state, instructions, {costs, policy})`, with labels `"true"` and `"false"` |
+| `define(..., costs=costs, verify=...)` | `chooseVerified(state, instructions, options, {verify, fallback, costs})` |
+| `apply_costs(decision, costs)` | `applyCosts(decision, costs)` |
+| `costs.expected(probabilities)` | `expectedCosts(probabilities, costs)` |
+
+The result fields are `status`, `value`, `expectedCost`, `expectedCosts`, `abstainCost` and `decision`. `abstain` is required in the type, and `null` means never abstain because of cost. Both SDKs give the same answer for the same probabilities and costs, and a test in each checks the worked example above.
+
+The TypeScript SDK has no decision log, so it has no named decisions, cost lines or `cost-report`. Those stay in Python until the runtime can log.
+
+## Over plain HTTP
+
+From any other language, send the question with `"min_confidence": 0` so the response carries every probability. For each allowed answer, add up probability times cost over every possible truth, as in the table above. Take the cheapest answer, or ask a person if that costs less.
+
 ## What is logged
 
 With a `DecisionLog`, a cost-aware decision writes two lines:
@@ -186,6 +234,5 @@ A decision can be replayed only if its log line has probabilities and its outcom
 - **The rule trusts the probabilities.** If the model is overconfident, the expected costs are too low. The [model validation report](model-validation.md) records wrong answers from `LiquidAI/d1-3B` with reported probabilities above 0.84. Check a model's probabilities with `decilist calibrate`, and replay real outcomes with `cost-report`, before acting on a cost rule.
 - **The costs are yours.** The SDK does not know what a mistake costs your organisation, and a wrong table gives a confidently wrong rule.
 - **A replay describes the past.** It covers only the decisions that have outcomes, which may not be a fair sample.
-- **Shadow mode does not use costs.** It compares the model's most probable answer with your current one. Define the decision without costs for shadow mode, then use `cost-report` on the labelled log.
 - **No scores.** Costs apply to choices and yes or no questions.
-- **Python only.** The TypeScript client and the HTTP API do not have costs yet.
+- **The log side is Python only.** Cost lines, `cost-report` and shadow mode need the decision log, which the TypeScript client and the runtime do not have yet.

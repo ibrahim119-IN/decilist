@@ -11,8 +11,9 @@ from pathlib import Path
 from typing import Any, Callable
 
 from .client import Client
-from .contracts import Choose, Decision, Policy, Predict, Question, Score, State, _encode_options, encode_state
-from .decision_log import DecisionLog, _wilson_lower
+from .contracts import Choose, Decision, Policy, Predict, Question, Score, State, _encode_options, encode_state, labels_for
+from .costs import Costs, apply_costs
+from .decision_log import DecisionLog, _log_cost, _wilson_lower
 from .engine import Decilist
 
 
@@ -40,7 +41,7 @@ class Shadow:
             except Exception as write_exc:
                 logging.getLogger("decilist").warning("Shadow error log failed (%s)", type(write_exc).__name__)
 
-    def _start(self, build: Callable[[], Question], current: Any, policy: Policy | None, name: str | None = None) -> asyncio.Task | None:
+    def _start(self, build: Callable[[], Question], current: Any, policy: Policy | None, name: str | None = None, costs: Costs | None = None) -> asyncio.Task | None:
         try:
             if isinstance(current, Enum):
                 current = current.name
@@ -65,10 +66,18 @@ class Shadow:
             question = build()
             if policy is not None:
                 policy = policy.model_copy(deep=True)
+            if costs is not None:
+                if not isinstance(costs, Costs):
+                    raise TypeError("costs must be a Costs")
+                if question.kind == "score":
+                    raise ValueError("costs apply to choose and predict, not score")
+                costs.check_labels(labels_for(question))
+                # The cost rule needs every probability, so the confidence threshold is not applied.
+                policy = (policy or getattr(self.decisions, "policy", None) or Policy()).model_copy(update={"min_confidence": 0.0})
         except Exception as exc:
             self._error(exc, before_decision=True)
             return None
-        coroutine = self._run(question, current, policy, name)
+        coroutine = self._run(question, current, policy, name, costs)
         try:
             task = asyncio.create_task(coroutine)
         except Exception as exc:
@@ -79,7 +88,7 @@ class Shadow:
         task.add_done_callback(self._tasks.discard)
         return task
 
-    async def _run(self, question: Question, current: Any, policy: Policy | None, name: str | None = None) -> Decision | None:
+    async def _run(self, question: Question, current: Any, policy: Policy | None, name: str | None = None, costs: Costs | None = None) -> Decision | None:
         decision = None
         try:
             # Only pass the name when there is one, so a custom decisions object without that argument keeps working.
@@ -89,15 +98,22 @@ class Shadow:
                 if attempt.outcome in ("error", "timeout"):
                     self.errors += 1
                     logging.getLogger("decilist").warning("Shadow provider attempt failed (%s)", attempt.outcome)
+            # With costs, the answer compared is the cost rule's pick, which can differ from the model's top answer.
+            answer = decision if costs is None else apply_costs(decision, costs)
+            if costs is not None:
+                _log_cost(self.decisions.log, name, answer)
             agreed = None
-            if decision.status == "accepted" and current is not None:
+            if answer.status == "accepted" and current is not None:
                 if decision.kind == "choose":
-                    agreed = decision.value == current
+                    agreed = answer.value == current
                 elif decision.kind == "predict" and type(current) is bool:
-                    agreed = decision.value is current
+                    agreed = answer.value is current
                 elif decision.kind == "score" and type(current) in (int, float):
-                    agreed = abs(decision.value - current) <= .5
-            self.decisions.log.record_shadow(decision.request_id, current, agreed)
+                    agreed = abs(answer.value - current) <= .5
+            if costs is None:
+                self.decisions.log.record_shadow(decision.request_id, current, agreed)
+            else:
+                self.decisions.log.record_shadow(decision.request_id, current, agreed, status=answer.status, value=answer.value)
             return decision
         except Exception as exc:
             self._error(exc, before_decision=decision is None)
@@ -115,12 +131,12 @@ class Shadow:
         """Start a score comparison and return whether it started."""
         return self._start(lambda: Score(state=encode_state(state), instructions=instructions, levels=levels), current, policy) is not None
 
-    def observe(self, question: Question, *, current: Any, policy: Policy | None = None, name: str | None = None) -> bool:
-        """Start a comparison for a question and return whether it started."""
-        return self._start(lambda: question.model_copy(deep=True), current, policy, name) is not None
+    def observe(self, question: Question, *, current: Any, policy: Policy | None = None, name: str | None = None, costs: Costs | None = None) -> bool:
+        """Start a comparison for a question and return whether it started. With costs, the cost rule's pick is compared."""
+        return self._start(lambda: question.model_copy(deep=True), current, policy, name, costs) is not None
 
-    async def _compare(self, build: Callable[[], Question], current: Any, policy: Policy | None, name: str | None = None) -> Decision | None:
-        task = self._start(build, current, policy, name)
+    async def _compare(self, build: Callable[[], Question], current: Any, policy: Policy | None, name: str | None = None, costs: Costs | None = None) -> Decision | None:
+        task = self._start(build, current, policy, name, costs)
         return await task if task is not None else None
 
     async def compare_choose(self, state: State, instructions: str, options: dict[str, str] | type[Enum], *, current: Any, policy: Policy | None = None) -> Decision | None:
@@ -135,9 +151,9 @@ class Shadow:
         """Wait for a score comparison."""
         return await self._compare(lambda: Score(state=encode_state(state), instructions=instructions, levels=levels), current, policy)
 
-    async def compare(self, question: Question, *, current: Any, policy: Policy | None = None, name: str | None = None) -> Decision | None:
-        """Wait for a comparison for a question."""
-        return await self._compare(lambda: question.model_copy(deep=True), current, policy, name)
+    async def compare(self, question: Question, *, current: Any, policy: Policy | None = None, name: str | None = None, costs: Costs | None = None) -> Decision | None:
+        """Wait for a comparison for a question. The model's own decision is returned, also when costs are given."""
+        return await self._compare(lambda: question.model_copy(deep=True), current, policy, name, costs)
 
     async def drain(self, timeout: float | None = None) -> int:
         """Wait for current tasks without cancelling those that outlast the timeout."""
@@ -184,7 +200,10 @@ def _valid(record: dict) -> bool:
     if not isinstance(request_id, str) or not request_id.strip():
         return False
     if kind == "shadow":
-        return "current" in record and _scalar(record["current"]) and "agreed" in record and (record["agreed"] is None or type(record["agreed"]) is bool)
+        # A cost rule's answer, when present, replaces the model's top answer in the report.
+        costed = "status" not in record or (record["status"] in ("accepted", "abstained") and type(record.get("value")) in (str, bool, type(None))
+                                           and (record.get("value") is None) == (record["status"] == "abstained"))
+        return costed and "current" in record and _scalar(record["current"]) and "agreed" in record and (record["agreed"] is None or type(record["agreed"]) is bool)
     if kind == "outcome":
         correct = type(record.get("correct")) is bool
         expected = "expected" in record and record["expected"] is not None and _scalar(record["expected"])
@@ -254,6 +273,8 @@ def shadow_report(path: str | Path, *, max_disagreements: int = 20, model: str |
         elif name is not None and decision.get("name") != name:
             continue
         elif model is None or decision.get("model") == model:
+            if "status" in shadow:
+                decision = {**decision, "status": shadow["status"], "value": shadow["value"]}
             rows.append((decision, shadow))
         elif decision.get("model") is None:
             unnamed += 1
@@ -282,6 +303,9 @@ def shadow_report(path: str | Path, *, max_disagreements: int = 20, model: str |
                               "both_labelled": len(both), "model_correct_on_both": sum(model_correct(d, o) for d, _, o in both),
                               "current_correct_on_both": sum(_matches(d["kind"], s["current"], o["expected"]) for d, s, o in both)}
     warnings = []
+    result["cost_rule"] = sum("status" in s for _, s in rows)
+    if 0 < result["cost_rule"] < len(rows):
+        warnings.append("The report mixes observations answered by a cost rule with ones that were not.")
     names = sorted({d["name"] for d, _ in rows if isinstance(d.get("name"), str)})
     result["name"], result["names"] = name, names
     if name is None and len(names) > 1:

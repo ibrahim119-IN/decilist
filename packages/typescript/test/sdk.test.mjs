@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { Decilist, validateDecision, HttpTransport, questionSchema } from "../dist/index.js";
+import { Decilist, validateDecision, HttpTransport, questionSchema, applyCosts, expectedCosts } from "../dist/index.js";
 const cases = JSON.parse(await readFile(new URL("../../../contracts/cases.json", import.meta.url)));
 function envelope(c) { return {schema_version:"1",request_id:"test",kind:c.question.kind,status:"accepted",value:c.value,probabilities:c.probabilities,confidence:c.confidence,provider:"test",model:"test",latency_ms:1,cost_usd:null,attempts:[{provider:"test",outcome:"accepted",latency_ms:1}]}; }
 for(const [index,c] of cases.entries()) test(`shared contract ${index}`,async()=>{
@@ -127,4 +127,69 @@ test("invalid verification settings fail before transport", async () => {
   await assert.rejects(sdk.chooseVerified("state", "Choose", rankedOptions, {verify:null}), TypeError);
   await assert.rejects(sdk.chooseVerified("state", "Choose", rankedOptions, {verify:() => true, fallback:null}), TypeError);
   assert.equal(calls(),0);
+});
+
+const triageOptions = {ignore:"Noise", fix:"Run the fix", page:"Call a person"};
+const triageCosts = {wrong:{ignore:{page:100, fix:5}, fix:{page:40}, page:{ignore:3, fix:3}}, abstain:2};
+function fixed(kind, probabilities, seen = []) {
+  const confidence = Math.max(...Object.values(probabilities));
+  const value = kind === "predict" ? probabilities.true >= .5 : Object.keys(probabilities).find(key => probabilities[key] === confidence);
+  return new Decilist({async decide(question, policy) { seen.push(policy); return {schema_version:"1",request_id:"test",kind,status:"accepted",value,probabilities,confidence,provider:"test",model:"test",latency_ms:1,cost_usd:null,attempts:[]}; }});
+}
+function near(actual, expected) { for (const key of Object.keys(expected)) assert.ok(Math.abs(actual[key] - expected[key]) < 1e-9, `${key}: ${actual[key]}`); assert.deepEqual(Object.keys(actual), Object.keys(expected)); }
+test("cost-aware choice matches the documented example and the Python SDK", async () => {
+  const seen = [];
+  const abstained = await fixed("choose", {ignore:.75, fix:.05, page:.20}, seen).chooseCosted("alert", "Triage", triageOptions, {costs:triageCosts, policy:{min_confidence:.99}});
+  assert.equal(abstained.status, "abstained"); assert.equal(abstained.value, null); assert.equal(abstained.expectedCost, null);
+  near(abstained.expectedCosts, {ignore:20.25, fix:8.75, page:2.4});
+  assert.equal(abstained.decision.value, "ignore"); assert.equal(abstained.abstainCost, 2);
+  assert.equal(seen[0].min_confidence, 0);
+  const paged = await fixed("choose", {ignore:.5, fix:.05, page:.45}).chooseCosted("alert", "Triage", triageOptions, {costs:triageCosts});
+  assert.equal(paged.status, "accepted"); assert.equal(paged.value, "page"); assert.equal(paged.decision.value, "ignore");
+  assert.ok(Math.abs(paged.expectedCost - 1.65) < 1e-9);
+  const sure = await fixed("choose", {ignore:.99, fix:.007, page:.003}).chooseCosted("alert", "Triage", triageOptions, {costs:triageCosts});
+  assert.equal(sure.value, "ignore");
+});
+test("uniform costs equal the confidence threshold, and null never abstains", () => {
+  near(expectedCosts({a:.71, b:.29}, {abstain:.3}), {a:.29, b:.71});
+  const decision = p => ({schema_version:"1",request_id:"t",kind:"choose",status:"accepted",value:"a",probabilities:p,confidence:p.a,provider:"t",model:"t",latency_ms:1,cost_usd:null,attempts:[]});
+  assert.equal(applyCosts(decision({a:.71, b:.29}), {abstain:.3}).value, "a");
+  assert.equal(applyCosts(decision({a:.69, b:.31}), {abstain:.3}).status, "abstained");
+  assert.equal(applyCosts(decision({a:.4, b:.35, c:.25}), {abstain:null}).value, "a");
+});
+test("cost-aware yes or no uses true and false labels", async () => {
+  const result = await fixed("predict", {false:.9, true:.1}).predictCosted("payment", "Is this fraud?", {costs:{wrong:{false:{true:50}}, abstain:10}});
+  assert.equal(result.value, true); assert.equal(result.decision.value, false);
+  near(result.expectedCosts, {false:5, true:.9});
+});
+test("costs are validated before the model is asked", async () => {
+  let asked = 0;
+  const sdk = new Decilist({async decide() { asked++; throw new Error("not reached"); }});
+  for (const costs of [{wrong:{ignore:{pgae:100}}, abstain:1}, {wrong:{ignore:{page:-1}}, abstain:1}, {wrong:{ignore:{page:NaN}}, abstain:1}, {abstain:-1}, {abstain:1, default:Infinity}, {wrong:{ignore:1}, abstain:1}, {}, {abstain:1, typo:2}, null])
+    await assert.rejects(sdk.chooseCosted("alert", "Triage", triageOptions, {costs}));
+  await assert.rejects(sdk.predictCosted("payment", "Fraud?", {costs:{wrong:{yes:{no:1}}, abstain:1}}), /yes/);
+  await assert.rejects(sdk.chooseVerified("alert", "Triage", triageOptions, {verify:() => true, costs:{wrong:{ignore:{pgae:1}}, abstain:1}}), /pgae/);
+  assert.equal(asked, 0);
+  const score = {schema_version:"1",request_id:"t",kind:"score",status:"accepted",value:.5,probabilities:{"0":.5,"1":.5},confidence:.5,provider:"t",model:"t",latency_ms:1,cost_usd:null,attempts:[]};
+  assert.throws(() => applyCosts(score, {abstain:1}), /not score/);
+});
+test("verified choices follow cost order and skip answers costlier than a person", async () => {
+  const calls = [];
+  const seen = [];
+  const costs = {wrong:{ignore:{page:100}}, abstain:5};
+  const sdk = fixed("choose", {ignore:.7, fix:.1, page:.2}, seen);
+  const result = await sdk.chooseVerified("alert", "Triage", triageOptions, {costs, verify: label => {calls.push(label); return label === "fix";}, fallback: () => "person"});
+  assert.deepEqual(calls, ["page", "fix"]);
+  assert.equal(result.status, "verified"); assert.equal(result.value, "fix");
+  assert.equal(result.costed.value, "page"); assert.equal(result.decision.value, "ignore"); assert.equal(seen[0].min_confidence, 0);
+  calls.length = 0;
+  const refused = await sdk.chooseVerified("alert", "Triage", triageOptions, {costs, verify: label => {calls.push(label); return false;}, fallback: () => "person"});
+  assert.deepEqual(calls, ["page", "fix"]); assert.equal(refused.status, "fallback"); assert.equal(refused.result, "person");
+  const plain = await sdk.chooseVerified("alert", "Triage", triageOptions, {verify: () => true, policy:{min_confidence:0}});
+  assert.equal(plain.value, "ignore"); assert.equal("costed" in plain, false);
+});
+test("a model abstention stays an abstention under costs", async () => {
+  const sdk = new Decilist({async decide() { return {schema_version:"1",request_id:"t",kind:"choose",status:"abstained",value:null,probabilities:{},confidence:null,provider:null,model:null,latency_ms:1,cost_usd:null,attempts:[{provider:"t",outcome:"error",latency_ms:1}]}; }});
+  const result = await sdk.chooseCosted("alert", "Triage", triageOptions, {costs:triageCosts});
+  assert.equal(result.status, "abstained"); assert.deepEqual(result.expectedCosts, {});
 });

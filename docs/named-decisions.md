@@ -131,7 +131,7 @@ triage.observe(shadow, alert, current=analyst_choice)             # background, 
 decision = await triage.compare(shadow, alert, current=analyst_choice)   # waits, for labelling
 ```
 
-These pass the definition's policy and name to [shadow mode](shadow-mode.md). `shadow.observe` and `shadow.compare` also accept `name=` directly. A definition with `costs` cannot be used here, because shadow mode compares the model's most probable answer.
+These pass the definition's policy, name and costs to [shadow mode](shadow-mode.md). `shadow.observe` and `shadow.compare` also accept `name=` and `costs=` directly. For a definition with `costs`, the comparison uses the cost rule's pick, and `compare` returns the `CostedDecision`.
 
 ## Limits
 

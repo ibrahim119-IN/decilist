@@ -44,3 +44,19 @@ if (checked.status === "verified") {
 }
 // @ts-expect-error primitive numeric state is not supported
 await sdk.predict(42, "Ready?");
+
+const costed = await sdk.chooseCosted("state", "Choose", {proceed:"Ready", review:"Review"}, {costs: {wrong: {proceed: {review: 10}}, abstain: 2}});
+if (costed.status === "accepted") {
+  const selected: "proceed" | "review" = costed.value;
+  const cost: number = costed.expectedCost;
+  // @ts-expect-error a costed choice keeps the declared options
+  const invalid: "other" = costed.value;
+} else {
+  const none: null = costed.value;
+}
+const costedPredicate = await sdk.predictCosted("state", "Ready?", {costs: {abstain: null}});
+if (costedPredicate.status === "accepted") {
+  const yes: boolean = costedPredicate.value;
+}
+// @ts-expect-error abstain is required so the cost of asking a person is always stated
+await sdk.chooseCosted("state", "Choose", {proceed:"Ready", review:"Review"}, {costs: {wrong: {}}});

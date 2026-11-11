@@ -124,8 +124,52 @@ async def test_outcomes_and_shadow_with_costs(tmp_path):
         triage.record_outcome(result, correct=True)
     triage.record_outcome(result, expected="page")
     assert [r["expected"] for r in log.read() if r["type"] == "outcome"] == ["page"]
-    with pytest.raises(ValueError, match="without costs"):
-        triage.observe(Shadow(decisions), "alert", current="page")
+
+
+async def test_shadow_compares_the_cost_pick(tmp_path):
+    from decilist import shadow_report
+    log = DecisionLog(tmp_path / "log.jsonl")
+    decisions = sdk({"ignore": .7, "fix": .1, "page": .2}, log)  # Most probable: ignore. Cost pick: page.
+    shadow = Shadow(decisions)
+    triage = decisions.define("triage", "Triage", options=OPTIONS, costs=MISS, policy=Policy(min_confidence=.99))
+    agreed = await triage.compare(shadow, "alert", current="page")
+    assert isinstance(agreed, CostedDecision) and agreed.value == "page" and agreed.decision.value == "ignore"
+    triage.record_outcome(agreed, expected="page")
+    assert triage.observe(shadow, "alert", current="ignore") is True
+    costly = decisions.define("costly", "Triage", options=OPTIONS, costs=Costs({"ignore": {"page": 100}, "fix": {"page": 100}, "page": {"ignore": 30, "fix": 30}}, abstain=5))
+    assert (await costly.compare(shadow, "alert", current="page")).status == "abstained"
+    assert await shadow.drain(timeout=5) == 0 and shadow.errors == 0
+
+    lines = list(log.read())
+    shadows = [r for r in lines if r["type"] == "shadow"]
+    # The background observation can finish after the awaited comparison that follows it.
+    assert {(r["status"], r["value"], r["agreed"]) for r in shadows} == {("accepted", "page", True), ("accepted", "page", False), ("abstained", None, None)} and len(shadows) == 3
+    assert [r["min_confidence"] for r in lines if r["type"] == "decision"] == [0, 0, 0]
+    assert len([r for r in lines if r["type"] == "cost"]) == 3
+
+    report = shadow_report(log.path, name="triage")
+    assert report["observations"] == 2 and report["accepted"] == 2 and report["agreements"] == 1 and report["cost_rule"] == 2
+    assert report["disagreements"][0]["value"] == "page" and report["disagreements"][0]["current"] == "ignore"
+    # The outcome is judged against the cost pick (page), not the model's top answer (ignore).
+    assert report["outcomes"]["model_correct"] == 1 and report["outcomes"]["current_correct"] == 1
+    everything = shadow_report(log.path)
+    assert everything["observations"] == 3 and everything["abstained"] == 1 and everything["compared"] == 2
+
+    plain = decisions.define("plain", "Triage", options=OPTIONS, policy=Policy(min_confidence=0))
+    await plain.compare(shadow, "alert", current="ignore")
+    mixed = shadow_report(log.path)
+    assert mixed["cost_rule"] == 3 and any("mixes observations answered by a cost rule" in w for w in mixed["warnings"])
+
+
+async def test_shadow_rejects_costs_that_do_not_fit(tmp_path):
+    from decilist import Choose, Score
+    decisions = sdk({"ignore": .7, "fix": .1, "page": .2}, DecisionLog(tmp_path / "log.jsonl"))
+    shadow = Shadow(decisions)
+    question = Choose(state="alert", instructions="Triage", options=OPTIONS)
+    assert shadow.observe(question, current="page", costs=Costs({"ignore": {"typo": 1}}, abstain=1)) is False
+    assert shadow.observe(question, current="page", costs={"abstain": 1}) is False
+    assert shadow.observe(Score(state="s", instructions="Rate", levels=["low", "high"]), current=1, costs=MISS) is False
+    assert shadow.errors == 3 and await shadow.compare(question, current="page", costs=MISS) is not None
 
 
 async def test_cost_report_replays_both_rules(tmp_path, capsys):

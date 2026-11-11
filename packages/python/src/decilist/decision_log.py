@@ -72,10 +72,14 @@ class DecisionLog:
         record["correct" if correct is not None else "expected"] = correct if correct is not None else expected
         self._write(record)
 
-    def record_shadow(self, request_id: str, current: str | bool | int | float | None, agreed: bool | None) -> None:
-        """Append a comparison with the application's current answer."""
-        self._write({"type": "shadow", "log_version": 1, "ts": datetime.now(timezone.utc).isoformat(),
-                     "request_id": request_id, "current": current, "agreed": agreed})
+    def record_shadow(self, request_id: str, current: str | bool | int | float | None, agreed: bool | None, *,
+                      status: str | None = None, value: str | bool | None = None) -> None:
+        """Append a comparison with the application's current answer. status and value hold a cost rule's answer."""
+        record = {"type": "shadow", "log_version": 1, "ts": datetime.now(timezone.utc).isoformat(),
+                  "request_id": request_id, "current": current, "agreed": agreed}
+        if status is not None:
+            record.update(status=status, value=value)
+        self._write(record)
 
     def record_cost(self, request_id: str, *, name: str | None, status: str, value: str | bool | None, expected_cost: float | None, abstain_cost: float | None) -> None:
         """Append the answer a cost rule picked, which can differ from the model's top answer."""

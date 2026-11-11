@@ -292,7 +292,7 @@ costs = Costs(
 triage = decisions.define("alert_triage", "Choose what to do with this alert.", options=OPTIONS, costs=costs)
 ```
 
-Say the model answers `ignore` at 0.75 and gives `page_oncall` 0.20. A 0.7 threshold would accept `ignore`. With these costs its expected cost is 20.25, against 2 for asking a person, so the decision abstains. `decilist cost-report` replays your logged decisions under both rules and shows what each would have cost. The rule is only as good as the model's probabilities and the costs you give it. See [cost-aware decisions](docs/cost-aware-decisions.md) and the [offline example](examples/cost_aware.py). Python only for now.
+Say the model answers `ignore` at 0.75 and gives `page_oncall` 0.20. A 0.7 threshold would accept `ignore`. With these costs its expected cost is 20.25, against 2 for asking a person, so the decision abstains. `decilist cost-report` replays your logged decisions under both rules and shows what each would have cost. The rule is only as good as the model's probabilities and the costs you give it. See [cost-aware decisions](docs/cost-aware-decisions.md) and the [offline example](examples/cost_aware.py). The rule also works in TypeScript through `chooseCosted`; the replay needs the Python decision log.
 
 ## Record, compare and calibrate
 

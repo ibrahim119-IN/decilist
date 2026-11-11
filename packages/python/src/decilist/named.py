@@ -95,19 +95,14 @@ class NamedDecision:
         request_id = result if isinstance(result, str) else getattr(result, "request_id", None) or result.decision.request_id
         log.record_outcome(request_id, correct=correct, expected=expected)
 
-    def _no_cost_shadow(self) -> None:
-        if self.costs is not None:
-            raise ValueError("shadow compares the model's top answer; define the decision without costs for shadow mode and use cost_report on labelled outcomes")
-
     def observe(self, shadow: Shadow, state: State, *, current: Any) -> bool:
-        """Start a background shadow comparison under this decision's name."""
-        self._no_cost_shadow()
-        return shadow.observe(self.question(state), current=current, policy=self.policy, name=self.name)
+        """Start a background shadow comparison under this decision's name. With costs, the cost rule's pick is compared."""
+        return shadow.observe(self.question(state), current=current, policy=self.policy, name=self.name, costs=self.costs)
 
-    async def compare(self, shadow: Shadow, state: State, *, current: Any) -> Decision | None:
-        """Wait for a shadow comparison under this decision's name."""
-        self._no_cost_shadow()
-        return await shadow.compare(self.question(state), current=current, policy=self.policy, name=self.name)
+    async def compare(self, shadow: Shadow, state: State, *, current: Any) -> Decision | CostedDecision | None:
+        """Wait for a shadow comparison under this decision's name. With costs, the cost result is returned."""
+        decision = await shadow.compare(self.question(state), current=current, policy=self.policy, name=self.name, costs=self.costs)
+        return decision if decision is None or self.costs is None else apply_costs(decision, self.costs)
 
 
 def _define(owner: Any, name: str, instructions: str, **kwargs: Any) -> NamedDecision:
